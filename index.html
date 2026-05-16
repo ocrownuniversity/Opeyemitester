@@ -1666,14 +1666,17 @@ window.toggleDrawer=()=>{
 
 // ===== FETCH PRODUCTS =====
 async function fetchProducts(){
+  // Always show demo products immediately — no blank loading screen
+  window.allProducts=getDemoProducts();
+  renderHomeProducts();
+  // Then try Firebase in background
   try{
     const snap=await getDocs(collection(db,'products'));
-    window.allProducts=snap.docs.map(d=>({id:d.id,...d.data()}));
-  }catch(e){
-    // Use demo products if Firestore fails
-    window.allProducts=getDemoProducts();
-  }
-  renderHomeProducts();
+    if(snap&&snap.docs&&snap.docs.length>0){
+      const fbProds=snap.docs.map(d=>({id:d.id,...d.data()})).filter(p=>p.active!==false);
+      if(fbProds.length>0){window.allProducts=fbProds;renderHomeProducts();}
+    }
+  }catch(e){console.log('Using demo products');}
 }
 
 function getDemoProducts(){
@@ -2338,12 +2341,22 @@ window.adminLogin=async()=>{
   const email=document.getElementById('admEmail').value.trim();
   const pass=document.getElementById('admPassword').value;
   if(!email||!pass){showToast('Enter email and password','error');return;}
+  // List of allowed admin emails
+  const ADMIN_EMAILS=['shopwithbenim@gmail.com','ocrownmarket@gmail.com'];
   try{
     const cred=await signInWithEmailAndPassword(auth,email,pass);
-    // Check if admin in Firestore
-    const adminDoc=await getDoc(doc(db,'admins',cred.user.uid));
-    if(!adminDoc.exists()&&email!=='shopwithbenim@gmail.com'){
-      await signOut(auth);showToast('Access denied. Not an admin.','error');return;
+    // Allow if email is in admin list OR has admin doc in Firestore
+    let isAdmin=ADMIN_EMAILS.includes(email.toLowerCase());
+    if(!isAdmin){
+      try{
+        const adminDoc=await getDoc(doc(db,'admins',cred.user.uid));
+        isAdmin=adminDoc.exists();
+      }catch(e){/* Firestore rules may block — treat as non-admin */}
+    }
+    if(!isAdmin){
+      await signOut(auth);
+      showToast('Access denied. Contact store owner.','error');
+      return;
     }
     closeAdminLogin();
     launchAdmin(cred.user);
@@ -2351,14 +2364,15 @@ window.adminLogin=async()=>{
 };
 
 window.launchAdmin=(user)=>{
-  document.querySelector('body > *:not(#adminShell):not(#adminLoginPage):not(#toast-container)').style.display='none';
-  // Hide all non-admin elements
-  document.querySelectorAll('#header,#page-home,#page-products,#page-detail,#page-cart,#page-checkout,#page-success,#page-track,#page-auth,#page-dashboard,#page-wishlist-page,#page-about,#page-policy-delivery,#page-policy-return,#page-privacy,#page-policy-terms,#page-faq,footer,.whatsapp-float,.announce-bar').forEach(el=>{if(el)el.style.display='none'});
+  // Hide all store UI elements safely
+  const storeEls=['header','page-home','page-products','page-detail','page-cart','page-checkout','page-success','page-track','page-auth','page-dashboard','page-wishlist-page','page-about','page-policy-delivery','page-policy-return','page-privacy','page-policy-terms','page-faq'];
+  storeEls.forEach(id=>{const el=document.getElementById(id);if(el)el.style.display='none';});
+  document.querySelectorAll('footer,.whatsapp-float,.announce-bar,.nav-drawer,.nav-drawer-overlay').forEach(el=>{if(el)el.style.display='none';});
   const shell=document.getElementById('adminShell');
   shell.classList.add('active');
   shell.style.display='flex';
-  document.getElementById('admAvatar').textContent=user.email[0].toUpperCase();
-  document.getElementById('admEmailDisplay').value=user.email;
+  document.getElementById('admAvatar').textContent=(user.email||'A')[0].toUpperCase();
+  if(document.getElementById('admEmailDisplay'))document.getElementById('admEmailDisplay').value=user.email||'';
   admShowPanel('dashboard');
   loadAdminData();
 };
@@ -2426,19 +2440,21 @@ window.allCustomers=[];
 window.admProducts=[];
 
 async function loadAdminData(){
+  // Load each independently so one failure doesn't block others
   try{
-    // Orders
     const ordSnap=await getDocs(query(collection(db,'orders'),orderBy('createdAt','desc')));
     window.allOrders=ordSnap.docs.map(d=>({id:d.id,...d.data()}));
-    // Products
+  }catch(e){console.log('Orders load error:',e.message);window.allOrders=[];}
+  try{
     const prSnap=await getDocs(collection(db,'products'));
     window.admProducts=prSnap.docs.map(d=>({id:d.id,...d.data()}));
     window.allProducts=[...window.admProducts];
-    // Customers
+  }catch(e){console.log('Products load error:',e.message);window.admProducts=getDemoProducts();window.allProducts=[...window.admProducts];}
+  try{
     const cuSnap=await getDocs(collection(db,'users'));
     window.allCustomers=cuSnap.docs.map(d=>({id:d.id,...d.data()}));
-    renderAdmDashboard();
-  }catch(e){console.error('Admin data load error:',e);renderAdmDashboard();}
+  }catch(e){console.log('Customers load error:',e.message);window.allCustomers=[];}
+  renderAdmDashboard();
 }
 
 // ===== DASHBOARD =====
