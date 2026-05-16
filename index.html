@@ -32,9 +32,9 @@
   --radius:10px;
   --radius-lg:16px;
 }
-*{margin:0;padding:0;box-sizing:border-box}
-html{scroll-behavior:smooth}
-body{font-family:var(--font-body);color:var(--black);background:#fff;overflow-x:hidden}
+*{margin:0;padding:0;box-sizing:border-box;min-width:0}
+html{scroll-behavior:smooth;max-width:100vw;overflow-x:hidden}
+body{font-family:var(--font-body);color:var(--black);background:#fff;overflow-x:hidden;max-width:100vw}
 a{text-decoration:none;color:inherit}
 img{max-width:100%;display:block}
 button{cursor:pointer;border:none;outline:none;font-family:var(--font-body)}
@@ -129,28 +129,28 @@ input,select,textarea{font-family:var(--font-body);outline:none}
 .cat-card .cat-icon{font-size:28px;margin-bottom:8px}
 .cat-card span{font-size:12px;font-weight:600;color:var(--dark)}
 
-/* Product grid */
-.prod-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}
-@media(min-width:600px){.prod-grid{grid-template-columns:repeat(3,1fr)}}
+/* Product grid - 3 cols mobile */
+.prod-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+@media(min-width:600px){.prod-grid{grid-template-columns:repeat(3,1fr);gap:12px}}
 @media(min-width:900px){.prod-grid{grid-template-columns:repeat(4,1fr)}}
 @media(min-width:1100px){.prod-grid{grid-template-columns:repeat(5,1fr)}}
 
-.prod-card{background:#fff;border-radius:var(--radius);border:1px solid var(--border);overflow:hidden;cursor:pointer;transition:.2s;position:relative}
+.prod-card{background:#fff;border-radius:var(--radius);border:1px solid var(--border);overflow:hidden;cursor:pointer;transition:.2s;position:relative;min-width:0;width:100%}
 .prod-card:hover{box-shadow:var(--shadow-lg);transform:translateY(-2px)}
 .prod-img{position:relative;aspect-ratio:1;background:var(--light-gray);overflow:hidden}
 .prod-img img{width:100%;height:100%;object-fit:cover;transition:transform .3s}
 .prod-card:hover .prod-img img{transform:scale(1.06)}
-.prod-badge{position:absolute;top:8px;left:8px;background:var(--orange);color:#fff;font-size:10px;font-weight:700;padding:3px 8px;border-radius:4px}
+.prod-badge{position:absolute;top:4px;left:4px;background:var(--orange);color:#fff;font-size:9px;font-weight:700;padding:2px 6px;border-radius:4px}
 .prod-badge.new{background:var(--success)}
-.wishlist-btn{position:absolute;top:8px;right:8px;width:30px;height:30px;background:#fff;border-radius:50%;display:flex;align-items:center;justify-content:center;border:1px solid var(--border);cursor:pointer;transition:.2s;font-size:13px;color:var(--gray)}
+.wishlist-btn{position:absolute;top:4px;right:4px;width:26px;height:26px;background:#fff;border-radius:50%;display:flex;align-items:center;justify-content:center;border:1px solid var(--border);cursor:pointer;transition:.2s;font-size:11px;color:var(--gray)}
 .wishlist-btn.active,.wishlist-btn:hover{color:var(--orange);border-color:var(--orange)}
-.prod-info{padding:10px}
-.prod-name{font-size:13px;font-weight:600;color:var(--dark);line-height:1.3;margin-bottom:4px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
-.prod-price{font-family:var(--font-head);font-size:16px;font-weight:800;color:var(--orange);margin-bottom:4px}
-.prod-old-price{font-size:12px;color:var(--gray);text-decoration:line-through;margin-right:6px}
-.prod-rating{display:flex;align-items:center;gap:4px;font-size:11px;color:var(--gray)}
+.prod-info{padding:7px}
+.prod-name{font-size:11px;font-weight:600;color:var(--dark);line-height:1.3;margin-bottom:3px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.prod-price{font-family:var(--font-head);font-size:13px;font-weight:800;color:var(--orange);margin-bottom:2px}
+.prod-old-price{font-size:10px;color:var(--gray);text-decoration:line-through;margin-right:4px}
+.prod-rating{display:flex;align-items:center;gap:3px;font-size:10px;color:var(--gray)}
 .stars{color:#f59e0b}
-.add-cart-btn{width:100%;background:var(--orange);color:#fff;border:none;padding:8px;font-size:12px;font-weight:700;cursor:pointer;transition:background .2s;font-family:var(--font-head)}
+.add-cart-btn{width:100%;background:var(--orange);color:#fff;border:none;padding:6px;font-size:10px;font-weight:700;cursor:pointer;transition:background .2s;font-family:var(--font-head)}
 .add-cart-btn:hover{background:var(--orange-dark)}
 
 /* Promo banner */
@@ -408,7 +408,142 @@ footer{background:var(--black);color:#fff;padding:40px 16px 20px;margin-top:40px
 .search-result-name{font-size:13px;font-weight:600}
 .search-result-price{font-size:13px;color:var(--orange);font-weight:700}
 
-/* Responsive fixes */
+/* ===== ADMIN STYLES ===== */
+#adminShell{display:none;min-height:100vh;background:#f0f2f5}
+#adminShell.active{display:flex}
+.adm-sidebar{width:240px;background:var(--black);color:#fff;display:flex;flex-direction:column;min-height:100vh;position:fixed;left:0;top:0;z-index:800;transition:transform .3s;overflow-y:auto}
+.adm-logo{padding:18px 16px;border-bottom:1px solid rgba(255,255,255,.1);display:flex;align-items:center;gap:10px;flex-shrink:0}
+.adm-logo span{font-family:var(--font-head);font-size:16px;font-weight:800;color:var(--orange-light)}
+.adm-logo small{display:block;font-size:10px;opacity:.5;font-weight:400}
+.adm-nav{flex:1;padding:10px 0}
+.adm-nav-group{padding:8px 16px 4px;font-size:10px;font-weight:700;letter-spacing:1px;opacity:.4;text-transform:uppercase}
+.adm-nav-item{display:flex;align-items:center;gap:10px;padding:11px 16px;font-size:13px;font-weight:500;cursor:pointer;transition:background .2s;border-left:3px solid transparent;color:rgba(255,255,255,.7)}
+.adm-nav-item:hover{background:rgba(255,255,255,.06);color:#fff}
+.adm-nav-item.active{background:rgba(232,68,10,.15);border-left-color:var(--orange);color:#fff}
+.adm-nav-item i{width:18px;font-size:14px;color:var(--orange-light)}
+.adm-nav-item .badge-count{margin-left:auto;background:var(--orange);color:#fff;font-size:10px;font-weight:700;padding:2px 6px;border-radius:10px;min-width:18px;text-align:center}
+.adm-footer{padding:14px 16px;border-top:1px solid rgba(255,255,255,.1);font-size:13px;color:rgba(255,255,255,.5);cursor:pointer;flex-shrink:0;display:flex;align-items:center;gap:8px}
+.adm-footer:hover{color:#fff}
+.adm-main{flex:1;margin-left:240px;display:flex;flex-direction:column;min-height:100vh;transition:margin .3s;max-width:calc(100vw - 240px)}
+.adm-topbar{background:#fff;border-bottom:1px solid var(--border);padding:0 20px;height:56px;display:flex;align-items:center;gap:12px;position:sticky;top:0;z-index:700;box-shadow:0 1px 4px rgba(0,0,0,.06)}
+.adm-toggle{background:none;color:var(--dark);font-size:18px;padding:6px;border-radius:6px;cursor:pointer;display:none}
+.adm-topbar-title{font-family:var(--font-head);font-size:17px;font-weight:800;flex:1}
+.adm-topbar-actions{display:flex;align-items:center;gap:8px}
+.adm-avatar{width:34px;height:34px;border-radius:50%;background:var(--orange);color:#fff;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;cursor:pointer;flex-shrink:0}
+.adm-content{padding:20px;flex:1;overflow-x:hidden}
+.adm-panel{display:none}
+.adm-panel.active{display:block}
+/* Stat cards */
+.stat-cards{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-bottom:20px}
+@media(min-width:700px){.stat-cards{grid-template-columns:repeat(4,1fr)}}
+.stat-card{background:#fff;border-radius:var(--radius-lg);padding:16px;border:1px solid var(--border)}
+.stat-icon{width:40px;height:40px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:18px;margin-bottom:10px}
+.stat-card.orange .stat-icon{background:#fff3ef;color:var(--orange)}
+.stat-card.green .stat-icon{background:#dcfce7;color:var(--success)}
+.stat-card.blue .stat-icon{background:#dbeafe;color:#2563eb}
+.stat-card.purple .stat-icon{background:#ede9fe;color:#7c3aed}
+.stat-num{font-family:var(--font-head);font-size:22px;font-weight:800;color:var(--black);margin-bottom:2px}
+.stat-label{font-size:12px;color:var(--gray)}
+.stat-trend{font-size:11px;margin-top:4px;font-weight:600;color:var(--success)}
+/* Tables */
+.adm-table-wrap{background:#fff;border-radius:var(--radius-lg);border:1px solid var(--border);overflow:hidden}
+.adm-table-head{padding:14px 18px;display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;border-bottom:1px solid var(--border)}
+.adm-table-title{font-family:var(--font-head);font-size:15px;font-weight:800}
+.adm-search-input{padding:8px 12px;border:1.5px solid var(--border);border-radius:7px;font-size:13px;width:200px;max-width:100%}
+.adm-search-input:focus{border-color:var(--orange);outline:none}
+.adm-table-scroll{overflow-x:auto;-webkit-overflow-scrolling:touch}
+table{width:100%;border-collapse:collapse;font-size:13px}
+thead{background:#f9fafb}
+th{padding:10px 14px;text-align:left;font-weight:700;color:var(--gray);font-size:11px;text-transform:uppercase;letter-spacing:.5px;white-space:nowrap}
+td{padding:11px 14px;border-top:1px solid var(--border);vertical-align:middle}
+tr:hover td{background:#fafafa}
+.td-img{width:44px;height:44px;border-radius:7px;object-fit:cover;background:var(--light-gray)}
+.td-name{font-weight:600;color:var(--dark)}
+.td-sub{font-size:11px;color:var(--gray);margin-top:2px}
+/* Status badge */
+.sbadge{padding:3px 10px;border-radius:20px;font-size:11px;font-weight:700;display:inline-block;white-space:nowrap}
+.sbadge.pending{background:#fef3c7;color:#d97706}
+.sbadge.confirmed{background:#dbeafe;color:#2563eb}
+.sbadge.processing{background:#dbeafe;color:#2563eb}
+.sbadge.shipped{background:#e0f2fe;color:#0369a1}
+.sbadge.delivered{background:#dcfce7;color:#16a34a}
+.sbadge.cancelled{background:#fee2e2;color:#dc2626}
+.sbadge.active{background:#dcfce7;color:#16a34a}
+.sbadge.inactive{background:#f3f4f6;color:#6b7280}
+/* Btns */
+.adm-btn{display:inline-flex;align-items:center;gap:6px;padding:8px 14px;border-radius:7px;font-size:13px;font-weight:600;cursor:pointer;transition:.2s;font-family:var(--font-body);border:none;white-space:nowrap}
+.adm-btn.primary{background:var(--orange);color:#fff}
+.adm-btn.primary:hover{background:var(--orange-dark)}
+.adm-btn.outline{background:#fff;color:var(--dark);border:1.5px solid var(--border)}
+.adm-btn.outline:hover{border-color:var(--orange);color:var(--orange)}
+.adm-btn.danger{background:#fee2e2;color:#dc2626}
+.adm-btn.danger:hover{background:#dc2626;color:#fff}
+.adm-btn.success{background:#dcfce7;color:#16a34a}
+.adm-btn.sm{padding:5px 10px;font-size:12px}
+/* Form cards */
+.adm-form-card{background:#fff;border:1px solid var(--border);border-radius:var(--radius-lg);padding:20px;margin-bottom:16px}
+.adm-form-title{font-family:var(--font-head);font-size:16px;font-weight:800;margin-bottom:16px;display:flex;align-items:center;gap:8px}
+.adm-form-title i{color:var(--orange)}
+.adm-form-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+@media(max-width:600px){.adm-form-grid{grid-template-columns:1fr}}
+.adm-form-group{margin-bottom:12px}
+.adm-form-group.full{grid-column:1/-1}
+.adm-form-group label{display:block;font-size:12px;font-weight:700;margin-bottom:5px;color:var(--dark);text-transform:uppercase;letter-spacing:.3px}
+.adm-form-group input,.adm-form-group select,.adm-form-group textarea{width:100%;padding:10px 12px;border:1.5px solid var(--border);border-radius:7px;font-size:14px;transition:.2s;background:#fff;outline:none}
+.adm-form-group input:focus,.adm-form-group select:focus,.adm-form-group textarea:focus{border-color:var(--orange)}
+.adm-form-group textarea{resize:vertical;min-height:80px}
+/* Toggle switch */
+.toggle-switch{position:relative;width:44px;height:24px;flex-shrink:0;display:inline-block}
+.toggle-switch input{opacity:0;width:0;height:0}
+.toggle-slider{position:absolute;inset:0;background:#d1d5db;border-radius:24px;cursor:pointer;transition:.3s}
+.toggle-slider::before{content:'';position:absolute;height:18px;width:18px;left:3px;bottom:3px;background:#fff;border-radius:50%;transition:.3s}
+.toggle-switch input:checked+.toggle-slider{background:var(--orange)}
+.toggle-switch input:checked+.toggle-slider::before{transform:translateX(20px)}
+/* Admin login */
+#adminLoginPage{position:fixed;inset:0;background:linear-gradient(135deg,var(--black),#1a0a00);display:none;align-items:center;justify-content:center;z-index:2000;padding:16px}
+#adminLoginPage.show{display:flex}
+.adm-login-card{background:#1a1a1a;border:1px solid rgba(255,255,255,.1);border-radius:var(--radius-lg);padding:32px;width:100%;max-width:380px}
+.adm-login-card h2{font-family:var(--font-head);font-size:22px;font-weight:800;color:#fff;margin-bottom:4px;text-align:center}
+.adm-login-card p{font-size:13px;color:rgba(255,255,255,.4);margin-bottom:24px;text-align:center}
+.adm-login-card input{width:100%;padding:12px 14px;background:rgba(255,255,255,.06);border:1.5px solid rgba(255,255,255,.1);border-radius:8px;color:#fff;font-size:14px;margin-bottom:12px;transition:.2s;outline:none}
+.adm-login-card input:focus{border-color:var(--orange)}
+.adm-login-card input::placeholder{color:rgba(255,255,255,.3)}
+.adm-login-submit{width:100%;background:var(--orange);color:#fff;padding:13px;border-radius:8px;font-size:15px;font-weight:700;font-family:var(--font-head);cursor:pointer;transition:.2s;border:none;margin-top:4px}
+.adm-login-submit:hover{background:var(--orange-dark)}
+/* Chart */
+.chart-bar-wrap{background:#fff;border:1px solid var(--border);border-radius:var(--radius-lg);padding:18px;margin-bottom:16px}
+.chart-bars{display:flex;align-items:flex-end;gap:6px;height:120px;padding-top:12px}
+.chart-bar-col{flex:1;display:flex;flex-direction:column;align-items:center;gap:4px;min-width:0}
+.chart-bar{width:100%;background:linear-gradient(to top,var(--orange),var(--orange-light));border-radius:4px 4px 0 0;min-height:4px;transition:height .5s ease}
+.chart-bar-label{font-size:9px;color:var(--gray);white-space:nowrap}
+.chart-bar-val{font-size:9px;font-weight:700;color:var(--orange)}
+/* Coupon */
+.coupon-card{background:#fff;border:1.5px dashed var(--border);border-radius:var(--radius-lg);padding:14px;display:flex;align-items:center;gap:14px;margin-bottom:10px;flex-wrap:wrap}
+.coupon-code{font-family:var(--font-head);font-size:18px;font-weight:800;color:var(--orange);letter-spacing:2px}
+.coupon-info{flex:1;min-width:120px}
+.coupon-desc{font-size:13px;color:var(--gray)}
+/* Settings */
+.settings-grid{display:grid;grid-template-columns:1fr;gap:16px}
+@media(min-width:700px){.settings-grid{grid-template-columns:1fr 1fr}}
+/* Admin tabs */
+.adm-tabs{display:flex;border-bottom:2px solid var(--border);margin-bottom:16px;overflow-x:auto;scrollbar-width:none}
+.adm-tab{padding:10px 16px;font-size:13px;font-weight:600;cursor:pointer;border-bottom:2px solid transparent;margin-bottom:-2px;white-space:nowrap;transition:.2s;font-family:var(--font-head)}
+.adm-tab.active{color:var(--orange);border-bottom-color:var(--orange)}
+/* Mobile admin */
+@media(max-width:768px){
+  .adm-toggle{display:block}
+  .adm-sidebar{transform:translateX(-240px)}
+  .adm-sidebar.open{transform:translateX(0)}
+  .adm-main{margin-left:0!important;max-width:100vw}
+  .adm-content{padding:12px}
+}
+.adm-mobile-overlay{position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:799;display:none}
+.adm-mobile-overlay.show{display:block}
+/* FAQ editor */
+.faq-editor-item{border:1px solid var(--border);border-radius:8px;padding:12px;margin-bottom:8px}
+.faq-editor-item input,.faq-editor-item textarea{width:100%;padding:8px 10px;border:1px solid var(--border);border-radius:6px;font-size:13px;margin-top:4px;outline:none}
+.faq-editor-item textarea{min-height:60px;resize:vertical}
+
 @media(max-width:480px){
   .cat-grid{grid-template-columns:repeat(4,1fr)}
   .hero{padding:36px 14px 32px}
@@ -1119,6 +1254,324 @@ footer{background:var(--black);color:#fff;padding:40px 16px 20px;margin-top:40px
     <button class="btn-primary" onclick="saveAddress()" style="width:100%;justify-content:center"><i class="fa fa-save"></i> Save Address</button>
   </div>
 </div>
+
+<!-- ========== ADMIN LOGIN ========== -->
+<div id="adminLoginPage">
+  <div class="adm-login-card">
+    <div style="text-align:center;margin-bottom:20px">
+      <img src="BENIM_logo_web_optimized.webp" style="height:44px;margin:0 auto 10px" onerror="this.style.display='none'"/>
+      <h2>Admin Panel</h2>
+      <p>BENIM Trade Control Centre</p>
+    </div>
+    <input type="email" id="admEmail" placeholder="Admin email"/>
+    <input type="password" id="admPassword" placeholder="Password"/>
+    <button class="adm-login-submit" onclick="adminLogin()">Sign In to Dashboard</button>
+    <p style="text-align:center;margin-top:14px;font-size:12px;color:rgba(255,255,255,.3);cursor:pointer" onclick="closeAdminLogin()">← Back to Store</p>
+  </div>
+</div>
+
+<!-- ========== ADMIN SHELL ========== -->
+<div id="adminShell">
+  <!-- Sidebar -->
+  <div class="adm-sidebar" id="admSidebar">
+    <div class="adm-logo">
+      <img src="BENIM_logo_web_optimized.webp" style="height:32px" onerror="this.style.display='none'"/>
+      <div><span>BENIM</span><small>Admin Panel</small></div>
+    </div>
+    <nav class="adm-nav">
+      <div class="adm-nav-group">Main</div>
+      <div class="adm-nav-item active" onclick="admShowPanel('dashboard')"><i class="fa fa-gauge"></i>Dashboard</div>
+      <div class="adm-nav-item" onclick="admShowPanel('orders')"><i class="fa fa-bag-shopping"></i>Orders <span class="badge-count" id="pendingBadge">0</span></div>
+      <div class="adm-nav-item" onclick="admShowPanel('products')"><i class="fa fa-box"></i>Products</div>
+      <div class="adm-nav-item" onclick="admShowPanel('customers')"><i class="fa fa-users"></i>Customers</div>
+      <div class="adm-nav-group">Store</div>
+      <div class="adm-nav-item" onclick="admShowPanel('reviews')"><i class="fa fa-star"></i>Reviews</div>
+      <div class="adm-nav-item" onclick="admShowPanel('coupons')"><i class="fa fa-ticket"></i>Coupons</div>
+      <div class="adm-nav-item" onclick="admShowPanel('content')"><i class="fa fa-photo-film"></i>Content</div>
+      <div class="adm-nav-group">Settings</div>
+      <div class="adm-nav-item" onclick="admShowPanel('delivery')"><i class="fa fa-truck"></i>Delivery</div>
+      <div class="adm-nav-item" onclick="admShowPanel('payment')"><i class="fa fa-credit-card"></i>Payment</div>
+      <div class="adm-nav-item" onclick="admShowPanel('settings')"><i class="fa fa-gear"></i>Settings</div>
+    </nav>
+    <div class="adm-footer" onclick="admLogout()"><i class="fa fa-right-from-bracket"></i> Logout</div>
+  </div>
+  <div class="adm-mobile-overlay" id="admOverlay" onclick="closeAdmSidebar()"></div>
+
+  <!-- Main -->
+  <div class="adm-main" id="admMain">
+    <div class="adm-topbar">
+      <button class="adm-toggle" onclick="toggleAdmSidebar()"><i class="fa fa-bars"></i></button>
+      <div class="adm-topbar-title" id="admTopTitle">Dashboard</div>
+      <div class="adm-topbar-actions">
+        <button class="adm-btn outline sm" onclick="window.open('index.html','_blank')"><i class="fa fa-eye"></i> View Store</button>
+        <div class="adm-avatar" id="admAvatar">A</div>
+      </div>
+    </div>
+    <div class="adm-content">
+
+      <!-- ===== DASHBOARD PANEL ===== -->
+      <div class="adm-panel active" id="panel-dashboard">
+        <div class="stat-cards">
+          <div class="stat-card orange"><div class="stat-icon"><i class="fa fa-naira-sign"></i></div><div class="stat-num" id="statRevenue">₦0</div><div class="stat-label">Total Revenue</div><div class="stat-trend up" id="statRevTrend">Loading...</div></div>
+          <div class="stat-card green"><div class="stat-icon"><i class="fa fa-bag-shopping"></i></div><div class="stat-num" id="statOrders">0</div><div class="stat-label">Total Orders</div><div class="stat-trend up" id="statOrdTrend">Loading...</div></div>
+          <div class="stat-card blue"><div class="stat-icon"><i class="fa fa-users"></i></div><div class="stat-num" id="statCustomers">0</div><div class="stat-label">Customers</div><div class="stat-trend up">Registered users</div></div>
+          <div class="stat-card purple"><div class="stat-icon"><i class="fa fa-box"></i></div><div class="stat-num" id="statProducts">0</div><div class="stat-label">Products</div><div class="stat-trend up">In catalogue</div></div>
+        </div>
+        <div style="display:grid;grid-template-columns:1fr;gap:16px">
+          <div class="chart-bar-wrap">
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">
+              <div style="font-family:var(--font-head);font-size:15px;font-weight:800">Revenue (Last 7 Days)</div>
+            </div>
+            <div class="chart-bars" id="revChart"></div>
+          </div>
+          <div class="adm-table-wrap">
+            <div class="adm-table-head"><div class="adm-table-title">Recent Orders</div><button class="adm-btn outline sm" onclick="admShowPanel('orders')">View All</button></div>
+            <div class="adm-table-scroll"><table><thead><tr><th>Order ID</th><th>Customer</th><th>Amount</th><th>Status</th><th>Date</th></tr></thead><tbody id="recentOrdersTable"></tbody></table></div>
+          </div>
+        </div>
+        <div style="display:grid;grid-template-columns:1fr;gap:16px;margin-top:16px">
+          <div class="adm-table-wrap">
+            <div class="adm-table-head"><div class="adm-table-title">Best Selling Products</div></div>
+            <div class="adm-table-scroll"><table><thead><tr><th>Product</th><th>Category</th><th>Price</th><th>Stock</th></tr></thead><tbody id="bestSellingTable"></tbody></table></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ===== ORDERS PANEL ===== -->
+      <div class="adm-panel" id="panel-orders">
+        <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px">
+          <button class="adm-btn primary sm" onclick="filterOrders('all')">All</button>
+          <button class="adm-btn outline sm" onclick="filterOrders('pending')">Pending</button>
+          <button class="adm-btn outline sm" onclick="filterOrders('confirmed')">Confirmed</button>
+          <button class="adm-btn outline sm" onclick="filterOrders('shipped')">Shipped</button>
+          <button class="adm-btn outline sm" onclick="filterOrders('delivered')">Delivered</button>
+          <button class="adm-btn outline sm" onclick="filterOrders('cancelled')">Cancelled</button>
+        </div>
+        <div class="adm-table-wrap">
+          <div class="adm-table-head">
+            <div class="adm-table-title">All Orders</div>
+            <input class="adm-search-input" placeholder="Search order ID or customer..." oninput="searchOrders(this.value)"/>
+          </div>
+          <div class="adm-table-scroll"><table><thead><tr><th>Order ID</th><th>Customer</th><th>Items</th><th>Total</th><th>Payment</th><th>Delivery</th><th>Status</th><th>Date</th><th>Action</th></tr></thead><tbody id="ordersTable"></tbody></table></div>
+        </div>
+      </div>
+
+      <!-- ===== PRODUCTS PANEL ===== -->
+      <div class="adm-panel" id="panel-products">
+        <div class="adm-tabs">
+          <div class="adm-tab active" onclick="switchAdmTab(this,'prod-list')">Product List</div>
+          <div class="adm-tab" onclick="switchAdmTab(this,'prod-add')">Add Product</div>
+        </div>
+        <!-- Product list -->
+        <div id="adm-prod-list">
+          <div class="adm-table-wrap">
+            <div class="adm-table-head">
+              <div class="adm-table-title">Products</div>
+              <div style="display:flex;gap:8px;flex-wrap:wrap">
+                <input class="adm-search-input" placeholder="Search products..." oninput="searchAdmProducts(this.value)"/>
+                <button class="adm-btn primary sm" onclick="openAddProduct()"><i class="fa fa-plus"></i> Add</button>
+              </div>
+            </div>
+            <div class="adm-table-scroll"><table><thead><tr><th>Image</th><th>Name</th><th>Category</th><th>Price</th><th>Stock</th><th>Status</th><th>Actions</th></tr></thead><tbody id="productsAdmTable"></tbody></table></div>
+          </div>
+        </div>
+        <!-- Add/Edit product form -->
+        <div id="adm-prod-add" style="display:none">
+          <div class="adm-form-card">
+            <div class="adm-form-title"><i class="fa fa-box"></i><span id="prodFormTitle">Add New Product</span></div>
+            <input type="hidden" id="editProductId"/>
+            <div class="adm-form-grid">
+              <div class="adm-form-group full"><label>Product Name *</label><input type="text" id="pName" placeholder="e.g. Classic White Sneakers"/></div>
+              <div class="adm-form-group"><label>Category *</label>
+                <select id="pCategory"><option value="">Select category</option><option>Men's Shoes</option><option>Women's Shoes</option><option>Bags</option><option>Accessories</option><option>New Arrivals</option><option>Sale</option></select>
+              </div>
+              <div class="adm-form-group"><label>Badge</label>
+                <select id="pBadge"><option value="">None</option><option>Hot</option><option>New</option><option>Sale</option></select>
+              </div>
+              <div class="adm-form-group"><label>Price (₦) *</label><input type="number" id="pPrice" placeholder="12500"/></div>
+              <div class="adm-form-group"><label>Old Price (₦) - for discount</label><input type="number" id="pOldPrice" placeholder="Leave blank if no discount"/></div>
+              <div class="adm-form-group"><label>Stock Quantity</label><input type="number" id="pStock" placeholder="10"/></div>
+              <div class="adm-form-group"><label>Rating (1-5)</label><input type="number" id="pRating" placeholder="4.5" min="1" max="5" step="0.1"/></div>
+              <div class="adm-form-group full"><label>Description</label><textarea id="pDesc" placeholder="Product description..."></textarea></div>
+              <div class="adm-form-group full"><label>Sizes (comma separated)</label><input type="text" id="pSizes" placeholder="e.g. 36,37,38,39,40,41,42"/></div>
+              <div class="adm-form-group full"><label>Colors (comma separated)</label><input type="text" id="pColors" placeholder="e.g. Black,White,Brown"/></div>
+              <div class="adm-form-group full">
+                <label>Product Images (URLs, one per line)</label>
+                <textarea id="pImages" rows="3" placeholder="https://example.com/image1.jpg&#10;https://example.com/image2.jpg"></textarea>
+                <p style="font-size:11px;color:var(--gray);margin-top:4px">💡 Upload images to Imgur, Cloudinary or use direct URLs</p>
+              </div>
+              <div class="adm-form-group full">
+                <label style="display:flex;align-items:center;gap:8px">
+                  <label class="toggle-switch"><input type="checkbox" id="pActive" checked/><span class="toggle-slider"></span></label>
+                  Product Active (visible on store)
+                </label>
+              </div>
+            </div>
+            <div style="display:flex;gap:10px;margin-top:8px;flex-wrap:wrap">
+              <button class="adm-btn primary" onclick="saveProduct()"><i class="fa fa-save"></i> Save Product</button>
+              <button class="adm-btn outline" onclick="cancelProductEdit()"><i class="fa fa-times"></i> Cancel</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ===== CUSTOMERS PANEL ===== -->
+      <div class="adm-panel" id="panel-customers">
+        <div class="adm-table-wrap">
+          <div class="adm-table-head">
+            <div class="adm-table-title">Customers</div>
+            <input class="adm-search-input" placeholder="Search customers..." oninput="searchCustomers(this.value)"/>
+          </div>
+          <div class="adm-table-scroll"><table><thead><tr><th>Name</th><th>Email</th><th>Phone</th><th>Orders</th><th>Joined</th><th>Action</th></tr></thead><tbody id="customersTable"></tbody></table></div>
+        </div>
+      </div>
+
+      <!-- ===== REVIEWS PANEL ===== -->
+      <div class="adm-panel" id="panel-reviews">
+        <div class="adm-table-wrap">
+          <div class="adm-table-head"><div class="adm-table-title">Customer Reviews</div></div>
+          <div id="reviewsList" style="padding:16px"></div>
+        </div>
+      </div>
+
+      <!-- ===== COUPONS PANEL ===== -->
+      <div class="adm-panel" id="panel-coupons">
+        <div class="adm-form-card" style="margin-bottom:16px">
+          <div class="adm-form-title"><i class="fa fa-ticket"></i>Create Coupon</div>
+          <div class="adm-form-grid">
+            <div class="adm-form-group"><label>Coupon Code *</label><input type="text" id="couponCode" placeholder="e.g. BENIM20" style="text-transform:uppercase"/></div>
+            <div class="adm-form-group"><label>Discount Type</label>
+              <select id="couponType"><option value="percent">Percentage (%)</option><option value="fixed">Fixed Amount (₦)</option></select>
+            </div>
+            <div class="adm-form-group"><label>Discount Value *</label><input type="number" id="couponValue" placeholder="e.g. 20"/></div>
+            <div class="adm-form-group"><label>Min Order Amount (₦)</label><input type="number" id="couponMin" placeholder="e.g. 5000"/></div>
+            <div class="adm-form-group"><label>Expiry Date</label><input type="date" id="couponExpiry"/></div>
+            <div class="adm-form-group"><label>Max Uses</label><input type="number" id="couponMaxUse" placeholder="0 = unlimited"/></div>
+          </div>
+          <button class="adm-btn primary" onclick="saveCoupon()"><i class="fa fa-plus"></i> Create Coupon</button>
+        </div>
+        <div id="couponsList"></div>
+      </div>
+
+      <!-- ===== CONTENT PANEL ===== -->
+      <div class="adm-panel" id="panel-content">
+        <div class="adm-tabs">
+          <div class="adm-tab active" onclick="switchAdmTab(this,'content-hero')">Hero</div>
+          <div class="adm-tab" onclick="switchAdmTab(this,'content-faq')">FAQ</div>
+          <div class="adm-tab" onclick="switchAdmTab(this,'content-policy')">Policies</div>
+          <div class="adm-tab" onclick="switchAdmTab(this,'content-testimonials')">Testimonials</div>
+        </div>
+        <!-- Hero editor -->
+        <div id="adm-content-hero">
+          <div class="adm-form-card">
+            <div class="adm-form-title"><i class="fa fa-image"></i>Hero Section</div>
+            <div class="adm-form-group"><label>Headline</label><input type="text" id="heroHeadline" placeholder="Shop Smart. Dress Better."/></div>
+            <div class="adm-form-group"><label>Sub Text</label><input type="text" id="heroSubtext" placeholder="Premium fashion at honest prices."/></div>
+            <div class="adm-form-group"><label>Button Text</label><input type="text" id="heroBtnText" placeholder="Shop Now"/></div>
+            <div class="adm-form-group"><label>Announcement Bar Text</label><input type="text" id="announceText" placeholder="Free delivery on orders above ₦15,000..."/></div>
+            <button class="adm-btn primary" onclick="saveHeroContent()"><i class="fa fa-save"></i> Save Hero</button>
+          </div>
+        </div>
+        <!-- FAQ editor -->
+        <div id="adm-content-faq" style="display:none">
+          <div class="adm-form-card">
+            <div class="adm-form-title"><i class="fa fa-circle-question"></i>FAQ Management</div>
+            <div id="faqEditorList" style="margin-bottom:14px"></div>
+            <button class="adm-btn outline" onclick="addFAQItem()"><i class="fa fa-plus"></i> Add FAQ Item</button>
+            <button class="adm-btn primary" style="margin-left:8px" onclick="saveFAQContent()"><i class="fa fa-save"></i> Save FAQs</button>
+          </div>
+        </div>
+        <!-- Policy editor -->
+        <div id="adm-content-policy" style="display:none">
+          <div class="adm-form-card">
+            <div class="adm-form-title"><i class="fa fa-file-lines"></i>Policy Pages</div>
+            <div class="adm-form-group"><label>Select Policy</label>
+              <select id="policySelector" onchange="loadPolicyContent()">
+                <option value="delivery">Delivery Policy</option>
+                <option value="return">Return & Refund</option>
+                <option value="privacy">Privacy Policy</option>
+                <option value="terms">Terms & Conditions</option>
+              </select>
+            </div>
+            <div class="adm-form-group"><label>Policy Content (HTML allowed)</label><textarea id="policyContent" rows="10"></textarea></div>
+            <button class="adm-btn primary" onclick="savePolicyContent()"><i class="fa fa-save"></i> Save Policy</button>
+          </div>
+        </div>
+        <!-- Testimonials -->
+        <div id="adm-content-testimonials" style="display:none">
+          <div class="adm-form-card">
+            <div class="adm-form-title"><i class="fa fa-comments"></i>Testimonials</div>
+            <div id="testimonialsList" style="margin-bottom:14px"></div>
+            <button class="adm-btn outline" onclick="addTestimonial()"><i class="fa fa-plus"></i> Add Testimonial</button>
+            <button class="adm-btn primary" style="margin-left:8px" onclick="saveTestimonials()"><i class="fa fa-save"></i> Save</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- ===== DELIVERY PANEL ===== -->
+      <div class="adm-panel" id="panel-delivery">
+        <div class="adm-form-card">
+          <div class="adm-form-title"><i class="fa fa-truck"></i>Delivery Settings</div>
+          <div class="adm-form-group"><label>Home Delivery Status</label>
+            <label class="toggle-switch"><input type="checkbox" id="homeDeliveryActive" checked/><span class="toggle-slider"></span></label>
+          </div>
+          <div class="adm-form-group"><label>Pickup Station Status</label>
+            <label class="toggle-switch"><input type="checkbox" id="pickupActive" checked/><span class="toggle-slider"></span></label>
+          </div>
+          <div class="adm-form-group"><label>Free Delivery Threshold (₦)</label><input type="number" id="freeDeliveryThreshold" placeholder="15000"/></div>
+          <div class="adm-form-group"><label>Default Delivery Fee (₦)</label><input type="number" id="defaultDeliveryFee" placeholder="2000"/></div>
+          <div class="adm-form-group"><label>Pickup Stations (one per line)</label><textarea id="pickupStations" rows="4" placeholder="Ibadan - Ring Road&#10;Lagos - Ikeja&#10;Abuja - Wuse"></textarea></div>
+          <button class="adm-btn primary" onclick="saveDeliverySettings()"><i class="fa fa-save"></i> Save Delivery Settings</button>
+        </div>
+        <div class="adm-table-wrap" style="margin-top:16px">
+          <div class="adm-table-head"><div class="adm-table-title">Pay on Delivery Orders</div></div>
+          <div class="adm-table-scroll"><table><thead><tr><th>Order ID</th><th>Customer</th><th>Amount</th><th>Status</th><th>Action</th></tr></thead><tbody id="podOrdersTable"></tbody></table></div>
+        </div>
+      </div>
+
+      <!-- ===== PAYMENT PANEL ===== -->
+      <div class="adm-panel" id="panel-payment">
+        <div class="adm-form-card">
+          <div class="adm-form-title"><i class="fa fa-building-columns"></i>Bank Details</div>
+          <div class="adm-form-grid">
+            <div class="adm-form-group"><label>Bank Name</label><input type="text" id="bankName" placeholder="Opay"/></div>
+            <div class="adm-form-group"><label>Account Name</label><input type="text" id="bankAccName" placeholder="Adewole Aderonke Aishat"/></div>
+            <div class="adm-form-group"><label>Account Number</label><input type="text" id="bankAccNum" placeholder="9168031213"/></div>
+          </div>
+          <button class="adm-btn primary" onclick="savePaymentSettings()"><i class="fa fa-save"></i> Save Bank Details</button>
+        </div>
+        <div class="adm-table-wrap" style="margin-top:16px">
+          <div class="adm-table-head"><div class="adm-table-title">Bank Transfer Orders (Awaiting Confirmation)</div></div>
+          <div class="adm-table-scroll"><table><thead><tr><th>Order ID</th><th>Customer</th><th>Amount</th><th>Status</th><th>Action</th></tr></thead><tbody id="transferOrdersTable"></tbody></table></div>
+        </div>
+      </div>
+
+      <!-- ===== SETTINGS PANEL ===== -->
+      <div class="adm-panel" id="panel-settings">
+        <div class="settings-grid">
+          <div class="adm-form-card">
+            <div class="adm-form-title"><i class="fa fa-store"></i>Store Settings</div>
+            <div class="adm-form-group"><label>Store Name</label><input type="text" id="storeName" value="BENIM Trade"/></div>
+            <div class="adm-form-group"><label>WhatsApp Number</label><input type="text" id="storeWhatsapp" value="+234 916 803 1213"/></div>
+            <div class="adm-form-group"><label>Support Email</label><input type="email" id="storeEmail" value="shopwithbenim@gmail.com"/></div>
+            <div class="adm-form-group"><label>Store Status</label>
+              <select id="storeStatus"><option value="open">Open</option><option value="maintenance">Maintenance Mode</option></select>
+            </div>
+            <button class="adm-btn primary" onclick="saveStoreSettings()"><i class="fa fa-save"></i> Save Settings</button>
+          </div>
+          <div class="adm-form-card">
+            <div class="adm-form-title"><i class="fa fa-user-shield"></i>Admin Account</div>
+            <div class="adm-form-group"><label>Current Admin Email</label><input type="email" id="admEmailDisplay" readonly style="background:#f9fafb"/></div>
+            <div class="adm-form-group"><label>New Password</label><input type="password" id="newAdmPass" placeholder="Leave blank to keep current"/></div>
+            <div class="adm-form-group"><label>Confirm Password</label><input type="password" id="confirmAdmPass" placeholder="Confirm new password"/></div>
+            <button class="adm-btn primary" onclick="changeAdmPassword()"><i class="fa fa-key"></i> Change Password</button>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- /adm-content -->
+  </div><!-- /adm-main -->
+</div><!-- /adminShell -->
 
 <!-- Firebase + Scripts -->
 <script type="module">
@@ -1863,8 +2316,737 @@ window.toggleFAQ=(i,btn)=>{
   btn.classList.toggle('open');
 };
 
-// ===== UTILS =====
-window.formatPrice=(n)=>'₦'+Number(n).toLocaleString('en-NG');
+
+// ===== ADMIN SYSTEM =====
+// Trigger admin login by going to ?admin in URL or typing #admin
+window.openAdmin=()=>{document.getElementById('adminLoginPage').classList.add('show')};
+window.closeAdminLogin=()=>{document.getElementById('adminLoginPage').classList.remove('show')};
+
+// Check URL for admin
+if(window.location.hash==='#admin'||window.location.search==='?admin'){
+  window.openAdmin();
+}
+// Secret key: click logo 5 times
+let logoClicks=0;
+document.querySelector('.logo-wrap')?.addEventListener('click',()=>{
+  logoClicks++;
+  if(logoClicks>=5){logoClicks=0;window.openAdmin();}
+  setTimeout(()=>{if(logoClicks<5)logoClicks=0;},3000);
+});
+
+window.adminLogin=async()=>{
+  const email=document.getElementById('admEmail').value.trim();
+  const pass=document.getElementById('admPassword').value;
+  if(!email||!pass){showToast('Enter email and password','error');return;}
+  try{
+    const cred=await signInWithEmailAndPassword(auth,email,pass);
+    // Check if admin in Firestore
+    const adminDoc=await getDoc(doc(db,'admins',cred.user.uid));
+    if(!adminDoc.exists()&&email!=='shopwithbenim@gmail.com'){
+      await signOut(auth);showToast('Access denied. Not an admin.','error');return;
+    }
+    closeAdminLogin();
+    launchAdmin(cred.user);
+  }catch(e){showToast('Login failed: '+e.message,'error');}
+};
+
+window.launchAdmin=(user)=>{
+  document.querySelector('body > *:not(#adminShell):not(#adminLoginPage):not(#toast-container)').style.display='none';
+  // Hide all non-admin elements
+  document.querySelectorAll('#header,#page-home,#page-products,#page-detail,#page-cart,#page-checkout,#page-success,#page-track,#page-auth,#page-dashboard,#page-wishlist-page,#page-about,#page-policy-delivery,#page-policy-return,#page-privacy,#page-policy-terms,#page-faq,footer,.whatsapp-float,.announce-bar').forEach(el=>{if(el)el.style.display='none'});
+  const shell=document.getElementById('adminShell');
+  shell.classList.add('active');
+  shell.style.display='flex';
+  document.getElementById('admAvatar').textContent=user.email[0].toUpperCase();
+  document.getElementById('admEmailDisplay').value=user.email;
+  admShowPanel('dashboard');
+  loadAdminData();
+};
+
+window.admLogout=async()=>{
+  await signOut(auth);
+  document.getElementById('adminShell').classList.remove('active');
+  document.getElementById('adminShell').style.display='none';
+  // Restore store
+  document.querySelectorAll('#header,.announce-bar,footer,.whatsapp-float').forEach(el=>{if(el)el.style.display='';});
+  showPage('home');
+  showToast('Logged out from admin','info');
+};
+
+window.toggleAdmSidebar=()=>{
+  const sb=document.getElementById('admSidebar');
+  const ov=document.getElementById('admOverlay');
+  sb.classList.toggle('open');
+  ov.classList.toggle('show');
+};
+window.closeAdmSidebar=()=>{
+  document.getElementById('admSidebar').classList.remove('open');
+  document.getElementById('admOverlay').classList.remove('show');
+};
+
+window.admShowPanel=(panel)=>{
+  document.querySelectorAll('.adm-panel').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.adm-nav-item').forEach(n=>n.classList.remove('active'));
+  const el=document.getElementById('panel-'+panel);
+  if(el)el.classList.add('active');
+  const navEl=document.querySelector(`.adm-nav-item[onclick*="${panel}"]`);
+  if(navEl)navEl.classList.add('active');
+  const titles={dashboard:'Dashboard',orders:'Orders',products:'Products',customers:'Customers',reviews:'Reviews',coupons:'Coupons',content:'Content Management',delivery:'Delivery Settings',payment:'Payment Settings',settings:'Store Settings'};
+  document.getElementById('admTopTitle').textContent=titles[panel]||panel;
+  if(panel==='orders')loadAdmOrders();
+  if(panel==='products')loadAdmProducts();
+  if(panel==='customers')loadAdmCustomers();
+  if(panel==='reviews')loadAdmReviews();
+  if(panel==='coupons')loadAdmCoupons();
+  if(panel==='delivery')loadAdmDelivery();
+  if(panel==='payment')loadAdmPayment();
+  if(panel==='content')loadAdmContent();
+  closeAdmSidebar();
+};
+
+window.switchAdmTab=(btn,target)=>{
+  const parent=btn.closest('.adm-panel');
+  parent.querySelectorAll('.adm-tab').forEach(t=>t.classList.remove('active'));
+  btn.classList.add('active');
+  // Find sibling content divs (prefix = adm-)
+  const prefix=target.split('-')[0]+'-'+target.split('-')[1];
+  parent.querySelectorAll(`[id^="adm-${prefix.replace('adm-','')}"], [id^="${prefix}"]`).forEach(d=>d.style.display='none');
+  // simpler: hide all siblings that are divs with IDs starting with adm-
+  const allDivs=parent.querySelectorAll(':scope > div[id], :scope > div > div[id]');
+  // Target specifically
+  document.getElementById('adm-'+target)?.style && (document.getElementById('adm-'+target).style.display='block');
+  // Hide other tabs of same group
+  const group=btn.closest('.adm-panel').querySelectorAll('.adm-tabs ~ div');
+  group.forEach(d=>d.style.display=d.id==='adm-'+target?'block':'none');
+};
+
+// ===== LOAD ADMIN DATA =====
+window.allOrders=[];
+window.allCustomers=[];
+window.admProducts=[];
+
+async function loadAdminData(){
+  try{
+    // Orders
+    const ordSnap=await getDocs(query(collection(db,'orders'),orderBy('createdAt','desc')));
+    window.allOrders=ordSnap.docs.map(d=>({id:d.id,...d.data()}));
+    // Products
+    const prSnap=await getDocs(collection(db,'products'));
+    window.admProducts=prSnap.docs.map(d=>({id:d.id,...d.data()}));
+    window.allProducts=[...window.admProducts];
+    // Customers
+    const cuSnap=await getDocs(collection(db,'users'));
+    window.allCustomers=cuSnap.docs.map(d=>({id:d.id,...d.data()}));
+    renderAdmDashboard();
+  }catch(e){console.error('Admin data load error:',e);renderAdmDashboard();}
+}
+
+// ===== DASHBOARD =====
+function renderAdmDashboard(){
+  const orders=window.allOrders;
+  const revenue=orders.filter(o=>o.status!=='cancelled').reduce((s,o)=>s+(o.subtotal||0),0);
+  document.getElementById('statRevenue').textContent=formatPrice(revenue);
+  document.getElementById('statOrders').textContent=orders.length;
+  document.getElementById('statCustomers').textContent=window.allCustomers.length;
+  document.getElementById('statProducts').textContent=window.admProducts.length;
+  // Pending badge
+  const pending=orders.filter(o=>o.status==='pending').length;
+  document.getElementById('pendingBadge').textContent=pending;
+  document.getElementById('statRevTrend').textContent=`${orders.filter(o=>o.status==='delivered').length} delivered`;
+  document.getElementById('statOrdTrend').textContent=`${pending} pending`;
+  // Recent orders table
+  const tbody=document.getElementById('recentOrdersTable');
+  tbody.innerHTML=orders.slice(0,8).map(o=>`<tr>
+    <td><div class="td-name">${o.orderId||o.id.slice(0,12)}</div></td>
+    <td>${o.customer?.name||'Guest'}<div class="td-sub">${o.customer?.phone||''}</div></td>
+    <td style="font-weight:700;color:var(--orange)">${formatPrice(o.subtotal||0)}</td>
+    <td><span class="sbadge ${o.status||'pending'}">${(o.status||'pending').charAt(0).toUpperCase()+(o.status||'pending').slice(1)}</span></td>
+    <td>${o.createdAt?.toDate?o.createdAt.toDate().toLocaleDateString():'—'}</td>
+  </tr>`).join('');
+  // Best selling (by product count in orders)
+  const prodCounts={};
+  orders.forEach(o=>(o.items||[]).forEach(i=>{prodCounts[i.name]=(prodCounts[i.name]||0)+i.qty}));
+  const best=Object.entries(prodCounts).sort((a,b)=>b[1]-a[1]).slice(0,5);
+  document.getElementById('bestSellingTable').innerHTML=best.length?best.map(([name,qty])=>{
+    const p=window.admProducts.find(pp=>pp.name===name)||{};
+    return`<tr><td><div class="td-name">${name}</div></td><td>${p.category||'—'}</td><td style="font-weight:700">${formatPrice(p.price||0)}</td><td><span class="sbadge active">${qty} sold</span></td></tr>`;
+  }).join(''):'<tr><td colspan="4" style="text-align:center;color:var(--gray);padding:20px">No sales data yet</td></tr>';
+  // Revenue chart (last 7 days)
+  const days=['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+  const today=new Date();
+  const dayRevenue=Array(7).fill(0);
+  orders.forEach(o=>{
+    if(o.createdAt?.toDate){
+      const d=o.createdAt.toDate();
+      const diff=Math.floor((today-d)/(1000*60*60*24));
+      if(diff<7)dayRevenue[6-diff]+=(o.subtotal||0);
+    }
+  });
+  const maxRev=Math.max(...dayRevenue,1);
+  const chartLabels=Array(7).fill(0).map((_,i)=>{const d=new Date(today);d.setDate(d.getDate()-(6-i));return days[d.getDay()];});
+  document.getElementById('revChart').innerHTML=dayRevenue.map((v,i)=>`
+    <div class="chart-bar-col">
+      <div class="chart-bar-val">${v>0?'₦'+Math.round(v/1000)+'k':''}</div>
+      <div class="chart-bar" style="height:${Math.max(4,Math.round((v/maxRev)*100))}px"></div>
+      <div class="chart-bar-label">${chartLabels[i]}</div>
+    </div>`).join('');
+}
+
+// ===== ORDERS =====
+window.ordersFilter='all';
+window.loadAdmOrders=async()=>{
+  if(!window.allOrders.length){
+    try{const snap=await getDocs(query(collection(db,'orders'),orderBy('createdAt','desc')));window.allOrders=snap.docs.map(d=>({id:d.id,...d.data()}));}catch(e){}
+  }
+  renderOrdersTable(window.allOrders);
+  // POD + Transfer tables
+  renderPODTable();
+  renderTransferTable();
+};
+
+window.filterOrders=(status)=>{
+  window.ordersFilter=status;
+  const filtered=status==='all'?window.allOrders:window.allOrders.filter(o=>o.status===status);
+  renderOrdersTable(filtered);
+};
+
+window.searchOrders=(val)=>{
+  const v=val.toLowerCase();
+  const filtered=window.allOrders.filter(o=>(o.orderId||'').toLowerCase().includes(v)||(o.customer?.name||'').toLowerCase().includes(v)||(o.customer?.email||'').toLowerCase().includes(v));
+  renderOrdersTable(filtered);
+};
+
+function renderOrdersTable(orders){
+  const tbody=document.getElementById('ordersTable');
+  if(!orders.length){tbody.innerHTML='<tr><td colspan="9" style="text-align:center;padding:24px;color:var(--gray)">No orders found</td></tr>';return;}
+  tbody.innerHTML=orders.map(o=>`<tr>
+    <td><div class="td-name" style="font-size:11px">${o.orderId||o.id.slice(0,12)}</div></td>
+    <td><div class="td-name">${o.customer?.name||'Guest'}</div><div class="td-sub">${o.customer?.phone||o.customer?.email||''}</div></td>
+    <td>${(o.items||[]).length} item(s)</td>
+    <td style="font-weight:700;color:var(--orange)">${formatPrice(o.subtotal||0)}</td>
+    <td><span style="font-size:11px">${o.payment==='transfer'?'🏦 Transfer':'💵 POD'}</span></td>
+    <td><span style="font-size:11px">${o.delivery==='pickup'?'📍 Pickup':'🏠 Home'}</span></td>
+    <td>
+      <select onchange="updateOrderStatus('${o.id}',this.value)" style="padding:4px 8px;border:1.5px solid var(--border);border-radius:6px;font-size:12px;cursor:pointer;outline:none">
+        ${['pending','confirmed','processing','shipped','delivered','cancelled'].map(s=>`<option value="${s}" ${o.status===s?'selected':''}>${s.charAt(0).toUpperCase()+s.slice(1)}</option>`).join('')}
+      </select>
+    </td>
+    <td style="font-size:11px;color:var(--gray)">${o.createdAt?.toDate?o.createdAt.toDate().toLocaleDateString():'—'}</td>
+    <td>
+      <button class="adm-btn outline sm" onclick="viewOrderDetail('${o.id}')"><i class="fa fa-eye"></i></button>
+      <button class="adm-btn outline sm" onclick="whatsappCustomer('${o.customer?.phone||''}','${o.orderId||o.id}')" style="margin-left:4px"><i class="fab fa-whatsapp" style="color:#25D366"></i></button>
+    </td>
+  </tr>`).join('');
+}
+
+window.updateOrderStatus=async(id,status)=>{
+  try{
+    await updateDoc(doc(db,'orders',id),{status});
+    const idx=window.allOrders.findIndex(o=>o.id===id);
+    if(idx>-1)window.allOrders[idx].status=status;
+    showToast('Order status updated to '+status,'success');
+    // Update pending badge
+    const pending=window.allOrders.filter(o=>o.status==='pending').length;
+    document.getElementById('pendingBadge').textContent=pending;
+  }catch(e){showToast('Error updating order','error');}
+};
+
+window.viewOrderDetail=(id)=>{
+  const o=window.allOrders.find(ord=>ord.id===id);
+  if(!o)return;
+  const info=`ORDER: ${o.orderId||id}\nCustomer: ${o.customer?.name||'Guest'}\nPhone: ${o.customer?.phone||'—'}\nEmail: ${o.customer?.email||'—'}\nItems: ${(o.items||[]).map(i=>i.name+' x'+i.qty).join(', ')}\nTotal: ${formatPrice(o.subtotal||0)}\nPayment: ${o.payment}\nDelivery: ${o.delivery}\nStatus: ${o.status}\nNote: ${o.note||'—'}`;
+  alert(info);
+};
+
+window.whatsappCustomer=(phone,orderId)=>{
+  const num=phone.replace(/\D/g,'');
+  if(!num){showToast('No phone number for this customer','error');return;}
+  window.open(`https://wa.me/${num.startsWith('0')?'234'+num.slice(1):num}?text=Hello! Regarding your BENIM Trade order ${orderId}...`,'_blank');
+};
+
+function renderPODTable(){
+  const pod=window.allOrders.filter(o=>o.payment==='pod');
+  document.getElementById('podOrdersTable').innerHTML=pod.slice(0,10).map(o=>`<tr>
+    <td>${o.orderId||o.id.slice(0,12)}</td>
+    <td>${o.customer?.name||'Guest'}</td>
+    <td style="font-weight:700;color:var(--orange)">${formatPrice(o.subtotal||0)}</td>
+    <td><span class="sbadge ${o.status||'pending'}">${o.status||'pending'}</span></td>
+    <td><button class="adm-btn outline sm" onclick="whatsappCustomer('${o.customer?.phone||''}','${o.orderId||o.id}')"><i class="fab fa-whatsapp"></i></button></td>
+  </tr>`).join('')||'<tr><td colspan="5" style="text-align:center;padding:20px;color:var(--gray)">No POD orders</td></tr>';
+}
+
+function renderTransferTable(){
+  const transfers=window.allOrders.filter(o=>o.payment==='transfer');
+  document.getElementById('transferOrdersTable').innerHTML=transfers.slice(0,10).map(o=>`<tr>
+    <td>${o.orderId||o.id.slice(0,12)}</td>
+    <td>${o.customer?.name||'Guest'}</td>
+    <td style="font-weight:700;color:var(--orange)">${formatPrice(o.subtotal||0)}</td>
+    <td><span class="sbadge ${o.status||'pending'}">${o.status||'pending'}</span></td>
+    <td>
+      <button class="adm-btn success sm" onclick="updateOrderStatus('${o.id}','confirmed')">Confirm</button>
+    </td>
+  </tr>`).join('')||'<tr><td colspan="5" style="text-align:center;padding:20px;color:var(--gray)">No transfer orders</td></tr>';
+}
+
+// ===== PRODUCTS =====
+window.loadAdmProducts=async()=>{
+  if(!window.admProducts.length){
+    try{const snap=await getDocs(collection(db,'products'));window.admProducts=snap.docs.map(d=>({id:d.id,...d.data()}));window.allProducts=[...window.admProducts];}catch(e){}
+  }
+  renderAdmProductsTable(window.admProducts);
+};
+
+function renderAdmProductsTable(prods){
+  const tbody=document.getElementById('productsAdmTable');
+  if(!prods.length){tbody.innerHTML='<tr><td colspan="7" style="text-align:center;padding:24px;color:var(--gray)">No products yet. Add your first product!</td></tr>';return;}
+  tbody.innerHTML=prods.map(p=>`<tr>
+    <td><img class="td-img" src="${p.images&&p.images[0]?p.images[0]:''}" onerror="this.src='https://via.placeholder.com/44'" /></td>
+    <td><div class="td-name">${p.name}</div><div class="td-sub">${p.badge||''}</div></td>
+    <td>${p.category||'—'}</td>
+    <td style="font-weight:700">${formatPrice(p.price||0)}</td>
+    <td>${p.stock||0}</td>
+    <td><span class="sbadge ${p.active===false?'inactive':'active'}">${p.active===false?'Hidden':'Active'}</span></td>
+    <td style="white-space:nowrap">
+      <button class="adm-btn outline sm" onclick="editProduct('${p.id}')"><i class="fa fa-pen"></i></button>
+      <button class="adm-btn danger sm" onclick="deleteProduct('${p.id}')" style="margin-left:4px"><i class="fa fa-trash"></i></button>
+      <button class="adm-btn outline sm" onclick="toggleProductActive('${p.id}',${p.active!==false})" style="margin-left:4px" title="${p.active===false?'Show':'Hide'}"><i class="fa fa-eye${p.active===false?'':'-slash'}"></i></button>
+    </td>
+  </tr>`).join('');
+}
+
+window.searchAdmProducts=(val)=>{
+  const v=val.toLowerCase();
+  const filtered=window.admProducts.filter(p=>p.name.toLowerCase().includes(v)||((p.category||'').toLowerCase().includes(v)));
+  renderAdmProductsTable(filtered);
+};
+
+window.openAddProduct=()=>{
+  document.getElementById('prodFormTitle').textContent='Add New Product';
+  document.getElementById('editProductId').value='';
+  ['pName','pPrice','pOldPrice','pStock','pRating','pDesc','pSizes','pColors','pImages'].forEach(id=>{const el=document.getElementById(id);if(el)el.value='';});
+  document.getElementById('pCategory').value='';
+  document.getElementById('pBadge').value='';
+  document.getElementById('pActive').checked=true;
+  switchAdmTab(document.querySelectorAll('#panel-products .adm-tab')[1],'prod-add');
+};
+
+window.cancelProductEdit=()=>{
+  switchAdmTab(document.querySelectorAll('#panel-products .adm-tab')[0],'prod-list');
+};
+
+window.editProduct=(id)=>{
+  const p=window.admProducts.find(pp=>pp.id===id);
+  if(!p)return;
+  document.getElementById('prodFormTitle').textContent='Edit Product';
+  document.getElementById('editProductId').value=id;
+  document.getElementById('pName').value=p.name||'';
+  document.getElementById('pCategory').value=p.category||'';
+  document.getElementById('pBadge').value=p.badge||'';
+  document.getElementById('pPrice').value=p.price||'';
+  document.getElementById('pOldPrice').value=p.oldPrice||'';
+  document.getElementById('pStock').value=p.stock||'';
+  document.getElementById('pRating').value=p.rating||'';
+  document.getElementById('pDesc').value=p.description||'';
+  document.getElementById('pSizes').value=(p.sizes||[]).join(',');
+  document.getElementById('pColors').value=(p.colors||[]).join(',');
+  document.getElementById('pImages').value=(p.images||[]).join('\n');
+  document.getElementById('pActive').checked=p.active!==false;
+  switchAdmTab(document.querySelectorAll('#panel-products .adm-tab')[1],'prod-add');
+};
+
+window.saveProduct=async()=>{
+  const name=document.getElementById('pName').value.trim();
+  const category=document.getElementById('pCategory').value;
+  const price=parseFloat(document.getElementById('pPrice').value);
+  if(!name||!category||!price){showToast('Name, category and price are required','error');return;}
+  const data={
+    name,category,
+    badge:document.getElementById('pBadge').value,
+    price,
+    oldPrice:parseFloat(document.getElementById('pOldPrice').value)||null,
+    stock:parseInt(document.getElementById('pStock').value)||0,
+    rating:parseFloat(document.getElementById('pRating').value)||4.5,
+    description:document.getElementById('pDesc').value.trim(),
+    sizes:document.getElementById('pSizes').value.split(',').map(s=>s.trim()).filter(Boolean),
+    colors:document.getElementById('pColors').value.split(',').map(c=>c.trim()).filter(Boolean),
+    images:document.getElementById('pImages').value.split('\n').map(u=>u.trim()).filter(Boolean),
+    active:document.getElementById('pActive').checked,
+    updatedAt:serverTimestamp(),
+  };
+  const editId=document.getElementById('editProductId').value;
+  try{
+    if(editId){
+      await updateDoc(doc(db,'products',editId),data);
+      const idx=window.admProducts.findIndex(p=>p.id===editId);
+      if(idx>-1)window.admProducts[idx]={...window.admProducts[idx],...data};
+      showToast('Product updated!','success');
+    }else{
+      data.createdAt=serverTimestamp();
+      data.reviews=0;
+      const ref=await addDoc(collection(db,'products'),data);
+      window.admProducts.push({id:ref.id,...data});
+      showToast('Product added!','success');
+    }
+    window.allProducts=[...window.admProducts];
+    cancelProductEdit();
+    renderAdmProductsTable(window.admProducts);
+  }catch(e){showToast('Error saving product: '+e.message,'error');}
+};
+
+window.deleteProduct=async(id)=>{
+  if(!confirm('Delete this product? This cannot be undone.'))return;
+  try{
+    await deleteDoc ? deleteDoc(doc(db,'products',id)) : null;
+    // Use updateDoc to mark deleted if deleteDoc not imported
+    try{const{deleteDoc:dd}=await import('https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js');await dd(doc(db,'products',id));}catch(e2){}
+    window.admProducts=window.admProducts.filter(p=>p.id!==id);
+    window.allProducts=[...window.admProducts];
+    renderAdmProductsTable(window.admProducts);
+    showToast('Product deleted','success');
+  }catch(e){showToast('Error: '+e.message,'error');}
+};
+
+window.toggleProductActive=async(id,currentlyActive)=>{
+  try{
+    await updateDoc(doc(db,'products',id),{active:!currentlyActive});
+    const idx=window.admProducts.findIndex(p=>p.id===id);
+    if(idx>-1)window.admProducts[idx].active=!currentlyActive;
+    window.allProducts=[...window.admProducts];
+    renderAdmProductsTable(window.admProducts);
+    showToast('Product visibility updated','success');
+  }catch(e){showToast('Error: '+e.message,'error');}
+};
+
+// ===== CUSTOMERS =====
+window.loadAdmCustomers=async()=>{
+  if(!window.allCustomers.length){
+    try{const snap=await getDocs(collection(db,'users'));window.allCustomers=snap.docs.map(d=>({id:d.id,...d.data()}));}catch(e){}
+  }
+  renderCustomersTable(window.allCustomers);
+};
+
+function renderCustomersTable(customers){
+  const tbody=document.getElementById('customersTable');
+  if(!customers.length){tbody.innerHTML='<tr><td colspan="6" style="text-align:center;padding:24px;color:var(--gray)">No customers yet</td></tr>';return;}
+  tbody.innerHTML=customers.map(c=>{
+    const orders=window.allOrders.filter(o=>o.userId===c.id).length;
+    return`<tr>
+      <td><div class="td-name">${c.name||'—'}</div></td>
+      <td>${c.email||'—'}</td>
+      <td>${c.phone||'—'}</td>
+      <td><span class="sbadge active">${orders} order(s)</span></td>
+      <td style="font-size:12px;color:var(--gray)">${c.createdAt?.toDate?c.createdAt.toDate().toLocaleDateString():'—'}</td>
+      <td><button class="adm-btn outline sm" onclick="whatsappCustomer('${c.phone||''}','')"><i class="fab fa-whatsapp"></i></button></td>
+    </tr>`;
+  }).join('');
+}
+
+window.searchCustomers=(val)=>{
+  const v=val.toLowerCase();
+  renderCustomersTable(window.allCustomers.filter(c=>(c.name||'').toLowerCase().includes(v)||(c.email||'').toLowerCase().includes(v)||(c.phone||'').includes(v)));
+};
+
+// ===== REVIEWS =====
+window.loadAdmReviews=async()=>{
+  const el=document.getElementById('reviewsList');
+  try{
+    const snap=await getDocs(collection(db,'reviews'));
+    const reviews=snap.docs.map(d=>({id:d.id,...d.data()}));
+    if(!reviews.length){el.innerHTML='<div class="empty-state"><i class="fa fa-star"></i><p>No reviews yet. Reviews submitted by customers appear here.</p></div>';return;}
+    el.innerHTML=reviews.map(r=>`
+      <div style="border:1px solid var(--border);border-radius:8px;padding:14px;margin-bottom:10px;display:flex;gap:12px;align-items:flex-start;flex-wrap:wrap">
+        <div style="flex:1;min-width:200px">
+          <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px">
+            <strong>${r.name||'Anonymous'}</strong>
+            <span style="color:#f59e0b">${'★'.repeat(r.rating||5)}</span>
+            <span class="sbadge ${r.approved?'active':'pending'}">${r.approved?'Approved':'Pending'}</span>
+          </div>
+          <div style="font-size:13px;color:#374151">${r.text||''}</div>
+          <div style="font-size:11px;color:var(--gray);margin-top:4px">Product: ${r.productName||'—'} | ${r.createdAt?.toDate?r.createdAt.toDate().toLocaleDateString():'—'}</div>
+        </div>
+        <div style="display:flex;gap:6px;flex-shrink:0">
+          <button class="adm-btn success sm" onclick="approveReview('${r.id}',${!r.approved})">${r.approved?'Unapprove':'Approve'}</button>
+          <button class="adm-btn danger sm" onclick="deleteReview('${r.id}')"><i class="fa fa-trash"></i></button>
+        </div>
+      </div>`).join('');
+  }catch(e){el.innerHTML='<div class="empty-state"><i class="fa fa-star"></i><p>Reviews will appear here once customers submit them.</p></div>';}
+};
+
+window.approveReview=async(id,approved)=>{
+  try{await updateDoc(doc(db,'reviews',id),{approved});showToast('Review '+(approved?'approved':'unapproved'),'success');loadAdmReviews();}catch(e){}
+};
+window.deleteReview=async(id)=>{
+  if(!confirm('Delete this review?'))return;
+  try{
+    const{deleteDoc:dd}=await import('https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js');
+    await dd(doc(db,'reviews',id));showToast('Review deleted','success');loadAdmReviews();
+  }catch(e){showToast('Error deleting','error');}
+};
+
+// ===== COUPONS =====
+window.loadAdmCoupons=async()=>{
+  try{
+    const snap=await getDocs(collection(db,'coupons'));
+    const coupons=snap.docs.map(d=>({id:d.id,...d.data()}));
+    renderCouponsList(coupons);
+  }catch(e){document.getElementById('couponsList').innerHTML='<div style="text-align:center;color:var(--gray);padding:20px">Create your first coupon above</div>';}
+};
+
+function renderCouponsList(coupons){
+  const el=document.getElementById('couponsList');
+  if(!coupons.length){el.innerHTML='<div style="text-align:center;color:var(--gray);padding:20px">No coupons yet</div>';return;}
+  el.innerHTML=coupons.map(c=>`
+    <div class="coupon-card">
+      <div>
+        <div class="coupon-code">${c.code}</div>
+        <div class="coupon-desc">${c.type==='percent'?c.value+'% off':'₦'+c.value+' off'} | Min: ₦${c.minOrder||0}</div>
+      </div>
+      <div class="coupon-info">
+        <div style="font-size:12px;color:var(--gray)">Expires: ${c.expiry||'No expiry'}</div>
+        <div style="font-size:12px;color:var(--gray)">Used: ${c.usedCount||0}/${c.maxUse||'∞'}</div>
+      </div>
+      <div style="margin-left:auto;display:flex;gap:6px;align-items:center">
+        <span class="sbadge ${c.active!==false?'active':'inactive'}">${c.active!==false?'Active':'Inactive'}</span>
+        <button class="adm-btn outline sm" onclick="toggleCoupon('${c.id}',${c.active!==false})">${c.active!==false?'Disable':'Enable'}</button>
+        <button class="adm-btn danger sm" onclick="deleteCoupon('${c.id}')"><i class="fa fa-trash"></i></button>
+      </div>
+    </div>`).join('');
+}
+
+window.saveCoupon=async()=>{
+  const code=document.getElementById('couponCode').value.trim().toUpperCase();
+  const value=parseFloat(document.getElementById('couponValue').value);
+  if(!code||!value){showToast('Enter code and value','error');return;}
+  const data={
+    code,value,
+    type:document.getElementById('couponType').value,
+    minOrder:parseFloat(document.getElementById('couponMin').value)||0,
+    expiry:document.getElementById('couponExpiry').value||null,
+    maxUse:parseInt(document.getElementById('couponMaxUse').value)||0,
+    usedCount:0,active:true,
+    createdAt:serverTimestamp(),
+  };
+  try{
+    await addDoc(collection(db,'coupons'),data);
+    showToast('Coupon created!','success');
+    ['couponCode','couponValue','couponMin','couponExpiry','couponMaxUse'].forEach(id=>document.getElementById(id).value='');
+    loadAdmCoupons();
+  }catch(e){showToast('Error: '+e.message,'error');}
+};
+
+window.toggleCoupon=async(id,currentlyActive)=>{
+  try{await updateDoc(doc(db,'coupons',id),{active:!currentlyActive});showToast('Coupon updated','success');loadAdmCoupons();}catch(e){}
+};
+window.deleteCoupon=async(id)=>{
+  if(!confirm('Delete coupon?'))return;
+  try{
+    const{deleteDoc:dd}=await import('https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js');
+    await dd(doc(db,'coupons',id));showToast('Coupon deleted','success');loadAdmCoupons();
+  }catch(e){}
+};
+
+// ===== CONTENT MANAGEMENT =====
+window.loadAdmContent=async()=>{
+  try{
+    const snap=await getDoc(doc(db,'settings','content'));
+    if(snap.exists()){
+      const d=snap.data();
+      if(d.heroHeadline)document.getElementById('heroHeadline').value=d.heroHeadline;
+      if(d.heroSubtext)document.getElementById('heroSubtext').value=d.heroSubtext;
+      if(d.heroBtnText)document.getElementById('heroBtnText').value=d.heroBtnText;
+      if(d.announceText)document.getElementById('announceText').value=d.announceText;
+    }
+  }catch(e){}
+  loadFAQEditor();
+  loadTestimonialsEditor();
+};
+
+window.saveHeroContent=async()=>{
+  const data={
+    heroHeadline:document.getElementById('heroHeadline').value,
+    heroSubtext:document.getElementById('heroSubtext').value,
+    heroBtnText:document.getElementById('heroBtnText').value,
+    announceText:document.getElementById('announceText').value,
+    updatedAt:serverTimestamp(),
+  };
+  try{
+    await setDoc(doc(db,'settings','content'),data,{merge:true});
+    showToast('Hero content saved!','success');
+    // Live update on store
+    const h1=document.querySelector('.hero h1');
+    const heroP=document.querySelector('.hero p');
+    if(h1&&data.heroHeadline){const parts=data.heroHeadline.split('.');h1.innerHTML=parts[0]+'.<br><span>'+parts.slice(1).join('.')||'</span>';}
+    if(heroP&&data.heroSubtext)heroP.textContent=data.heroSubtext;
+    if(data.announceText){const ab=document.querySelector('.announce-bar');if(ab)ab.innerHTML=data.announceText;}
+  }catch(e){showToast('Error: '+e.message,'error');}
+};
+
+// FAQ editor
+window.faqEditorItems=[];
+async function loadFAQEditor(){
+  try{
+    const snap=await getDoc(doc(db,'settings','faq'));
+    window.faqEditorItems=snap.exists()?(snap.data().items||[...faqs]):[...faqs];
+  }catch(e){window.faqEditorItems=[...faqs];}
+  renderFAQEditor();
+}
+function renderFAQEditor(){
+  document.getElementById('faqEditorList').innerHTML=window.faqEditorItems.map((f,i)=>`
+    <div class="faq-editor-item">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px">
+        <strong style="font-size:13px">FAQ #${i+1}</strong>
+        <button class="adm-btn danger sm" onclick="removeFAQItem(${i})"><i class="fa fa-trash"></i></button>
+      </div>
+      <label style="font-size:11px;font-weight:700;color:var(--gray)">QUESTION</label>
+      <input type="text" value="${f.q}" oninput="window.faqEditorItems[${i}].q=this.value"/>
+      <label style="font-size:11px;font-weight:700;color:var(--gray);margin-top:6px;display:block">ANSWER</label>
+      <textarea oninput="window.faqEditorItems[${i}].a=this.value">${f.a}</textarea>
+    </div>`).join('');
+}
+window.addFAQItem=()=>{window.faqEditorItems.push({q:'New Question',a:'Answer here'});renderFAQEditor();};
+window.removeFAQItem=(i)=>{window.faqEditorItems.splice(i,1);renderFAQEditor();};
+window.saveFAQContent=async()=>{
+  try{
+    await setDoc(doc(db,'settings','faq'),{items:window.faqEditorItems,updatedAt:serverTimestamp()});
+    showToast('FAQs saved! Reload store to see changes.','success');
+    window.faqs=[...window.faqEditorItems];
+    renderFAQ();
+  }catch(e){showToast('Error: '+e.message,'error');}
+};
+
+// Testimonials
+window.testimonialItems=[];
+async function loadTestimonialsEditor(){
+  try{
+    const snap=await getDoc(doc(db,'settings','testimonials'));
+    window.testimonialItems=snap.exists()?(snap.data().items||[]):[];
+  }catch(e){window.testimonialItems=[];}
+  renderTestimonialsEditor();
+}
+function renderTestimonialsEditor(){
+  document.getElementById('testimonialsList').innerHTML=window.testimonialItems.map((t,i)=>`
+    <div class="faq-editor-item">
+      <div style="display:flex;justify-content:space-between;margin-bottom:6px"><strong>Testimonial #${i+1}</strong><button class="adm-btn danger sm" onclick="window.testimonialItems.splice(${i},1);renderTestimonialsEditor()"><i class="fa fa-trash"></i></button></div>
+      <input type="text" value="${t.name||''}" placeholder="Customer name" oninput="window.testimonialItems[${i}].name=this.value"/>
+      <textarea placeholder="Their review..." oninput="window.testimonialItems[${i}].text=this.value">${t.text||''}</textarea>
+    </div>`).join('');
+}
+window.addTestimonial=()=>{window.testimonialItems.push({name:'',text:''});renderTestimonialsEditor();};
+window.saveTestimonials=async()=>{
+  try{await setDoc(doc(db,'settings','testimonials'),{items:window.testimonialItems,updatedAt:serverTimestamp()});showToast('Testimonials saved!','success');}catch(e){showToast('Error','error');}
+};
+
+// Policy editor
+window.loadPolicyContent=async()=>{
+  const key=document.getElementById('policySelector').value;
+  try{
+    const snap=await getDoc(doc(db,'settings','policies'));
+    if(snap.exists()&&snap.data()[key]){
+      document.getElementById('policyContent').value=snap.data()[key];
+    }else{document.getElementById('policyContent').value='';}
+  }catch(e){document.getElementById('policyContent').value='';}
+};
+window.savePolicyContent=async()=>{
+  const key=document.getElementById('policySelector').value;
+  const content=document.getElementById('policyContent').value;
+  try{
+    await setDoc(doc(db,'settings','policies'),{[key]:content,updatedAt:serverTimestamp()},{merge:true});
+    showToast('Policy saved!','success');
+  }catch(e){showToast('Error: '+e.message,'error');}
+};
+
+// ===== DELIVERY SETTINGS =====
+window.loadAdmDelivery=async()=>{
+  try{
+    const snap=await getDoc(doc(db,'settings','delivery'));
+    if(snap.exists()){
+      const d=snap.data();
+      document.getElementById('homeDeliveryActive').checked=d.homeDelivery!==false;
+      document.getElementById('pickupActive').checked=d.pickup!==false;
+      document.getElementById('freeDeliveryThreshold').value=d.freeThreshold||15000;
+      document.getElementById('defaultDeliveryFee').value=d.defaultFee||2000;
+      document.getElementById('pickupStations').value=(d.stations||[]).join('\n');
+    }
+  }catch(e){}
+  renderPODTable();
+};
+window.saveDeliverySettings=async()=>{
+  const data={
+    homeDelivery:document.getElementById('homeDeliveryActive').checked,
+    pickup:document.getElementById('pickupActive').checked,
+    freeThreshold:parseFloat(document.getElementById('freeDeliveryThreshold').value)||15000,
+    defaultFee:parseFloat(document.getElementById('defaultDeliveryFee').value)||2000,
+    stations:document.getElementById('pickupStations').value.split('\n').map(s=>s.trim()).filter(Boolean),
+    updatedAt:serverTimestamp(),
+  };
+  try{await setDoc(doc(db,'settings','delivery'),data);showToast('Delivery settings saved!','success');}catch(e){showToast('Error','error');}
+};
+
+// ===== PAYMENT SETTINGS =====
+window.loadAdmPayment=async()=>{
+  try{
+    const snap=await getDoc(doc(db,'settings','payment'));
+    if(snap.exists()){
+      const d=snap.data();
+      document.getElementById('bankName').value=d.bankName||'Opay';
+      document.getElementById('bankAccName').value=d.accountName||'Adewole Aderonke Aishat';
+      document.getElementById('bankAccNum').value=d.accountNumber||'9168031213';
+    }
+  }catch(e){}
+  renderTransferTable();
+};
+window.savePaymentSettings=async()=>{
+  const data={
+    bankName:document.getElementById('bankName').value,
+    accountName:document.getElementById('bankAccName').value,
+    accountNumber:document.getElementById('bankAccNum').value,
+    updatedAt:serverTimestamp(),
+  };
+  try{
+    await setDoc(doc(db,'settings','payment'),data);
+    showToast('Bank details saved!','success');
+    // Live update checkout bank details
+    const box=document.getElementById('bankDetailsBox');
+    if(box)box.innerHTML=`<p><strong>Bank:</strong> ${data.bankName}</p><p><strong>Account Name:</strong> ${data.accountName}</p><p><strong>Account Number:</strong> <strong>${data.accountNumber}</strong></p><p style="margin-top:6px;color:#374151;font-size:12px">⚠️ Please send proof of payment via WhatsApp after transfer.</p>`;
+  }catch(e){showToast('Error','error');}
+};
+
+// ===== STORE SETTINGS =====
+window.saveStoreSettings=async()=>{
+  try{
+    await setDoc(doc(db,'settings','store'),{name:document.getElementById('storeName').value,whatsapp:document.getElementById('storeWhatsapp').value,email:document.getElementById('storeEmail').value,status:document.getElementById('storeStatus').value,updatedAt:serverTimestamp()});
+    showToast('Store settings saved!','success');
+  }catch(e){showToast('Error','error');}
+};
+window.changeAdmPassword=async()=>{
+  const np=document.getElementById('newAdmPass').value;
+  const cp=document.getElementById('confirmAdmPass').value;
+  if(!np){showToast('Enter new password','error');return;}
+  if(np!==cp){showToast('Passwords do not match','error');return;}
+  if(np.length<6){showToast('Minimum 6 characters','error');return;}
+  try{
+    const{updatePassword}=await import('https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js');
+    await updatePassword(auth.currentUser,np);
+    showToast('Password changed!','success');
+    document.getElementById('newAdmPass').value='';
+    document.getElementById('confirmAdmPass').value='';
+  }catch(e){showToast('Error: '+e.message,'error');}
+};
+
+// ===== COUPON VALIDATION ON CHECKOUT =====
+// Add coupon input to checkout if not present
+window.validateCoupon=async(code)=>{
+  try{
+    const snap=await getDocs(query(collection(db,'coupons'),where('code','==',code.toUpperCase()),where('active','==',true)));
+    if(snap.empty)return null;
+    const c={id:snap.docs[0].id,...snap.docs[0].data()};
+    if(c.expiry&&new Date(c.expiry)<new Date())return null;
+    if(c.maxUse&&(c.usedCount||0)>=c.maxUse)return null;
+    return c;
+  }catch(e){return null;}
+};
+
+
 
 // ===== INIT =====
 fetchProducts();
