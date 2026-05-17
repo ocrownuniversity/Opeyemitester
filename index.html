@@ -1062,11 +1062,38 @@ footer{background:var(--dark);color:#fff;padding:60px 0 0;}
   </div>
 </div>
 
-<script>
+<!-- Firebase SDK -->
+<script type="module">
 // ============================================================
-// DATA STORE
+// FIREBASE SETUP
 // ============================================================
-const DB = {
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import {
+  getFirestore, doc, getDoc, setDoc, addDoc, updateDoc, deleteDoc,
+  collection, getDocs, query, where, orderBy, onSnapshot, serverTimestamp
+} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+import {
+  getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword,
+  signOut, onAuthStateChanged, sendPasswordResetEmail
+} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyAusH_i0b-O2WM9PyZW_AvFtd2ZW7iSnE0",
+  authDomain: "benim-525de.firebaseapp.com",
+  projectId: "benim-525de",
+  storageBucket: "benim-525de.firebasestorage.app",
+  messagingSenderId: "806159296289",
+  appId: "1:806159296289:web:a3b760ce9e997462a98060"
+};
+
+const app = initializeApp(firebaseConfig);
+const db  = getFirestore(app);
+const auth = getAuth(app);
+
+// ============================================================
+// LOCAL CACHE (cart & wishlist stay local — fast UX)
+// ============================================================
+const LC = {
   get(k){try{return JSON.parse(localStorage.getItem('benim_'+k))||null}catch{return null}},
   set(k,v){localStorage.setItem('benim_'+k,JSON.stringify(v))},
   del(k){localStorage.removeItem('benim_'+k)}
@@ -1113,20 +1140,20 @@ const DEFAULT_SETTINGS = {
 };
 
 // ============================================================
-// STATE
+// STATE  (cart & wishlist = localStorage; rest = Firestore)
 // ============================================================
 let STATE = {
   currentPage:'home',
-  user: DB.get('user') || null,
-  cart: DB.get('cart') || [],
-  wishlist: DB.get('wishlist') || [],
-  orders: DB.get('orders') || [],
-  users: DB.get('users') || [],
-  products: DB.get('products') || DEFAULT_PRODUCTS,
-  categories: DB.get('cats') || DEFAULT_CATS,
-  testimonials: DB.get('testimonials') || DEFAULT_TESTIMONIALS,
-  settings: DB.get('settings') || DEFAULT_SETTINGS,
-  coupons: DB.get('coupons') || [],
+  user: null,          // set by onAuthStateChanged
+  cart: LC.get('cart') || [],
+  wishlist: LC.get('wishlist') || [],
+  orders: [],
+  users: [],
+  products: DEFAULT_PRODUCTS,   // refreshed from Firestore on load
+  categories: DEFAULT_CATS,
+  testimonials: DEFAULT_TESTIMONIALS,
+  settings: DEFAULT_SETTINGS,
+  coupons: [],
   adminLoggedIn: false,
   currentProduct: null,
   shopFilter:{cat:'',sort:'default',search:''},
@@ -1134,17 +1161,96 @@ let STATE = {
   editingProductId: null,
 };
 
-function saveState(){
-  DB.set('cart',STATE.cart);
-  DB.set('wishlist',STATE.wishlist);
-  DB.set('orders',STATE.orders);
-  DB.set('users',STATE.users);
-  DB.set('products',STATE.products);
-  DB.set('cats',STATE.categories);
-  DB.set('testimonials',STATE.testimonials);
-  DB.set('settings',STATE.settings);
-  DB.set('coupons',STATE.coupons);
-  if(STATE.user) DB.set('user',STATE.user);
+// Save only local items (cart/wishlist); Firestore saves happen per-action
+function saveLocalState(){
+  LC.set('cart', STATE.cart);
+  LC.set('wishlist', STATE.wishlist);
+}
+// Alias kept for backwards compat inside cart/wishlist handlers
+function saveState(){ saveLocalState(); }
+
+// ============================================================
+// FIRESTORE HELPERS
+// ============================================================
+async function fsGet(col,id){
+  const snap = await getDoc(doc(db,col,id));
+  return snap.exists()?{id:snap.id,...snap.data()}:null;
+}
+async function fsGetAll(col){
+  const snap = await getDocs(collection(db,col));
+  return snap.docs.map(d=>({id:d.id,...d.data()}));
+}
+async function fsSet(col,id,data){
+  await setDoc(doc(db,col,id),data,{merge:true});
+}
+async function fsAdd(col,data){
+  const ref = await addDoc(collection(db,col),data);
+  return ref.id;
+}
+async function fsUpdate(col,id,data){
+  await updateDoc(doc(db,col,id),data);
+}
+async function fsDel(col,id){
+  await deleteDoc(doc(db,col,id));
+}
+
+// ============================================================
+// SEED FIRESTORE WITH DEFAULTS (only if collection is empty)
+// ============================================================
+async function seedIfEmpty(col,defaults){
+  const snap = await getDocs(collection(db,col));
+  if(!snap.empty) return snap.docs.map(d=>({id:d.id,...d.data()}));
+  for(const item of defaults){
+    await setDoc(doc(db,col,item.id), item);
+  }
+  return defaults;
+}
+
+// ============================================================
+// LOAD ALL DATA FROM FIRESTORE
+// ============================================================
+async function loadFirestoreData(){
+  // Show loading indicator
+  document.body.insertAdjacentHTML('afterbegin',`
+    <div id="appLoader" style="position:fixed;inset:0;background:#fff;z-index:9999;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px;">
+      <div class="logo" style="font-size:32px;font-family:'Playfair Display',serif;color:#E63946;font-weight:800;">BENIM<span style="color:#0D1117">.</span></div>
+      <div class="spinner"></div>
+      <p style="font-size:13px;color:#6B7280;">Loading store...</p>
+    </div>`);
+
+  try {
+    // Products, categories, testimonials — seed if first time
+    STATE.products     = await seedIfEmpty('products',    DEFAULT_PRODUCTS);
+    STATE.categories   = await seedIfEmpty('categories',  DEFAULT_CATS);
+    STATE.testimonials = await seedIfEmpty('testimonials',DEFAULT_TESTIMONIALS);
+
+    // Settings
+    const settingsSnap = await getDoc(doc(db,'settings','main'));
+    if(settingsSnap.exists()) STATE.settings = settingsSnap.data();
+    else await setDoc(doc(db,'settings','main'), DEFAULT_SETTINGS);
+
+    // Coupons
+    STATE.coupons = await fsGetAll('coupons');
+
+    // Orders
+    STATE.orders = await fsGetAll('orders');
+
+    // Users list (admin only use; lightweight)
+    STATE.users = await fsGetAll('users');
+
+  } catch(e){
+    console.error('Firestore load error:',e);
+    // Fall back to defaults silently
+    STATE.products   = DEFAULT_PRODUCTS;
+    STATE.categories = DEFAULT_CATS;
+  }
+
+  document.getElementById('appLoader')?.remove();
+  updateCartCount();
+  updateWishlistCount();
+  renderHome();
+  const hash=window.location.hash.slice(1);
+  if(hash==='admin') showPage('admin');
 }
 
 // ============================================================
@@ -1708,7 +1814,7 @@ function selectDelivery(type){
   if(ag)ag.style.display=type==='house'?'block':'none';
 }
 
-function placeOrder(){
+async function placeOrder(){
   const first=document.getElementById('chkFirst')?.value.trim();
   const last=document.getElementById('chkLast')?.value.trim();
   const phone=document.getElementById('chkPhone')?.value.trim();
@@ -1733,23 +1839,33 @@ function placeOrder(){
     note,
     subtotal,deliveryFee:delFee,total,
     status:'pending',
-    userId:STATE.user?.id||null,
+    userId:STATE.user?.uid||null,
+    createdAt: new Date().toISOString(),
   };
 
-  STATE.orders.push(order);
-  if(STATE.user){
-    const u=STATE.users.find(u=>u.id===STATE.user.id);
-    if(u){if(!u.orders)u.orders=[];u.orders.push(order.id);}
-    STATE.user.orders=STATE.user.orders||[];
-    STATE.user.orders.push(order.id);
+  try{
+    // Save to Firestore
+    await fsSet('orders', order.id, order);
+    STATE.orders.push(order);
+
+    // Update user's order list
+    if(STATE.user){
+      await fsUpdate('users', STATE.user.uid, {
+        orders: [...(STATE.user.orders||[]), order.id]
+      });
+    }
+  }catch(e){
+    console.error('Order save error:',e);
+    // Still proceed — WhatsApp is the backup confirmation
   }
+
   STATE.cart=[];
-  saveState();
+  saveLocalState();
   updateCartCount();
 
   // WhatsApp message
   const msg=`*New Order from BENIM Trade*\n\nOrder ID: ${order.id}\nCustomer: ${first} ${last}\nPhone: ${phone}\nDelivery: ${delivery==='house'?address:'Pick-up Station'}\nPayment: ${payment==='pod'?'Pay on Delivery':'Bank Transfer'}\n\nItems:\n${order.items.map(i=>`• ${i.name} (${i.qty}x) - ${fmt(i.price*i.qty)}`).join('\n')}\n\nTotal: ${fmt(total)}\n${note?`Note: ${note}`:''}`;
-  
+
   const successDetails=document.getElementById('orderSuccessDetails');
   if(successDetails){
     successDetails.innerHTML=`
@@ -1814,20 +1930,20 @@ function renderAuthReset(){
     </div>`;
 }
 
-function loginUser(){
+async function loginUser(){
   const email=document.getElementById('loginEmail').value.trim();
   const pass=document.getElementById('loginPass').value;
   if(!email||!pass){toast('Please fill all fields','error');return;}
-  const user=STATE.users.find(u=>u.email===email&&u.password===pass);
-  if(!user){toast('Invalid email or password','error');return;}
-  STATE.user=user;
-  DB.set('user',user);
-  closeModal('authModal');
-  toast(`Welcome back, ${user.firstName}! 👋`);
-  showPage('dashboard');
+  try{
+    await signInWithEmailAndPassword(auth,email,pass);
+    // onAuthStateChanged will handle the rest
+    closeModal('authModal');
+  }catch(e){
+    toast(e.code==='auth/invalid-credential'||e.code==='auth/wrong-password'?'Invalid email or password':'Login failed: '+e.message,'error');
+  }
 }
 
-function registerUser(){
+async function registerUser(){
   const first=document.getElementById('regFirst').value.trim();
   const last=document.getElementById('regLast').value.trim();
   const email=document.getElementById('regEmail').value.trim();
@@ -1835,26 +1951,34 @@ function registerUser(){
   const pass=document.getElementById('regPass').value;
   if(!first||!last||!email||!pass){toast('Please fill all required fields','error');return;}
   if(pass.length<6){toast('Password must be at least 6 characters','error');return;}
-  if(STATE.users.find(u=>u.email===email)){toast('Email already registered. Please login.','error');return;}
-  const user={id:uid(),firstName:first,lastName:last,email,phone,password:pass,orders:[],addresses:[],joinDate:new Date().toLocaleDateString()};
-  STATE.users.push(user);
-  STATE.user=user;
-  saveState();
-  closeModal('authModal');
-  toast(`Welcome to BENIM Trade, ${first}! 🎉`);
-  showPage('dashboard');
+  try{
+    const cred = await createUserWithEmailAndPassword(auth,email,pass);
+    const userData = {id:cred.user.uid,firstName:first,lastName:last,email,phone,orders:[],addresses:[],joinDate:new Date().toLocaleDateString()};
+    await fsSet('users',cred.user.uid,userData);
+    STATE.users.push(userData);
+    closeModal('authModal');
+    toast(`Welcome to BENIM Trade, ${first}! 🎉`);
+  }catch(e){
+    toast(e.code==='auth/email-already-in-use'?'Email already registered. Please login.':'Registration failed: '+e.message,'error');
+  }
 }
 
-function requestReset(){
+async function requestReset(){
   const email=document.getElementById('resetEmail').value.trim();
   if(!email){toast('Please enter your email','error');return;}
-  toast('Reset instructions sent via WhatsApp');
-  setTimeout(()=>renderAuthLogin(),1500);
+  try{
+    await sendPasswordResetEmail(auth,email);
+    toast('Password reset email sent! Check your inbox.');
+    setTimeout(()=>renderAuthLogin(),1500);
+  }catch(e){
+    toast('Could not send reset email','error');
+  }
 }
 
-function logout(){
+async function logout(){
+  await signOut(auth);
   STATE.user=null;
-  DB.del('user');
+  LC.del('user');
   showPage('home');
   toast('Logged out successfully','info');
 }
@@ -1945,18 +2069,19 @@ function renderDashSettings(){
   </div>`;
 }
 
-function saveUserSettings(){
+async function saveUserSettings(){
   const first=document.getElementById('setFirst').value.trim();
   const last=document.getElementById('setLast').value.trim();
   const email=document.getElementById('setEmail').value.trim();
   const phone=document.getElementById('setPhone').value.trim();
-  const pass=document.getElementById('setPass').value;
   if(!first||!last||!email){toast('Required fields missing','error');return;}
-  const u=STATE.users.find(u=>u.id===STATE.user.id);
-  if(u){u.firstName=first;u.lastName=last;u.email=email;u.phone=phone;if(pass)u.password=pass;}
-  STATE.user={...STATE.user,firstName:first,lastName:last,email,phone};
-  saveState();
-  toast('Settings saved! ✅');
+  try{
+    await fsUpdate('users', STATE.user.uid, {firstName:first,lastName:last,email,phone});
+    STATE.user={...STATE.user,firstName:first,lastName:last,email,phone};
+    toast('Settings saved! ✅');
+  }catch(e){
+    toast('Save failed: '+e.message,'error');
+  }
 }
 
 // ============================================================
@@ -2192,15 +2317,18 @@ function filterAdminProducts(q){
   rows.forEach(r=>{r.style.display=r.textContent.toLowerCase().includes(q.toLowerCase())?'':'none';});
 }
 
-function toggleProductActive(id){
+async function toggleProductActive(id){
   const p=STATE.products.find(x=>x.id===id);
-  if(p){p.active=!p.active;saveState();showAdminSection('products');}
+  if(!p)return;
+  p.active=!p.active;
+  await fsUpdate('products',id,{active:p.active});
+  showAdminSection('products');
 }
 
-function deleteProduct(id){
+async function deleteProduct(id){
   if(!confirm('Delete this product?'))return;
+  await fsDel('products',id);
   STATE.products=STATE.products.filter(p=>p.id!==id);
-  saveState();
   showAdminSection('products');
   toast('Product deleted','info');
 }
@@ -2242,7 +2370,7 @@ function openAddProductModal(id){
   openModal('addProductModal');
 }
 
-function saveProduct(){
+async function saveProduct(){
   const name=document.getElementById('pName').value.trim();
   const cat=document.getElementById('pCat').value;
   const price=parseFloat(document.getElementById('pPrice').value);
@@ -2262,17 +2390,23 @@ function saveProduct(){
 
   const productData={name,category:cat,price,oldPrice,stock,discount,image,images:[image],description:desc,variations:{sizes,colors},featured,flashDeal,bestSeller,active,rating:4.5,reviews:0};
 
-  if(STATE.editingProductId){
-    const idx=STATE.products.findIndex(p=>p.id===STATE.editingProductId);
-    if(idx>-1)STATE.products[idx]={...STATE.products[idx],...productData};
-    toast('Product updated! ✅');
-  }else{
-    STATE.products.push({id:'p'+uid(),...productData});
-    toast('Product added! 🎉');
+  try{
+    if(STATE.editingProductId){
+      await fsUpdate('products', STATE.editingProductId, productData);
+      const idx=STATE.products.findIndex(p=>p.id===STATE.editingProductId);
+      if(idx>-1)STATE.products[idx]={...STATE.products[idx],...productData};
+      toast('Product updated! ✅');
+    }else{
+      const newId='p'+uid();
+      await fsSet('products', newId, {...productData, id:newId});
+      STATE.products.push({id:newId,...productData});
+      toast('Product added! 🎉');
+    }
+    closeModal('addProductModal');
+    showAdminSection('products');
+  }catch(e){
+    toast('Save failed: '+e.message,'error');
   }
-  saveState();
-  closeModal('addProductModal');
-  showAdminSection('products');
 }
 
 function renderAdminOrders(){
@@ -2309,9 +2443,13 @@ function filterAdminOrders(status){
   rows.forEach(r=>{r.style.display=(status==='all'||r.dataset.status===status)?'':'none';});
 }
 
-function updateOrderStatus(id,status){
+async function updateOrderStatus(id,status){
   const o=STATE.orders.find(x=>x.id===id);
-  if(o){o.status=status;saveState();toast(`Order ${id} marked as ${status}`);}
+  if(o){
+    o.status=status;
+    await fsUpdate('orders',id,{status});
+    toast(`Order ${id} marked as ${status}`);
+  }
 }
 
 function renderAdminCustomers(){
@@ -2353,16 +2491,19 @@ function renderAdminCategories(){
   </div>`;
 }
 
-function addCategory(){
+async function addCategory(){
   const name=prompt('Category name:');if(!name)return;
   const icon=prompt('Emoji icon:')||'📦';
-  STATE.categories.push({id:'cat'+uid(),name:name.trim(),icon,count:0});
-  saveState();showAdminSection('categories');toast('Category added!');
+  const newCat={id:'cat'+uid(),name:name.trim(),icon,count:0};
+  await fsSet('categories',newCat.id,newCat);
+  STATE.categories.push(newCat);
+  showAdminSection('categories');toast('Category added!');
 }
-function deleteCat(id){
+async function deleteCat(id){
   if(!confirm('Delete this category?'))return;
+  await fsDel('categories',id);
   STATE.categories=STATE.categories.filter(c=>c.id!==id);
-  saveState();showAdminSection('categories');
+  showAdminSection('categories');
 }
 
 function renderAdminCoupons(){
@@ -2385,16 +2526,19 @@ function renderAdminCoupons(){
   </div>`;
 }
 
-function addCoupon(){
+async function addCoupon(){
   const code=prompt('Coupon code (e.g. SAVE10):');if(!code)return;
   const discount=parseFloat(prompt('Discount value:'))||10;
   const type=prompt('Type: percent or amount')||'percent';
-  STATE.coupons.push({id:uid(),code:code.toUpperCase(),discount,type,minOrder:0,active:true});
-  saveState();showAdminSection('coupons');toast('Coupon created!');
+  const newC={id:uid(),code:code.toUpperCase(),discount,type,minOrder:0,active:true};
+  await fsSet('coupons',newC.id,newC);
+  STATE.coupons.push(newC);
+  showAdminSection('coupons');toast('Coupon created!');
 }
-function deleteCoupon(id){
+async function deleteCoupon(id){
+  await fsDel('coupons',id);
   STATE.coupons=STATE.coupons.filter(c=>c.id!==id);
-  saveState();showAdminSection('coupons');
+  showAdminSection('coupons');
 }
 
 function renderAdminTestimonials(){
@@ -2413,16 +2557,19 @@ function renderAdminTestimonials(){
   </div>`;
 }
 
-function addTestimonial(){
+async function addTestimonial(){
   const name=prompt('Customer name:');if(!name)return;
   const location=prompt('Location (e.g. Lagos):')||'Nigeria';
   const text=prompt('Review text:');if(!text)return;
-  STATE.testimonials.push({id:uid(),name,location,text,rating:5,avatar:name[0].toUpperCase()});
-  saveState();showAdminSection('testimonials');toast('Testimonial added!');
+  const newT={id:uid(),name,location,text,rating:5,avatar:name[0].toUpperCase()};
+  await fsSet('testimonials',newT.id,newT);
+  STATE.testimonials.push(newT);
+  showAdminSection('testimonials');toast('Testimonial added!');
 }
-function deleteTestimonial(id){
+async function deleteTestimonial(id){
+  await fsDel('testimonials',id);
   STATE.testimonials=STATE.testimonials.filter(t=>t.id!==id);
-  saveState();showAdminSection('testimonials');
+  showAdminSection('testimonials');
 }
 
 function renderAdminSettings(){
@@ -2441,7 +2588,7 @@ function renderAdminSettings(){
   </div>`;
 }
 
-function saveSettings(){
+async function saveSettings(){
   STATE.settings={
     ...STATE.settings,
     whatsapp:document.getElementById('setWA').value,
@@ -2451,7 +2598,7 @@ function saveSettings(){
     deliveryFee:parseFloat(document.getElementById('setDelFee').value)||1500,
     freeDeliveryAbove:parseFloat(document.getElementById('setFreeAbove').value)||20000,
   };
-  saveState();
+  await fsSet('settings','main',STATE.settings);
   toast('Settings saved! ✅');
 }
 
@@ -2496,22 +2643,28 @@ function renderAdminBanners(){
 }
 
 // ============================================================
-// INIT
+// INIT — Firebase Auth listener + load data
 // ============================================================
-window.addEventListener('DOMContentLoaded',()=>{
-  // Ensure default data
-  if(!DB.get('products'))DB.set('products',DEFAULT_PRODUCTS);
-  if(!DB.get('cats'))DB.set('cats',DEFAULT_CATS);
-  if(!DB.get('testimonials'))DB.set('testimonials',DEFAULT_TESTIMONIALS);
-  if(!DB.get('settings'))DB.set('settings',DEFAULT_SETTINGS);
 
+// Watch auth state — fires on page load & after login/logout
+onAuthStateChanged(auth, async (firebaseUser)=>{
+  if(firebaseUser){
+    // Fetch user profile from Firestore
+    const profile = await fsGet('users', firebaseUser.uid);
+    STATE.user = profile ? {...profile, uid:firebaseUser.uid} : {uid:firebaseUser.uid, email:firebaseUser.email, firstName:'Customer', lastName:'', orders:[]};
+    LC.set('user', STATE.user);
+    toast(`Welcome back, ${STATE.user.firstName}! 👋`);
+    if(STATE.currentPage==='home') renderHome();
+  } else {
+    STATE.user = null;
+    LC.del('user');
+  }
   updateCartCount();
   updateWishlistCount();
-  renderHome();
+});
 
-  // Handle hash routes
-  const hash=window.location.hash.slice(1);
-  if(hash==='admin')showPage('admin');
+window.addEventListener('DOMContentLoaded', ()=>{
+  loadFirestoreData();
 });
 
 // Expose to global
