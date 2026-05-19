@@ -400,6 +400,53 @@ body{padding-bottom:60px}
 }
 /* Inline notification */
 .notif-dot{width:8px;height:8px;border-radius:50%;background:var(--red);display:inline-block}
+
+/* ====== FOOTER ====== */
+#site-footer{background:var(--gray-900);color:#fff;margin-top:0;padding-bottom:70px}
+.footer-inner{max-width:1400px;margin:0 auto;padding:40px 20px 24px;display:grid;grid-template-columns:1fr;gap:32px}
+@media(min-width:600px){.footer-inner{grid-template-columns:1fr 1fr}}
+@media(min-width:900px){.footer-inner{grid-template-columns:2fr 1fr 1fr 1fr}}
+.footer-logo-wrap{}
+.footer-logo{height:48px;object-fit:contain;filter:brightness(0) invert(1);cursor:pointer;margin-bottom:12px}
+.footer-tagline{font-size:13px;color:var(--gray-400);line-height:1.6;margin-bottom:14px}
+.footer-socials{display:flex;gap:8px}
+.social-btn{width:34px;height:34px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:15px;transition:.2s;color:#fff}
+.social-btn.wa{background:#25d366}.social-btn.ig{background:linear-gradient(135deg,#f09433,#e6683c,#dc2743,#cc2366,#bc1888)}
+.social-btn.fb{background:#1877f2}.social-btn.tw{background:#000}
+.social-btn:hover{transform:translateY(-2px);box-shadow:0 4px 12px rgba(0,0,0,.3)}
+.footer-col h4{font-size:14px;font-weight:800;color:#fff;margin-bottom:14px;padding-bottom:8px;border-bottom:2px solid var(--orange);display:inline-block}
+.footer-col ul{list-style:none;display:flex;flex-direction:column;gap:8px}
+.footer-col ul li a{font-size:13px;color:var(--gray-400);cursor:pointer;transition:.15s;display:flex;align-items:center;gap:6px}
+.footer-col ul li a:hover{color:var(--orange)}
+.footer-col ul li a i{font-size:10px;color:var(--orange)}
+.footer-contact li{display:flex;align-items:center;gap:8px;font-size:13px;color:var(--gray-400);padding:3px 0}
+.footer-bottom{border-top:1px solid rgba(255,255,255,.08);padding:16px 20px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;max-width:1400px;margin:0 auto;font-size:12px;color:var(--gray-500)}
+
+/* ====== FOOTER PAGES ====== */
+.footer-page-wrap{max-width:860px;margin:0 auto;padding:24px 16px}
+.footer-page-wrap h2{font-size:22px;font-weight:900;color:var(--gray-800);margin-bottom:6px;display:flex;align-items:center;gap:10px}
+.footer-page-wrap h2 i{color:var(--orange)}
+.footer-page-wrap .subtitle{color:var(--gray-400);font-size:14px;margin-bottom:24px;border-bottom:2px solid var(--gray-200);padding-bottom:16px}
+.fp-section{margin-bottom:24px}
+.fp-section h3{font-size:15px;font-weight:800;color:var(--gray-800);margin-bottom:8px;padding-left:10px;border-left:3px solid var(--orange)}
+.fp-section p,.fp-section li{font-size:14px;color:var(--gray-600);line-height:1.7}
+.fp-section ul{margin-left:20px;margin-top:6px}
+.fp-section ul li{margin-bottom:4px}
+.contact-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:12px}
+@media(max-width:480px){.contact-grid{grid-template-columns:1fr}}
+.contact-card{background:var(--gray-50);border-radius:var(--radius-lg);padding:16px;display:flex;align-items:flex-start;gap:12px}
+.contact-card i{font-size:22px;color:var(--orange);margin-top:2px;flex-shrink:0}
+.contact-card h4{font-size:14px;font-weight:800;margin-bottom:3px}
+.contact-card p{font-size:13px;color:var(--gray-500)}
+.contact-card a{color:var(--orange);font-weight:700}
+.faq-item{border:1px solid var(--gray-200);border-radius:var(--radius);margin-bottom:8px;overflow:hidden}
+.faq-q{padding:14px 16px;cursor:pointer;font-size:14px;font-weight:700;display:flex;justify-content:space-between;align-items:center;transition:.15s;user-select:none}
+.faq-q:hover{background:var(--gray-50)}
+.faq-q i{color:var(--orange);transition:.3s}
+.faq-a{display:none;padding:0 16px 14px;font-size:13px;color:var(--gray-600);line-height:1.7}
+.faq-item.open .faq-q{background:rgba(232,66,10,.04);color:var(--orange)}
+.faq-item.open .faq-q i{transform:rotate(180deg)}
+.faq-item.open .faq-a{display:block}
 </style>
 </head>
 <body>
@@ -465,9 +512,15 @@ body{padding-bottom:60px}
   </div>
 
   <div class="sidebar-section">
-    <div class="sidebar-section-title">Help</div>
+    <div class="sidebar-section-title">Help & Info</div>
     <div class="sidebar-item" onclick="navigate('track');toggleSidebar()"><i class="fas fa-search-location"></i> Track My Order</div>
     <div class="sidebar-item" onclick="openChatbot()"><i class="fas fa-comment-dots"></i> Chat Support</div>
+    <div class="sidebar-item" onclick="navigate('about');toggleSidebar()"><i class="fas fa-info-circle"></i> About Us</div>
+    <div class="sidebar-item" onclick="navigate('contact');toggleSidebar()"><i class="fas fa-headset"></i> Contact Us</div>
+    <div class="sidebar-item" onclick="navigate('faq');toggleSidebar()"><i class="fas fa-question-circle"></i> FAQ</div>
+    <div class="sidebar-item" onclick="navigate('shipping-policy');toggleSidebar()"><i class="fas fa-shipping-fast"></i> Shipping Policy</div>
+    <div class="sidebar-item" onclick="navigate('privacy-policy');toggleSidebar()"><i class="fas fa-shield-alt"></i> Privacy Policy</div>
+    <div class="sidebar-item" onclick="navigate('terms');toggleSidebar()"><i class="fas fa-file-contract"></i> Terms & Conditions</div>
   </div>
 
   <div class="sidebar-section" id="sb-logout-section" style="display:none">
@@ -682,7 +735,7 @@ body{padding-bottom:60px}
     <div id="cart-summary-wrap" class="hidden">
       <div class="cart-summary">
         <div class="summary-row"><span>Subtotal</span><span id="cart-subtotal">₦0</span></div>
-        <div class="summary-row"><span>Delivery</span><span style="color:var(--green)">FREE</span></div>
+        <div class="summary-row"><span>Delivery</span><span id="cart-delivery" style="color:var(--green)">FREE</span></div>
         <div class="summary-row total"><span>Total</span><span id="cart-total">₦0</span></div>
         <button class="btn-checkout" onclick="goToCheckout()"><i class="fas fa-lock"></i> Proceed to Checkout</button>
       </div>
@@ -945,6 +998,269 @@ body{padding-bottom:60px}
   </div>
 </div>
 
+<!-- ABOUT PAGE -->
+<div id="page-about" class="page">
+  <div class="page-header"><button class="back-btn" onclick="history.back()"><i class="fas fa-arrow-left"></i></button><h2>About Us</h2></div>
+  <div class="footer-page-wrap">
+    <h2><i class="fas fa-store"></i> About Benim</h2>
+    <p class="subtitle">Your trusted online shopping destination in Nigeria</p>
+    <div class="fp-section">
+      <h3>Our Story</h3>
+      <p>Benim was founded with a simple mission: to make quality products accessible to everyone in Nigeria. We believe shopping should be easy, safe, and enjoyable — whether you're buying electronics, fashion, groceries, or household goods.</p>
+    </div>
+    <div class="fp-section">
+      <h3>What We Offer</h3>
+      <ul>
+        <li>Thousands of products across all categories</li>
+        <li>Fast and reliable delivery across Nigeria</li>
+        <li>Secure payment via Bank Transfer or Pay on Delivery</li>
+        <li>24/7 customer support via WhatsApp and chat</li>
+        <li>Easy returns and buyer protection on all orders</li>
+      </ul>
+    </div>
+    <div class="fp-section">
+      <h3>Our Values</h3>
+      <p>We are committed to <strong>transparency</strong>, <strong>quality</strong>, and <strong>customer satisfaction</strong>. Every product on our platform is carefully curated, and every order is handled with care.</p>
+    </div>
+    <div class="fp-section">
+      <h3>Get In Touch</h3>
+      <p>Have questions or suggestions? We'd love to hear from you. <a onclick="navigate('contact')" style="color:var(--orange);font-weight:700;cursor:pointer">Contact us here</a> or WhatsApp us at <strong>+234 916 803 1213</strong>.</p>
+    </div>
+  </div>
+</div>
+
+<!-- CONTACT PAGE -->
+<div id="page-contact" class="page">
+  <div class="page-header"><button class="back-btn" onclick="history.back()"><i class="fas fa-arrow-left"></i></button><h2>Contact Us</h2></div>
+  <div class="footer-page-wrap">
+    <h2><i class="fas fa-headset"></i> Contact Us</h2>
+    <p class="subtitle">We're here to help — reach us through any of the channels below</p>
+    <div class="contact-grid">
+      <div class="contact-card">
+        <i class="fab fa-whatsapp" style="color:#25d366"></i>
+        <div><h4>WhatsApp</h4><p>Chat with us directly<br><a href="https://wa.me/2349168031213" target="_blank">+234 916 803 1213</a></p></div>
+      </div>
+      <div class="contact-card">
+        <i class="fas fa-envelope"></i>
+        <div><h4>Email</h4><p>Send us an email<br><a href="mailto:shopwitbenim@gmail.com">shopwitbenim@gmail.com</a></p></div>
+      </div>
+      <div class="contact-card">
+        <i class="fas fa-clock"></i>
+        <div><h4>Business Hours</h4><p>Monday – Saturday<br>8:00 AM – 8:00 PM (WAT)</p></div>
+      </div>
+      <div class="contact-card">
+        <i class="fas fa-map-marker-alt"></i>
+        <div><h4>Location</h4><p>Nigeria<br>Nationwide delivery available</p></div>
+      </div>
+    </div>
+    <div class="fp-section" style="margin-top:24px">
+      <h3>Send Us a Message</h3>
+      <div class="form-group" style="margin-top:12px"><label class="form-label">Your Name</label><input class="form-input" id="contact-name" placeholder="Full name"></div>
+      <div class="form-group"><label class="form-label">Email or Phone</label><input class="form-input" id="contact-email" placeholder="Email or WhatsApp number"></div>
+      <div class="form-group"><label class="form-label">Message</label><textarea class="form-input" id="contact-msg" rows="4" placeholder="How can we help you?"></textarea></div>
+      <button class="btn-primary" onclick="sendContactMessage()"><i class="fab fa-whatsapp"></i> Send via WhatsApp</button>
+    </div>
+  </div>
+</div>
+
+<!-- SHIPPING POLICY PAGE -->
+<div id="page-shipping-policy" class="page">
+  <div class="page-header"><button class="back-btn" onclick="history.back()"><i class="fas fa-arrow-left"></i></button><h2>Shipping Policy</h2></div>
+  <div class="footer-page-wrap">
+    <h2><i class="fas fa-shipping-fast"></i> Shipping Policy</h2>
+    <p class="subtitle">Last updated: January 2025</p>
+    <div class="fp-section">
+      <h3>Shipping Coverage</h3>
+      <p>Benim ships to all states across Nigeria. We partner with reputable logistics companies to ensure your orders arrive safely and on time.</p>
+    </div>
+    <div class="fp-section">
+      <h3>Shipping Fees</h3>
+      <ul>
+        <li><strong>Orders above ₦150,000:</strong> FREE shipping — no delivery fee applied.</li>
+        <li><strong>Orders below ₦150,000:</strong> A flat delivery fee of ₦3,500 is added at checkout.</li>
+        <li>Delivery fees are calculated automatically based on your cart total.</li>
+      </ul>
+    </div>
+    <div class="fp-section">
+      <h3>Processing Time</h3>
+      <p>Orders are processed within <strong>1–2 business days</strong> after payment is confirmed. You will receive a WhatsApp notification when your order is shipped.</p>
+    </div>
+    <div class="fp-section">
+      <h3>Estimated Delivery Times</h3>
+      <ul>
+        <li><strong>Lagos:</strong> 1–2 business days</li>
+        <li><strong>Abuja, Port Harcourt:</strong> 2–3 business days</li>
+        <li><strong>Other states:</strong> 3–5 business days</li>
+        <li>Remote areas may take slightly longer.</li>
+      </ul>
+    </div>
+    <div class="fp-section">
+      <h3>Order Tracking</h3>
+      <p>Once your order is shipped, you can track it using the <strong>Track Order</strong> feature in the app. You'll also receive WhatsApp updates at every status change.</p>
+    </div>
+  </div>
+</div>
+
+<!-- DELIVERY POLICY PAGE -->
+<div id="page-delivery-policy" class="page">
+  <div class="page-header"><button class="back-btn" onclick="history.back()"><i class="fas fa-arrow-left"></i></button><h2>Delivery Policy</h2></div>
+  <div class="footer-page-wrap">
+    <h2><i class="fas fa-truck"></i> Delivery Policy</h2>
+    <p class="subtitle">Last updated: January 2025</p>
+    <div class="fp-section">
+      <h3>Free Delivery Threshold</h3>
+      <p>Orders with a total value of <strong>₦150,000 or above</strong> qualify for <strong>free delivery</strong> anywhere in Nigeria. Orders below ₦150,000 attract a flat fee of <strong>₦3,500</strong>.</p>
+    </div>
+    <div class="fp-section">
+      <h3>Delivery Process</h3>
+      <ul>
+        <li>After placing your order, our team will confirm it within 24 hours.</li>
+        <li>You will receive a WhatsApp notification at every stage: Confirmed → Processing → Out for Delivery → Delivered.</li>
+        <li>Ensure your delivery address and phone number are accurate to avoid delays.</li>
+      </ul>
+    </div>
+    <div class="fp-section">
+      <h3>Failed Deliveries</h3>
+      <p>If a delivery attempt fails (e.g., no one available to receive), our logistics partner will try again within 24 hours. After two failed attempts, the order may be returned and a re-delivery fee may apply.</p>
+    </div>
+    <div class="fp-section">
+      <h3>Pay on Delivery</h3>
+      <p>For Pay on Delivery orders, please have the <strong>exact amount ready</strong> in cash when the delivery agent arrives. Do not pay to any party claiming to be from Benim unless they show proper identification.</p>
+    </div>
+    <div class="fp-section">
+      <h3>Damaged or Wrong Items</h3>
+      <p>If you receive a damaged or wrong item, please contact us within <strong>24 hours of delivery</strong> via WhatsApp at +234 916 803 1213 with photos. We will resolve the issue promptly.</p>
+    </div>
+  </div>
+</div>
+
+<!-- PRIVACY POLICY PAGE -->
+<div id="page-privacy-policy" class="page">
+  <div class="page-header"><button class="back-btn" onclick="history.back()"><i class="fas fa-arrow-left"></i></button><h2>Privacy Policy</h2></div>
+  <div class="footer-page-wrap">
+    <h2><i class="fas fa-shield-alt"></i> Privacy Policy</h2>
+    <p class="subtitle">Last updated: January 2025</p>
+    <div class="fp-section">
+      <h3>Information We Collect</h3>
+      <ul>
+        <li><strong>Account information:</strong> Name, email address, phone number</li>
+        <li><strong>Delivery information:</strong> Delivery addresses</li>
+        <li><strong>Transaction data:</strong> Order history, payment method (we do NOT store card details)</li>
+        <li><strong>Usage data:</strong> Pages visited, products viewed, search queries</li>
+      </ul>
+    </div>
+    <div class="fp-section">
+      <h3>How We Use Your Information</h3>
+      <ul>
+        <li>To process and fulfill your orders</li>
+        <li>To send order updates via WhatsApp and email</li>
+        <li>To improve our platform and personalise your experience</li>
+        <li>To respond to customer service requests</li>
+      </ul>
+    </div>
+    <div class="fp-section">
+      <h3>Data Security</h3>
+      <p>Your data is stored securely using Firebase (Google Cloud). We use industry-standard encryption and do not sell your personal information to third parties.</p>
+    </div>
+    <div class="fp-section">
+      <h3>Your Rights</h3>
+      <ul>
+        <li>You may request access to, correction of, or deletion of your personal data at any time.</li>
+        <li>You may opt out of marketing communications.</li>
+        <li>Contact us at shopwitbenim@gmail.com to exercise your rights.</li>
+      </ul>
+    </div>
+    <div class="fp-section">
+      <h3>Cookies</h3>
+      <p>We use local storage to maintain your shopping cart and session data. No third-party advertising cookies are used.</p>
+    </div>
+  </div>
+</div>
+
+<!-- TERMS & CONDITIONS PAGE -->
+<div id="page-terms" class="page">
+  <div class="page-header"><button class="back-btn" onclick="history.back()"><i class="fas fa-arrow-left"></i></button><h2>Terms & Conditions</h2></div>
+  <div class="footer-page-wrap">
+    <h2><i class="fas fa-file-contract"></i> Terms & Conditions</h2>
+    <p class="subtitle">Last updated: January 2025. By using Benim, you agree to these terms.</p>
+    <div class="fp-section">
+      <h3>1. Use of the Platform</h3>
+      <p>Benim is an online retail platform. You must be at least 18 years old to create an account and make purchases. You are responsible for maintaining the confidentiality of your account credentials.</p>
+    </div>
+    <div class="fp-section">
+      <h3>2. Orders & Payment</h3>
+      <ul>
+        <li>All prices are in Nigerian Naira (₦) and include applicable taxes.</li>
+        <li>For Bank Transfer orders, payment must be made within 24 hours of placing the order.</li>
+        <li>Orders not paid within 24 hours (Bank Transfer) may be cancelled automatically.</li>
+        <li>We reserve the right to cancel orders due to pricing errors or stock issues.</li>
+      </ul>
+    </div>
+    <div class="fp-section">
+      <h3>3. Delivery</h3>
+      <p>Delivery timelines are estimates. Benim is not liable for delays caused by logistics partners, natural events, or inaccurate address information provided by the buyer.</p>
+    </div>
+    <div class="fp-section">
+      <h3>4. Returns & Refunds</h3>
+      <p>Items may be returned within <strong>7 days of delivery</strong> if they are defective, damaged, or incorrect. Items must be unused and in original packaging. Contact us via WhatsApp to initiate a return. Refunds are processed within 5–7 business days.</p>
+    </div>
+    <div class="fp-section">
+      <h3>5. Prohibited Activities</h3>
+      <ul>
+        <li>Fraudulent orders or chargebacks</li>
+        <li>Misuse of promotional codes</li>
+        <li>Posting false or misleading reviews</li>
+        <li>Any activity that disrupts or harms the platform</li>
+      </ul>
+    </div>
+    <div class="fp-section">
+      <h3>6. Changes to Terms</h3>
+      <p>Benim reserves the right to update these terms at any time. Continued use of the platform after changes constitutes acceptance of the new terms.</p>
+    </div>
+  </div>
+</div>
+
+<!-- FAQ PAGE -->
+<div id="page-faq" class="page">
+  <div class="page-header"><button class="back-btn" onclick="history.back()"><i class="fas fa-arrow-left"></i></button><h2>FAQ</h2></div>
+  <div class="footer-page-wrap">
+    <h2><i class="fas fa-question-circle"></i> Frequently Asked Questions</h2>
+    <p class="subtitle">Can't find your answer? <a onclick="navigate('contact')" style="color:var(--orange);cursor:pointer;font-weight:700">Contact us</a> — we're happy to help!</p>
+    <div class="faq-item" onclick="toggleFaq(this)">
+      <div class="faq-q">How do I place an order? <i class="fas fa-chevron-down"></i></div>
+      <div class="faq-a">Browse products, add items to your cart, and click "Proceed to Checkout". You'll need to be signed in and have a saved delivery address. Choose your payment method and confirm your order.</div>
+    </div>
+    <div class="faq-item" onclick="toggleFaq(this)">
+      <div class="faq-q">When do I get free delivery? <i class="fas fa-chevron-down"></i></div>
+      <div class="faq-a">Orders with a total value of ₦150,000 or above qualify for free delivery. Orders below ₦150,000 attract a flat delivery fee of ₦3,500, automatically added at checkout.</div>
+    </div>
+    <div class="faq-item" onclick="toggleFaq(this)">
+      <div class="faq-q">What payment methods do you accept? <i class="fas fa-chevron-down"></i></div>
+      <div class="faq-a">We accept Bank Transfer (Opay) and Pay on Delivery. Bank details: Opay | Adewole Aderonke Aishat | Account Number: 9168031213. Please use your Order ID as the transfer reference.</div>
+    </div>
+    <div class="faq-item" onclick="toggleFaq(this)">
+      <div class="faq-q">How do I track my order? <i class="fas fa-chevron-down"></i></div>
+      <div class="faq-a">Go to Menu → Track Order and enter your Order ID or the phone number you used during checkout. You'll also receive automatic WhatsApp updates whenever your order status changes.</div>
+    </div>
+    <div class="faq-item" onclick="toggleFaq(this)">
+      <div class="faq-q">How long does delivery take? <i class="fas fa-chevron-down"></i></div>
+      <div class="faq-a">Lagos: 1–2 business days. Abuja & Port Harcourt: 2–3 business days. Other states: 3–5 business days. Remote areas may take slightly longer.</div>
+    </div>
+    <div class="faq-item" onclick="toggleFaq(this)">
+      <div class="faq-q">Can I return a product? <i class="fas fa-chevron-down"></i></div>
+      <div class="faq-a">Yes! You can return items within 7 days of delivery if they are defective, damaged, or incorrect. The item must be unused and in its original packaging. Contact us via WhatsApp to start the process.</div>
+    </div>
+    <div class="faq-item" onclick="toggleFaq(this)">
+      <div class="faq-q">Is my personal information safe? <i class="fas fa-chevron-down"></i></div>
+      <div class="faq-a">Yes. We take your privacy seriously. Your data is stored securely using Google Firebase. We never sell your personal information to third parties. Read our Privacy Policy for details.</div>
+    </div>
+    <div class="faq-item" onclick="toggleFaq(this)">
+      <div class="faq-q">I made a Bank Transfer — how do I confirm my payment? <i class="fas fa-chevron-down"></i></div>
+      <div class="faq-a">After transferring, send your payment receipt and Order ID to our WhatsApp: +234 916 803 1213. Our team will confirm your order within a few hours during business hours.</div>
+    </div>
+  </div>
+</div>
+
 </main>
 
 <!-- ====== BOTTOM NAV ====== -->
@@ -955,6 +1271,52 @@ body{padding-bottom:60px}
   <div class="bnav-item" id="bnav-orders" onclick="navigate('orders')"><i class="fas fa-box"></i><span>Orders</span></div>
   <div class="bnav-item" id="bnav-profile" onclick="navigate('profile')"><i class="fas fa-user"></i><span>Account</span></div>
 </nav>
+
+<!-- ====== SITE FOOTER ====== -->
+<footer id="site-footer">
+  <div class="footer-inner">
+    <div class="footer-logo-wrap">
+      <img src="IMG-20260507-WA0041_1_.jpg" alt="Benim" class="footer-logo" onclick="navigate('home')" onerror="this.style.display='none'">
+      <p class="footer-tagline">Your trusted online shopping destination.<br>Quality products, fast delivery, great prices.</p>
+      <div class="footer-socials">
+        <a href="https://wa.me/2349168031213" target="_blank" class="social-btn wa"><i class="fab fa-whatsapp"></i></a>
+        <a href="#" class="social-btn ig"><i class="fab fa-instagram"></i></a>
+        <a href="#" class="social-btn fb"><i class="fab fa-facebook-f"></i></a>
+        <a href="#" class="social-btn tw"><i class="fab fa-x-twitter"></i></a>
+      </div>
+    </div>
+    <div class="footer-col">
+      <h4>Company</h4>
+      <ul>
+        <li><a onclick="navigate('about')"><i class="fas fa-chevron-right"></i> About Us</a></li>
+        <li><a onclick="navigate('contact')"><i class="fas fa-chevron-right"></i> Contact Us</a></li>
+        <li><a onclick="navigate('faq')"><i class="fas fa-chevron-right"></i> FAQ</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Policies</h4>
+      <ul>
+        <li><a onclick="navigate('shipping-policy')"><i class="fas fa-chevron-right"></i> Shipping Policy</a></li>
+        <li><a onclick="navigate('delivery-policy')"><i class="fas fa-chevron-right"></i> Delivery Policy</a></li>
+        <li><a onclick="navigate('privacy-policy')"><i class="fas fa-chevron-right"></i> Privacy Policy</a></li>
+        <li><a onclick="navigate('terms')"><i class="fas fa-chevron-right"></i> Terms & Conditions</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Contact</h4>
+      <ul class="footer-contact">
+        <li><i class="fab fa-whatsapp" style="color:#25d366"></i> +234 916 803 1213</li>
+        <li><i class="fas fa-envelope" style="color:var(--orange)"></i> shopwitbenim@gmail.com</li>
+        <li><i class="fas fa-clock" style="color:var(--orange)"></i> Mon–Sat: 8am – 8pm</li>
+        <li><i class="fas fa-map-marker-alt" style="color:var(--orange)"></i> Nigeria</li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span>© 2025 Benim. All rights reserved.</span>
+    <span>Made with 🧡 in Nigeria</span>
+  </div>
+</footer>
 
 <!-- ====== CHATBOT ====== -->
 <button id="chatbot-btn" onclick="toggleChatbot()" title="Chat Support"><i class="fas fa-comment-dots"></i></button>
@@ -1515,8 +1877,12 @@ window.renderCart = function() {
     </div>
   `).join('');
   const subtotal = cart.reduce((s,x)=>s+(x.price*x.qty),0);
+  const deliveryFee = subtotal >= 150000 ? 0 : 3500;
+  const grandTotal = subtotal + deliveryFee;
   document.getElementById('cart-subtotal').textContent = '₦'+subtotal.toLocaleString();
-  document.getElementById('cart-total').textContent = '₦'+subtotal.toLocaleString();
+  document.getElementById('cart-delivery').textContent = deliveryFee===0 ? 'FREE' : '₦'+deliveryFee.toLocaleString();
+  document.getElementById('cart-delivery').style.color = deliveryFee===0 ? 'var(--green)' : 'var(--gray-800)';
+  document.getElementById('cart-total').textContent = '₦'+grandTotal.toLocaleString();
 };
 
 window.updateCartQty = function(i, delta) {
@@ -1559,9 +1925,16 @@ async function loadCheckout() {
   } catch(e) { addrDiv.innerHTML = ''; }
   // Render order summary
   const sumDiv = document.getElementById('checkout-items-summary');
-  sumDiv.innerHTML = cart.map(x=>`<div class="summary-row"><span>${x.name} × ${x.qty}</span><span>₦${(x.price*x.qty).toLocaleString()}</span></div>`).join('');
-  const total = cart.reduce((s,x)=>s+(x.price*x.qty),0);
-  document.getElementById('checkout-total').textContent = '₦'+total.toLocaleString();
+  const subtotal = cart.reduce((s,x)=>s+(x.price*x.qty),0);
+  const deliveryFee = subtotal >= 150000 ? 0 : 3500;
+  const grandTotal = subtotal + deliveryFee;
+  sumDiv.innerHTML = cart.map(x=>`<div class="summary-row"><span>${x.name} × ${x.qty}</span><span>₦${(x.price*x.qty).toLocaleString()}</span></div>`).join('') +
+    `<div class="summary-row"><span>Delivery Fee</span><span style="color:${deliveryFee===0?'var(--green)':'var(--gray-800)'}">${deliveryFee===0?'FREE':'₦'+deliveryFee.toLocaleString()}</span></div>` +
+    (deliveryFee===0 ? `<div style="font-size:11px;color:var(--green);margin-top:-6px;margin-bottom:4px"><i class="fas fa-check-circle"></i> Your order qualifies for free delivery!</div>` : `<div style="font-size:11px;color:var(--gray-400);margin-top:-6px;margin-bottom:4px"><i class="fas fa-info-circle"></i> Add ₦${(150000-subtotal).toLocaleString()} more for free delivery</div>`);
+  document.getElementById('checkout-total').textContent = '₦'+grandTotal.toLocaleString();
+  // Store delivery fee for placeOrder to use
+  window._checkoutDeliveryFee = deliveryFee;
+  window._checkoutGrandTotal = grandTotal;
 }
 
 window.selectAddr = function(el, id) {
@@ -1589,22 +1962,32 @@ window.placeOrder = async function() {
   try {
     const addrSnap = await getDoc(doc(db,`users/${currentUser.uid}/addresses`,selectedAddress));
     const addr = addrSnap.exists() ? addrSnap.data() : {};
-    const total = cart.reduce((s,x)=>s+(x.price*x.qty),0);
+    const subtotal = cart.reduce((s,x)=>s+(x.price*x.qty),0);
+    const deliveryFee = window._checkoutDeliveryFee !== undefined ? window._checkoutDeliveryFee : (subtotal >= 150000 ? 0 : 3500);
+    const grandTotal = subtotal + deliveryFee;
     const orderId = 'BNM-'+Date.now();
+    const itemsCopy = [...cart];
     const orderData = {
       orderId, userId: currentUser.uid, userEmail: currentUser.email,
-      items: [...cart], address: addr, payment: selectedPayment,
-      total, status: 'pending', createdAt: serverTimestamp(),
+      items: itemsCopy, address: addr, payment: selectedPayment,
+      subtotal, deliveryFee, total: grandTotal, status: 'pending',
+      createdAt: serverTimestamp(),
       phone: addr.phone || ''
     };
     const orderRef = await addDoc(collection(db,'orders'), orderData);
     lastOrderId = orderRef.id;
-    // Clear cart
+    // Clear cart BEFORE notifications (so items don't appear empty)
+    const itemNames = itemsCopy.map(x=>x.name).join(', ');
+    const addrStr = [addr.street,addr.city,addr.state].filter(Boolean).join(', ');
     cart = [];
     await saveCart();
     updateCartBadge();
-    // WhatsApp notification
-    sendWhatsApp(addr.phone||'', orderId, 'Pending', cart.map(x=>x.name).join(', '), addr.name||'Customer');
+    // Notify BUYER via WhatsApp (order placed = status "Pending")
+    notifyBuyerWhatsApp(addr.phone||'', orderId, 'pending', itemNames, addr.name||currentUser.email.split('@')[0], grandTotal, deliveryFee);
+    // Notify ADMIN via WhatsApp about new order
+    setTimeout(()=>{
+      notifyAdminWhatsApp(orderId, addr.name||currentUser.email.split('@')[0], currentUser.email, itemNames, subtotal, deliveryFee, selectedPayment, addrStr);
+    }, 1500);
     // Show receipt
     showReceipt(orderId, orderData);
     navigate('success');
@@ -1616,15 +1999,18 @@ window.placeOrder = async function() {
 
 function showReceipt(orderId, data) {
   const wrap = document.getElementById('receipt-wrap');
+  const deliveryFee = data.deliveryFee || 0;
   wrap.innerHTML = `
     <h3 style="font-size:16px;font-weight:900;margin-bottom:14px;color:var(--orange)">🧾 Order Receipt</h3>
     <div class="summary-row"><span>Order ID</span><span style="font-weight:800">${orderId}</span></div>
     <div class="summary-row"><span>Date</span><span>${new Date().toLocaleDateString()}</span></div>
     <div class="summary-row"><span>Payment</span><span>${data.payment==='bank'?'Bank Transfer':'Pay on Delivery'}</span></div>
-    <div class="summary-row"><span>Delivery to</span><span>${data.address.street||''}, ${data.address.city||''}</span></div>
+    <div class="summary-row"><span>Delivery to</span><span>${(data.address&&data.address.street)||''}, ${(data.address&&data.address.city)||''}</span></div>
     <hr style="border:none;border-top:1px solid var(--gray-200);margin:10px 0">
     ${data.items.map(x=>`<div class="summary-row"><span>${x.name} × ${x.qty}</span><span>₦${(x.price*x.qty).toLocaleString()}</span></div>`).join('')}
-    <div class="summary-row total"><span>Total</span><span style="color:var(--orange)">₦${data.total.toLocaleString()}</span></div>
+    <div class="summary-row"><span>Subtotal</span><span>₦${(data.subtotal||data.total||0).toLocaleString()}</span></div>
+    <div class="summary-row"><span>Delivery Fee</span><span style="color:${deliveryFee===0?'var(--green)':'var(--gray-800)'}">${deliveryFee===0?'FREE':'₦'+deliveryFee.toLocaleString()}</span></div>
+    <div class="summary-row total"><span>Grand Total</span><span style="color:var(--orange)">₦${(data.total||0).toLocaleString()}</span></div>
     ${data.payment==='bank'?`<div style="margin-top:12px;background:var(--gray-50);padding:10px;border-radius:8px;font-size:12px"><p style="font-weight:800;margin-bottom:4px">Transfer Details:</p><p>Bank: Opay</p><p>Account: Adewole Aderonke Aishat</p><p>Number: 9168031213</p><p style="color:var(--orange);font-weight:700;margin-top:6px">Reference: ${orderId}</p></div>`:''}
   `;
 }
@@ -1957,8 +2343,11 @@ window.updateOrderStatus = async function() {
     closeModal('modal-status');
     loadAdminOrders();
     showToast('Order status updated!');
-    // WhatsApp
-    sendWhatsApp(o.phone||'', o.orderId||id, status.replace('_',' '), (o.items||[]).map(x=>x.name).join(', '), o.userEmail||'Customer');
+    // Notify BUYER on WhatsApp with full order details
+    const buyerPhone = o.phone || (o.address && o.address.phone) || '';
+    const buyerName = (o.address && o.address.name) || o.userEmail || 'Customer';
+    const itemNames = (o.items||[]).map(x=>x.name).join(', ');
+    notifyBuyerWhatsApp(buyerPhone, o.orderId||id, status, itemNames, buyerName, o.total||0, o.deliveryFee||0);
   } catch(e) { showToast('Failed to update','error'); }
 };
 
@@ -2035,7 +2424,7 @@ const chatResponses = {
   track: "To track your order, go to Menu → Track Order and enter your Order ID or phone number.",
   order: "You can view your orders in the Orders section of the app. Need help with a specific order?",
   payment: "We accept Bank Transfer (Opay) and Pay on Delivery. Bank details: Opay | Adewole Aderonke Aishat | 9168031213.",
-  delivery: "We deliver to your saved address. Free delivery on orders above ₦5,000!",
+  delivery: "We deliver to your saved address. Free delivery on orders ₦150,000 and above! Orders below ₦150,000 have a flat delivery fee of ₦3,500.",
   return: "For returns or issues, please contact us via WhatsApp or message us here.",
   price: "All prices are displayed in Naira (₦). Discounted prices are shown in orange.",
   cart: "Add items to your cart and proceed to checkout. You must be signed in to place an order.",
@@ -2102,12 +2491,40 @@ async function saveChatSession(text, role) {
 }
 
 // ===== WHATSAPP =====
-function sendWhatsApp(phone, orderId, status, items, customerName) {
+const ADMIN_WHATSAPP = '2349168031213';
+
+function notifyBuyerWhatsApp(phone, orderId, status, items, customerName, total, deliveryFee) {
   if(!phone) return;
-  const msg = encodeURIComponent(`Hi ${customerName}! 👋\n\nYour Benim order *${orderId}* has been updated.\n\n📦 Status: *${status.toUpperCase()}*\n🛍️ Items: ${items}\n\nThank you for shopping with Benim! 🧡`);
-  // Open WhatsApp link silently (would fire on status update)
-  // We create a link and log it; in production this would trigger server notification
-  console.log(`WhatsApp: https://wa.me/${phone.replace(/[^0-9]/g,'')}?text=${msg}`);
+  const cleanPhone = String(phone).replace(/[^0-9]/g,'');
+  if(!cleanPhone) return;
+  const statusEmoji = {pending:'⏳',confirmed:'✅',processing:'⚙️',out_for_delivery:'🚚',delivered:'🎉',cancelled:'❌'}[status]||'📦';
+  const statusLabel = status.replace(/_/g,' ').replace(/\b\w/g,l=>l.toUpperCase());
+  const msg = encodeURIComponent(
+    `Hi ${customerName}! 👋\n\nYour *Benim* order has been updated.\n\n` +
+    `🧾 *Order ID:* ${orderId}\n` +
+    `${statusEmoji} *Status:* ${statusLabel}\n` +
+    `🛍️ *Items:* ${items}\n` +
+    `💰 *Order Total:* ₦${Number(total||0).toLocaleString()}\n` +
+    (Number(deliveryFee)>0 ? `🚚 *Delivery Fee:* ₦${Number(deliveryFee).toLocaleString()}\n` : `🚚 *Delivery:* FREE\n`) +
+    `\nThank you for shopping with *Benim*! 🧡\nQuestions? Reply to this message.`
+  );
+  window.open(`https://wa.me/${cleanPhone}?text=${msg}`, '_blank');
+}
+
+function notifyAdminWhatsApp(orderId, customerName, customerEmail, items, total, deliveryFee, payment, address) {
+  const msg = encodeURIComponent(
+    `🛒 *New Order Received — Benim!*\n\n` +
+    `🧾 *Order ID:* ${orderId}\n` +
+    `👤 *Customer:* ${customerName}\n` +
+    `📧 *Email:* ${customerEmail}\n` +
+    `📦 *Items:* ${items}\n` +
+    `💰 *Subtotal:* ₦${Number(total||0).toLocaleString()}\n` +
+    (Number(deliveryFee)>0 ? `🚚 *Delivery Fee:* ₦${Number(deliveryFee).toLocaleString()}\n` : `🚚 *Delivery:* FREE\n`) +
+    `💳 *Payment:* ${payment==='bank'?'Bank Transfer':'Pay on Delivery'}\n` +
+    `📍 *Address:* ${address}\n` +
+    `\nPlease confirm the order in the Admin Panel.`
+  );
+  window.open(`https://wa.me/${ADMIN_WHATSAPP}?text=${msg}`, '_blank');
 }
 
 // ===== SLIDER =====
@@ -2167,8 +2584,30 @@ window.navigate = function(page) {
     loadAdminProducts();
     loadAdminStats();
   }
+  // Footer pages don't need special loading
   // Push state for SPA
   history.pushState({ page }, '', '#'+page);
+};
+
+// ===== FAQ TOGGLE =====
+window.toggleFaq = function(el) {
+  el.classList.toggle('open');
+};
+
+// ===== CONTACT FORM VIA WHATSAPP =====
+window.sendContactMessage = function() {
+  const name = document.getElementById('contact-name').value.trim();
+  const email = document.getElementById('contact-email').value.trim();
+  const msg = document.getElementById('contact-msg').value.trim();
+  if(!name||!msg) return showToast('Please fill in your name and message','error');
+  const wa = encodeURIComponent(
+    `Hello Benim! 👋\n\nName: ${name}\nContact: ${email||'N/A'}\n\nMessage:\n${msg}`
+  );
+  window.open(`https://wa.me/2349168031213?text=${wa}`, '_blank');
+  document.getElementById('contact-name').value='';
+  document.getElementById('contact-email').value='';
+  document.getElementById('contact-msg').value='';
+  showToast('Opening WhatsApp to send your message!');
 };
 
 window.addEventListener('popstate', (e) => {
