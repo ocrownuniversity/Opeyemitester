@@ -1704,7 +1704,7 @@ body{padding-bottom:65px!important;background:#f2f2f2!important}
 <option value="Delta">Delta — ₦4,500</option>
 <option value="Ebonyi">Ebonyi — ₦5,000</option>
 <option value="Edo">Edo — ₦4,500</option>
-<option value="Ekiti">Ekiti — ₦4,500</option>
+<option value="Ekiti">Ekiti — ₦3,500</option>
 <option value="Enugu">Enugu — ₦4,500</option>
 <option value="FCT">FCT — ₦3,500</option>
 <option value="Gombe">Gombe — ₦6,000</option>
@@ -1715,14 +1715,14 @@ body{padding-bottom:65px!important;background:#f2f2f2!important}
 <option value="Katsina">Katsina — ₦5,500</option>
 <option value="Kebbi">Kebbi — ₦6,000</option>
 <option value="Kogi">Kogi — ₦5,000</option>
-<option value="Kwara">Kwara — ₦4,500</option>
-<option value="Lagos">Lagos — ₦3,000</option>
+<option value="Kwara">Kwara — ₦3,500</option>
+<option value="Lagos">Lagos — ₦2,500</option>
 <option value="Nassarawa">Nassarawa — ₦5,000</option>
 <option value="Niger">Niger — ₦5,500</option>
 <option value="Ogun">Ogun — ₦3,500</option>
-<option value="Ondo">Ondo — ₦4,500</option>
-<option value="Osun">Osun — ₦4,000</option>
-<option value="Oyo">Oyo — ₦4,000</option>
+<option value="Ondo">Ondo — ₦3,500</option>
+<option value="Osun">Osun — ₦2,000</option>
+<option value="Oyo">Oyo — ₦1,500</option>
 <option value="Plateau">Plateau — ₦5,500</option>
 <option value="Rivers">Rivers — ₦4,500</option>
 <option value="Sokoto">Sokoto — ₦6,000</option>
@@ -1791,7 +1791,7 @@ const db = getFirestore(app);
 const ADMIN_EMAIL = 'shopwitbenim@gmail.com';
 
 // ===== STATE SHIPPING FEES =====
-const STATE_SHIPPING_FEES = {"Lagos": 3000, "Abuja": 3500, "FCT": 3500, "Ogun": 3500, "Oyo": 4000, "Osun": 4000, "Ondo": 4500, "Ekiti": 4500, "Edo": 4500, "Delta": 4500, "Rivers": 4500, "Bayelsa": 5000, "Anambra": 4500, "Enugu": 4500, "Imo": 4500, "Abia": 5000, "Ebonyi": 5000, "Cross River": 5500, "Akwa Ibom": 5000, "Kano": 5000, "Kaduna": 5000, "Katsina": 5500, "Sokoto": 6000, "Kebbi": 6000, "Zamfara": 6000, "Niger": 5500, "Kwara": 4500, "Kogi": 5000, "Benue": 5500, "Plateau": 5500, "Nassarawa": 5000, "Taraba": 6000, "Adamawa": 6000, "Borno": 6500, "Yobe": 6500, "Gombe": 6000, "Bauchi": 6000, "Jigawa": 6000};
+const STATE_SHIPPING_FEES = {"Lagos": 2500, "Abuja": 3500, "FCT": 3500, "Ogun": 3500, "Oyo": 1500, "Osun": 2000, "Ondo": 3500, "Ekiti": 3500, "Edo": 4500, "Delta": 4500, "Rivers": 4500, "Bayelsa": 5000, "Anambra": 4500, "Enugu": 4500, "Imo": 4500, "Abia": 5000, "Ebonyi": 5000, "Cross River": 5500, "Akwa Ibom": 5000, "Kano": 5000, "Kaduna": 5000, "Katsina": 5500, "Sokoto": 6000, "Kebbi": 6000, "Zamfara": 6000, "Niger": 5500, "Kwara": 3500, "Kogi": 5000, "Benue": 5500, "Plateau": 5500, "Nassarawa": 5000, "Taraba": 6000, "Adamawa": 6000, "Borno": 6500, "Yobe": 6500, "Gombe": 6000, "Bauchi": 6000, "Jigawa": 6000};
 function getShippingFee(stateName) {
   if (!stateName) return 3500;
   if (STATE_SHIPPING_FEES[stateName] !== undefined) return STATE_SHIPPING_FEES[stateName];
