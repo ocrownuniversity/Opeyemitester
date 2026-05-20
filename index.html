@@ -532,6 +532,13 @@ body{padding-bottom:70px}
 /* PAGE BACKGROUNDS */
 #page-home{background:#f2f2f2!important}
 body{padding-bottom:65px!important;background:#f2f2f2!important}
+
+/* CARD ACTION BUTTONS */
+.card-action-btns{display:flex;gap:4px;margin-top:8px}
+.card-btn-cart{flex:1;background:transparent;color:#111;border:1.5px solid #111;border-radius:5px;padding:5px 0;font-size:10px;font-weight:800;cursor:pointer;font-family:'Poppins',sans-serif;display:flex;align-items:center;justify-content:center;gap:3px;transition:.15s}
+.card-btn-cart:hover{background:#111;color:#fff}
+.card-btn-buy{flex:1;background:transparent;color:#111;border:1.5px solid #111;border-radius:5px;padding:5px 0;font-size:10px;font-weight:800;cursor:pointer;font-family:'Poppins',sans-serif;transition:.15s}
+.card-btn-buy:hover{background:#111;color:#fff}
 </style>
 </head>
 <body>
@@ -1953,6 +1960,10 @@ function productCardHTML(p, isFlash=false) {
         <span style="color:var(--yellow);font-size:11px">${starsHTML(p.rating||0)}</span>
         <span style="font-size:11px;color:var(--gray-400)">(${p.reviewCount||0})</span>
       </div>`}
+      <div class="card-action-btns" onclick="event.stopPropagation()">
+        <button class="card-btn-cart" onclick="quickAddToCart('${p.id}')"><i class="fas fa-cart-plus"></i> Add to Cart</button>
+        <button class="card-btn-buy" onclick="cardBuyNow('${p.id}')">Buy Now</button>
+      </div>
     </div>
   </div>`;
 }
@@ -2120,6 +2131,19 @@ window.quickAddToCart = function(productId) {
   saveCart();
   updateCartBadge();
   showToast(`${p.name} added to cart!`);
+};
+
+window.cardBuyNow = function(productId) {
+  if(!currentUser) { showToast('Please sign in to buy','info'); navigate('login'); return; }
+  const p = allProducts.find(x=>x.id===productId);
+  if(!p) return;
+  const price = Number(p.discountPrice)>0 ? Number(p.discountPrice) : Number(p.price);
+  const variantKey = p.id;
+  const existing = cart.find(x=>x.variantKey===variantKey);
+  if(existing) { existing.qty = Math.min(existing.qty+1, p.stock||99); }
+  else { cart.push({ productId: p.id, variantKey, name: p.name, price, image: (p.images&&p.images[0])||'', qty: 1, size:'', colour:'', variantLabel:'' }); }
+  saveCart(); updateCartBadge();
+  goToCheckout();
 };
 
 window.addToCartFromDetail = function() {
