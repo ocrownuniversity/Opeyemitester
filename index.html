@@ -365,7 +365,7 @@ body{padding-bottom:70px}
 .flash-time{font-size:13px;font-weight:900;color:var(--orange);min-width:22px;text-align:center}
 .flash-colon{font-size:13px;font-weight:900;color:var(--orange)}
 
-/* ====== PRODUCT CARD — ref image style ====== */
+/* ====== PRODUCT CARD &mdash; ref image style ====== */
 .product-card{background:#fff;border-radius:12px;overflow:hidden;box-shadow:0 1px 6px rgba(0,0,0,.07);transition:.2s;cursor:pointer;position:relative;border:1px solid rgba(0,0,0,.04)}
 .product-card:hover{box-shadow:0 4px 16px rgba(0,0,0,.12);transform:translateY(-2px)}
 .product-img-wrap{position:relative;overflow:hidden;aspect-ratio:1;background:#f8f8f8}
@@ -461,9 +461,9 @@ body{padding-bottom:70px}
 </style>
 
 <style>
-/* ========= FINAL OVERRIDE — clean Jumia-style UI ========= */
+/* ========= FINAL OVERRIDE &mdash; clean Jumia-style UI ========= */
 
-/* HEADER — white bg */
+/* HEADER &mdash; white bg */
 #header{background:#fff!important;box-shadow:0 1px 3px rgba(0,0,0,.08)!important}
 .header-top{padding:12px 14px 10px!important;gap:8px!important}
 .hamburger{color:#222!important;font-size:22px!important;background:none!important;border:none!important;padding:0!important}
@@ -473,7 +473,7 @@ body{padding-bottom:70px}
 .hicon-label{display:none!important}
 .header-icons{gap:6px!important}
 
-/* SEARCH BAR — full-width pill below header row */
+/* SEARCH BAR &mdash; full-width pill below header row */
 .header-search-row{background:#fff!important;padding:0 14px 12px!important}
 .header-search-wrap{background:#f2f2f2!important;border-radius:50px!important;padding:0 16px!important;display:flex!important;align-items:center!important;gap:8px!important;border:none!important}
 .header-search{background:transparent!important;border:none!important;padding:12px 0!important;font-size:13px!important;flex:1!important;outline:none!important;color:#333!important}
@@ -506,9 +506,8 @@ body{padding-bottom:70px}
 .flash-colon{color:#e8420a!important;font-weight:900!important}
 .flash-bolt{color:#e8420a!important}
 
-/* PRODUCT GRID — 3 columns always */
-.product-grid{display:grid!important;grid-template-columns:repeat(2,1fr)!important;gap:8px!important}
-@media(min-width:400px){.product-grid{grid-template-columns:repeat(3,1fr)!important}}
+/* PRODUCT GRID &mdash; 3 columns on ALL screen sizes */
+.product-grid{display:grid!important;grid-template-columns:repeat(3,1fr)!important;gap:6px!important}
 
 /* PRODUCT CARD */
 .product-card{background:#fff!important;border-radius:10px!important;overflow:hidden!important;box-shadow:0 1px 4px rgba(0,0,0,.08)!important;border:1px solid #f0f0f0!important}
@@ -649,7 +648,7 @@ body{padding-bottom:65px!important;background:#f2f2f2!important}
       <div class="slide slide-3">
         <div class="slide-content">
           <h2>Flash Sale<br>Is Live 🔥</h2>
-          <p>Limited time offers — grab before it's gone</p>
+          <p>Limited time offers &mdash; grab before it's gone</p>
           <button class="slide-btn" onclick="navigate('search')">View Flash Sale</button>
         </div>
       </div>
@@ -659,7 +658,7 @@ body{padding-bottom:65px!important;background:#f2f2f2!important}
     <div class="slider-dots" id="slider-dots"></div>
   </div>
 
-  <!-- Flash Sales — directly below banner (ref image style) -->
+  <!-- Flash Sales &mdash; directly below banner (ref image style) -->
   <div class="home-section" id="flash-section">
     <div class="home-section-header">
       <div>
@@ -734,7 +733,7 @@ body{padding-bottom:65px!important;background:#f2f2f2!important}
         </select>
       </div>
       <div class="filter-group">
-        <label>Max Price: ₦<span id="price-val">999999</span></label>
+        <label>Max Price: &#8358;<span id="price-val">999999</span></label>
         <input type="range" min="0" max="999999" value="999999" id="price-range" style="accent-color:var(--orange)" onchange="applyFilters()">
       </div>
     </div>
@@ -787,7 +786,7 @@ body{padding-bottom:65px!important;background:#f2f2f2!important}
         <div class="qty-wrap">
           <span class="qty-label">Qty:</span>
           <div class="qty-controls">
-            <button class="qty-btn" onclick="changeQty(-1)">−</button>
+            <button class="qty-btn" onclick="changeQty(-1)">-</button>
             <input class="qty-input" id="qty-input" value="1" type="number" min="1">
             <button class="qty-btn" onclick="changeQty(1)">+</button>
           </div>
@@ -797,7 +796,7 @@ body{padding-bottom:65px!important;background:#f2f2f2!important}
           <button class="btn-wish" id="detail-wish-btn" onclick="toggleWishlistDetail()"><i class="fas fa-heart"></i></button>
         </div>
         <div style="background:var(--gray-50);border-radius:8px;padding:12px;font-size:13px;color:var(--gray-600)">
-          <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px"><i class="fas fa-truck" style="color:var(--orange)"></i> Free delivery on orders above ₦5,000</div>
+          <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px"><i class="fas fa-truck" style="color:var(--orange)"></i> Free delivery on orders above &#8358;5,000</div>
           <div style="display:flex;align-items:center;gap:8px"><i class="fas fa-shield-alt" style="color:var(--green)"></i> Secure payment & buyer protection</div>
         </div>
       </div>
@@ -849,9 +848,9 @@ body{padding-bottom:65px!important;background:#f2f2f2!important}
     </div>
     <div id="cart-summary-wrap" class="hidden">
       <div class="cart-summary">
-        <div class="summary-row"><span>Subtotal</span><span id="cart-subtotal">₦0</span></div>
+        <div class="summary-row"><span>Subtotal</span><span id="cart-subtotal">&#8358;0</span></div>
         <div class="summary-row"><span>Delivery</span><span id="cart-delivery" style="color:var(--green)">FREE</span></div>
-        <div class="summary-row total"><span>Total</span><span id="cart-total">₦0</span></div>
+        <div class="summary-row total"><span>Total</span><span id="cart-total">&#8358;0</span></div>
         <button class="btn-checkout" onclick="goToCheckout()"><i class="fas fa-lock"></i> Proceed to Checkout</button>
       </div>
     </div>
@@ -892,7 +891,7 @@ body{padding-bottom:65px!important;background:#f2f2f2!important}
       <div class="checkout-title"><i class="fas fa-receipt"></i> Order Summary</div>
       <div id="checkout-items-summary"></div>
       <div class="summary-row total" style="padding-top:10px;border-top:2px solid var(--gray-200);margin-top:10px;display:flex;justify-content:space-between;font-size:18px;font-weight:900">
-        <span>Total</span><span id="checkout-total" style="color:var(--orange)">₦0</span>
+        <span>Total</span><span id="checkout-total" style="color:var(--orange)">&#8358;0</span>
       </div>
     </div>
     <button class="btn-checkout" onclick="placeOrder()"><i class="fas fa-check-circle"></i> Place Order</button>
@@ -1134,12 +1133,12 @@ body{padding-bottom:65px!important;background:#f2f2f2!important}
 
     <div class="fp-section">
       <h3>Who We Are</h3>
-      <p>BENIM is a modern Nigerian trading and fashion brand built on <strong>quality</strong>, <strong>trust</strong>, and <strong>value</strong>. We curate footwear and fashion essentials designed to match everyday style with a premium feel — without the premium price.</p>
+      <p>BENIM is a modern Nigerian trading and fashion brand built on <strong>quality</strong>, <strong>trust</strong>, and <strong>value</strong>. We curate footwear and fashion essentials designed to match everyday style with a premium feel &mdash; without the premium price.</p>
     </div>
 
     <div class="fp-section">
       <h3>Our Mission</h3>
-      <p>Our mission is to bridge the gap between <strong>affordability and style</strong>, delivering products that feel global but remain accessible. At BENIM, we are not just selling products — we are building a <strong>trusted lifestyle brand</strong>.</p>
+      <p>Our mission is to bridge the gap between <strong>affordability and style</strong>, delivering products that feel global but remain accessible. At BENIM, we are not just selling products &mdash; we are building a <strong>trusted lifestyle brand</strong>.</p>
     </div>
 
     <div class="fp-section">
@@ -1148,7 +1147,7 @@ body{padding-bottom:65px!important;background:#f2f2f2!important}
         <div style="background:var(--gray-50);border-radius:var(--radius-lg);padding:16px;border-left:3px solid var(--orange)">
           <div style="font-size:22px;margin-bottom:6px">👟</div>
           <h4 style="font-size:14px;font-weight:800;margin-bottom:4px">Curated Fashion</h4>
-          <p style="font-size:13px;color:var(--gray-500)">Every product is hand-picked for quality and style — no compromise.</p>
+          <p style="font-size:13px;color:var(--gray-500)">Every product is hand-picked for quality and style &mdash; no compromise.</p>
         </div>
         <div style="background:var(--gray-50);border-radius:var(--radius-lg);padding:16px;border-left:3px solid var(--orange)">
           <div style="font-size:22px;margin-bottom:6px">💰</div>
@@ -1170,7 +1169,7 @@ body{padding-bottom:65px!important;background:#f2f2f2!important}
 
     <div class="fp-section">
       <h3>Our Brand Promise</h3>
-      <p>When you shop with BENIM, you are not just buying a product. You are investing in a brand that cares about how you look, how you feel, and how much you spend. <strong>Style is not a luxury — it is a right.</strong> And at BENIM, we make sure you have access to both.</p>
+      <p>When you shop with BENIM, you are not just buying a product. You are investing in a brand that cares about how you look, how you feel, and how much you spend. <strong>Style is not a luxury &mdash; it is a right.</strong> And at BENIM, we make sure you have access to both.</p>
     </div>
 
     <div style="background:var(--gray-800);border-radius:var(--radius-xl);padding:20px 24px;text-align:center;color:#fff;margin-top:8px">
@@ -1189,7 +1188,7 @@ body{padding-bottom:65px!important;background:#f2f2f2!important}
   <div class="page-header"><button class="back-btn" onclick="history.back()"><i class="fas fa-arrow-left"></i></button><h2>Contact Us</h2></div>
   <div class="footer-page-wrap">
     <h2><i class="fas fa-headset"></i> Contact Us</h2>
-    <p class="subtitle">We're here to help — reach us through any of the channels below</p>
+    <p class="subtitle">We're here to help &mdash; reach us through any of the channels below</p>
     <div class="contact-grid">
       <div class="contact-card">
         <i class="fab fa-whatsapp" style="color:#25d366"></i>
@@ -1231,8 +1230,8 @@ body{padding-bottom:65px!important;background:#f2f2f2!important}
     <div class="fp-section">
       <h3>Shipping Fees</h3>
       <ul>
-        <li><strong>Orders above ₦150,000:</strong> FREE shipping — no delivery fee applied.</li>
-        <li><strong>Orders below ₦150,000:</strong> A flat delivery fee of ₦3,500 is added at checkout.</li>
+        <li><strong>Orders above &#8358;150,000:</strong> FREE shipping &mdash; no delivery fee applied.</li>
+        <li><strong>Orders below &#8358;150,000:</strong> A flat delivery fee of &#8358;3,500 is added at checkout.</li>
         <li>Delivery fees are calculated automatically based on your cart total.</li>
       </ul>
     </div>
@@ -1308,19 +1307,19 @@ body{padding-bottom:65px!important;background:#f2f2f2!important}
           <span>Location</span><span>Delivery Fee</span>
         </div>
         <div style="display:grid;grid-template-columns:1fr 1fr;padding:10px 14px;border-bottom:1px solid var(--gray-100);font-size:13px">
-          <span style="font-weight:700">Ibadan</span><span style="color:var(--orange);font-weight:700">₦1,500 – ₦2,500</span>
+          <span style="font-weight:700">Ibadan</span><span style="color:var(--orange);font-weight:700">&#8358;1,500 – &#8358;2,500</span>
         </div>
         <div style="display:grid;grid-template-columns:1fr 1fr;padding:10px 14px;border-bottom:1px solid var(--gray-100);background:var(--gray-50);font-size:13px">
-          <span style="font-weight:700">Lagos</span><span style="color:var(--orange);font-weight:700">₦2,500 – ₦3,500</span>
+          <span style="font-weight:700">Lagos</span><span style="color:var(--orange);font-weight:700">&#8358;2,500 – &#8358;3,500</span>
         </div>
         <div style="display:grid;grid-template-columns:1fr 1fr;padding:10px 14px;border-bottom:1px solid var(--gray-100);font-size:13px">
-          <span style="font-weight:700">Abuja / Port Harcourt</span><span style="color:var(--orange);font-weight:700">₦4,500 – ₦6,000</span>
+          <span style="font-weight:700">Abuja / Port Harcourt</span><span style="color:var(--orange);font-weight:700">&#8358;4,500 – &#8358;6,000</span>
         </div>
         <div style="display:grid;grid-template-columns:1fr 1fr;padding:10px 14px;border-bottom:1px solid var(--gray-100);background:var(--gray-50);font-size:13px">
-          <span style="font-weight:700">Other States</span><span style="color:var(--orange);font-weight:700">₦3,000 – ₦6,000</span>
+          <span style="font-weight:700">Other States</span><span style="color:var(--orange);font-weight:700">&#8358;3,000 – &#8358;6,000</span>
         </div>
         <div style="display:grid;grid-template-columns:1fr 1fr;padding:10px 14px;background:#d1fae5;font-size:13px">
-          <span style="font-weight:800;color:var(--green)">Orders above ₦150,000</span><span style="color:var(--green);font-weight:800">🎉 FREE Delivery</span>
+          <span style="font-weight:800;color:var(--green)">Orders above &#8358;150,000</span><span style="color:var(--green);font-weight:800">🎉 FREE Delivery</span>
         </div>
       </div>
     </div>
@@ -1346,7 +1345,7 @@ body{padding-bottom:65px!important;background:#f2f2f2!important}
         <div style="display:flex;gap:14px;padding-bottom:18px;position:relative">
           <div style="width:32px;height:32px;border-radius:50%;background:var(--orange);color:#fff;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:900;flex-shrink:0;z-index:1">4</div>
           <div style="position:absolute;left:15px;top:32px;bottom:0;width:2px;background:var(--gray-200)"></div>
-          <div style="padding-top:5px"><h4 style="font-size:14px;font-weight:800;margin-bottom:2px">Tracking Updates via WhatsApp</h4><p style="font-size:13px;color:var(--gray-500)">Receive real-time WhatsApp updates at every stage — Confirmed, Processing, Out for Delivery, Delivered.</p></div>
+          <div style="padding-top:5px"><h4 style="font-size:14px;font-weight:800;margin-bottom:2px">Tracking Updates via WhatsApp</h4><p style="font-size:13px;color:var(--gray-500)">Receive real-time WhatsApp updates at every stage &mdash; Confirmed, Processing, Out for Delivery, Delivered.</p></div>
         </div>
         <div style="display:flex;gap:14px">
           <div style="width:32px;height:32px;border-radius:50%;background:var(--green);color:#fff;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:900;flex-shrink:0">5</div>
@@ -1433,7 +1432,7 @@ body{padding-bottom:65px!important;background:#f2f2f2!important}
     <div class="fp-section">
       <h3>2. Orders & Payment</h3>
       <ul>
-        <li>All prices are in Nigerian Naira (₦) and include applicable taxes.</li>
+        <li>All prices are in Nigerian Naira (&#8358;) and include applicable taxes.</li>
         <li>For Bank Transfer orders, payment must be made within 24 hours of placing the order.</li>
         <li>Orders not paid within 24 hours (Bank Transfer) may be cancelled automatically.</li>
         <li>We reserve the right to cancel orders due to pricing errors or stock issues.</li>
@@ -1468,14 +1467,14 @@ body{padding-bottom:65px!important;background:#f2f2f2!important}
   <div class="page-header"><button class="back-btn" onclick="history.back()"><i class="fas fa-arrow-left"></i></button><h2>FAQ</h2></div>
   <div class="footer-page-wrap">
     <h2><i class="fas fa-question-circle"></i> Frequently Asked Questions</h2>
-    <p class="subtitle">Can't find your answer? <a onclick="navigate('contact')" style="color:var(--orange);cursor:pointer;font-weight:700">Contact us</a> — we're happy to help!</p>
+    <p class="subtitle">Can't find your answer? <a onclick="navigate('contact')" style="color:var(--orange);cursor:pointer;font-weight:700">Contact us</a> &mdash; we're happy to help!</p>
     <div class="faq-item" onclick="toggleFaq(this)">
       <div class="faq-q">How do I place an order? <i class="fas fa-chevron-down"></i></div>
       <div class="faq-a">Browse products, add items to your cart, and click "Proceed to Checkout". You'll need to be signed in and have a saved delivery address. Choose your payment method and confirm your order.</div>
     </div>
     <div class="faq-item" onclick="toggleFaq(this)">
       <div class="faq-q">When do I get free delivery? <i class="fas fa-chevron-down"></i></div>
-      <div class="faq-a">Orders with a total value of ₦150,000 or above qualify for free delivery. Orders below ₦150,000 attract a flat delivery fee of ₦3,500, automatically added at checkout.</div>
+      <div class="faq-a">Orders with a total value of &#8358;150,000 or above qualify for free delivery. Orders below &#8358;150,000 attract a flat delivery fee of &#8358;3,500, automatically added at checkout.</div>
     </div>
     <div class="faq-item" onclick="toggleFaq(this)">
       <div class="faq-q">What payment methods do you accept? <i class="fas fa-chevron-down"></i></div>
@@ -1498,7 +1497,7 @@ body{padding-bottom:65px!important;background:#f2f2f2!important}
       <div class="faq-a">Yes. We take your privacy seriously. Your data is stored securely using Google Firebase. We never sell your personal information to third parties. Read our Privacy Policy for details.</div>
     </div>
     <div class="faq-item" onclick="toggleFaq(this)">
-      <div class="faq-q">I made a Bank Transfer — how do I confirm my payment? <i class="fas fa-chevron-down"></i></div>
+      <div class="faq-q">I made a Bank Transfer &mdash; how do I confirm my payment? <i class="fas fa-chevron-down"></i></div>
       <div class="faq-a">After transferring, send your payment receipt and Order ID to our WhatsApp: +234 916 803 1213. Our team will confirm your order within a few hours during business hours.</div>
     </div>
   </div>
@@ -1556,7 +1555,7 @@ body{padding-bottom:65px!important;background:#f2f2f2!important}
     </div>
   </div>
   <div class="footer-bottom">
-    <span>© 2025 <strong style="color:rgba(255,255,255,.7)">BENIM GROUP CO. LTD</strong>. All rights reserved.</span>
+    <span>© 2025 <strong style="color:rgba(255,255,255,.7)">BENIM INTERNATIONAL TRADE LIMITED</strong>. All rights reserved.</span>
     <span>Made with 🧡 in Nigeria</span>
   </div>
 </footer>
@@ -1588,8 +1587,8 @@ body{padding-bottom:65px!important;background:#f2f2f2!important}
       <input type="hidden" id="edit-product-id">
       <div class="form-group"><label class="form-label">Product Name *</label><input class="form-input" id="p-name" placeholder="Product name"></div>
       <div class="form-row">
-        <div class="form-group"><label class="form-label">Price (₦) *</label><input class="form-input" id="p-price" type="number" placeholder="0"></div>
-        <div class="form-group"><label class="form-label">Discount Price (₦)</label><input class="form-input" id="p-discount" type="number" placeholder="0"></div>
+        <div class="form-group"><label class="form-label">Price (&#8358;) *</label><input class="form-input" id="p-price" type="number" placeholder="0"></div>
+        <div class="form-group"><label class="form-label">Discount Price (&#8358;)</label><input class="form-input" id="p-discount" type="number" placeholder="0"></div>
       </div>
       <div class="form-row">
         <div class="form-group"><label class="form-label">Category *</label>
@@ -1897,7 +1896,7 @@ function renderHome() {
     setTimeout(()=>{
       ['flash-grid','featured-grid','trending-grid'].forEach(id=>{
         const el = document.getElementById(id);
-        if(el) el.innerHTML = `<div style="grid-column:1/-1;text-align:center;padding:30px 20px;color:var(--gray-400)"><i class="fas fa-box-open" style="font-size:40px;display:block;margin-bottom:10px"></i><p style="font-size:14px;font-weight:600">No products yet — check back soon!</p></div>`;
+        if(el) el.innerHTML = `<div style="grid-column:1/-1;text-align:center;padding:30px 20px;color:var(--gray-400)"><i class="fas fa-box-open" style="font-size:40px;display:block;margin-bottom:10px"></i><p style="font-size:14px;font-weight:600">No products yet &mdash; check back soon!</p></div>`;
       });
     },1500);
     return;
@@ -1944,8 +1943,8 @@ function productCardHTML(p, isFlash=false) {
     <div class="product-info">
       <div class="product-name">${p.name||'Product'}</div>
       <div class="product-price-row">
-        <span class="product-price">₦${displayPrice.toLocaleString()}</span>
-        ${hasDisc?`<span class="product-old-price">₦${price.toLocaleString()}</span>`:''}
+        <span class="product-price">&#8358;${displayPrice.toLocaleString()}</span>
+        ${hasDisc?`<span class="product-old-price">&#8358;${price.toLocaleString()}</span>`:''}
       </div>
       ${isFlash ? `<div class="product-sold-row">
         <div class="sold-bar-wrap"><div class="sold-bar" style="width:${soldPct}%"></div></div>
@@ -1978,8 +1977,8 @@ window.openProduct = function(id) {
   const displayPrice = disc>0 ? disc : price;
   const hasDisc = disc>0 && disc<price;
   const discPct = hasDisc ? Math.round((1-disc/price)*100) : 0;
-  document.getElementById('detail-price').textContent = '₦'+displayPrice.toLocaleString();
-  document.getElementById('detail-old-price').textContent = hasDisc ? '₦'+price.toLocaleString() : '';
+  document.getElementById('detail-price').textContent = '&#8358;'+displayPrice.toLocaleString();
+  document.getElementById('detail-old-price').textContent = hasDisc ? '&#8358;'+price.toLocaleString() : '';
   document.getElementById('detail-discount').textContent = hasDisc ? `-${discPct}%` : '';
   document.getElementById('detail-discount').classList.toggle('hidden', !hasDisc);
   document.getElementById('detail-stars').textContent = starsHTML(p.rating||0);
@@ -2211,10 +2210,10 @@ window.renderCart = function() {
       <img class="cart-item-img" src="${item.image||'https://placehold.co/80x80/f3f4f6/9ca3af?text=Img'}" onerror="this.src='https://placehold.co/80x80/f3f4f6/9ca3af?text=Img'">
       <div class="cart-item-info">
         <div class="cart-item-name">${item.name}${item.variantLabel?` <span style="font-size:11px;color:var(--orange);font-weight:700">(${item.variantLabel})</span>`:''}</div>
-        <div class="cart-item-price">₦${(item.price*item.qty).toLocaleString()}</div>
+        <div class="cart-item-price">&#8358;${(item.price*item.qty).toLocaleString()}</div>
         <div class="cart-item-actions">
           <div class="qty-controls">
-            <button class="qty-btn" onclick="updateCartQty(${i},-1)">−</button>
+            <button class="qty-btn" onclick="updateCartQty(${i},-1)">-</button>
             <input class="qty-input" value="${item.qty}" type="number" min="1" onchange="setCartQty(${i},this.value)" style="width:40px">
             <button class="qty-btn" onclick="updateCartQty(${i},1)">+</button>
           </div>
@@ -2226,10 +2225,10 @@ window.renderCart = function() {
   const subtotal = cart.reduce((s,x)=>s+(x.price*x.qty),0);
   const deliveryFee = subtotal >= 150000 ? 0 : 3500;
   const grandTotal = subtotal + deliveryFee;
-  document.getElementById('cart-subtotal').textContent = '₦'+subtotal.toLocaleString();
-  document.getElementById('cart-delivery').textContent = deliveryFee===0 ? 'FREE' : '₦'+deliveryFee.toLocaleString();
+  document.getElementById('cart-subtotal').textContent = '&#8358;'+subtotal.toLocaleString();
+  document.getElementById('cart-delivery').textContent = deliveryFee===0 ? 'FREE' : '&#8358;'+deliveryFee.toLocaleString();
   document.getElementById('cart-delivery').style.color = deliveryFee===0 ? 'var(--green)' : 'var(--gray-800)';
-  document.getElementById('cart-total').textContent = '₦'+grandTotal.toLocaleString();
+  document.getElementById('cart-total').textContent = '&#8358;'+grandTotal.toLocaleString();
 };
 
 window.updateCartQty = function(i, delta) {
@@ -2263,7 +2262,7 @@ async function loadCheckout() {
       addrDiv.innerHTML = snap.docs.map((d,i)=>{
         const a = d.data();
         return `<div class="address-card${i===0?' selected':''}" onclick="selectAddr(this,'${d.id}')" data-addr-id="${d.id}">
-          <h4>${a.name} — ${a.phone}</h4>
+          <h4>${a.name} &mdash; ${a.phone}</h4>
           <p>${a.street}, ${a.city}, ${a.state}</p>
         </div>`;
       }).join('');
@@ -2275,10 +2274,10 @@ async function loadCheckout() {
   const subtotal = cart.reduce((s,x)=>s+(x.price*x.qty),0);
   const deliveryFee = subtotal >= 150000 ? 0 : 3500;
   const grandTotal = subtotal + deliveryFee;
-  sumDiv.innerHTML = cart.map(x=>`<div class="summary-row"><span>${x.name} × ${x.qty}</span><span>₦${(x.price*x.qty).toLocaleString()}</span></div>`).join('') +
-    `<div class="summary-row"><span>Delivery Fee</span><span style="color:${deliveryFee===0?'var(--green)':'var(--gray-800)'}">${deliveryFee===0?'FREE':'₦'+deliveryFee.toLocaleString()}</span></div>` +
-    (deliveryFee===0 ? `<div style="font-size:11px;color:var(--green);margin-top:-6px;margin-bottom:4px"><i class="fas fa-check-circle"></i> Your order qualifies for free delivery!</div>` : `<div style="font-size:11px;color:var(--gray-400);margin-top:-6px;margin-bottom:4px"><i class="fas fa-info-circle"></i> Add ₦${(150000-subtotal).toLocaleString()} more for free delivery</div>`);
-  document.getElementById('checkout-total').textContent = '₦'+grandTotal.toLocaleString();
+  sumDiv.innerHTML = cart.map(x=>`<div class="summary-row"><span>${x.name} × ${x.qty}</span><span>&#8358;${(x.price*x.qty).toLocaleString()}</span></div>`).join('') +
+    `<div class="summary-row"><span>Delivery Fee</span><span style="color:${deliveryFee===0?'var(--green)':'var(--gray-800)'}">${deliveryFee===0?'FREE':'&#8358;'+deliveryFee.toLocaleString()}</span></div>` +
+    (deliveryFee===0 ? `<div style="font-size:11px;color:var(--green);margin-top:-6px;margin-bottom:4px"><i class="fas fa-check-circle"></i> Your order qualifies for free delivery!</div>` : `<div style="font-size:11px;color:var(--gray-400);margin-top:-6px;margin-bottom:4px"><i class="fas fa-info-circle"></i> Add &#8358;${(150000-subtotal).toLocaleString()} more for free delivery</div>`);
+  document.getElementById('checkout-total').textContent = '&#8358;'+grandTotal.toLocaleString();
   // Store delivery fee for placeOrder to use
   window._checkoutDeliveryFee = deliveryFee;
   window._checkoutGrandTotal = grandTotal;
@@ -2354,10 +2353,10 @@ function showReceipt(orderId, data) {
     <div class="summary-row"><span>Payment</span><span>${data.payment==='bank'?'Bank Transfer':'Pay on Delivery'}</span></div>
     <div class="summary-row"><span>Delivery to</span><span>${(data.address&&data.address.street)||''}, ${(data.address&&data.address.city)||''}</span></div>
     <hr style="border:none;border-top:1px solid var(--gray-200);margin:10px 0">
-    ${data.items.map(x=>`<div class="summary-row"><span>${x.name} × ${x.qty}</span><span>₦${(x.price*x.qty).toLocaleString()}</span></div>`).join('')}
-    <div class="summary-row"><span>Subtotal</span><span>₦${(data.subtotal||data.total||0).toLocaleString()}</span></div>
-    <div class="summary-row"><span>Delivery Fee</span><span style="color:${deliveryFee===0?'var(--green)':'var(--gray-800)'}">${deliveryFee===0?'FREE':'₦'+deliveryFee.toLocaleString()}</span></div>
-    <div class="summary-row total"><span>Grand Total</span><span style="color:var(--orange)">₦${(data.total||0).toLocaleString()}</span></div>
+    ${data.items.map(x=>`<div class="summary-row"><span>${x.name} × ${x.qty}</span><span>&#8358;${(x.price*x.qty).toLocaleString()}</span></div>`).join('')}
+    <div class="summary-row"><span>Subtotal</span><span>&#8358;${(data.subtotal||data.total||0).toLocaleString()}</span></div>
+    <div class="summary-row"><span>Delivery Fee</span><span style="color:${deliveryFee===0?'var(--green)':'var(--gray-800)'}">${deliveryFee===0?'FREE':'&#8358;'+deliveryFee.toLocaleString()}</span></div>
+    <div class="summary-row total"><span>Grand Total</span><span style="color:var(--orange)">&#8358;${(data.total||0).toLocaleString()}</span></div>
     ${data.payment==='bank'?`<div style="margin-top:12px;background:var(--gray-50);padding:10px;border-radius:8px;font-size:12px"><p style="font-weight:800;margin-bottom:4px">Transfer Details:</p><p>Bank: Opay</p><p>Account: Adewole Aderonke Aishat</p><p>Number: 9168031213</p><p style="color:var(--orange);font-weight:700;margin-top:6px">Reference: ${orderId}</p></div>`:''}
   `;
 }
@@ -2385,7 +2384,7 @@ window.loadOrders = async function() {
         </div>
         <div class="order-items">${(o.items||[]).map(x=>x.name).join(', ')}</div>
         <div style="display:flex;align-items:center;justify-content:space-between">
-          <span class="order-total">₦${(o.total||0).toLocaleString()}</span>
+          <span class="order-total">&#8358;${(o.total||0).toLocaleString()}</span>
           <button class="track-order-btn" onclick="showTrackingModal('${d.id}')"><i class="fas fa-truck"></i> Track</button>
         </div>
       </div>`;
@@ -2414,7 +2413,7 @@ window.trackOrder = async function() {
     const currentIdx = steps.indexOf(o.status);
     result.innerHTML = `
       <h4 style="font-size:15px;font-weight:800;margin-bottom:4px">${o.orderId||snap.docs[0].id}</h4>
-      <p style="font-size:13px;color:var(--gray-500);margin-bottom:16px">Total: ₦${(o.total||0).toLocaleString()}</p>
+      <p style="font-size:13px;color:var(--gray-500);margin-bottom:16px">Total: &#8358;${(o.total||0).toLocaleString()}</p>
       <div class="tracking-steps">
         ${steps.map((s,i)=>{
           const done = i<currentIdx;
@@ -2556,7 +2555,7 @@ window.loadAddresses = async function() {
     list.innerHTML = snap.docs.map(d=>{
       const a = d.data();
       return `<div class="address-card" style="position:relative">
-        <h4>${a.name} — ${a.phone}</h4>
+        <h4>${a.name} &mdash; ${a.phone}</h4>
         <p>${a.street}, ${a.city}, ${a.state}</p>
         <button class="btn-danger" style="position:absolute;top:10px;right:10px;padding:4px 10px;font-size:11px" onclick="deleteAddress('${d.id}')"><i class="fas fa-trash"></i></button>
       </div>`;
@@ -2646,7 +2645,7 @@ window.loadAdminProducts = function() {
       <td><img class="product-thumb-small" src="${(p.images&&p.images[0])||'https://placehold.co/40x40/f3f4f6/9ca3af?text=P'}" onerror="this.src='https://placehold.co/40x40/f3f4f6/9ca3af?text=P'"></td>
       <td>${p.name||''}</td>
       <td>${p.category||''}</td>
-      <td>₦${(Number(p.discountPrice)||Number(p.price)||0).toLocaleString()}</td>
+      <td>&#8358;${(Number(p.discountPrice)||Number(p.price)||0).toLocaleString()}</td>
       <td>${p.stock||0}</td>
       <td style="display:flex;gap:6px;flex-wrap:wrap">
         <button class="btn-primary" style="padding:5px 10px;font-size:11px" onclick="editProduct('${p.id}')"><i class="fas fa-edit"></i></button>
@@ -2669,7 +2668,7 @@ window.loadAdminOrders = async function() {
       return `<tr>
         <td style="font-size:11px">${o.orderId||d.id.slice(0,8)}</td>
         <td>${o.userEmail||''}</td>
-        <td>₦${(o.total||0).toLocaleString()}</td>
+        <td>&#8358;${(o.total||0).toLocaleString()}</td>
         <td>${(o.items||[]).length} items</td>
         <td>${o.payment==='bank'?'Bank Transfer':'Pay on Delivery'}</td>
         <td><span class="order-status ${'status-'+(o.status==='out_for_delivery'?'out':o.status||'pending')}">${(o.status||'').replace('_',' ').replace(/\b\w/g,l=>l.toUpperCase())||'Pending'}</span></td>
@@ -2678,7 +2677,7 @@ window.loadAdminOrders = async function() {
     });
     tbody.innerHTML = rows.join('') || '<tr><td colspan="7" style="text-align:center;color:var(--gray-400)">No orders</td></tr>';
     document.getElementById('stat-orders').textContent = snap.docs.length;
-    document.getElementById('stat-revenue').textContent = '₦'+totalRevenue.toLocaleString();
+    document.getElementById('stat-revenue').textContent = '&#8358;'+totalRevenue.toLocaleString();
   } catch(e) { tbody.innerHTML = '<tr><td colspan="7" style="color:var(--red);text-align:center">Error loading</td></tr>'; }
 };
 
@@ -2780,9 +2779,9 @@ const chatResponses = {
   track: "To track your order, go to Menu → Track Order and enter your Order ID or phone number.",
   order: "You can view your orders in the Orders section of the app. Need help with a specific order?",
   payment: "We accept Bank Transfer (Opay) and Pay on Delivery. Bank details: Opay | Adewole Aderonke Aishat | 9168031213.",
-  delivery: "We deliver to your saved address. Free delivery on orders ₦150,000 and above! Orders below ₦150,000 have a flat delivery fee of ₦3,500.",
+  delivery: "We deliver to your saved address. Free delivery on orders &#8358;150,000 and above! Orders below &#8358;150,000 have a flat delivery fee of &#8358;3,500.",
   return: "For returns or issues, please contact us via WhatsApp or message us here.",
-  price: "All prices are displayed in Naira (₦). Discounted prices are shown in orange.",
+  price: "All prices are displayed in Naira (&#8358;). Discounted prices are shown in orange.",
   cart: "Add items to your cart and proceed to checkout. You must be signed in to place an order.",
   account: "You can create an account by clicking 'Create Account' or sign in if you already have one.",
   default: "I'm not sure about that, but our team is happy to help! Try asking about orders, payments, delivery, or products. 😊"
@@ -2819,7 +2818,7 @@ window.sendChatMessage = function() {
     const found = allProducts.find(p=>(p.name||'').toLowerCase().includes(lower));
     if(found) {
       const price = Number(found.discountPrice)||Number(found.price)||0;
-      response = `Found it! **${found.name}** — ₦${price.toLocaleString()}. ${found.stock>0?'In stock!':'Out of stock.'} Tap to view it in the shop!`;
+      response = `Found it! **${found.name}** &mdash; &#8358;${price.toLocaleString()}. ${found.stock>0?'In stock!':'Out of stock.'} Tap to view it in the shop!`;
     }
     addChatMsg(response, 'bot');
     saveChatSession(response, 'bot');
@@ -2860,8 +2859,8 @@ function notifyBuyerWhatsApp(phone, orderId, status, items, customerName, total,
     `🧾 *Order ID:* ${orderId}\n` +
     `${statusEmoji} *Status:* ${statusLabel}\n` +
     `🛍️ *Items:* ${items}\n` +
-    `💰 *Order Total:* ₦${Number(total||0).toLocaleString()}\n` +
-    (Number(deliveryFee)>0 ? `🚚 *Delivery Fee:* ₦${Number(deliveryFee).toLocaleString()}\n` : `🚚 *Delivery:* FREE\n`) +
+    `💰 *Order Total:* &#8358;${Number(total||0).toLocaleString()}\n` +
+    (Number(deliveryFee)>0 ? `🚚 *Delivery Fee:* &#8358;${Number(deliveryFee).toLocaleString()}\n` : `🚚 *Delivery:* FREE\n`) +
     `\nThank you for shopping with *Benim*! 🧡\nQuestions? Reply to this message.`
   );
   window.open(`https://wa.me/${cleanPhone}?text=${msg}`, '_blank');
@@ -2869,13 +2868,13 @@ function notifyBuyerWhatsApp(phone, orderId, status, items, customerName, total,
 
 function notifyAdminWhatsApp(orderId, customerName, customerEmail, items, total, deliveryFee, payment, address) {
   const msg = encodeURIComponent(
-    `🛒 *New Order Received — Benim!*\n\n` +
+    `🛒 *New Order Received &mdash; Benim!*\n\n` +
     `🧾 *Order ID:* ${orderId}\n` +
     `👤 *Customer:* ${customerName}\n` +
     `📧 *Email:* ${customerEmail}\n` +
     `📦 *Items:* ${items}\n` +
-    `💰 *Subtotal:* ₦${Number(total||0).toLocaleString()}\n` +
-    (Number(deliveryFee)>0 ? `🚚 *Delivery Fee:* ₦${Number(deliveryFee).toLocaleString()}\n` : `🚚 *Delivery:* FREE\n`) +
+    `💰 *Subtotal:* &#8358;${Number(total||0).toLocaleString()}\n` +
+    (Number(deliveryFee)>0 ? `🚚 *Delivery Fee:* &#8358;${Number(deliveryFee).toLocaleString()}\n` : `🚚 *Delivery:* FREE\n`) +
     `💳 *Payment:* ${payment==='bank'?'Bank Transfer':'Pay on Delivery'}\n` +
     `📍 *Address:* ${address}\n` +
     `\nPlease confirm the order in the Admin Panel.`
