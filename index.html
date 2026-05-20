@@ -493,16 +493,10 @@ body{padding-bottom:70px}
 .slider-dots{bottom:8px!important}
 
 /* HOME SECTIONS */
-.home-section{background:#fff!important;margin:8px 0 0!important;padding:14px 0 18px!important}
-.home-section-title{font-size:16px!important;font-weight:800!important;color:#111!important;font-family:'Poppins',sans-serif!important;margin-bottom:4px!important;padding:0 12px!important}
-.home-section-header{margin-bottom:14px!important;display:flex!important;align-items:center!important;justify-content:space-between!important;padding:0 12px!important}
-.home-see-all{color:#e8420a!important;font-size:13px!important;font-weight:700!important;white-space:nowrap!important;padding-top:2px!important;cursor:pointer!important}
-
-/* PRODUCT GRID — force clean white, no extra bg */
-#flash-section,#page-home .home-section{border-radius:0!important}
-
-/* PAGE BACKGROUNDS — slightly off-white between sections */
-#page-home{background:#f0f0f0!important}
+.home-section{background:#fff!important;margin:8px 0 0!important;padding:14px 12px 18px!important}
+.home-section-title{font-size:16px!important;font-weight:800!important;color:#111!important;font-family:'Poppins',sans-serif!important;margin-bottom:4px!important}
+.home-section-header{margin-bottom:14px!important}
+.home-see-all{color:#e8420a!important;font-size:13px!important;font-weight:700!important;white-space:nowrap!important;padding-top:2px!important}
 
 /* FLASH SECTION */
 #flash-section{margin-top:8px!important}
@@ -511,14 +505,12 @@ body{padding-bottom:70px}
 .flash-time{color:#e8420a!important;font-size:12px!important;font-weight:900!important}
 .flash-colon{color:#e8420a!important;font-weight:900!important}
 .flash-bolt{color:#e8420a!important}
-/* Flash section header needs padding too */
-#flash-section .home-section-header{padding:0 12px!important}
 
-/* PRODUCT GRID — 3 columns full width, no side padding */
-.product-grid{display:grid!important;grid-template-columns:repeat(3,1fr)!important;gap:2px!important;width:100%!important}
+/* PRODUCT GRID &mdash; 3 columns on ALL screen sizes */
+.product-grid{display:grid!important;grid-template-columns:repeat(3,1fr)!important;gap:6px!important}
 
 /* PRODUCT CARD — matches screenshot exactly */
-.pc{background:#fff;border-radius:0;overflow:hidden;cursor:pointer;display:flex;flex-direction:column;box-shadow:none;border:none;border-right:1px solid #f0f0f0;border-bottom:1px solid #f0f0f0}
+.pc{background:#fff;border-radius:10px;overflow:hidden;cursor:pointer;display:flex;flex-direction:column;box-shadow:0 1px 4px rgba(0,0,0,.07);border:1px solid #f0f0f0}
 .pc:hover{box-shadow:0 3px 12px rgba(0,0,0,.12)}
 .pc-img-wrap{position:relative;width:100%;aspect-ratio:1;background:#f5f5f5;overflow:hidden;flex-shrink:0}
 .pc-img-wrap img{width:100%;height:100%;object-fit:cover;display:block}
@@ -544,7 +536,8 @@ body{padding-bottom:70px}
 .bnav-badge{top:4px!important;right:calc(50% - 18px)!important;font-size:9px!important;padding:1px 4px!important}
 
 /* PAGE BACKGROUNDS */
-body{padding-bottom:65px!important;background:#f0f0f0!important}
+#page-home{background:#f2f2f2!important}
+body{padding-bottom:65px!important;background:#f2f2f2!important}
 
 /* CARD ACTION BUTTONS */
 .card-action-btns{display:flex;gap:4px;margin-top:8px}
@@ -552,13 +545,6 @@ body{padding-bottom:65px!important;background:#f0f0f0!important}
 .card-btn-cart:hover{background:#111;color:#fff}
 .card-btn-buy{flex:1;background:transparent;color:#111;border:1.5px solid #111;border-radius:5px;padding:5px 0;font-size:10px;font-weight:800;cursor:pointer;font-family:'Poppins',sans-serif;transition:.15s}
 .card-btn-buy:hover{background:#111;color:#fff}
-
-/* TYPING INDICATOR */
-.typing-indicator{display:flex!important;gap:4px;align-items:center;padding:10px 14px!important;min-width:50px}
-.typing-indicator span{width:7px;height:7px;border-radius:50%;background:#ccc;display:inline-block;animation:typingBounce 1.2s infinite ease-in-out}
-.typing-indicator span:nth-child(2){animation-delay:.2s}
-.typing-indicator span:nth-child(3){animation-delay:.4s}
-@keyframes typingBounce{0%,80%,100%{transform:scale(0.6);opacity:.5}40%{transform:scale(1);opacity:1}}
 </style>
 </head>
 <body>
@@ -2000,8 +1986,8 @@ window.openProduct = function(id) {
   const displayPrice = disc>0 ? disc : price;
   const hasDisc = disc>0 && disc<price;
   const discPct = hasDisc ? Math.round((1-disc/price)*100) : 0;
-  document.getElementById('detail-price').innerHTML = '&#8358;'+displayPrice.toLocaleString();
-  document.getElementById('detail-old-price').innerHTML = hasDisc ? '&#8358;'+price.toLocaleString() : '';
+  document.getElementById('detail-price').textContent = '&#8358;'+displayPrice.toLocaleString();
+  document.getElementById('detail-old-price').textContent = hasDisc ? '&#8358;'+price.toLocaleString() : '';
   document.getElementById('detail-discount').textContent = hasDisc ? `-${discPct}%` : '';
   document.getElementById('detail-discount').classList.toggle('hidden', !hasDisc);
   document.getElementById('detail-stars').textContent = starsHTML(p.rating||0);
@@ -2261,10 +2247,10 @@ window.renderCart = function() {
   const subtotal = cart.reduce((s,x)=>s+(x.price*x.qty),0);
   const deliveryFee = subtotal >= 150000 ? 0 : 3500;
   const grandTotal = subtotal + deliveryFee;
-  document.getElementById('cart-subtotal').innerHTML = '&#8358;'+subtotal.toLocaleString();
-  document.getElementById('cart-delivery').innerHTML = deliveryFee===0 ? 'FREE' : '&#8358;'+deliveryFee.toLocaleString();
+  document.getElementById('cart-subtotal').textContent = '&#8358;'+subtotal.toLocaleString();
+  document.getElementById('cart-delivery').textContent = deliveryFee===0 ? 'FREE' : '&#8358;'+deliveryFee.toLocaleString();
   document.getElementById('cart-delivery').style.color = deliveryFee===0 ? 'var(--green)' : 'var(--gray-800)';
-  document.getElementById('cart-total').innerHTML = '&#8358;'+grandTotal.toLocaleString();
+  document.getElementById('cart-total').textContent = '&#8358;'+grandTotal.toLocaleString();
 };
 
 window.updateCartQty = function(i, delta) {
@@ -2313,7 +2299,7 @@ async function loadCheckout() {
   sumDiv.innerHTML = cart.map(x=>`<div class="summary-row"><span>${x.name} × ${x.qty}</span><span>&#8358;${(x.price*x.qty).toLocaleString()}</span></div>`).join('') +
     `<div class="summary-row"><span>Delivery Fee</span><span style="color:${deliveryFee===0?'var(--green)':'var(--gray-800)'}">${deliveryFee===0?'FREE':'&#8358;'+deliveryFee.toLocaleString()}</span></div>` +
     (deliveryFee===0 ? `<div style="font-size:11px;color:var(--green);margin-top:-6px;margin-bottom:4px"><i class="fas fa-check-circle"></i> Your order qualifies for free delivery!</div>` : `<div style="font-size:11px;color:var(--gray-400);margin-top:-6px;margin-bottom:4px"><i class="fas fa-info-circle"></i> Add &#8358;${(150000-subtotal).toLocaleString()} more for free delivery</div>`);
-  document.getElementById('checkout-total').innerHTML = '&#8358;'+grandTotal.toLocaleString();
+  document.getElementById('checkout-total').textContent = '&#8358;'+grandTotal.toLocaleString();
   // Store delivery fee for placeOrder to use
   window._checkoutDeliveryFee = deliveryFee;
   window._checkoutGrandTotal = grandTotal;
@@ -2713,7 +2699,7 @@ window.loadAdminOrders = async function() {
     });
     tbody.innerHTML = rows.join('') || '<tr><td colspan="7" style="text-align:center;color:var(--gray-400)">No orders</td></tr>';
     document.getElementById('stat-orders').textContent = snap.docs.length;
-    document.getElementById('stat-revenue').innerHTML = '&#8358;'+totalRevenue.toLocaleString();
+    document.getElementById('stat-revenue').textContent = '&#8358;'+totalRevenue.toLocaleString();
   } catch(e) { tbody.innerHTML = '<tr><td colspan="7" style="color:var(--red);text-align:center">Error loading</td></tr>'; }
 };
 
@@ -2807,192 +2793,58 @@ window.loadAdminStats = async function() {
   loadAdminOrders();
 };
 
-// ===== CHATBOT (Smart Local AI - Free) =====
+// ===== CHATBOT =====
 let chatOpen = false;
-let chatHistory = [];
+const chatResponses = {
+  hello: "Hi! 👋 Welcome to Benim! How can I help you today?",
+  hi: "Hello! Welcome to Benim! I'm here to assist you.",
+  track: "To track your order, go to Menu → Track Order and enter your Order ID or phone number.",
+  order: "You can view your orders in the Orders section of the app. Need help with a specific order?",
+  payment: "We accept Bank Transfer (Opay) and Pay on Delivery. Bank details: Opay | Adewole Aderonke Aishat | 9168031213.",
+  delivery: "We deliver to your saved address. Free delivery on orders &#8358;150,000 and above! Orders below &#8358;150,000 have a flat delivery fee of &#8358;3,500.",
+  return: "For returns or issues, please contact us via WhatsApp or message us here.",
+  price: "All prices are displayed in Naira (&#8358;). Discounted prices are shown in orange.",
+  cart: "Add items to your cart and proceed to checkout. You must be signed in to place an order.",
+  account: "You can create an account by clicking 'Create Account' or sign in if you already have one.",
+  default: "I'm not sure about that, but our team is happy to help! Try asking about orders, payments, delivery, or products. 😊"
+};
 
 window.toggleChatbot = function() {
   chatOpen = !chatOpen;
   document.getElementById('chatbot-window').classList.toggle('open', chatOpen);
   if(chatOpen && !document.getElementById('chat-messages').innerHTML) {
-    addChatMsg("Hi! 👋 I'm Benim's support assistant. Ask me about products, prices, delivery, payment, categories, or orders!", 'bot');
+    addChatMsg("Hi! 👋 I'm Benim's support assistant. Ask me about orders, payments, delivery, and more!", 'bot');
+    saveChatSession("Hi! 👋 I'm Benim's support assistant.", 'bot');
   }
 };
 window.openChatbot = function() { chatOpen=false; toggleChatbot(); };
+
 window.chatKeyPress = function(e) {
-  if(e.key==='Enter'&&!e.shiftKey){ e.preventDefault(); sendChatMessage(); }
+  if(e.key==='Enter'&&!e.shiftKey) { e.preventDefault(); sendChatMessage(); }
 };
-
-function getBotReply(text) {
-  const q = text.toLowerCase().trim();
-
-  // ---- GREETINGS ----
-  if(/^(hi|hello|hey|good morning|good afternoon|good evening|howdy|sup|yo)\b/.test(q))
-    return "Hello! 👋 Welcome to Benim! How can I help you today? You can ask about products, prices, delivery, payment, or orders.";
-
-  // ---- PRODUCT SEARCH ----
-  // Check if asking about a specific product
-  const productMatches = allProducts.filter(p => {
-    const name = (p.name||'').toLowerCase();
-    const cat = (p.category||'').toLowerCase();
-    const words = q.replace(/[?!.,]/g,'').split(/\s+/).filter(w=>w.length>2);
-    return words.some(w => name.includes(w) || cat.includes(w));
-  }).slice(0,3);
-
-  if(productMatches.length > 0 && (q.includes('price')||q.includes('cost')||q.includes('how much')||q.includes('sell')||q.includes('have')||q.includes('buy')||q.includes('want')||q.includes('get')||q.includes('stock')||q.includes('available')||productMatches.length===1)) {
-    if(productMatches.length === 1) {
-      const p = productMatches[0];
-      const price = Number(p.discountPrice)||Number(p.price)||0;
-      const oldPrice = Number(p.price)||0;
-      const inStock = (p.stock||0) > 0;
-      const disc = p.discountPrice && p.discountPrice < oldPrice ? ` (was ₦${oldPrice.toLocaleString()})` : '';
-      return `We have **${p.name}**! 🛍️\nPrice: ₦${price.toLocaleString()}${disc}\nStatus: ${inStock?'✅ In stock':'❌ Out of stock'}\nCategory: ${p.category||'General'}\n\nTap it on the home page to add to cart!`;
-    } else {
-      const list = productMatches.map(p=>{
-        const price = Number(p.discountPrice)||Number(p.price)||0;
-        return `• ${p.name} — ₦${price.toLocaleString()}`;
-      }).join('\n');
-      return `Here's what we found:\n${list}\n\nTap any product on the home page to view details and add to cart!`;
-    }
-  }
-
-  // ---- PRICE/PRODUCT BROWSING ----
-  if(q.includes('cheapest')||q.includes('lowest price')||q.includes('affordable')) {
-    const sorted = [...allProducts].filter(p=>p.price).sort((a,b)=>(Number(a.discountPrice||a.price))-(Number(b.discountPrice||b.price))).slice(0,3);
-    const list = sorted.map(p=>`• ${p.name} — ₦${(Number(p.discountPrice||p.price)).toLocaleString()}`).join('\n');
-    return `Our most affordable products:\n${list}\n\nCheck the home page for all deals! 😊`;
-  }
-  if(q.includes('expensive')||q.includes('premium')||q.includes('highest')) {
-    const sorted = [...allProducts].filter(p=>p.price).sort((a,b)=>(Number(b.discountPrice||b.price))-(Number(a.discountPrice||a.price))).slice(0,3);
-    const list = sorted.map(p=>`• ${p.name} — ₦${(Number(p.discountPrice||p.price)).toLocaleString()}`).join('\n');
-    return `Our premium products:\n${list}`;
-  }
-  if(q.includes('discount')||q.includes('sale')||q.includes('promo')||q.includes('offer')||q.includes('deal')) {
-    const discounted = allProducts.filter(p=>p.discountPrice && Number(p.discountPrice)<Number(p.price)).slice(0,4);
-    if(discounted.length) {
-      const list = discounted.map(p=>{
-        const save = Number(p.price)-Number(p.discountPrice);
-        return `• ${p.name} — ₦${Number(p.discountPrice).toLocaleString()} (save ₦${save.toLocaleString()})`;
-      }).join('\n');
-      return `🔥 Current deals & discounts:\n${list}\n\nCheck Flash Sales on the home page for more!`;
-    }
-    return "Check our Flash Sales section on the home page for the best current deals! 🔥";
-  }
-
-  // ---- CATEGORIES ----
-  if(q.includes('categor')||q.includes('what do you sell')||q.includes('what products')||q.includes('what items')) {
-    const cats = [...new Set(allProducts.map(p=>p.category).filter(Boolean))];
-    const list = cats.length ? cats.join(', ') : 'Electronics, Fashion, Men\'s Fashion, Women\'s Fashion, Baby Products, Home & Kitchen, Beauty, Sports, Phones, Toys';
-    return `We sell a wide range of products! 🛒\n\nCategories: ${list}\n\nTap "Categories" at the bottom of the app to browse by category.`;
-  }
-  if(q.includes('fashion')||q.includes('cloth')||q.includes('wear')||q.includes('shirt')||q.includes('trouser')||q.includes('dress')||q.includes('shoe')||q.includes('jean')) {
-    const fashion = allProducts.filter(p=>(p.category||'').toLowerCase().includes('fashion')||(p.name||'').toLowerCase().includes(q.split(' ')[0])).slice(0,3);
-    if(fashion.length) {
-      const list = fashion.map(p=>`• ${p.name} — ₦${(Number(p.discountPrice||p.price)).toLocaleString()}`).join('\n');
-      return `Here are some fashion items:\n${list}\n\nTap Categories → Fashion to see all! 👗`;
-    }
-    return "We have a great fashion collection! Tap Categories → Men's Fashion or Women's Fashion to browse. 👗";
-  }
-  if(q.includes('phone')||q.includes('mobile')||q.includes('smartphone')) {
-    const phones = allProducts.filter(p=>(p.category||'').toLowerCase().includes('phone')||(p.name||'').toLowerCase().includes('phone')).slice(0,3);
-    if(phones.length) {
-      const list = phones.map(p=>`• ${p.name} — ₦${(Number(p.discountPrice||p.price)).toLocaleString()}`).join('\n');
-      return `📱 Phones we carry:\n${list}`;
-    }
-    return "Browse our Phones & Electronics category for the latest devices! 📱 Tap Categories to see all.";
-  }
-  if(q.includes('electron')||q.includes('gadget')||q.includes('watch')||q.includes('laptop')||q.includes('tv')) {
-    const elec = allProducts.filter(p=>(p.category||'').toLowerCase().includes('electron')||(p.name||'').toLowerCase().match(/watch|tv|laptop|tablet/)).slice(0,3);
-    if(elec.length) {
-      const list = elec.map(p=>`• ${p.name} — ₦${(Number(p.discountPrice||p.price)).toLocaleString()}`).join('\n');
-      return `⚡ Electronics we carry:\n${list}`;
-    }
-    return "We carry electronics and gadgets! Tap Categories → Electronics to browse. ⚡";
-  }
-
-  // ---- DELIVERY ----
-  if(q.includes('deliver')||q.includes('shipping')||q.includes('ship')||q.includes('how long')||q.includes('when will')||q.includes('arrive')) {
-    return "🚚 Delivery info:\n• FREE delivery on orders ₦150,000 and above\n• ₦3,500 flat delivery fee for orders below ₦150,000\n• Delivery is made to your saved address\n\nFor delivery time, contact us on WhatsApp: +2349168031213";
-  }
-
-  // ---- PAYMENT ----
-  if(q.includes('pay')||q.includes('payment')||q.includes('transfer')||q.includes('bank')||q.includes('opay')||q.includes('cash')) {
-    return "💳 Payment options:\n1. Bank Transfer (Opay)\n   • Bank: Opay\n   • Name: Adewole Aderonke Aishat\n   • Account: 9168031213\n2. Pay on Delivery\n\nAfter transfer, send your receipt to our WhatsApp: +2349168031213";
-  }
-
-  // ---- ORDERS & TRACKING ----
-  if(q.includes('track')||q.includes('my order')||q.includes('order status')||q.includes('where is my')) {
-    return "📦 To track your order:\n1. Tap the menu (≡) at the top\n2. Select 'Track Order'\n3. Enter your Order ID or phone number\n\nOr contact us on WhatsApp: +2349168031213 with your order ID.";
-  }
-  if(q.includes('order')||q.includes('purchase')||q.includes('bought')||q.includes('place')) {
-    return "🛍️ To place an order:\n1. Find your product on the home page\n2. Tap it to view details\n3. Add to cart\n4. Go to cart and checkout\n5. Fill in your details and confirm\n\nNeed help? WhatsApp us: +2349168031213";
-  }
-
-  // ---- RETURN & REFUND ----
-  if(q.includes('return')||q.includes('refund')||q.includes('exchange')||q.includes('wrong item')||q.includes('damaged')||q.includes('complaint')) {
-    return "↩️ Return & Refund Policy:\n• Contact us within 7 days of receiving your order\n• Send your Order ID and reason via WhatsApp\n• We'll guide you through the return process\n\nWhatsApp: +2349168031213";
-  }
-
-  // ---- CONTACT ----
-  if(q.includes('contact')||q.includes('whatsapp')||q.includes('call')||q.includes('reach')||q.includes('speak')||q.includes('talk')||q.includes('support')||q.includes('help')) {
-    return "📞 Contact Benim:\n• WhatsApp: +2349168031213\n• Tap 'Contact' in the menu for our contact form\n• Our team responds quickly on WhatsApp!\n\nWe're here to help! 😊";
-  }
-
-  // ---- ACCOUNT ----
-  if(q.includes('account')||q.includes('sign in')||q.includes('login')||q.includes('register')||q.includes('sign up')||q.includes('password')) {
-    return "👤 Account help:\n• Tap the person icon at the top right to sign in\n• New customer? Tap 'Create Account'\n• Forgot password? Use the 'Forgot Password' link on the sign-in page\n\nNeed more help? WhatsApp: +2349168031213";
-  }
-
-  // ---- CART ----
-  if(q.includes('cart')||q.includes('basket')||q.includes('checkout')) {
-    return "🛒 Cart help:\n• Tap the cart icon at the top right to view your cart\n• Add items from any product page\n• Tap 'Checkout' when ready to order\n\nDelivery is FREE for orders ₦150,000+!";
-  }
-
-  // ---- ABOUT ----
-  if(q.includes('about')||q.includes('who are you')||q.includes('benim')||q.includes('trusted')||q.includes('legit')||q.includes('real')) {
-    return "🏪 About Benim:\nBenim is a trusted Nigerian e-commerce shop selling quality products across fashion, electronics, baby items, home goods, and more. We offer genuine products, secure payment, and reliable delivery.\n\nShop with confidence! ✅";
-  }
-
-  // ---- WISHLIST/SAVED ----
-  if(q.includes('wishlist')||q.includes('saved')||q.includes('favorite')||q.includes('favourite')) {
-    return "❤️ To save products:\n• Tap the heart icon on any product to save it\n• View saved items by tapping 'Saved' at the bottom of the app";
-  }
-
-  // ---- THANK YOU ----
-  if(q.includes('thank')||q.includes('thanks')||q.includes('appreciate')) {
-    return "You're welcome! 😊 Happy shopping at Benim! If you need anything else, I'm here. 🛍️";
-  }
-
-  // ---- GOODBYE ----
-  if(q.includes('bye')||q.includes('goodbye')||q.includes('see you')||q.includes('later')) {
-    return "Goodbye! 👋 Thanks for visiting Benim. Come back anytime! 😊";
-  }
-
-  // ---- DEFAULT with suggestions ----
-  return `I'm not sure about that, but I can help you with:\n• 🔍 Finding products (e.g. "Do you have jeans?")\n• 💰 Prices & discounts\n• 🚚 Delivery & shipping\n• 💳 Payment methods\n• 📦 Order tracking\n• ↩️ Returns & refunds\n• 📞 Contact us\n\nWhat would you like to know?`;
-}
 
 window.sendChatMessage = function() {
   const input = document.getElementById('chat-input');
   const text = input.value.trim();
   if(!text) return;
   addChatMsg(text, 'user');
+  saveChatSession(text, 'user');
   input.value = '';
-
-  // Typing effect delay
-  const typingEl = document.createElement('div');
-  typingEl.className = 'chat-msg bot typing-indicator';
-  typingEl.innerHTML = '<span></span><span></span><span></span>';
-  document.getElementById('chat-messages').appendChild(typingEl);
-  document.getElementById('chat-messages').scrollTop = 99999;
-
-  setTimeout(function() {
-    typingEl.remove();
-    const reply = getBotReply(text);
-    addChatMsg(reply, 'bot');
-    saveChatSession(text, 'user');
-    saveChatSession(reply, 'bot');
-  }, 700);
+  setTimeout(()=>{
+    const lower = text.toLowerCase();
+    let response = chatResponses.default;
+    for(const key of Object.keys(chatResponses)) {
+      if(lower.includes(key)) { response=chatResponses[key]; break; }
+    }
+    // Check if asking about a product
+    const found = allProducts.find(p=>(p.name||'').toLowerCase().includes(lower));
+    if(found) {
+      const price = Number(found.discountPrice)||Number(found.price)||0;
+      response = `Found it! **${found.name}** &mdash; &#8358;${price.toLocaleString()}. ${found.stock>0?'In stock!':'Out of stock.'} Tap to view it in the shop!`;
+    }
+    addChatMsg(response, 'bot');
+    saveChatSession(response, 'bot');
+  }, 600);
 };
 
 function addChatMsg(text, role) {
@@ -3089,7 +2941,8 @@ function startCountdown() {
 }
 
 // ===== NAVIGATION =====
-const _navStack = ['home'];
+const _navStack = [];
+let _navBusy = false;
 
 function _showPage(page) {
   document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
@@ -3109,31 +2962,32 @@ function _showPage(page) {
 
 window.navigate = function(page) {
   if(page==='admin' && !isAdmin) { navigate('home'); return; }
-  if(_navStack[_navStack.length-1] !== page) _navStack.push(page);
-  // Push a new entry for EVERY navigation so back button has entries to consume
-  history.pushState({benimPage: page}, '', location.href);
   _showPage(page);
+  if(_navStack[_navStack.length-1] !== page) {
+    _navStack.push(page);
+    _navBusy = true;
+    history.pushState({ benimPage: page }, '', '#'+page);
+    _navBusy = false;
+  }
 };
 
 window.goBack = function() {
   if(_navStack.length > 1) {
     _navStack.pop();
-    _showPage(_navStack[_navStack.length-1]);
+    const prev = _navStack[_navStack.length-1];
+    _showPage(prev);
+    _navBusy = true;
+    history.replaceState({ benimPage: prev }, '', '#'+prev);
+    _navBusy = false;
+  } else {
+    _showPage('home');
+    _navStack.length = 0;
+    _navStack.push('home');
+    _navBusy = true;
+    history.replaceState({ benimPage: 'home' }, '', '#home');
+    _navBusy = false;
   }
 };
-
-// On Android/Chrome: popstate fires when back is pressed.
-// history.go(1) immediately cancels the back by going forward again,
-// then we do our own in-app navigation.
-window.addEventListener('popstate', function(e) {
-  // Always go forward to cancel the browser back
-  history.go(1);
-  // Then do in-app back
-  if(_navStack.length > 1) {
-    _navStack.pop();
-    _showPage(_navStack[_navStack.length-1]);
-  }
-});
 
 // ===== FAQ TOGGLE =====
 window.toggleFaq = function(el) {
@@ -3156,6 +3010,24 @@ window.sendContactMessage = function() {
   showToast('Opening WhatsApp to send your message!');
 };
 
+window.addEventListener('popstate', (e) => {
+  if(_navBusy) return;
+  if(e.state && e.state.benimPage) {
+    const page = e.state.benimPage;
+    const idx = _navStack.lastIndexOf(page);
+    if(idx >= 0) _navStack.splice(idx+1);
+    else _navStack.push(page);
+    _showPage(page);
+  } else {
+    // went back past site entry — push home back so user stays
+    _showPage('home');
+    _navStack.length = 0;
+    _navStack.push('home');
+    _navBusy = true;
+    history.pushState({ benimPage: 'home' }, '', '#home');
+    _navBusy = false;
+  }
+});
 
 // ===== SIDEBAR =====
 window.toggleSidebar = function() {
@@ -3194,15 +3066,19 @@ window.showToast = function(message, type='success') {
 
 // ===== INIT =====
 async function init() {
-  // Seed history with one entry so popstate can fire on first back press
-  history.replaceState({benimPage:'home'}, '', location.href);
   initSlider();
   startCountdown();
   renderSkeletons('flash-grid',4);
   renderSkeletons('featured-grid',8);
   renderSkeletons('trending-grid',8);
   await loadProducts();
-  _showPage('home');
+  // Handle hash navigation
+  // Seed the nav stack with home first
+  _navStack.push('home');
+  history.replaceState({ benimPage: 'home' }, '', '#home');
+  // Then navigate to hash page if present
+  const hash = location.hash.replace('#','');
+  if(hash && hash !== 'home' && document.getElementById('page-'+hash)) navigate(hash);
 }
 
 init();
