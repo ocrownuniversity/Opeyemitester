@@ -535,9 +535,6 @@ body{padding-bottom:70px}
 .bnav-item.active{color:#e8420a!important}
 .bnav-badge{top:4px!important;right:calc(50% - 18px)!important;font-size:9px!important;padding:1px 4px!important}
 
-/* Typing animation */
-@keyframes typingDot{0%,80%,100%{transform:scale(0);opacity:.3}40%{transform:scale(1);opacity:1}}
-
 /* PAGE BACKGROUNDS */
 #page-home{background:#f2f2f2!important}
 body{padding-bottom:65px!important;background:#f2f2f2!important}
@@ -2798,323 +2795,29 @@ window.loadAdminStats = async function() {
 
 // ===== CHATBOT =====
 let chatOpen = false;
-
-// Smart intent matcher — checks if message contains ANY of the keywords
-function matchesAny(msg, keywords) {
-  return keywords.some(k => msg.includes(k));
-}
-
-function getBotResponse(text) {
-  const q = text.toLowerCase().trim();
-
-  // ── Greetings ──────────────────────────────────────────────────────────────
-  if(matchesAny(q,['hello','hi ','hey','good morning','good afternoon','good evening','howdy','sup ','hiya'])) {
-    return `Hi there! 👋 Welcome to BENIM! I'm your shopping assistant. I can help you with:
-
-🛍️ Products & categories
-🚚 Delivery & shipping
-💳 Payment & orders
-📞 Contact & support
-
-What would you like to know?`;
-  }
-
-  // ── Product search — check product list first ─────────────────────────────
-  const productMatches = allProducts.filter(p => {
-    const name = (p.name||'').toLowerCase();
-    const cat = (p.category||'').toLowerCase();
-    const desc = (p.description||'').toLowerCase();
-    return name.includes(q) || q.includes(name.split(' ')[0]) || cat.includes(q) || desc.includes(q);
-  });
-  if(productMatches.length > 0) {
-    const topMatches = productMatches.slice(0,3);
-    const list = topMatches.map(p => {
-      const price = Number(p.discountPrice)>0 ? Number(p.discountPrice) : Number(p.price);
-      const stock = p.stock>0 ? '✅ In stock' : '❌ Out of stock';
-      return `• ${p.name} — ₦${price.toLocaleString()} (${stock})`;
-    }).join('
-');
-    const more = productMatches.length > 3 ? `
-
-...and ${productMatches.length-3} more. Use the search bar to see all results!` : '';
-    return `I found ${productMatches.length} product(s) matching "${text}":
-
-${list}${more}
-
-Tap any product on the homepage to view full details, sizes, and colours. 🛍️`;
-  }
-
-  // ── Categories ────────────────────────────────────────────────────────────
-  if(matchesAny(q,['categor','fashion','men','women','baby','electronic','phone','beauty','sport','grocer','kitchen','toys','footwear','shoe','sneaker','bag','cloth','wear','dress','shirt','jean','trouser','pant'])) {
-    const cats = [...new Set(allProducts.map(p=>p.category).filter(Boolean))];
-    if(cats.length > 0) {
-      return `We have products in these categories:
-
-${cats.map(c=>'🏷️ '+c).join('
-')}
-
-Tap the ☰ menu or use the search bar to browse by category!`;
-    }
-    return `We stock Men's Fashion, Women's Fashion, Baby Products, Electronics, Phones, Beauty, Sports, Home & Kitchen, Groceries, and more!
-
-Tap the ☰ menu to browse categories. 🏷️`;
-  }
-
-  // ── Specific product type searches ────────────────────────────────────────
-  if(matchesAny(q,['jean','jeans','denim pant'])) {
-    const found = allProducts.filter(p=>(p.name+' '+(p.description||'')).toLowerCase().includes('jean'));
-    if(found.length) {
-      return `I found ${found.length} jean(s) available:
-
-${found.slice(0,3).map(p=>`• ${p.name} — ₦${(Number(p.discountPrice)||Number(p.price)||0).toLocaleString()}`).join('
-')}
-
-Use the search bar and type "jean" to see all! 👖`;
-    }
-    return `We don't have jeans listed yet, but new products are added regularly! Check back soon or contact us on WhatsApp: +234 916 803 1213 📲`;
-  }
-
-  // ── Price / discount ──────────────────────────────────────────────────────
-  if(matchesAny(q,['price','cost','how much','expensive','cheap','afford','discount','offer','sale','promo','deal'])) {
-    const sorted = [...allProducts].sort((a,b)=>(Number(a.discountPrice)||Number(a.price))-(Number(b.discountPrice)||Number(b.price)));
-    if(sorted.length) {
-      const cheapest = sorted[0];
-      const pricest = sorted[sorted.length-1];
-      const cp = Number(cheapest.discountPrice)||Number(cheapest.price)||0;
-      const pp = Number(pricest.discountPrice)||Number(pricest.price)||0;
-      return `Our prices range from ₦${cp.toLocaleString()} (${cheapest.name}) to ₦${pp.toLocaleString()} (${pricest.name}).
-
-💰 We always offer honest, affordable prices!
-🔥 Check the Flash Sales section for the best discounts.
-
-You can also filter products by price using the search/filter feature.`;
-    }
-    return `All our prices are in Nigerian Naira (₦) and are clearly shown on each product. We offer the best prices with regular flash sales and discounts! 💰`;
-  }
-
-  // ── Delivery / shipping ───────────────────────────────────────────────────
-  if(matchesAny(q,['deliver','shipping','ship','send','dispatch','logistics','arrive','when will','how long','days'])) {
-    return `🚚 BENIM Delivery Information:
-
-📍 Lagos: 1–2 business days
-📍 Abuja & Port Harcourt: 2–3 business days
-📍 Other states: 3–5 business days
-📍 Remote areas: 5–7 business days
-
-💸 Delivery Fees:
-• Ibadan: ₦1,500–₦2,500
-• Lagos: ₦2,500–₦3,500
-• Abuja/PH: ₦4,500–₦6,000
-• Other states: ₦3,000–₦6,000
-• Orders above ₦150,000: FREE 🎉
-
-You'll get WhatsApp updates at every step!`;
-  }
-
-  // ── Payment ───────────────────────────────────────────────────────────────
-  if(matchesAny(q,['pay','payment','transfer','bank','opay','cash','cod','card','checkout'])) {
-    return `💳 We accept two payment methods:
-
-1️⃣ Bank Transfer (Opay)
-   Bank: Opay
-   Account Name: Adewole Aderonke Aishat
-   Account Number: 9168031213
-   📌 Use your Order ID as reference
-
-2️⃣ Pay on Delivery
-   Pay cash when your order arrives
-
-After bank transfer, send your receipt to our WhatsApp: +234 916 803 1213 ✅`;
-  }
-
-  // ── Order tracking ────────────────────────────────────────────────────────
-  if(matchesAny(q,['track','where is my order','order status','find my order','locate'])) {
-    return `📦 To track your order:
-
-1. Tap the ☰ menu
-2. Select "Track My Order"
-3. Enter your Order ID or phone number
-
-OR go to the Orders section to see all your orders with live status updates.
-
-You also receive automatic WhatsApp updates at every stage:
-⏳ Pending → ✅ Confirmed → ⚙️ Processing → 🚚 Out for Delivery → 🎉 Delivered`;
-  }
-
-  // ── Order issues ─────────────────────────────────────────────────────────
-  if(matchesAny(q,['cancel','return','refund','wrong item','damaged','broken','exchange','complain','complaint','problem with order'])) {
-    return `😟 Sorry to hear that! Here's how we handle issues:
-
-🔄 Returns: Within 7 days of delivery
-✅ Item must be unused and in original packaging
-📸 Send photos of the issue
-
-📞 Contact us immediately:
-WhatsApp: +234 916 803 1213
-Email: shopwitbenim@gmail.com
-
-We resolve all issues promptly! 💪`;
-  }
-
-  // ── Stock / availability ──────────────────────────────────────────────────
-  if(matchesAny(q,['stock','available','availability','do you have','in stock','out of stock'])) {
-    const inStock = allProducts.filter(p=>p.stock>0).length;
-    const total = allProducts.length;
-    return `📦 Stock Update:
-
-✅ ${inStock} of ${total} products are currently in stock.
-
-Each product page shows live stock availability. If something is out of stock, contact us on WhatsApp and we'll notify you when it's back:
-
-📲 +234 916 803 1213`;
-  }
-
-  // ── Size & colour ─────────────────────────────────────────────────────────
-  if(matchesAny(q,['size','colour','color','fit','fitting','measure','small','medium','large','xl','xxl'])) {
-    return `👗 Sizes & Colours:
-
-Available sizes and colours are shown on each product page. Simply:
-
-1. Tap on a product
-2. Select your size (e.g. S, M, L, XL or shoe size)
-3. Select your colour
-4. Add to cart
-
-Not sure about sizing? WhatsApp us and we'll guide you:
-📲 +234 916 803 1213`;
-  }
-
-  // ── Contact ───────────────────────────────────────────────────────────────
-  if(matchesAny(q,['contact','reach you','whatsapp','call','phone number','email','address','speak to','talk to','agent','human'])) {
-    return `📞 Contact BENIM:
-
-💬 WhatsApp: +234 916 803 1213
-📧 Email: shopwitbenim@gmail.com
-🕐 Hours: Mon–Sat, 8am–8pm (WAT)
-
-For fastest response, WhatsApp us directly! We typically reply within minutes during business hours. 🚀
-
-You can also visit our Contact Us page from the menu.`;
-  }
-
-  // ── Account / login / signup ──────────────────────────────────────────────
-  if(matchesAny(q,['account','login','sign in','sign up','register','password','forgot','profile','my account'])) {
-    return `👤 Account Help:
-
-• To create an account: tap the 👤 icon → "Create Account"
-• To sign in: tap the 👤 icon → "Sign In"
-• Forgot password: tap "Forgot Password" on the sign-in page
-• To update your profile: go to Account → Profile & Settings
-
-You need an account to place orders and save your wishlist. 🛒`;
-  }
-
-  // ── Cart / wishlist ───────────────────────────────────────────────────────
-  if(matchesAny(q,['cart','basket','wishlist','saved','favourite','favorite','add to cart'])) {
-    return `🛒 Cart & Wishlist:
-
-• Tap any product to view it, then tap "Add to Cart"
-• View your cart by tapping the cart icon at the top
-• Save products for later using the ♡ Saved section
-• Your cart is saved automatically — even if you close the app
-
-You must be signed in to place an order. 🔐`;
-  }
-
-  // ── About BENIM ───────────────────────────────────────────────────────────
-  if(matchesAny(q,['about','who are you','what is benim','benim','your brand','company','story','what do you sell'])) {
-    return `🧡 About BENIM:
-
-BENIM INTERNATIONAL TRADE LIMITED is a modern Nigerian trading & fashion brand built on quality, trust, and value.
-
-We curate footwear and fashion essentials designed to match everyday style with a premium feel — without the premium price.
-
-🎯 Our mission: bridge the gap between affordability and style.
-
-Shop: tap any category to explore! 🛍️`;
-  }
-
-  // ── Thank you ─────────────────────────────────────────────────────────────
-  if(matchesAny(q,['thank','thanks','ok thanks','great','awesome','perfect','cool','nice','wonderful'])) {
-    return `You're welcome! 😊 Happy shopping at BENIM! 🛍️
-
-Feel free to ask me anything else. If you need human support, WhatsApp us at +234 916 803 1213 anytime! 🧡`;
-  }
-
-  // ── Bye ───────────────────────────────────────────────────────────────────
-  if(matchesAny(q,['bye','goodbye','see you','later','done','exit','quit'])) {
-    return `Goodbye! 👋 Thanks for visiting BENIM. Have a great day and happy shopping! 🛍️🧡`;
-  }
-
-  // ── Flash sale ────────────────────────────────────────────────────────────
-  if(matchesAny(q,['flash','flash sale','hot deal','best deal','today deal','sale today'])) {
-    const flash = allProducts.filter(p=>p.isFlash);
-    if(flash.length) {
-      return `🔥 Flash Sales are LIVE right now!
-
-${flash.slice(0,3).map(p=>{
-        const price = Number(p.discountPrice)||Number(p.price)||0;
-        const old = Number(p.price)||0;
-        const disc = p.discountPrice ? Math.round((1-p.discountPrice/old)*100) : 0;
-        return `• ${p.name} — ₦${price.toLocaleString()}${disc?` (-${disc}%)` : ''}`;
-      }).join('
-')}
-
-Scroll up on the homepage to see all flash deals! ⚡`;
-    }
-    return `🔥 Check the Flash Sales section right at the top of the homepage for our best limited-time deals! New deals are added regularly. ⚡`;
-  }
-
-  // ── Default — smart fallback ──────────────────────────────────────────────
-  // Last attempt: search product names with individual words
-  const words = q.split(/\s+/).filter(w=>w.length>2);
-  for(const word of words) {
-    const found = allProducts.filter(p=>(p.name||'').toLowerCase().includes(word));
-    if(found.length) {
-      return `I found ${found.length} product(s) related to "${word}":
-
-${found.slice(0,3).map(p=>`• ${p.name} — ₦${(Number(p.discountPrice)||Number(p.price)||0).toLocaleString()}`).join('
-')}
-
-Tap any product to view details. 🛍️`;
-    }
-  }
-
-  return `🤔 I'm not sure about that, but I'm here to help!
-
-You can ask me about:
-• 🛍️ Products & what's in stock
-• 🚚 Delivery & shipping fees
-• 💳 How to pay
-• 📦 Tracking your order
-• 📞 How to contact us
-• 🔥 Flash sales & deals
-
-Or WhatsApp us directly: +234 916 803 1213 💬`;
-}
+const chatResponses = {
+  hello: "Hi! 👋 Welcome to Benim! How can I help you today?",
+  hi: "Hello! Welcome to Benim! I'm here to assist you.",
+  track: "To track your order, go to Menu → Track Order and enter your Order ID or phone number.",
+  order: "You can view your orders in the Orders section of the app. Need help with a specific order?",
+  payment: "We accept Bank Transfer (Opay) and Pay on Delivery. Bank details: Opay | Adewole Aderonke Aishat | 9168031213.",
+  delivery: "We deliver to your saved address. Free delivery on orders &#8358;150,000 and above! Orders below &#8358;150,000 have a flat delivery fee of &#8358;3,500.",
+  return: "For returns or issues, please contact us via WhatsApp or message us here.",
+  price: "All prices are displayed in Naira (&#8358;). Discounted prices are shown in orange.",
+  cart: "Add items to your cart and proceed to checkout. You must be signed in to place an order.",
+  account: "You can create an account by clicking 'Create Account' or sign in if you already have one.",
+  default: "I'm not sure about that, but our team is happy to help! Try asking about orders, payments, delivery, or products. 😊"
+};
 
 window.toggleChatbot = function() {
   chatOpen = !chatOpen;
   document.getElementById('chatbot-window').classList.toggle('open', chatOpen);
   if(chatOpen && !document.getElementById('chat-messages').innerHTML) {
-    addChatMsg("Hi! 👋 I'm BENIM's shopping assistant. Ask me about products, delivery, payment, or anything else! 🛍️", 'bot');
-    // Quick reply buttons
-    const msgs = document.getElementById('chat-messages');
-    const quickDiv = document.createElement('div');
-    quickDiv.style.cssText = 'display:flex;flex-wrap:wrap;gap:6px;margin-top:4px';
-    quickDiv.innerHTML = ['🛍️ Products','🚚 Delivery','💳 Payment','📦 Track order','📞 Contact'].map(label=>
-      `<button onclick="quickReply('${label}')" style="background:#fff3ee;border:1px solid #e8420a;color:#e8420a;border-radius:16px;padding:5px 10px;font-size:11px;font-weight:700;cursor:pointer;font-family:Poppins,sans-serif">${label}</button>`
-    ).join('');
-    msgs.appendChild(quickDiv);
-    msgs.scrollTop = msgs.scrollHeight;
+    addChatMsg("Hi! 👋 I'm Benim's support assistant. Ask me about orders, payments, delivery, and more!", 'bot');
+    saveChatSession("Hi! 👋 I'm Benim's support assistant.", 'bot');
   }
 };
 window.openChatbot = function() { chatOpen=false; toggleChatbot(); };
-
-window.quickReply = function(label) {
-  document.getElementById('chat-input').value = label.replace(/[🛍️🚚💳📦📞]/g,'').trim();
-  sendChatMessage();
-};
 
 window.chatKeyPress = function(e) {
   if(e.key==='Enter'&&!e.shiftKey) { e.preventDefault(); sendChatMessage(); }
@@ -3127,21 +2830,21 @@ window.sendChatMessage = function() {
   addChatMsg(text, 'user');
   saveChatSession(text, 'user');
   input.value = '';
-  // Show typing indicator
-  const msgs = document.getElementById('chat-messages');
-  const typing = document.createElement('div');
-  typing.className = 'chat-msg bot';
-  typing.id = 'typing-indicator';
-  typing.innerHTML = '<span style="display:flex;gap:3px;align-items:center"><span style="width:6px;height:6px;background:#aaa;border-radius:50%;animation:typingDot 1s infinite .0s"></span><span style="width:6px;height:6px;background:#aaa;border-radius:50%;animation:typingDot 1s infinite .2s"></span><span style="width:6px;height:6px;background:#aaa;border-radius:50%;animation:typingDot 1s infinite .4s"></span></span>';
-  msgs.appendChild(typing);
-  msgs.scrollTop = msgs.scrollHeight;
   setTimeout(()=>{
-    const t = document.getElementById('typing-indicator');
-    if(t) t.remove();
-    const response = getBotResponse(text);
+    const lower = text.toLowerCase();
+    let response = chatResponses.default;
+    for(const key of Object.keys(chatResponses)) {
+      if(lower.includes(key)) { response=chatResponses[key]; break; }
+    }
+    // Check if asking about a product
+    const found = allProducts.find(p=>(p.name||'').toLowerCase().includes(lower));
+    if(found) {
+      const price = Number(found.discountPrice)||Number(found.price)||0;
+      response = `Found it! **${found.name}** &mdash; &#8358;${price.toLocaleString()}. ${found.stock>0?'In stock!':'Out of stock.'} Tap to view it in the shop!`;
+    }
     addChatMsg(response, 'bot');
     saveChatSession(response, 'bot');
-  }, 800);
+  }, 600);
 };
 
 function addChatMsg(text, role) {
