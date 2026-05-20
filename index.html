@@ -365,7 +365,7 @@ body{padding-bottom:70px}
 .flash-time{font-size:13px;font-weight:900;color:var(--orange);min-width:22px;text-align:center}
 .flash-colon{font-size:13px;font-weight:900;color:var(--orange)}
 
-/* ====== PRODUCT CARD — ref image style ====== */
+/* ====== PRODUCT CARD &mdash; ref image style ====== */
 .product-card{background:#fff;border-radius:12px;overflow:hidden;box-shadow:0 1px 6px rgba(0,0,0,.07);transition:.2s;cursor:pointer;position:relative;border:1px solid rgba(0,0,0,.04)}
 .product-card:hover{box-shadow:0 4px 16px rgba(0,0,0,.12);transform:translateY(-2px)}
 .product-img-wrap{position:relative;overflow:hidden;aspect-ratio:1;background:#f8f8f8}
@@ -461,9 +461,9 @@ body{padding-bottom:70px}
 </style>
 
 <style>
-/* ========= FINAL OVERRIDE — clean Jumia-style UI ========= */
+/* ========= FINAL OVERRIDE &mdash; clean Jumia-style UI ========= */
 
-/* HEADER — white bg */
+/* HEADER &mdash; white bg */
 #header{background:#fff!important;box-shadow:0 1px 3px rgba(0,0,0,.08)!important}
 .header-top{padding:12px 14px 10px!important;gap:8px!important}
 .hamburger{color:#222!important;font-size:22px!important;background:none!important;border:none!important;padding:0!important}
@@ -473,7 +473,7 @@ body{padding-bottom:70px}
 .hicon-label{display:none!important}
 .header-icons{gap:6px!important}
 
-/* SEARCH BAR — full-width pill below header row */
+/* SEARCH BAR &mdash; full-width pill below header row */
 .header-search-row{background:#fff!important;padding:0 14px 12px!important}
 .header-search-wrap{background:#f2f2f2!important;border-radius:50px!important;padding:0 16px!important;display:flex!important;align-items:center!important;gap:8px!important;border:none!important}
 .header-search{background:transparent!important;border:none!important;padding:12px 0!important;font-size:13px!important;flex:1!important;outline:none!important;color:#333!important}
@@ -493,10 +493,16 @@ body{padding-bottom:70px}
 .slider-dots{bottom:8px!important}
 
 /* HOME SECTIONS */
-.home-section{background:#fff!important;margin:10px 0 0!important;padding:14px 14px 16px!important}
-.home-section-title{font-size:16px!important;font-weight:800!important;color:#111!important;font-family:'Poppins',sans-serif!important;margin-bottom:4px!important}
-.home-section-header{margin-bottom:14px!important}
-.home-see-all{color:#e8420a!important;font-size:13px!important;font-weight:700!important;white-space:nowrap!important;padding-top:2px!important}
+.home-section{background:#fff!important;margin:8px 0 0!important;padding:14px 0 18px!important}
+.home-section-title{font-size:16px!important;font-weight:800!important;color:#111!important;font-family:'Poppins',sans-serif!important;margin-bottom:4px!important;padding:0 12px!important}
+.home-section-header{margin-bottom:14px!important;display:flex!important;align-items:center!important;justify-content:space-between!important;padding:0 12px!important}
+.home-see-all{color:#e8420a!important;font-size:13px!important;font-weight:700!important;white-space:nowrap!important;padding-top:2px!important;cursor:pointer!important}
+
+/* PRODUCT GRID — force clean white, no extra bg */
+#flash-section,#page-home .home-section{border-radius:0!important}
+
+/* PAGE BACKGROUNDS — slightly off-white between sections */
+#page-home{background:#f0f0f0!important}
 
 /* FLASH SECTION */
 #flash-section{margin-top:8px!important}
@@ -505,23 +511,30 @@ body{padding-bottom:70px}
 .flash-time{color:#e8420a!important;font-size:12px!important;font-weight:900!important}
 .flash-colon{color:#e8420a!important;font-weight:900!important}
 .flash-bolt{color:#e8420a!important}
+/* Flash section header needs padding too */
+#flash-section .home-section-header{padding:0 12px!important}
 
-/* PRODUCT GRID — 3 columns always */
-.product-grid{display:grid!important;grid-template-columns:repeat(2,1fr)!important;gap:8px!important}
-@media(min-width:400px){.product-grid{grid-template-columns:repeat(3,1fr)!important}}
+/* PRODUCT GRID — 3 columns full width, no side padding */
+.product-grid{display:grid!important;grid-template-columns:repeat(3,1fr)!important;gap:2px!important;width:100%!important}
 
-/* PRODUCT CARD */
-.product-card{background:#fff!important;border-radius:10px!important;overflow:hidden!important;box-shadow:0 1px 4px rgba(0,0,0,.08)!important;border:1px solid #f0f0f0!important}
-.product-img-wrap{aspect-ratio:1!important;background:#f8f8f8!important}
-.product-info{padding:8px 8px 10px!important}
-.product-name{font-size:12px!important;font-weight:700!important;color:#222!important;line-height:1.3!important;margin-bottom:4px!important;font-family:'Poppins',sans-serif!important}
-.product-price{font-size:14px!important;font-weight:900!important;color:#e8420a!important}
-.product-old-price{font-size:10px!important;color:#aaa!important;text-decoration:line-through!important}
-.product-badge{top:6px!important;left:6px!important;font-size:9px!important;padding:2px 6px!important;border-radius:3px!important;background:#e8420a!important;font-weight:800!important}
-.product-wishlist-btn{width:26px!important;height:26px!important;top:6px!important;right:6px!important;font-size:12px!important}
-.sold-bar-wrap{height:4px!important;border-radius:2px!important}
-.sold-bar{background:#e8420a!important}
-.sold-count{font-size:9px!important;color:#999!important}
+/* PRODUCT CARD — matches screenshot exactly */
+.pc{background:#fff;border-radius:0;overflow:hidden;cursor:pointer;display:flex;flex-direction:column;box-shadow:none;border:none;border-right:1px solid #f0f0f0;border-bottom:1px solid #f0f0f0}
+.pc:hover{box-shadow:0 3px 12px rgba(0,0,0,.12)}
+.pc-img-wrap{position:relative;width:100%;aspect-ratio:1;background:#f5f5f5;overflow:hidden;flex-shrink:0}
+.pc-img-wrap img{width:100%;height:100%;object-fit:cover;display:block}
+.pc-badge{position:absolute;top:7px;left:7px;background:#e8420a;color:#fff;font-size:10px;font-weight:800;padding:3px 7px;border-radius:4px;z-index:2}
+.pc-body{padding:8px 8px 10px;display:flex;flex-direction:column;gap:4px;flex:1}
+.pc-name{font-size:12px;font-weight:700;color:#111;line-height:1.3;font-family:'Poppins',sans-serif;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.pc-prices{display:flex;align-items:baseline;gap:5px;flex-wrap:wrap}
+.pc-price{font-size:13px;font-weight:900;color:#e8420a;font-family:'Poppins',sans-serif}
+.pc-old{font-size:10px;color:#aaa;text-decoration:line-through;font-family:'Poppins',sans-serif}
+.pc-sold-row{display:flex;align-items:center;gap:6px;margin-top:2px}
+.pc-bar-bg{flex:1;height:4px;background:#fde8e0;border-radius:2px;overflow:hidden}
+.pc-bar-fill{height:100%;background:#e8420a;border-radius:2px}
+.pc-sold-txt{font-size:10px;color:#888;white-space:nowrap;font-weight:600}
+/* hide old .product-card styles */
+.product-card{display:none!important}
+.product-img-wrap,.product-info,.product-name,.product-price,.product-badge,.product-wishlist-btn,.product-price-row{all:unset!important}
 
 /* BOTTOM NAV */
 .bottom-nav{background:#fff!important;border-top:1px solid #eee!important;padding:0!important}
@@ -531,12 +544,22 @@ body{padding-bottom:70px}
 .bnav-badge{top:4px!important;right:calc(50% - 18px)!important;font-size:9px!important;padding:1px 4px!important}
 
 /* PAGE BACKGROUNDS */
-#page-home{background:#f2f2f2!important}
-body{padding-bottom:65px!important;background:#f2f2f2!important}
+body{padding-bottom:65px!important;background:#f0f0f0!important}
+
+/* CARD ACTION BUTTONS */
+.card-action-btns{display:flex;gap:4px;margin-top:8px}
+.card-btn-cart{flex:1;background:transparent;color:#111;border:1.5px solid #111;border-radius:5px;padding:5px 0;font-size:10px;font-weight:800;cursor:pointer;font-family:'Poppins',sans-serif;display:flex;align-items:center;justify-content:center;gap:3px;transition:.15s}
+.card-btn-cart:hover{background:#111;color:#fff}
+.card-btn-buy{flex:1;background:transparent;color:#111;border:1.5px solid #111;border-radius:5px;padding:5px 0;font-size:10px;font-weight:800;cursor:pointer;font-family:'Poppins',sans-serif;transition:.15s}
+.card-btn-buy:hover{background:#111;color:#fff}
+
+/* TYPING INDICATOR */
+.typing-indicator{display:flex!important;gap:4px;align-items:center;padding:10px 14px!important;min-width:50px}
+.typing-indicator span{width:7px;height:7px;border-radius:50%;background:#ccc;display:inline-block;animation:typingBounce 1.2s infinite ease-in-out}
+.typing-indicator span:nth-child(2){animation-delay:.2s}
+.typing-indicator span:nth-child(3){animation-delay:.4s}
+@keyframes typingBounce{0%,80%,100%{transform:scale(0.6);opacity:.5}40%{transform:scale(1);opacity:1}}
 </style>
-<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
 </head>
 <body>
 
@@ -652,7 +675,7 @@ body{padding-bottom:65px!important;background:#f2f2f2!important}
       <div class="slide slide-3">
         <div class="slide-content">
           <h2>Flash Sale<br>Is Live 🔥</h2>
-          <p>Limited time offers — grab before it's gone</p>
+          <p>Limited time offers &mdash; grab before it's gone</p>
           <button class="slide-btn" onclick="navigate('search')">View Flash Sale</button>
         </div>
       </div>
@@ -662,7 +685,7 @@ body{padding-bottom:65px!important;background:#f2f2f2!important}
     <div class="slider-dots" id="slider-dots"></div>
   </div>
 
-  <!-- Flash Sales — directly below banner (ref image style) -->
+  <!-- Flash Sales &mdash; directly below banner (ref image style) -->
   <div class="home-section" id="flash-section">
     <div class="home-section-header">
       <div>
@@ -737,7 +760,7 @@ body{padding-bottom:65px!important;background:#f2f2f2!important}
         </select>
       </div>
       <div class="filter-group">
-        <label>Max Price: ₦<span id="price-val">999999</span></label>
+        <label>Max Price: &#8358;<span id="price-val">999999</span></label>
         <input type="range" min="0" max="999999" value="999999" id="price-range" style="accent-color:var(--orange)" onchange="applyFilters()">
       </div>
     </div>
@@ -753,7 +776,7 @@ body{padding-bottom:65px!important;background:#f2f2f2!important}
 <!-- PRODUCT DETAIL -->
 <div id="page-product" class="page">
   <div class="page-header">
-    <button class="back-btn" id="product-back-btn" onclick="history.back()"><i class="fas fa-arrow-left"></i></button>
+    <button class="back-btn" id="product-back-btn" onclick="goBack()"><i class="fas fa-arrow-left"></i></button>
     <h2>Product Details</h2>
   </div>
   <div class="product-detail-wrap">
@@ -790,7 +813,7 @@ body{padding-bottom:65px!important;background:#f2f2f2!important}
         <div class="qty-wrap">
           <span class="qty-label">Qty:</span>
           <div class="qty-controls">
-            <button class="qty-btn" onclick="changeQty(-1)">−</button>
+            <button class="qty-btn" onclick="changeQty(-1)">-</button>
             <input class="qty-input" id="qty-input" value="1" type="number" min="1">
             <button class="qty-btn" onclick="changeQty(1)">+</button>
           </div>
@@ -800,7 +823,7 @@ body{padding-bottom:65px!important;background:#f2f2f2!important}
           <button class="btn-wish" id="detail-wish-btn" onclick="toggleWishlistDetail()"><i class="fas fa-heart"></i></button>
         </div>
         <div style="background:var(--gray-50);border-radius:8px;padding:12px;font-size:13px;color:var(--gray-600)">
-          <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px"><i class="fas fa-truck" style="color:var(--orange)"></i> Free delivery on orders above ₦5,000</div>
+          <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px"><i class="fas fa-truck" style="color:var(--orange)"></i> Free delivery on orders above &#8358;5,000</div>
           <div style="display:flex;align-items:center;gap:8px"><i class="fas fa-shield-alt" style="color:var(--green)"></i> Secure payment & buyer protection</div>
         </div>
       </div>
@@ -852,9 +875,9 @@ body{padding-bottom:65px!important;background:#f2f2f2!important}
     </div>
     <div id="cart-summary-wrap" class="hidden">
       <div class="cart-summary">
-        <div class="summary-row"><span>Subtotal</span><span id="cart-subtotal">₦0</span></div>
+        <div class="summary-row"><span>Subtotal</span><span id="cart-subtotal">&#8358;0</span></div>
         <div class="summary-row"><span>Delivery</span><span id="cart-delivery" style="color:var(--green)">FREE</span></div>
-        <div class="summary-row total"><span>Total</span><span id="cart-total">₦0</span></div>
+        <div class="summary-row total"><span>Total</span><span id="cart-total">&#8358;0</span></div>
         <button class="btn-checkout" onclick="goToCheckout()"><i class="fas fa-lock"></i> Proceed to Checkout</button>
       </div>
     </div>
@@ -895,7 +918,7 @@ body{padding-bottom:65px!important;background:#f2f2f2!important}
       <div class="checkout-title"><i class="fas fa-receipt"></i> Order Summary</div>
       <div id="checkout-items-summary"></div>
       <div class="summary-row total" style="padding-top:10px;border-top:2px solid var(--gray-200);margin-top:10px;display:flex;justify-content:space-between;font-size:18px;font-weight:900">
-        <span>Total</span><span id="checkout-total" style="color:var(--orange)">₦0</span>
+        <span>Total</span><span id="checkout-total" style="color:var(--orange)">&#8358;0</span>
       </div>
     </div>
     <button class="btn-checkout" onclick="placeOrder()"><i class="fas fa-check-circle"></i> Place Order</button>
@@ -1118,7 +1141,7 @@ body{padding-bottom:65px!important;background:#f2f2f2!important}
 
 <!-- ABOUT PAGE -->
 <div id="page-about" class="page">
-  <div class="page-header"><button class="back-btn" onclick="history.back()"><i class="fas fa-arrow-left"></i></button><h2>About Us</h2></div>
+  <div class="page-header"><button class="back-btn" onclick="goBack()"><i class="fas fa-arrow-left"></i></button><h2>About Us</h2></div>
   <div class="footer-page-wrap">
 
     <!-- Brand hero banner -->
@@ -1137,12 +1160,12 @@ body{padding-bottom:65px!important;background:#f2f2f2!important}
 
     <div class="fp-section">
       <h3>Who We Are</h3>
-      <p>BENIM is a modern Nigerian trading and fashion brand built on <strong>quality</strong>, <strong>trust</strong>, and <strong>value</strong>. We curate footwear and fashion essentials designed to match everyday style with a premium feel — without the premium price.</p>
+      <p>BENIM is a modern Nigerian trading and fashion brand built on <strong>quality</strong>, <strong>trust</strong>, and <strong>value</strong>. We curate footwear and fashion essentials designed to match everyday style with a premium feel &mdash; without the premium price.</p>
     </div>
 
     <div class="fp-section">
       <h3>Our Mission</h3>
-      <p>Our mission is to bridge the gap between <strong>affordability and style</strong>, delivering products that feel global but remain accessible. At BENIM, we are not just selling products — we are building a <strong>trusted lifestyle brand</strong>.</p>
+      <p>Our mission is to bridge the gap between <strong>affordability and style</strong>, delivering products that feel global but remain accessible. At BENIM, we are not just selling products &mdash; we are building a <strong>trusted lifestyle brand</strong>.</p>
     </div>
 
     <div class="fp-section">
@@ -1151,7 +1174,7 @@ body{padding-bottom:65px!important;background:#f2f2f2!important}
         <div style="background:var(--gray-50);border-radius:var(--radius-lg);padding:16px;border-left:3px solid var(--orange)">
           <div style="font-size:22px;margin-bottom:6px">👟</div>
           <h4 style="font-size:14px;font-weight:800;margin-bottom:4px">Curated Fashion</h4>
-          <p style="font-size:13px;color:var(--gray-500)">Every product is hand-picked for quality and style — no compromise.</p>
+          <p style="font-size:13px;color:var(--gray-500)">Every product is hand-picked for quality and style &mdash; no compromise.</p>
         </div>
         <div style="background:var(--gray-50);border-radius:var(--radius-lg);padding:16px;border-left:3px solid var(--orange)">
           <div style="font-size:22px;margin-bottom:6px">💰</div>
@@ -1173,7 +1196,7 @@ body{padding-bottom:65px!important;background:#f2f2f2!important}
 
     <div class="fp-section">
       <h3>Our Brand Promise</h3>
-      <p>When you shop with BENIM, you are not just buying a product. You are investing in a brand that cares about how you look, how you feel, and how much you spend. <strong>Style is not a luxury — it is a right.</strong> And at BENIM, we make sure you have access to both.</p>
+      <p>When you shop with BENIM, you are not just buying a product. You are investing in a brand that cares about how you look, how you feel, and how much you spend. <strong>Style is not a luxury &mdash; it is a right.</strong> And at BENIM, we make sure you have access to both.</p>
     </div>
 
     <div style="background:var(--gray-800);border-radius:var(--radius-xl);padding:20px 24px;text-align:center;color:#fff;margin-top:8px">
@@ -1189,10 +1212,10 @@ body{padding-bottom:65px!important;background:#f2f2f2!important}
 
 <!-- CONTACT PAGE -->
 <div id="page-contact" class="page">
-  <div class="page-header"><button class="back-btn" onclick="history.back()"><i class="fas fa-arrow-left"></i></button><h2>Contact Us</h2></div>
+  <div class="page-header"><button class="back-btn" onclick="goBack()"><i class="fas fa-arrow-left"></i></button><h2>Contact Us</h2></div>
   <div class="footer-page-wrap">
     <h2><i class="fas fa-headset"></i> Contact Us</h2>
-    <p class="subtitle">We're here to help — reach us through any of the channels below</p>
+    <p class="subtitle">We're here to help &mdash; reach us through any of the channels below</p>
     <div class="contact-grid">
       <div class="contact-card">
         <i class="fab fa-whatsapp" style="color:#25d366"></i>
@@ -1223,7 +1246,7 @@ body{padding-bottom:65px!important;background:#f2f2f2!important}
 
 <!-- SHIPPING POLICY PAGE -->
 <div id="page-shipping-policy" class="page">
-  <div class="page-header"><button class="back-btn" onclick="history.back()"><i class="fas fa-arrow-left"></i></button><h2>Shipping Policy</h2></div>
+  <div class="page-header"><button class="back-btn" onclick="goBack()"><i class="fas fa-arrow-left"></i></button><h2>Shipping Policy</h2></div>
   <div class="footer-page-wrap">
     <h2><i class="fas fa-shipping-fast"></i> Shipping Policy</h2>
     <p class="subtitle">Last updated: January 2025</p>
@@ -1234,8 +1257,8 @@ body{padding-bottom:65px!important;background:#f2f2f2!important}
     <div class="fp-section">
       <h3>Shipping Fees</h3>
       <ul>
-        <li><strong>Orders above ₦150,000:</strong> FREE shipping — no delivery fee applied.</li>
-        <li><strong>Orders below ₦150,000:</strong> A flat delivery fee of ₦3,500 is added at checkout.</li>
+        <li><strong>Orders above &#8358;150,000:</strong> FREE shipping &mdash; no delivery fee applied.</li>
+        <li><strong>Orders below &#8358;150,000:</strong> A flat delivery fee of &#8358;3,500 is added at checkout.</li>
         <li>Delivery fees are calculated automatically based on your cart total.</li>
       </ul>
     </div>
@@ -1261,7 +1284,7 @@ body{padding-bottom:65px!important;background:#f2f2f2!important}
 
 <!-- DELIVERY POLICY PAGE -->
 <div id="page-delivery-policy" class="page">
-  <div class="page-header"><button class="back-btn" onclick="history.back()"><i class="fas fa-arrow-left"></i></button><h2>Delivery Policy</h2></div>
+  <div class="page-header"><button class="back-btn" onclick="goBack()"><i class="fas fa-arrow-left"></i></button><h2>Delivery Policy</h2></div>
   <div class="footer-page-wrap">
     <h2><i class="fas fa-truck"></i> Delivery Policy</h2>
     <p class="subtitle">Fast &amp; Reliable Delivery across Nigeria</p>
@@ -1311,19 +1334,19 @@ body{padding-bottom:65px!important;background:#f2f2f2!important}
           <span>Location</span><span>Delivery Fee</span>
         </div>
         <div style="display:grid;grid-template-columns:1fr 1fr;padding:10px 14px;border-bottom:1px solid var(--gray-100);font-size:13px">
-          <span style="font-weight:700">Ibadan</span><span style="color:var(--orange);font-weight:700">₦1,500 – ₦2,500</span>
+          <span style="font-weight:700">Ibadan</span><span style="color:var(--orange);font-weight:700">&#8358;1,500 – &#8358;2,500</span>
         </div>
         <div style="display:grid;grid-template-columns:1fr 1fr;padding:10px 14px;border-bottom:1px solid var(--gray-100);background:var(--gray-50);font-size:13px">
-          <span style="font-weight:700">Lagos</span><span style="color:var(--orange);font-weight:700">₦2,500 – ₦3,500</span>
+          <span style="font-weight:700">Lagos</span><span style="color:var(--orange);font-weight:700">&#8358;2,500 – &#8358;3,500</span>
         </div>
         <div style="display:grid;grid-template-columns:1fr 1fr;padding:10px 14px;border-bottom:1px solid var(--gray-100);font-size:13px">
-          <span style="font-weight:700">Abuja / Port Harcourt</span><span style="color:var(--orange);font-weight:700">₦4,500 – ₦6,000</span>
+          <span style="font-weight:700">Abuja / Port Harcourt</span><span style="color:var(--orange);font-weight:700">&#8358;4,500 – &#8358;6,000</span>
         </div>
         <div style="display:grid;grid-template-columns:1fr 1fr;padding:10px 14px;border-bottom:1px solid var(--gray-100);background:var(--gray-50);font-size:13px">
-          <span style="font-weight:700">Other States</span><span style="color:var(--orange);font-weight:700">₦3,000 – ₦6,000</span>
+          <span style="font-weight:700">Other States</span><span style="color:var(--orange);font-weight:700">&#8358;3,000 – &#8358;6,000</span>
         </div>
         <div style="display:grid;grid-template-columns:1fr 1fr;padding:10px 14px;background:#d1fae5;font-size:13px">
-          <span style="font-weight:800;color:var(--green)">Orders above ₦150,000</span><span style="color:var(--green);font-weight:800">🎉 FREE Delivery</span>
+          <span style="font-weight:800;color:var(--green)">Orders above &#8358;150,000</span><span style="color:var(--green);font-weight:800">🎉 FREE Delivery</span>
         </div>
       </div>
     </div>
@@ -1349,7 +1372,7 @@ body{padding-bottom:65px!important;background:#f2f2f2!important}
         <div style="display:flex;gap:14px;padding-bottom:18px;position:relative">
           <div style="width:32px;height:32px;border-radius:50%;background:var(--orange);color:#fff;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:900;flex-shrink:0;z-index:1">4</div>
           <div style="position:absolute;left:15px;top:32px;bottom:0;width:2px;background:var(--gray-200)"></div>
-          <div style="padding-top:5px"><h4 style="font-size:14px;font-weight:800;margin-bottom:2px">Tracking Updates via WhatsApp</h4><p style="font-size:13px;color:var(--gray-500)">Receive real-time WhatsApp updates at every stage — Confirmed, Processing, Out for Delivery, Delivered.</p></div>
+          <div style="padding-top:5px"><h4 style="font-size:14px;font-weight:800;margin-bottom:2px">Tracking Updates via WhatsApp</h4><p style="font-size:13px;color:var(--gray-500)">Receive real-time WhatsApp updates at every stage &mdash; Confirmed, Processing, Out for Delivery, Delivered.</p></div>
         </div>
         <div style="display:flex;gap:14px">
           <div style="width:32px;height:32px;border-radius:50%;background:var(--green);color:#fff;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:900;flex-shrink:0">5</div>
@@ -1382,7 +1405,7 @@ body{padding-bottom:65px!important;background:#f2f2f2!important}
 
 <!-- PRIVACY POLICY PAGE -->
 <div id="page-privacy-policy" class="page">
-  <div class="page-header"><button class="back-btn" onclick="history.back()"><i class="fas fa-arrow-left"></i></button><h2>Privacy Policy</h2></div>
+  <div class="page-header"><button class="back-btn" onclick="goBack()"><i class="fas fa-arrow-left"></i></button><h2>Privacy Policy</h2></div>
   <div class="footer-page-wrap">
     <h2><i class="fas fa-shield-alt"></i> Privacy Policy</h2>
     <p class="subtitle">Last updated: January 2025</p>
@@ -1425,7 +1448,7 @@ body{padding-bottom:65px!important;background:#f2f2f2!important}
 
 <!-- TERMS & CONDITIONS PAGE -->
 <div id="page-terms" class="page">
-  <div class="page-header"><button class="back-btn" onclick="history.back()"><i class="fas fa-arrow-left"></i></button><h2>Terms & Conditions</h2></div>
+  <div class="page-header"><button class="back-btn" onclick="goBack()"><i class="fas fa-arrow-left"></i></button><h2>Terms & Conditions</h2></div>
   <div class="footer-page-wrap">
     <h2><i class="fas fa-file-contract"></i> Terms & Conditions</h2>
     <p class="subtitle">Last updated: January 2025. By using Benim, you agree to these terms.</p>
@@ -1436,7 +1459,7 @@ body{padding-bottom:65px!important;background:#f2f2f2!important}
     <div class="fp-section">
       <h3>2. Orders & Payment</h3>
       <ul>
-        <li>All prices are in Nigerian Naira (₦) and include applicable taxes.</li>
+        <li>All prices are in Nigerian Naira (&#8358;) and include applicable taxes.</li>
         <li>For Bank Transfer orders, payment must be made within 24 hours of placing the order.</li>
         <li>Orders not paid within 24 hours (Bank Transfer) may be cancelled automatically.</li>
         <li>We reserve the right to cancel orders due to pricing errors or stock issues.</li>
@@ -1468,17 +1491,17 @@ body{padding-bottom:65px!important;background:#f2f2f2!important}
 
 <!-- FAQ PAGE -->
 <div id="page-faq" class="page">
-  <div class="page-header"><button class="back-btn" onclick="history.back()"><i class="fas fa-arrow-left"></i></button><h2>FAQ</h2></div>
+  <div class="page-header"><button class="back-btn" onclick="goBack()"><i class="fas fa-arrow-left"></i></button><h2>FAQ</h2></div>
   <div class="footer-page-wrap">
     <h2><i class="fas fa-question-circle"></i> Frequently Asked Questions</h2>
-    <p class="subtitle">Can't find your answer? <a onclick="navigate('contact')" style="color:var(--orange);cursor:pointer;font-weight:700">Contact us</a> — we're happy to help!</p>
+    <p class="subtitle">Can't find your answer? <a onclick="navigate('contact')" style="color:var(--orange);cursor:pointer;font-weight:700">Contact us</a> &mdash; we're happy to help!</p>
     <div class="faq-item" onclick="toggleFaq(this)">
       <div class="faq-q">How do I place an order? <i class="fas fa-chevron-down"></i></div>
       <div class="faq-a">Browse products, add items to your cart, and click "Proceed to Checkout". You'll need to be signed in and have a saved delivery address. Choose your payment method and confirm your order.</div>
     </div>
     <div class="faq-item" onclick="toggleFaq(this)">
       <div class="faq-q">When do I get free delivery? <i class="fas fa-chevron-down"></i></div>
-      <div class="faq-a">Orders with a total value of ₦150,000 or above qualify for free delivery. Orders below ₦150,000 attract a flat delivery fee of ₦3,500, automatically added at checkout.</div>
+      <div class="faq-a">Orders with a total value of &#8358;150,000 or above qualify for free delivery. Orders below &#8358;150,000 attract a flat delivery fee of &#8358;3,500, automatically added at checkout.</div>
     </div>
     <div class="faq-item" onclick="toggleFaq(this)">
       <div class="faq-q">What payment methods do you accept? <i class="fas fa-chevron-down"></i></div>
@@ -1501,7 +1524,7 @@ body{padding-bottom:65px!important;background:#f2f2f2!important}
       <div class="faq-a">Yes. We take your privacy seriously. Your data is stored securely using Google Firebase. We never sell your personal information to third parties. Read our Privacy Policy for details.</div>
     </div>
     <div class="faq-item" onclick="toggleFaq(this)">
-      <div class="faq-q">I made a Bank Transfer — how do I confirm my payment? <i class="fas fa-chevron-down"></i></div>
+      <div class="faq-q">I made a Bank Transfer &mdash; how do I confirm my payment? <i class="fas fa-chevron-down"></i></div>
       <div class="faq-a">After transferring, send your payment receipt and Order ID to our WhatsApp: +234 916 803 1213. Our team will confirm your order within a few hours during business hours.</div>
     </div>
   </div>
@@ -1559,7 +1582,7 @@ body{padding-bottom:65px!important;background:#f2f2f2!important}
     </div>
   </div>
   <div class="footer-bottom">
-    <span>© 2025 <strong style="color:rgba(255,255,255,.7)">BENIM GROUP CO. LTD</strong>. All rights reserved.</span>
+    <span>© 2025 <strong style="color:rgba(255,255,255,.7)">BENIM INTERNATIONAL TRADE LIMITED</strong>. All rights reserved.</span>
     <span>Made with 🧡 in Nigeria</span>
   </div>
 </footer>
@@ -1591,8 +1614,8 @@ body{padding-bottom:65px!important;background:#f2f2f2!important}
       <input type="hidden" id="edit-product-id">
       <div class="form-group"><label class="form-label">Product Name *</label><input class="form-input" id="p-name" placeholder="Product name"></div>
       <div class="form-row">
-        <div class="form-group"><label class="form-label">Price (₦) *</label><input class="form-input" id="p-price" type="number" placeholder="0"></div>
-        <div class="form-group"><label class="form-label">Discount Price (₦)</label><input class="form-input" id="p-discount" type="number" placeholder="0"></div>
+        <div class="form-group"><label class="form-label">Price (&#8358;) *</label><input class="form-input" id="p-price" type="number" placeholder="0"></div>
+        <div class="form-group"><label class="form-label">Discount Price (&#8358;)</label><input class="form-input" id="p-discount" type="number" placeholder="0"></div>
       </div>
       <div class="form-row">
         <div class="form-group"><label class="form-label">Category *</label>
@@ -1685,7 +1708,10 @@ body{padding-bottom:65px!important;background:#f2f2f2!important}
 <div id="toast-container"></div>
 
 <!-- ====== FIREBASE + APP SCRIPT ====== -->
-<script>
+<script type="module">
+import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js';
+import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, onAuthStateChanged, sendPasswordResetEmail, GoogleAuthProvider, signInWithPopup, updatePassword } from 'https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js';
+import { getFirestore, collection, doc, addDoc, getDoc, getDocs, setDoc, updateDoc, deleteDoc, query, where, orderBy, limit, onSnapshot, serverTimestamp } from 'https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js';
 
 const firebaseConfig = {
   apiKey: "AIzaSyA-jgBpKJMPd0Jz1Ro_U9RrAd45jGl_gJw",
@@ -1696,10 +1722,9 @@ const firebaseConfig = {
   appId: "1:574386699126:web:a0c4b4626539f495b15857"
 };
 
-firebase.initializeApp(firebaseConfig);
-const auth = firebase.auth();
-const db = firebase.firestore();
-const serverTimestamp = () => firebase.firestore.FieldValue.firebase.firestore.FieldValue.serverTimestamp();
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const db = getFirestore(app);
 const ADMIN_EMAIL = 'shopwitbenim@gmail.com';
 
 // ===== STATE =====
@@ -1743,7 +1768,7 @@ function setLogos() {
 setLogos();
 
 // ===== AUTH =====
-auth.onAuthStateChanged(async (user) => {
+onAuthStateChanged(auth, async (user) => {
   currentUser = user;
   isAdmin = user && user.email === ADMIN_EMAIL;
   updateAuthUI();
@@ -1781,8 +1806,8 @@ function updateAuthUI() {
 async function loadUserProfile() {
   if(!currentUser) return;
   try {
-    const snap = await db.collection('users'.get().doc(currentUser.uid));
-    if(snap.exists) {
+    const snap = await getDoc(doc(db,'users',currentUser.uid));
+    if(snap.exists()) {
       const d = snap.data();
       const pn = document.getElementById('profile-name');
       const pp = document.getElementById('profile-phone');
@@ -1798,7 +1823,7 @@ window.doLogin = async function() {
   const pass = document.getElementById('login-password').value;
   if(!email||!pass) return showToast('Please fill all fields','error');
   try {
-    await auth.signInWithEmailAndPassword(email, pass);
+    await signInWithEmailAndPassword(auth, email, pass);
     showToast('Welcome back!');
     navigate('home');
   } catch(e) {
@@ -1814,8 +1839,8 @@ window.doRegister = async function() {
   if(!name||!email||!pass) return showToast('Please fill required fields','error');
   if(pass.length<6) return showToast('Password must be at least 6 characters','error');
   try {
-    const cred = await auth.createUserWithEmailAndPassword(email, pass);
-    await db.collection('users').doc(cred.user.uid).set({ name, email, phone, createdAt: firebase.firestore.FieldValue.serverTimestamp() });
+    const cred = await createUserWithEmailAndPassword(auth, email, pass);
+    await setDoc(doc(db,'users',cred.user.uid), { name, email, phone, createdAt: serverTimestamp() });
     showToast('Account created! Welcome to Benim!');
     navigate('home');
   } catch(e) {
@@ -1825,11 +1850,11 @@ window.doRegister = async function() {
 
 window.loginWithGoogle = async function() {
   try {
-    const provider = new firebase.auth.GoogleAuthProvider();
-    const cred = await auth.signInWithPopup(provider);
-    const snap = await db.collection('users'.get().doc(cred.user.uid));
-    if(!snap.exists) {
-      await db.collection('users').doc(cred.user.uid).set({ name: cred.user.displayName, email: cred.user.email, createdAt: firebase.firestore.FieldValue.serverTimestamp() });
+    const provider = new GoogleAuthProvider();
+    const cred = await signInWithPopup(auth, provider);
+    const snap = await getDoc(doc(db,'users',cred.user.uid));
+    if(!snap.exists()) {
+      await setDoc(doc(db,'users',cred.user.uid), { name: cred.user.displayName, email: cred.user.email, createdAt: serverTimestamp() });
     }
     showToast('Signed in with Google!');
     navigate('home');
@@ -1839,7 +1864,7 @@ window.loginWithGoogle = async function() {
 };
 
 window.doLogout = async function() {
-  await auth.signOut();
+  await signOut(auth);
   cart = []; wishlist = [];
   updateCartBadge(); updateWishBadge();
   navigate('home');
@@ -1850,7 +1875,7 @@ window.doForgotPassword = async function() {
   const email = document.getElementById('forgot-email').value.trim();
   if(!email) return showToast('Enter your email','error');
   try {
-    await auth.sendPasswordResetEmail(email);
+    await sendPasswordResetEmail(auth, email);
     showToast('Reset link sent! Check your email.');
     navigate('login');
   } catch(e) {
@@ -1863,7 +1888,7 @@ window.saveProfile = async function() {
   const name = document.getElementById('profile-name').value.trim();
   const phone = document.getElementById('profile-phone').value.trim();
   try {
-    await db.collection('users').doc(currentUser.uid).set({ name, phone, email: currentUser.email }, { merge: true });
+    await setDoc(doc(db,'users',currentUser.uid), { name, phone, email: currentUser.email }, { merge: true });
     document.getElementById('profile-display-name').textContent = name;
     document.getElementById('sb-name').textContent = name;
     showToast('Profile updated!');
@@ -1875,7 +1900,7 @@ window.changePassword = async function() {
   const np = document.getElementById('new-password').value;
   if(np.length<6) return showToast('Password too short','error');
   try {
-    await currentUser.updatePassword(np);
+    await updatePassword(currentUser, np);
     showToast('Password updated!');
     document.getElementById('new-password').value = '';
   } catch(e) { showToast('Please re-login and try again','error'); }
@@ -1884,7 +1909,7 @@ window.changePassword = async function() {
 // ===== PRODUCTS =====
 async function loadProducts() {
   try {
-    const snap = await db.collection('products'.get());
+    const snap = await getDocs(collection(db,'products'));
     allProducts = snap.docs.map(d => ({id:d.id,...d.data()}));
     renderHome();
   } catch(e) { console.error(e); }
@@ -1898,7 +1923,7 @@ function renderHome() {
     setTimeout(()=>{
       ['flash-grid','featured-grid','trending-grid'].forEach(id=>{
         const el = document.getElementById(id);
-        if(el) el.innerHTML = `<div style="grid-column:1/-1;text-align:center;padding:30px 20px;color:var(--gray-400)"><i class="fas fa-box-open" style="font-size:40px;display:block;margin-bottom:10px"></i><p style="font-size:14px;font-weight:600">No products yet — check back soon!</p></div>`;
+        if(el) el.innerHTML = `<div style="grid-column:1/-1;text-align:center;padding:30px 20px;color:var(--gray-400)"><i class="fas fa-box-open" style="font-size:40px;display:block;margin-bottom:10px"></i><p style="font-size:14px;font-weight:600">No products yet &mdash; check back soon!</p></div>`;
       });
     },1500);
     return;
@@ -1932,29 +1957,25 @@ function productCardHTML(p, isFlash=false) {
   const displayPrice = disc>0 ? disc : price;
   const hasDisc = disc>0 && disc<price;
   const discPct = hasDisc ? Math.round((1-disc/price)*100) : 0;
-  const inWish = wishlist.includes(p.id);
-  const img = (p.images&&p.images[0]) ? p.images[0] : 'https://placehold.co/300x300/f8f8f8/cccccc?text=No+Image';
-  const soldCount = p.soldCount || Math.floor(Math.random()*150+10);
-  const soldPct = Math.min(100, Math.round(soldCount/(soldCount+(p.stock||50))*100));
-  return `<div class="product-card" onclick="openProduct('${p.id}')">
-    <div class="product-img-wrap">
-      <img src="${img}" alt="${p.name||''}" loading="lazy" onerror="this.src='https://placehold.co/300x300/f8f8f8/cccccc?text=No+Image'">
-      ${hasDisc ? `<span class="product-badge">-${discPct}%</span>` : ''}
-      <button class="product-wishlist-btn${inWish?' active':''}" onclick="event.stopPropagation();toggleWishlist('${p.id}')" title="Wishlist"><i class="fas fa-heart"></i></button>
+  const img = (p.images&&p.images[0]) ? p.images[0] : 'https://placehold.co/300x300/f0f0f0/aaaaaa?text=No+Image';
+  const soldCount = p.soldCount || Math.floor(Math.random()*150+20);
+  const stock = p.stock||50;
+  const soldPct = Math.min(95, Math.round(soldCount/(soldCount+stock)*100));
+  return `<div class="pc" onclick="openProduct('${p.id}')">
+    <div class="pc-img-wrap">
+      <img src="${img}" alt="${p.name||''}" loading="lazy" onerror="this.src='https://placehold.co/300x300/f0f0f0/aaaaaa?text=No+Image'">
+      ${hasDisc ? `<span class="pc-badge">-${discPct}%</span>` : ''}
     </div>
-    <div class="product-info">
-      <div class="product-name">${p.name||'Product'}</div>
-      <div class="product-price-row">
-        <span class="product-price">₦${displayPrice.toLocaleString()}</span>
-        ${hasDisc?`<span class="product-old-price">₦${price.toLocaleString()}</span>`:''}
+    <div class="pc-body">
+      <div class="pc-name">${p.name||'Product'}</div>
+      <div class="pc-prices">
+        <span class="pc-price">&#8358;${displayPrice.toLocaleString()}</span>
+        ${hasDisc ? `<span class="pc-old">&#8358;${price.toLocaleString()}</span>` : ''}
       </div>
-      ${isFlash ? `<div class="product-sold-row">
-        <div class="sold-bar-wrap"><div class="sold-bar" style="width:${soldPct}%"></div></div>
-        <span class="sold-count">${soldCount} sold</span>
-      </div>` : `<div style="display:flex;align-items:center;gap:3px;margin-top:4px">
-        <span style="color:var(--yellow);font-size:11px">${starsHTML(p.rating||0)}</span>
-        <span style="font-size:11px;color:var(--gray-400)">(${p.reviewCount||0})</span>
-      </div>`}
+      <div class="pc-sold-row">
+        <div class="pc-bar-bg"><div class="pc-bar-fill" style="width:${soldPct}%"></div></div>
+        <span class="pc-sold-txt">${soldCount} sold</span>
+      </div>
     </div>
   </div>`;
 }
@@ -1979,8 +2000,8 @@ window.openProduct = function(id) {
   const displayPrice = disc>0 ? disc : price;
   const hasDisc = disc>0 && disc<price;
   const discPct = hasDisc ? Math.round((1-disc/price)*100) : 0;
-  document.getElementById('detail-price').textContent = '₦'+displayPrice.toLocaleString();
-  document.getElementById('detail-old-price').textContent = hasDisc ? '₦'+price.toLocaleString() : '';
+  document.getElementById('detail-price').innerHTML = '&#8358;'+displayPrice.toLocaleString();
+  document.getElementById('detail-old-price').innerHTML = hasDisc ? '&#8358;'+price.toLocaleString() : '';
   document.getElementById('detail-discount').textContent = hasDisc ? `-${discPct}%` : '';
   document.getElementById('detail-discount').classList.toggle('hidden', !hasDisc);
   document.getElementById('detail-stars').textContent = starsHTML(p.rating||0);
@@ -2053,8 +2074,8 @@ async function loadProductReviews(productId) {
   const list = document.getElementById('reviews-list');
   list.innerHTML = '<p style="color:var(--gray-400);font-size:13px">Loading reviews...</p>';
   try {
-    const q = db.collection('reviews').where('productId','==',productId).where('status','==','approved');
-    const snap = await q.get();
+    const q = query(collection(db,'reviews'), where('productId','==',productId), where('status','==','approved'));
+    const snap = await getDocs(q);
     if(snap.empty) {
       list.innerHTML = '<p style="color:var(--gray-400);font-size:13px;margin-bottom:16px">No reviews yet. Be the first!</p>';
       return;
@@ -2079,12 +2100,12 @@ window.submitReview = async function() {
   const text = document.getElementById('review-text').value.trim();
   if(!text) return showToast('Write your review first','error');
   try {
-    await db.collection('reviews').add({
+    await addDoc(collection(db,'reviews'), {
       productId: currentProduct.id,
       userId: currentUser.uid,
       userName: currentUser.displayName || currentUser.email.split('@')[0],
       rating, text, status: 'pending',
-      createdAt: firebase.firestore.FieldValue.serverTimestamp()
+      createdAt: serverTimestamp()
     });
     document.getElementById('review-text').value = '';
     showToast('Review submitted! Pending admin approval.');
@@ -2095,8 +2116,8 @@ window.submitReview = async function() {
 async function loadCart() {
   if(!currentUser) return;
   try {
-    const snap = await db.collection('carts'.get().doc(currentUser.uid));
-    cart = snap.exists ? (snap.data().items||[]) : [];
+    const snap = await getDoc(doc(db,'carts',currentUser.uid));
+    cart = snap.exists() ? (snap.data().items||[]) : [];
     updateCartBadge();
   } catch(e){}
 }
@@ -2104,7 +2125,7 @@ async function loadCart() {
 async function saveCart() {
   if(!currentUser) return;
   try {
-    await db.collection('carts').doc(currentUser.uid).set({ items: cart, updatedAt: firebase.firestore.FieldValue.serverTimestamp() });
+    await setDoc(doc(db,'carts',currentUser.uid), { items: cart, updatedAt: serverTimestamp() });
   } catch(e){}
 }
 
@@ -2122,6 +2143,19 @@ window.quickAddToCart = function(productId) {
   saveCart();
   updateCartBadge();
   showToast(`${p.name} added to cart!`);
+};
+
+window.cardBuyNow = function(productId) {
+  if(!currentUser) { showToast('Please sign in to buy','info'); navigate('login'); return; }
+  const p = allProducts.find(x=>x.id===productId);
+  if(!p) return;
+  const price = Number(p.discountPrice)>0 ? Number(p.discountPrice) : Number(p.price);
+  const variantKey = p.id;
+  const existing = cart.find(x=>x.variantKey===variantKey);
+  if(existing) { existing.qty = Math.min(existing.qty+1, p.stock||99); }
+  else { cart.push({ productId: p.id, variantKey, name: p.name, price, image: (p.images&&p.images[0])||'', qty: 1, size:'', colour:'', variantLabel:'' }); }
+  saveCart(); updateCartBadge();
+  goToCheckout();
 };
 
 window.addToCartFromDetail = function() {
@@ -2212,10 +2246,10 @@ window.renderCart = function() {
       <img class="cart-item-img" src="${item.image||'https://placehold.co/80x80/f3f4f6/9ca3af?text=Img'}" onerror="this.src='https://placehold.co/80x80/f3f4f6/9ca3af?text=Img'">
       <div class="cart-item-info">
         <div class="cart-item-name">${item.name}${item.variantLabel?` <span style="font-size:11px;color:var(--orange);font-weight:700">(${item.variantLabel})</span>`:''}</div>
-        <div class="cart-item-price">₦${(item.price*item.qty).toLocaleString()}</div>
+        <div class="cart-item-price">&#8358;${(item.price*item.qty).toLocaleString()}</div>
         <div class="cart-item-actions">
           <div class="qty-controls">
-            <button class="qty-btn" onclick="updateCartQty(${i},-1)">−</button>
+            <button class="qty-btn" onclick="updateCartQty(${i},-1)">-</button>
             <input class="qty-input" value="${item.qty}" type="number" min="1" onchange="setCartQty(${i},this.value)" style="width:40px">
             <button class="qty-btn" onclick="updateCartQty(${i},1)">+</button>
           </div>
@@ -2227,10 +2261,10 @@ window.renderCart = function() {
   const subtotal = cart.reduce((s,x)=>s+(x.price*x.qty),0);
   const deliveryFee = subtotal >= 150000 ? 0 : 3500;
   const grandTotal = subtotal + deliveryFee;
-  document.getElementById('cart-subtotal').textContent = '₦'+subtotal.toLocaleString();
-  document.getElementById('cart-delivery').textContent = deliveryFee===0 ? 'FREE' : '₦'+deliveryFee.toLocaleString();
+  document.getElementById('cart-subtotal').innerHTML = '&#8358;'+subtotal.toLocaleString();
+  document.getElementById('cart-delivery').innerHTML = deliveryFee===0 ? 'FREE' : '&#8358;'+deliveryFee.toLocaleString();
   document.getElementById('cart-delivery').style.color = deliveryFee===0 ? 'var(--green)' : 'var(--gray-800)';
-  document.getElementById('cart-total').textContent = '₦'+grandTotal.toLocaleString();
+  document.getElementById('cart-total').innerHTML = '&#8358;'+grandTotal.toLocaleString();
 };
 
 window.updateCartQty = function(i, delta) {
@@ -2257,14 +2291,14 @@ async function loadCheckout() {
   const addrDiv = document.getElementById('saved-addresses');
   addrDiv.innerHTML = '<p style="color:var(--gray-400);font-size:13px">Loading addresses...</p>';
   try {
-    const snap = await db.collection('users'.get().doc(currentUser.uid).collection('addresses'));
+    const snap = await getDocs(collection(db,`users/${currentUser.uid}/addresses`));
     if(snap.empty) {
       addrDiv.innerHTML = '<p style="color:var(--gray-400);font-size:13px">No saved addresses. Add one below.</p>';
     } else {
       addrDiv.innerHTML = snap.docs.map((d,i)=>{
         const a = d.data();
         return `<div class="address-card${i===0?' selected':''}" onclick="selectAddr(this,'${d.id}')" data-addr-id="${d.id}">
-          <h4>${a.name} — ${a.phone}</h4>
+          <h4>${a.name} &mdash; ${a.phone}</h4>
           <p>${a.street}, ${a.city}, ${a.state}</p>
         </div>`;
       }).join('');
@@ -2276,10 +2310,10 @@ async function loadCheckout() {
   const subtotal = cart.reduce((s,x)=>s+(x.price*x.qty),0);
   const deliveryFee = subtotal >= 150000 ? 0 : 3500;
   const grandTotal = subtotal + deliveryFee;
-  sumDiv.innerHTML = cart.map(x=>`<div class="summary-row"><span>${x.name} × ${x.qty}</span><span>₦${(x.price*x.qty).toLocaleString()}</span></div>`).join('') +
-    `<div class="summary-row"><span>Delivery Fee</span><span style="color:${deliveryFee===0?'var(--green)':'var(--gray-800)'}">${deliveryFee===0?'FREE':'₦'+deliveryFee.toLocaleString()}</span></div>` +
-    (deliveryFee===0 ? `<div style="font-size:11px;color:var(--green);margin-top:-6px;margin-bottom:4px"><i class="fas fa-check-circle"></i> Your order qualifies for free delivery!</div>` : `<div style="font-size:11px;color:var(--gray-400);margin-top:-6px;margin-bottom:4px"><i class="fas fa-info-circle"></i> Add ₦${(150000-subtotal).toLocaleString()} more for free delivery</div>`);
-  document.getElementById('checkout-total').textContent = '₦'+grandTotal.toLocaleString();
+  sumDiv.innerHTML = cart.map(x=>`<div class="summary-row"><span>${x.name} × ${x.qty}</span><span>&#8358;${(x.price*x.qty).toLocaleString()}</span></div>`).join('') +
+    `<div class="summary-row"><span>Delivery Fee</span><span style="color:${deliveryFee===0?'var(--green)':'var(--gray-800)'}">${deliveryFee===0?'FREE':'&#8358;'+deliveryFee.toLocaleString()}</span></div>` +
+    (deliveryFee===0 ? `<div style="font-size:11px;color:var(--green);margin-top:-6px;margin-bottom:4px"><i class="fas fa-check-circle"></i> Your order qualifies for free delivery!</div>` : `<div style="font-size:11px;color:var(--gray-400);margin-top:-6px;margin-bottom:4px"><i class="fas fa-info-circle"></i> Add &#8358;${(150000-subtotal).toLocaleString()} more for free delivery</div>`);
+  document.getElementById('checkout-total').innerHTML = '&#8358;'+grandTotal.toLocaleString();
   // Store delivery fee for placeOrder to use
   window._checkoutDeliveryFee = deliveryFee;
   window._checkoutGrandTotal = grandTotal;
@@ -2308,7 +2342,7 @@ window.placeOrder = async function() {
   if(!cart.length) return showToast('Your cart is empty','error');
 
   try {
-    const addrSnap = await db.collection('users'.get().doc(currentUser.uid).collection('addresses').doc(selectedAddress));
+    const addrSnap = await getDoc(doc(db,`users/${currentUser.uid}/addresses`,selectedAddress));
     const addr = addrSnap.exists() ? addrSnap.data() : {};
     const subtotal = cart.reduce((s,x)=>s+(x.price*x.qty),0);
     const deliveryFee = window._checkoutDeliveryFee !== undefined ? window._checkoutDeliveryFee : (subtotal >= 150000 ? 0 : 3500);
@@ -2319,10 +2353,10 @@ window.placeOrder = async function() {
       orderId, userId: currentUser.uid, userEmail: currentUser.email,
       items: itemsCopy, address: addr, payment: selectedPayment,
       subtotal, deliveryFee, total: grandTotal, status: 'pending',
-      createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+      createdAt: serverTimestamp(),
       phone: addr.phone || ''
     };
-    const orderRef = await db.collection('orders').add(orderData);
+    const orderRef = await addDoc(collection(db,'orders'), orderData);
     lastOrderId = orderRef.id;
     // Clear cart BEFORE notifications (so items don't appear empty)
     const itemNames = itemsCopy.map(x=>x.name).join(', ');
@@ -2355,10 +2389,10 @@ function showReceipt(orderId, data) {
     <div class="summary-row"><span>Payment</span><span>${data.payment==='bank'?'Bank Transfer':'Pay on Delivery'}</span></div>
     <div class="summary-row"><span>Delivery to</span><span>${(data.address&&data.address.street)||''}, ${(data.address&&data.address.city)||''}</span></div>
     <hr style="border:none;border-top:1px solid var(--gray-200);margin:10px 0">
-    ${data.items.map(x=>`<div class="summary-row"><span>${x.name} × ${x.qty}</span><span>₦${(x.price*x.qty).toLocaleString()}</span></div>`).join('')}
-    <div class="summary-row"><span>Subtotal</span><span>₦${(data.subtotal||data.total||0).toLocaleString()}</span></div>
-    <div class="summary-row"><span>Delivery Fee</span><span style="color:${deliveryFee===0?'var(--green)':'var(--gray-800)'}">${deliveryFee===0?'FREE':'₦'+deliveryFee.toLocaleString()}</span></div>
-    <div class="summary-row total"><span>Grand Total</span><span style="color:var(--orange)">₦${(data.total||0).toLocaleString()}</span></div>
+    ${data.items.map(x=>`<div class="summary-row"><span>${x.name} × ${x.qty}</span><span>&#8358;${(x.price*x.qty).toLocaleString()}</span></div>`).join('')}
+    <div class="summary-row"><span>Subtotal</span><span>&#8358;${(data.subtotal||data.total||0).toLocaleString()}</span></div>
+    <div class="summary-row"><span>Delivery Fee</span><span style="color:${deliveryFee===0?'var(--green)':'var(--gray-800)'}">${deliveryFee===0?'FREE':'&#8358;'+deliveryFee.toLocaleString()}</span></div>
+    <div class="summary-row total"><span>Grand Total</span><span style="color:var(--orange)">&#8358;${(data.total||0).toLocaleString()}</span></div>
     ${data.payment==='bank'?`<div style="margin-top:12px;background:var(--gray-50);padding:10px;border-radius:8px;font-size:12px"><p style="font-weight:800;margin-bottom:4px">Transfer Details:</p><p>Bank: Opay</p><p>Account: Adewole Aderonke Aishat</p><p>Number: 9168031213</p><p style="color:var(--orange);font-weight:700;margin-top:6px">Reference: ${orderId}</p></div>`:''}
   `;
 }
@@ -2372,8 +2406,8 @@ window.loadOrders = async function() {
   const empty = document.getElementById('orders-empty');
   list.innerHTML = '<div class="empty-state"><i class="fas fa-spinner fa-spin"></i><p>Loading...</p></div>';
   try {
-    const q = db.collection('orders').where('userId','==',currentUser.uid).orderBy('createdAt','desc');
-    const snap = await q.get();
+    const q = query(collection(db,'orders'), where('userId','==',currentUser.uid), orderBy('createdAt','desc'));
+    const snap = await getDocs(q);
     if(snap.empty) { list.innerHTML=''; empty.classList.remove('hidden'); return; }
     empty.classList.add('hidden');
     list.innerHTML = snap.docs.map(d=>{
@@ -2386,7 +2420,7 @@ window.loadOrders = async function() {
         </div>
         <div class="order-items">${(o.items||[]).map(x=>x.name).join(', ')}</div>
         <div style="display:flex;align-items:center;justify-content:space-between">
-          <span class="order-total">₦${(o.total||0).toLocaleString()}</span>
+          <span class="order-total">&#8358;${(o.total||0).toLocaleString()}</span>
           <button class="track-order-btn" onclick="showTrackingModal('${d.id}')"><i class="fas fa-truck"></i> Track</button>
         </div>
       </div>`;
@@ -2403,11 +2437,11 @@ window.trackOrder = async function() {
   try {
     let snap;
     // Try by orderId
-    let q = db.collection('orders').where('orderId','==',input);
-    snap = await q.get();
+    let q = query(collection(db,'orders'), where('orderId','==',input));
+    snap = await getDocs(q);
     if(snap.empty) {
-      q = db.collection('orders').where('phone','==',input);
-      snap = await q.get();
+      q = query(collection(db,'orders'), where('phone','==',input));
+      snap = await getDocs(q);
     }
     if(snap.empty) { result.innerHTML = '<p style="color:var(--red);text-align:center">No order found for that ID or phone number.</p>'; return; }
     const o = snap.docs[0].data();
@@ -2415,7 +2449,7 @@ window.trackOrder = async function() {
     const currentIdx = steps.indexOf(o.status);
     result.innerHTML = `
       <h4 style="font-size:15px;font-weight:800;margin-bottom:4px">${o.orderId||snap.docs[0].id}</h4>
-      <p style="font-size:13px;color:var(--gray-500);margin-bottom:16px">Total: ₦${(o.total||0).toLocaleString()}</p>
+      <p style="font-size:13px;color:var(--gray-500);margin-bottom:16px">Total: &#8358;${(o.total||0).toLocaleString()}</p>
       <div class="tracking-steps">
         ${steps.map((s,i)=>{
           const done = i<currentIdx;
@@ -2440,15 +2474,15 @@ window.showTrackingModal = function(orderId) {
 async function loadWishlist() {
   if(!currentUser) return;
   try {
-    const snap = await db.collection('wishlist'.get().doc(currentUser.uid));
-    wishlist = snap.exists ? (snap.data().items||[]) : [];
+    const snap = await getDoc(doc(db,'wishlist',currentUser.uid));
+    wishlist = snap.exists() ? (snap.data().items||[]) : [];
     updateWishBadge();
   } catch(e){}
 }
 
 async function saveWishlist() {
   if(!currentUser) return;
-  await db.collection('wishlist').doc(currentUser.uid).set({ items: wishlist });
+  await setDoc(doc(db,'wishlist',currentUser.uid), { items: wishlist });
 }
 
 window.toggleWishlist = async function(productId) {
@@ -2540,7 +2574,7 @@ window.saveAddress = async function() {
   const state = document.getElementById('addr-state').value.trim();
   if(!name||!phone||!street||!city||!state) return showToast('Fill all fields','error');
   try {
-    await db.collection('users').doc(currentUser.uid).collection('addresses').add({ name, phone, street, city, state });
+    await addDoc(collection(db,`users/${currentUser.uid}/addresses`), { name, phone, street, city, state });
     closeModal('modal-address');
     showToast('Address saved!');
     loadAddresses();
@@ -2552,12 +2586,12 @@ window.loadAddresses = async function() {
   if(!currentUser) return;
   const list = document.getElementById('addresses-list');
   try {
-    const snap = await db.collection('users'.get().doc(currentUser.uid).collection('addresses'));
+    const snap = await getDocs(collection(db,`users/${currentUser.uid}/addresses`));
     if(snap.empty) { list.innerHTML = '<p style="color:var(--gray-400)">No addresses saved.</p>'; return; }
     list.innerHTML = snap.docs.map(d=>{
       const a = d.data();
       return `<div class="address-card" style="position:relative">
-        <h4>${a.name} — ${a.phone}</h4>
+        <h4>${a.name} &mdash; ${a.phone}</h4>
         <p>${a.street}, ${a.city}, ${a.state}</p>
         <button class="btn-danger" style="position:absolute;top:10px;right:10px;padding:4px 10px;font-size:11px" onclick="deleteAddress('${d.id}')"><i class="fas fa-trash"></i></button>
       </div>`;
@@ -2567,7 +2601,7 @@ window.loadAddresses = async function() {
 
 window.deleteAddress = async function(id) {
   if(!currentUser) return;
-  await db.collection('users'.delete().doc(currentUser.uid).collection('addresses').doc(id));
+  await deleteDoc(doc(db,`users/${currentUser.uid}/addresses`,id));
   loadAddresses();
 };
 
@@ -2616,14 +2650,14 @@ window.saveProduct = async function() {
   const isFlash = document.getElementById('p-flash').checked;
   if(!name||!price) return showToast('Name and price are required','error');
   try {
-    const data = { name, price, discountPrice, category, stock, description, images, sizes, colours, isFlash, updatedAt: firebase.firestore.FieldValue.serverTimestamp() };
+    const data = { name, price, discountPrice, category, stock, description, images, sizes, colours, isFlash, updatedAt: serverTimestamp() };
     if(editId) {
-      await db.collection('products').doc(editId).update(data);
+      await updateDoc(doc(db,'products',editId), data);
       showToast('Product updated!');
     } else {
-      data.createdAt = firebase.firestore.FieldValue.serverTimestamp();
+      data.createdAt = serverTimestamp();
       data.rating = 0; data.reviewCount = 0;
-      await db.collection('products').add(data);
+      await addDoc(collection(db,'products'), data);
       showToast('Product added!');
     }
     closeModal('modal-product');
@@ -2634,7 +2668,7 @@ window.saveProduct = async function() {
 
 window.deleteProduct = async function(id) {
   if(!isAdmin||!confirm('Delete this product?')) return;
-  await db.collection('products'.delete().doc(id));
+  await deleteDoc(doc(db,'products',id));
   await loadProducts();
   loadAdminProducts();
   showToast('Product deleted');
@@ -2647,7 +2681,7 @@ window.loadAdminProducts = function() {
       <td><img class="product-thumb-small" src="${(p.images&&p.images[0])||'https://placehold.co/40x40/f3f4f6/9ca3af?text=P'}" onerror="this.src='https://placehold.co/40x40/f3f4f6/9ca3af?text=P'"></td>
       <td>${p.name||''}</td>
       <td>${p.category||''}</td>
-      <td>₦${(Number(p.discountPrice)||Number(p.price)||0).toLocaleString()}</td>
+      <td>&#8358;${(Number(p.discountPrice)||Number(p.price)||0).toLocaleString()}</td>
       <td>${p.stock||0}</td>
       <td style="display:flex;gap:6px;flex-wrap:wrap">
         <button class="btn-primary" style="padding:5px 10px;font-size:11px" onclick="editProduct('${p.id}')"><i class="fas fa-edit"></i></button>
@@ -2661,8 +2695,8 @@ window.loadAdminOrders = async function() {
   const tbody = document.getElementById('admin-orders-body');
   tbody.innerHTML = '<tr><td colspan="7" style="text-align:center;color:var(--gray-400)">Loading...</td></tr>';
   try {
-    const q = db.collection('orders').orderBy('createdAt','desc');
-    const snap = await q.get();
+    const q = query(collection(db,'orders'), orderBy('createdAt','desc'));
+    const snap = await getDocs(q);
     let totalRevenue = 0;
     const rows = snap.docs.map(d=>{
       const o = d.data();
@@ -2670,7 +2704,7 @@ window.loadAdminOrders = async function() {
       return `<tr>
         <td style="font-size:11px">${o.orderId||d.id.slice(0,8)}</td>
         <td>${o.userEmail||''}</td>
-        <td>₦${(o.total||0).toLocaleString()}</td>
+        <td>&#8358;${(o.total||0).toLocaleString()}</td>
         <td>${(o.items||[]).length} items</td>
         <td>${o.payment==='bank'?'Bank Transfer':'Pay on Delivery'}</td>
         <td><span class="order-status ${'status-'+(o.status==='out_for_delivery'?'out':o.status||'pending')}">${(o.status||'').replace('_',' ').replace(/\b\w/g,l=>l.toUpperCase())||'Pending'}</span></td>
@@ -2679,7 +2713,7 @@ window.loadAdminOrders = async function() {
     });
     tbody.innerHTML = rows.join('') || '<tr><td colspan="7" style="text-align:center;color:var(--gray-400)">No orders</td></tr>';
     document.getElementById('stat-orders').textContent = snap.docs.length;
-    document.getElementById('stat-revenue').textContent = '₦'+totalRevenue.toLocaleString();
+    document.getElementById('stat-revenue').innerHTML = '&#8358;'+totalRevenue.toLocaleString();
   } catch(e) { tbody.innerHTML = '<tr><td colspan="7" style="color:var(--red);text-align:center">Error loading</td></tr>'; }
 };
 
@@ -2694,9 +2728,9 @@ window.updateOrderStatus = async function() {
   const id = document.getElementById('status-order-id').value;
   const status = document.getElementById('status-select').value;
   try {
-    const orderDoc = await db.collection('orders'.get().doc(id));
+    const orderDoc = await getDoc(doc(db,'orders',id));
     const o = orderDoc.data();
-    await db.collection('orders').doc(id).update({ status });
+    await updateDoc(doc(db,'orders',id), { status });
     closeModal('modal-status');
     loadAdminOrders();
     showToast('Order status updated!');
@@ -2712,8 +2746,8 @@ window.loadAdminReviews = async function() {
   const wrap = document.getElementById('admin-reviews-list');
   wrap.innerHTML = '<p style="color:var(--gray-400)">Loading...</p>';
   try {
-    const q = db.collection('reviews').where('status','==','pending');
-    const snap = await q.get();
+    const q = query(collection(db,'reviews'), where('status','==','pending'));
+    const snap = await getDocs(q);
     if(snap.empty) { wrap.innerHTML = '<p style="color:var(--gray-400)">No pending reviews.</p>'; return; }
     wrap.innerHTML = snap.docs.map(d=>{
       const r = d.data();
@@ -2730,18 +2764,18 @@ window.loadAdminReviews = async function() {
 };
 
 window.approveReview = async function(id) {
-  await db.collection('reviews').doc(id).update({ status: 'approved' });
+  await updateDoc(doc(db,'reviews',id), { status: 'approved' });
   loadAdminReviews(); showToast('Review approved!');
 };
 window.rejectReview = async function(id) {
-  await db.collection('reviews'.delete().doc(id));
+  await deleteDoc(doc(db,'reviews',id));
   loadAdminReviews(); showToast('Review rejected');
 };
 
 window.loadAdminChats = async function() {
   const wrap = document.getElementById('admin-chats-list');
   try {
-    const snap = await db.collection('chatbot_sessions'.get());
+    const snap = await getDocs(collection(db,'chatbot_sessions'));
     if(snap.empty) { wrap.innerHTML = '<p style="color:var(--gray-400)">No chat sessions.</p>'; return; }
     wrap.innerHTML = snap.docs.map(d=>{
       const s = d.data();
@@ -2767,124 +2801,199 @@ window.switchAdminTab = function(tab, btn) {
 window.loadAdminStats = async function() {
   document.getElementById('stat-products').textContent = allProducts.length;
   try {
-    const usersSnap = await db.collection('users'.get());
+    const usersSnap = await getDocs(collection(db,'users'));
     document.getElementById('stat-users').textContent = usersSnap.size;
   } catch(e){}
   loadAdminOrders();
 };
 
-// ===== CHATBOT =====
+// ===== CHATBOT (Smart Local AI - Free) =====
 let chatOpen = false;
-
-function getBotReply(text) {
-  var q = text.toLowerCase().trim();
-  if(q.length < 1) return "Please type your question!";
-
-  if(q === 'hi' || q === 'hello' || q === 'hey') {
-    return "Hi! Welcome to BENIM! I can help with products, delivery, payment, orders, and more. What do you need?";
-  }
-  if(q.indexOf('about') >= 0 || q.indexOf('what is benim') >= 0 || q.indexOf('who are you') >= 0) {
-    return "BENIM INTERNATIONAL TRADE LIMITED is a modern Nigerian fashion and trading brand. We sell quality footwear and fashion essentials at honest, affordable prices. Our mission is to bridge the gap between affordability and style for every Nigerian.";
-  }
-  if(q.indexOf('flash') >= 0 || q.indexOf('hot deal') >= 0 || q.indexOf('best deal') >= 0) {
-    var fl = allProducts.filter(function(p){ return p.isFlash; });
-    if(fl.length) {
-      var list = fl.slice(0,3).map(function(p){ var price = Number(p.discountPrice)||Number(p.price)||0; return '- ' + p.name + ': N' + price.toLocaleString(); }).join('\n');
-      return 'Flash Sales now live:\n\n' + list + '\n\nSee the Flash Sales section on the homepage!';
-    }
-    return 'Check the Flash Sales section at the top of the homepage for the best deals!';
-  }
-  if(q.indexOf('categor') >= 0 || q.indexOf('what do you sell') >= 0) {
-    var cats = [];
-    allProducts.forEach(function(p){ if(p.category && cats.indexOf(p.category)<0) cats.push(p.category); });
-    var catStr = cats.length ? cats.join(', ') : "Men's Fashion, Women's Fashion, Baby Products, Electronics, Phones, Beauty, Sports, Home & Kitchen";
-    return 'We sell: ' + catStr + '\n\nTap the menu icon to browse categories or use the search bar!';
-  }
-  var words = q.split(' ').filter(function(w){ return w.length > 2; });
-  var matched = allProducts.filter(function(p){
-    var n = (p.name||'').toLowerCase();
-    var cat = (p.category||'').toLowerCase();
-    return n.indexOf(q)>=0 || cat.indexOf(q)>=0 || words.some(function(w){ return n.indexOf(w)>=0 || cat.indexOf(w)>=0; });
-  });
-  if(matched.length > 0) {
-    var items = matched.slice(0,4).map(function(p){ var price = Number(p.discountPrice)>0?Number(p.discountPrice):Number(p.price)||0; return '- ' + p.name + ': N' + price.toLocaleString() + ' (' + (p.stock>0?'In stock':'Out of stock') + ')'; });
-    var extra = matched.length>4 ? '\n...and '+(matched.length-4)+' more. Use search to see all!' : '';
-    return 'Found ' + matched.length + ' product(s):\n\n' + items.join('\n') + extra + '\n\nTap any product to view full details.';
-  }
-  if(q.indexOf('deliver') >= 0 || q.indexOf('shipping') >= 0 || q.indexOf('how long') >= 0 || q.indexOf('dispatch') >= 0) {
-    return 'BENIM Delivery:\n\nLagos: 1-2 business days\nAbuja & Port Harcourt: 2-3 business days\nOther states: 3-5 business days\nRemote areas: 5-7 business days\n\nFees:\nIbadan: N1,500-N2,500 | Lagos: N2,500-N3,500\nAbuja/PH: N4,500-N6,000 | Other: N3,000-N6,000\n\nFREE delivery on orders above N150,000!';
-  }
-  if(q.indexOf('pay') >= 0 || q.indexOf('bank') >= 0 || q.indexOf('transfer') >= 0 || q.indexOf('opay') >= 0 || q.indexOf('cash') >= 0) {
-    return 'Payment Methods:\n\n1. Bank Transfer (Opay)\n   Name: Adewole Aderonke Aishat\n   Account: 9168031213\n   Use Order ID as reference\n\n2. Pay on Delivery\n\nSend receipt to WhatsApp: +234 916 803 1213';
-  }
-  if(q.indexOf('track') >= 0 || q.indexOf('order status') >= 0 || q.indexOf('where is my order') >= 0) {
-    return 'Track your order:\n\n1. Tap the menu icon (top-left)\n2. Select Track My Order\n3. Enter your Order ID or phone number\n\nYou also get WhatsApp updates automatically at every stage!';
-  }
-  if(q.indexOf('cancel') >= 0 || q.indexOf('return') >= 0 || q.indexOf('refund') >= 0 || q.indexOf('wrong item') >= 0 || q.indexOf('damaged') >= 0) {
-    return 'Returns & Refunds:\n\nReturn within 7 days of delivery if item is damaged, wrong, or defective. Must be unused in original packaging.\n\nContact us:\nWhatsApp: +234 916 803 1213\nEmail: shopwitbenim@gmail.com';
-  }
-  if(q.indexOf('size') >= 0 || q.indexOf('colour') >= 0 || q.indexOf('color') >= 0) {
-    return 'Sizes and colours are shown on each product page. Tap a product, select your size and colour, then add to cart.\n\nNeed help? WhatsApp: +234 916 803 1213';
-  }
-  if(q.indexOf('stock') >= 0 || q.indexOf('available') >= 0 || q.indexOf('do you have') >= 0) {
-    var inStock = allProducts.filter(function(p){ return (p.stock||0) > 0; }).length;
-    return 'We have ' + inStock + ' products in stock. Each product page shows live availability. WhatsApp +234 916 803 1213 to be notified when items return.';
-  }
-  if(q.indexOf('account') >= 0 || q.indexOf('login') >= 0 || q.indexOf('sign in') >= 0 || q.indexOf('sign up') >= 0 || q.indexOf('register') >= 0 || q.indexOf('password') >= 0) {
-    return 'Account Help:\n\nCreate account: Tap person icon, then Create Account\nSign in: Tap person icon, then Sign In\nForgot password: On sign-in page, tap Forgot Password\n\nYou need an account to place orders.';
-  }
-  if(q.indexOf('cart') >= 0 || q.indexOf('basket') >= 0 || q.indexOf('wishlist') >= 0 || q.indexOf('saved') >= 0) {
-    return 'Cart & Wishlist:\n\nAdd to cart: Tap a product then Add to Cart.\nView cart: Tap the cart icon at the top.\nSave items: Use the Saved section in the bottom menu.\n\nYou must be signed in to checkout.';
-  }
-  if(q.indexOf('contact') >= 0 || q.indexOf('whatsapp') >= 0 || q.indexOf('phone') >= 0 || q.indexOf('email') >= 0 || q.indexOf('reach') >= 0 || q.indexOf('human') >= 0 || q.indexOf('agent') >= 0) {
-    return 'Contact BENIM:\n\nWhatsApp: +234 916 803 1213\nEmail: shopwitbenim@gmail.com\nHours: Mon-Sat, 8am-8pm\n\nWhatsApp is fastest!';
-  }
-  if(q.indexOf('price') >= 0 || q.indexOf('how much') >= 0 || q.indexOf('cheap') >= 0 || q.indexOf('afford') >= 0) {
-    var prices = allProducts.map(function(p){ return Number(p.discountPrice)>0?Number(p.discountPrice):Number(p.price)||0; }).filter(Boolean).sort(function(a,b){return a-b;});
-    if(prices.length) return 'Prices range from N' + prices[0].toLocaleString() + ' to N' + prices[prices.length-1].toLocaleString() + '.\n\nCheck Flash Sales for the best discounts!';
-    return 'All prices are in Naira and shown on each product. Check Flash Sales for the best discounts!';
-  }
-  if(q.indexOf('thank') >= 0 || q.indexOf('great') >= 0 || q.indexOf('perfect') >= 0) {
-    return 'You are welcome! Happy shopping at BENIM!';
-  }
-  if(q.indexOf('bye') >= 0 || q.indexOf('goodbye') >= 0) {
-    return 'Goodbye! Thanks for visiting BENIM. Have a great day!';
-  }
-  if(q.indexOf('shipping policy') >= 0 || q.indexOf('privacy') >= 0 || q.indexOf('terms') >= 0 || q.indexOf('faq') >= 0) {
-    return 'Our full policies are in the footer menu:\n- Shipping Policy\n- Delivery Policy\n- Privacy Policy\n- Terms & Conditions\n- FAQ\n\nOr WhatsApp: +234 916 803 1213';
-  }
-  return 'I can help you with:\n\n- Product search (just type the product name)\n- Delivery info and fees\n- Payment options\n- Order tracking\n- Returns and refunds\n- Sizes and colours\n- Contact info\n\nOr WhatsApp us: +234 916 803 1213';
-}
+let chatHistory = [];
 
 window.toggleChatbot = function() {
   chatOpen = !chatOpen;
   document.getElementById('chatbot-window').classList.toggle('open', chatOpen);
   if(chatOpen && !document.getElementById('chat-messages').innerHTML) {
-    addChatMsg('Hi! Welcome to BENIM! Ask me about products, delivery, payment, orders, or anything else!', 'bot');
+    addChatMsg("Hi! 👋 I'm Benim's support assistant. Ask me about products, prices, delivery, payment, categories, or orders!", 'bot');
   }
 };
-window.openChatbot = function() { chatOpen = false; toggleChatbot(); };
-window.chatKeyPress = function(e) { if(e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendChatMessage(); } };
-window.sendChatMessage = function() {
-  var input = document.getElementById('chat-input');
-  var text = input.value.trim();
-  if(!text) return;
-  addChatMsg(text, 'user');
-  saveChatSession(text, 'user');
-  input.value = '';
-  var msgs = document.getElementById('chat-messages');
-  var t = document.createElement('div');
-  t.className = 'chat-msg bot'; t.id = 'typing-ind'; t.textContent = '...';
-  msgs.appendChild(t); msgs.scrollTop = 9999;
-  setTimeout(function() {
-    var ti = document.getElementById('typing-ind'); if(ti) ti.remove();
-    var response = getBotReply(text);
-    addChatMsg(response, 'bot');
-    saveChatSession(response, 'bot');
-  }, 700);
+window.openChatbot = function() { chatOpen=false; toggleChatbot(); };
+window.chatKeyPress = function(e) {
+  if(e.key==='Enter'&&!e.shiftKey){ e.preventDefault(); sendChatMessage(); }
 };
 
+function getBotReply(text) {
+  const q = text.toLowerCase().trim();
 
+  // ---- GREETINGS ----
+  if(/^(hi|hello|hey|good morning|good afternoon|good evening|howdy|sup|yo)\b/.test(q))
+    return "Hello! 👋 Welcome to Benim! How can I help you today? You can ask about products, prices, delivery, payment, or orders.";
+
+  // ---- PRODUCT SEARCH ----
+  // Check if asking about a specific product
+  const productMatches = allProducts.filter(p => {
+    const name = (p.name||'').toLowerCase();
+    const cat = (p.category||'').toLowerCase();
+    const words = q.replace(/[?!.,]/g,'').split(/\s+/).filter(w=>w.length>2);
+    return words.some(w => name.includes(w) || cat.includes(w));
+  }).slice(0,3);
+
+  if(productMatches.length > 0 && (q.includes('price')||q.includes('cost')||q.includes('how much')||q.includes('sell')||q.includes('have')||q.includes('buy')||q.includes('want')||q.includes('get')||q.includes('stock')||q.includes('available')||productMatches.length===1)) {
+    if(productMatches.length === 1) {
+      const p = productMatches[0];
+      const price = Number(p.discountPrice)||Number(p.price)||0;
+      const oldPrice = Number(p.price)||0;
+      const inStock = (p.stock||0) > 0;
+      const disc = p.discountPrice && p.discountPrice < oldPrice ? ` (was ₦${oldPrice.toLocaleString()})` : '';
+      return `We have **${p.name}**! 🛍️\nPrice: ₦${price.toLocaleString()}${disc}\nStatus: ${inStock?'✅ In stock':'❌ Out of stock'}\nCategory: ${p.category||'General'}\n\nTap it on the home page to add to cart!`;
+    } else {
+      const list = productMatches.map(p=>{
+        const price = Number(p.discountPrice)||Number(p.price)||0;
+        return `• ${p.name} — ₦${price.toLocaleString()}`;
+      }).join('\n');
+      return `Here's what we found:\n${list}\n\nTap any product on the home page to view details and add to cart!`;
+    }
+  }
+
+  // ---- PRICE/PRODUCT BROWSING ----
+  if(q.includes('cheapest')||q.includes('lowest price')||q.includes('affordable')) {
+    const sorted = [...allProducts].filter(p=>p.price).sort((a,b)=>(Number(a.discountPrice||a.price))-(Number(b.discountPrice||b.price))).slice(0,3);
+    const list = sorted.map(p=>`• ${p.name} — ₦${(Number(p.discountPrice||p.price)).toLocaleString()}`).join('\n');
+    return `Our most affordable products:\n${list}\n\nCheck the home page for all deals! 😊`;
+  }
+  if(q.includes('expensive')||q.includes('premium')||q.includes('highest')) {
+    const sorted = [...allProducts].filter(p=>p.price).sort((a,b)=>(Number(b.discountPrice||b.price))-(Number(a.discountPrice||a.price))).slice(0,3);
+    const list = sorted.map(p=>`• ${p.name} — ₦${(Number(p.discountPrice||p.price)).toLocaleString()}`).join('\n');
+    return `Our premium products:\n${list}`;
+  }
+  if(q.includes('discount')||q.includes('sale')||q.includes('promo')||q.includes('offer')||q.includes('deal')) {
+    const discounted = allProducts.filter(p=>p.discountPrice && Number(p.discountPrice)<Number(p.price)).slice(0,4);
+    if(discounted.length) {
+      const list = discounted.map(p=>{
+        const save = Number(p.price)-Number(p.discountPrice);
+        return `• ${p.name} — ₦${Number(p.discountPrice).toLocaleString()} (save ₦${save.toLocaleString()})`;
+      }).join('\n');
+      return `🔥 Current deals & discounts:\n${list}\n\nCheck Flash Sales on the home page for more!`;
+    }
+    return "Check our Flash Sales section on the home page for the best current deals! 🔥";
+  }
+
+  // ---- CATEGORIES ----
+  if(q.includes('categor')||q.includes('what do you sell')||q.includes('what products')||q.includes('what items')) {
+    const cats = [...new Set(allProducts.map(p=>p.category).filter(Boolean))];
+    const list = cats.length ? cats.join(', ') : 'Electronics, Fashion, Men\'s Fashion, Women\'s Fashion, Baby Products, Home & Kitchen, Beauty, Sports, Phones, Toys';
+    return `We sell a wide range of products! 🛒\n\nCategories: ${list}\n\nTap "Categories" at the bottom of the app to browse by category.`;
+  }
+  if(q.includes('fashion')||q.includes('cloth')||q.includes('wear')||q.includes('shirt')||q.includes('trouser')||q.includes('dress')||q.includes('shoe')||q.includes('jean')) {
+    const fashion = allProducts.filter(p=>(p.category||'').toLowerCase().includes('fashion')||(p.name||'').toLowerCase().includes(q.split(' ')[0])).slice(0,3);
+    if(fashion.length) {
+      const list = fashion.map(p=>`• ${p.name} — ₦${(Number(p.discountPrice||p.price)).toLocaleString()}`).join('\n');
+      return `Here are some fashion items:\n${list}\n\nTap Categories → Fashion to see all! 👗`;
+    }
+    return "We have a great fashion collection! Tap Categories → Men's Fashion or Women's Fashion to browse. 👗";
+  }
+  if(q.includes('phone')||q.includes('mobile')||q.includes('smartphone')) {
+    const phones = allProducts.filter(p=>(p.category||'').toLowerCase().includes('phone')||(p.name||'').toLowerCase().includes('phone')).slice(0,3);
+    if(phones.length) {
+      const list = phones.map(p=>`• ${p.name} — ₦${(Number(p.discountPrice||p.price)).toLocaleString()}`).join('\n');
+      return `📱 Phones we carry:\n${list}`;
+    }
+    return "Browse our Phones & Electronics category for the latest devices! 📱 Tap Categories to see all.";
+  }
+  if(q.includes('electron')||q.includes('gadget')||q.includes('watch')||q.includes('laptop')||q.includes('tv')) {
+    const elec = allProducts.filter(p=>(p.category||'').toLowerCase().includes('electron')||(p.name||'').toLowerCase().match(/watch|tv|laptop|tablet/)).slice(0,3);
+    if(elec.length) {
+      const list = elec.map(p=>`• ${p.name} — ₦${(Number(p.discountPrice||p.price)).toLocaleString()}`).join('\n');
+      return `⚡ Electronics we carry:\n${list}`;
+    }
+    return "We carry electronics and gadgets! Tap Categories → Electronics to browse. ⚡";
+  }
+
+  // ---- DELIVERY ----
+  if(q.includes('deliver')||q.includes('shipping')||q.includes('ship')||q.includes('how long')||q.includes('when will')||q.includes('arrive')) {
+    return "🚚 Delivery info:\n• FREE delivery on orders ₦150,000 and above\n• ₦3,500 flat delivery fee for orders below ₦150,000\n• Delivery is made to your saved address\n\nFor delivery time, contact us on WhatsApp: +2349168031213";
+  }
+
+  // ---- PAYMENT ----
+  if(q.includes('pay')||q.includes('payment')||q.includes('transfer')||q.includes('bank')||q.includes('opay')||q.includes('cash')) {
+    return "💳 Payment options:\n1. Bank Transfer (Opay)\n   • Bank: Opay\n   • Name: Adewole Aderonke Aishat\n   • Account: 9168031213\n2. Pay on Delivery\n\nAfter transfer, send your receipt to our WhatsApp: +2349168031213";
+  }
+
+  // ---- ORDERS & TRACKING ----
+  if(q.includes('track')||q.includes('my order')||q.includes('order status')||q.includes('where is my')) {
+    return "📦 To track your order:\n1. Tap the menu (≡) at the top\n2. Select 'Track Order'\n3. Enter your Order ID or phone number\n\nOr contact us on WhatsApp: +2349168031213 with your order ID.";
+  }
+  if(q.includes('order')||q.includes('purchase')||q.includes('bought')||q.includes('place')) {
+    return "🛍️ To place an order:\n1. Find your product on the home page\n2. Tap it to view details\n3. Add to cart\n4. Go to cart and checkout\n5. Fill in your details and confirm\n\nNeed help? WhatsApp us: +2349168031213";
+  }
+
+  // ---- RETURN & REFUND ----
+  if(q.includes('return')||q.includes('refund')||q.includes('exchange')||q.includes('wrong item')||q.includes('damaged')||q.includes('complaint')) {
+    return "↩️ Return & Refund Policy:\n• Contact us within 7 days of receiving your order\n• Send your Order ID and reason via WhatsApp\n• We'll guide you through the return process\n\nWhatsApp: +2349168031213";
+  }
+
+  // ---- CONTACT ----
+  if(q.includes('contact')||q.includes('whatsapp')||q.includes('call')||q.includes('reach')||q.includes('speak')||q.includes('talk')||q.includes('support')||q.includes('help')) {
+    return "📞 Contact Benim:\n• WhatsApp: +2349168031213\n• Tap 'Contact' in the menu for our contact form\n• Our team responds quickly on WhatsApp!\n\nWe're here to help! 😊";
+  }
+
+  // ---- ACCOUNT ----
+  if(q.includes('account')||q.includes('sign in')||q.includes('login')||q.includes('register')||q.includes('sign up')||q.includes('password')) {
+    return "👤 Account help:\n• Tap the person icon at the top right to sign in\n• New customer? Tap 'Create Account'\n• Forgot password? Use the 'Forgot Password' link on the sign-in page\n\nNeed more help? WhatsApp: +2349168031213";
+  }
+
+  // ---- CART ----
+  if(q.includes('cart')||q.includes('basket')||q.includes('checkout')) {
+    return "🛒 Cart help:\n• Tap the cart icon at the top right to view your cart\n• Add items from any product page\n• Tap 'Checkout' when ready to order\n\nDelivery is FREE for orders ₦150,000+!";
+  }
+
+  // ---- ABOUT ----
+  if(q.includes('about')||q.includes('who are you')||q.includes('benim')||q.includes('trusted')||q.includes('legit')||q.includes('real')) {
+    return "🏪 About Benim:\nBenim is a trusted Nigerian e-commerce shop selling quality products across fashion, electronics, baby items, home goods, and more. We offer genuine products, secure payment, and reliable delivery.\n\nShop with confidence! ✅";
+  }
+
+  // ---- WISHLIST/SAVED ----
+  if(q.includes('wishlist')||q.includes('saved')||q.includes('favorite')||q.includes('favourite')) {
+    return "❤️ To save products:\n• Tap the heart icon on any product to save it\n• View saved items by tapping 'Saved' at the bottom of the app";
+  }
+
+  // ---- THANK YOU ----
+  if(q.includes('thank')||q.includes('thanks')||q.includes('appreciate')) {
+    return "You're welcome! 😊 Happy shopping at Benim! If you need anything else, I'm here. 🛍️";
+  }
+
+  // ---- GOODBYE ----
+  if(q.includes('bye')||q.includes('goodbye')||q.includes('see you')||q.includes('later')) {
+    return "Goodbye! 👋 Thanks for visiting Benim. Come back anytime! 😊";
+  }
+
+  // ---- DEFAULT with suggestions ----
+  return `I'm not sure about that, but I can help you with:\n• 🔍 Finding products (e.g. "Do you have jeans?")\n• 💰 Prices & discounts\n• 🚚 Delivery & shipping\n• 💳 Payment methods\n• 📦 Order tracking\n• ↩️ Returns & refunds\n• 📞 Contact us\n\nWhat would you like to know?`;
+}
+
+window.sendChatMessage = function() {
+  const input = document.getElementById('chat-input');
+  const text = input.value.trim();
+  if(!text) return;
+  addChatMsg(text, 'user');
+  input.value = '';
+
+  // Typing effect delay
+  const typingEl = document.createElement('div');
+  typingEl.className = 'chat-msg bot typing-indicator';
+  typingEl.innerHTML = '<span></span><span></span><span></span>';
+  document.getElementById('chat-messages').appendChild(typingEl);
+  document.getElementById('chat-messages').scrollTop = 99999;
+
+  setTimeout(function() {
+    typingEl.remove();
+    const reply = getBotReply(text);
+    addChatMsg(reply, 'bot');
+    saveChatSession(text, 'user');
+    saveChatSession(reply, 'bot');
+  }, 700);
+};
 
 function addChatMsg(text, role) {
   const msgs = document.getElementById('chat-messages');
@@ -2898,11 +3007,11 @@ function addChatMsg(text, role) {
 async function saveChatSession(text, role) {
   try {
     if(!chatSessionId) chatSessionId = 'session-'+Date.now();
-    const ref = db.collection('chatbot_sessions').doc(chatSessionId);
-    const snap = await ref.get();
-    const existing = snap.exists ? (snap.data().messages||[]) : [];
+    const ref = doc(db,'chatbot_sessions',chatSessionId);
+    const snap = await getDoc(ref);
+    const existing = snap.exists() ? (snap.data().messages||[]) : [];
     existing.push({ text, role, ts: Date.now() });
-    await ref.set({ messages: existing, userEmail: currentUser?.email||'Guest', updatedAt: firebase.firestore.FieldValue.serverTimestamp() });
+    await setDoc(ref, { messages: existing, userEmail: currentUser?.email||'Guest', updatedAt: serverTimestamp() });
   } catch(e){}
 }
 
@@ -2920,8 +3029,8 @@ function notifyBuyerWhatsApp(phone, orderId, status, items, customerName, total,
     `🧾 *Order ID:* ${orderId}\n` +
     `${statusEmoji} *Status:* ${statusLabel}\n` +
     `🛍️ *Items:* ${items}\n` +
-    `💰 *Order Total:* ₦${Number(total||0).toLocaleString()}\n` +
-    (Number(deliveryFee)>0 ? `🚚 *Delivery Fee:* ₦${Number(deliveryFee).toLocaleString()}\n` : `🚚 *Delivery:* FREE\n`) +
+    `💰 *Order Total:* &#8358;${Number(total||0).toLocaleString()}\n` +
+    (Number(deliveryFee)>0 ? `🚚 *Delivery Fee:* &#8358;${Number(deliveryFee).toLocaleString()}\n` : `🚚 *Delivery:* FREE\n`) +
     `\nThank you for shopping with *Benim*! 🧡\nQuestions? Reply to this message.`
   );
   window.open(`https://wa.me/${cleanPhone}?text=${msg}`, '_blank');
@@ -2929,13 +3038,13 @@ function notifyBuyerWhatsApp(phone, orderId, status, items, customerName, total,
 
 function notifyAdminWhatsApp(orderId, customerName, customerEmail, items, total, deliveryFee, payment, address) {
   const msg = encodeURIComponent(
-    `🛒 *New Order Received — Benim!*\n\n` +
+    `🛒 *New Order Received &mdash; Benim!*\n\n` +
     `🧾 *Order ID:* ${orderId}\n` +
     `👤 *Customer:* ${customerName}\n` +
     `📧 *Email:* ${customerEmail}\n` +
     `📦 *Items:* ${items}\n` +
-    `💰 *Subtotal:* ₦${Number(total||0).toLocaleString()}\n` +
-    (Number(deliveryFee)>0 ? `🚚 *Delivery Fee:* ₦${Number(deliveryFee).toLocaleString()}\n` : `🚚 *Delivery:* FREE\n`) +
+    `💰 *Subtotal:* &#8358;${Number(total||0).toLocaleString()}\n` +
+    (Number(deliveryFee)>0 ? `🚚 *Delivery Fee:* &#8358;${Number(deliveryFee).toLocaleString()}\n` : `🚚 *Delivery:* FREE\n`) +
     `💳 *Payment:* ${payment==='bank'?'Bank Transfer':'Pay on Delivery'}\n` +
     `📍 *Address:* ${address}\n` +
     `\nPlease confirm the order in the Admin Panel.`
@@ -2980,30 +3089,51 @@ function startCountdown() {
 }
 
 // ===== NAVIGATION =====
-window.navigate = function(page) {
+const _navStack = ['home'];
+
+function _showPage(page) {
   document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
   const el = document.getElementById('page-'+page);
   if(el) el.classList.add('active');
-  // update bottom nav
   document.querySelectorAll('.bnav-item').forEach(b=>b.classList.remove('active'));
   const bnav = document.getElementById('bnav-'+page);
   if(bnav) bnav.classList.add('active');
   window.scrollTo(0,0);
-  // Page-specific logic
   if(page==='cart') renderCart();
   if(page==='orders') loadOrders();
   if(page==='wishlist') renderWishlist();
   if(page==='addresses') loadAddresses();
   if(page==='search') { if(!allProducts.length) loadProducts(); applyFilters(); }
-  if(page==='admin') {
-    if(!isAdmin) { navigate('home'); return; }
-    loadAdminProducts();
-    loadAdminStats();
-  }
-  // Footer pages don't need special loading
-  // Push state for SPA
-  history.pushState({ page }, '', '#'+page);
+  if(page==='admin') { loadAdminProducts(); loadAdminStats(); }
+}
+
+window.navigate = function(page) {
+  if(page==='admin' && !isAdmin) { navigate('home'); return; }
+  if(_navStack[_navStack.length-1] !== page) _navStack.push(page);
+  // Push a new entry for EVERY navigation so back button has entries to consume
+  history.pushState({benimPage: page}, '', location.href);
+  _showPage(page);
 };
+
+window.goBack = function() {
+  if(_navStack.length > 1) {
+    _navStack.pop();
+    _showPage(_navStack[_navStack.length-1]);
+  }
+};
+
+// On Android/Chrome: popstate fires when back is pressed.
+// history.go(1) immediately cancels the back by going forward again,
+// then we do our own in-app navigation.
+window.addEventListener('popstate', function(e) {
+  // Always go forward to cancel the browser back
+  history.go(1);
+  // Then do in-app back
+  if(_navStack.length > 1) {
+    _navStack.pop();
+    _showPage(_navStack[_navStack.length-1]);
+  }
+});
 
 // ===== FAQ TOGGLE =====
 window.toggleFaq = function(el) {
@@ -3026,9 +3156,6 @@ window.sendContactMessage = function() {
   showToast('Opening WhatsApp to send your message!');
 };
 
-window.addEventListener('popstate', (e) => {
-  if(e.state&&e.state.page) navigate(e.state.page);
-});
 
 // ===== SIDEBAR =====
 window.toggleSidebar = function() {
@@ -3067,15 +3194,15 @@ window.showToast = function(message, type='success') {
 
 // ===== INIT =====
 async function init() {
+  // Seed history with one entry so popstate can fire on first back press
+  history.replaceState({benimPage:'home'}, '', location.href);
   initSlider();
   startCountdown();
   renderSkeletons('flash-grid',4);
   renderSkeletons('featured-grid',8);
   renderSkeletons('trending-grid',8);
   await loadProducts();
-  // Handle hash navigation
-  const hash = location.hash.replace('#','');
-  if(hash && document.getElementById('page-'+hash)) navigate(hash);
+  _showPage('home');
 }
 
 init();
