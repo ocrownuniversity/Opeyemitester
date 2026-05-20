@@ -509,18 +509,18 @@ body{padding-bottom:70px}
 /* PRODUCT GRID &mdash; 3 columns on ALL screen sizes */
 .product-grid{display:grid!important;grid-template-columns:repeat(3,1fr)!important;gap:6px!important}
 
-/* PRODUCT CARD */
-.product-card{background:#fff!important;border-radius:10px!important;overflow:hidden!important;box-shadow:0 1px 4px rgba(0,0,0,.08)!important;border:1px solid #f0f0f0!important}
-.product-img-wrap{aspect-ratio:1!important;background:#f8f8f8!important}
-.product-info{padding:8px 8px 10px!important}
-.product-name{font-size:12px!important;font-weight:700!important;color:#222!important;line-height:1.3!important;margin-bottom:4px!important;font-family:'Poppins',sans-serif!important}
-.product-price{font-size:14px!important;font-weight:900!important;color:#e8420a!important}
-.product-old-price{font-size:10px!important;color:#aaa!important;text-decoration:line-through!important}
-.product-badge{top:6px!important;left:6px!important;font-size:9px!important;padding:2px 6px!important;border-radius:3px!important;background:#e8420a!important;font-weight:800!important}
-.product-wishlist-btn{width:26px!important;height:26px!important;top:6px!important;right:6px!important;font-size:12px!important}
-.sold-bar-wrap{height:4px!important;border-radius:2px!important}
-.sold-bar{background:#e8420a!important}
-.sold-count{font-size:9px!important;color:#999!important}
+/* PRODUCT CARD — clean like reference image */
+.product-card{background:#fff!important;border-radius:8px!important;overflow:hidden!important;box-shadow:0 1px 3px rgba(0,0,0,.07)!important;border:none!important;cursor:pointer!important}
+.product-card:hover{box-shadow:0 3px 10px rgba(0,0,0,.12)!important;transform:translateY(-1px)!important}
+.product-img-wrap{aspect-ratio:1!important;background:#f9f9f9!important;overflow:hidden!important;position:relative!important}
+.product-img-wrap img{width:100%!important;height:100%!important;object-fit:cover!important}
+.product-info{padding:7px 7px 9px!important}
+.product-name{font-size:11.5px!important;font-weight:700!important;color:#111!important;line-height:1.35!important;margin-bottom:5px!important;font-family:'Poppins',sans-serif!important;display:-webkit-box!important;-webkit-line-clamp:2!important;-webkit-box-orient:vertical!important;overflow:hidden!important}
+.product-price-row{display:flex!important;align-items:center!important;gap:0!important}
+.product-price{font-size:14px!important;font-weight:900!important;color:#111!important;font-family:'Poppins',sans-serif!important}
+.product-old-price{display:none!important}
+.product-badge{top:7px!important;left:7px!important;font-size:10px!important;padding:3px 7px!important;border-radius:4px!important;background:#e8420a!important;color:#fff!important;font-weight:800!important;position:absolute!important;z-index:2!important}
+.product-wishlist-btn{display:none!important}
 
 /* BOTTOM NAV */
 .bottom-nav{background:#fff!important;border-top:1px solid #eee!important;padding:0!important}
@@ -1939,30 +1939,15 @@ function productCardHTML(p, isFlash=false) {
   const discPct = hasDisc ? Math.round((1-disc/price)*100) : 0;
   const inWish = wishlist.includes(p.id);
   const img = (p.images&&p.images[0]) ? p.images[0] : 'https://placehold.co/300x300/f8f8f8/cccccc?text=No+Image';
-  const soldCount = p.soldCount || Math.floor(Math.random()*150+10);
-  const soldPct = Math.min(100, Math.round(soldCount/(soldCount+(p.stock||50))*100));
   return `<div class="product-card" onclick="openProduct('${p.id}')">
     <div class="product-img-wrap">
       <img src="${img}" alt="${p.name||''}" loading="lazy" onerror="this.src='https://placehold.co/300x300/f8f8f8/cccccc?text=No+Image'">
       ${hasDisc ? `<span class="product-badge">-${discPct}%</span>` : ''}
-      <button class="product-wishlist-btn${inWish?' active':''}" onclick="event.stopPropagation();toggleWishlist('${p.id}')" title="Wishlist"><i class="fas fa-heart"></i></button>
     </div>
     <div class="product-info">
       <div class="product-name">${p.name||'Product'}</div>
       <div class="product-price-row">
-        <span class="product-price">&#8358;${displayPrice.toLocaleString()}</span>
-        ${hasDisc?`<span class="product-old-price">&#8358;${price.toLocaleString()}</span>`:''}
-      </div>
-      ${isFlash ? `<div class="product-sold-row">
-        <div class="sold-bar-wrap"><div class="sold-bar" style="width:${soldPct}%"></div></div>
-        <span class="sold-count">${soldCount} sold</span>
-      </div>` : `<div style="display:flex;align-items:center;gap:3px;margin-top:4px">
-        <span style="color:var(--yellow);font-size:11px">${starsHTML(p.rating||0)}</span>
-        <span style="font-size:11px;color:var(--gray-400)">(${p.reviewCount||0})</span>
-      </div>`}
-      <div class="card-action-btns" onclick="event.stopPropagation()">
-        <button class="card-btn-cart" onclick="quickAddToCart('${p.id}')"><i class="fas fa-cart-plus"></i> Add to Cart</button>
-        <button class="card-btn-buy" onclick="cardBuyNow('${p.id}')">Buy Now</button>
+        <span class="product-price">&#8358; ${displayPrice.toLocaleString()}</span>
       </div>
     </div>
   </div>`;
