@@ -458,6 +458,26 @@ body{padding-bottom:70px}
 .faq-item.open .faq-q{background:rgba(232,66,10,.04);color:var(--orange)}
 .faq-item.open .faq-q i{transform:rotate(180deg)}
 .faq-item.open .faq-a{display:block}
+
+/* ===== SPLASH SCREEN ===== */
+#splash-screen{position:fixed;inset:0;z-index:99999;display:flex;align-items:center;justify-content:center;overflow:hidden;transition:opacity .7s ease,transform .7s ease}
+#splash-screen.fade-out{opacity:0;pointer-events:none;transform:scale(1.04)}
+.splash-bg{position:absolute;inset:0;background:radial-gradient(ellipse at 40% 30%,#3a1a00 0%,#1a0a00 40%,#0d0500 100%)}
+.splash-bg::after{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 60% 70%,rgba(200,120,10,.18) 0%,transparent 70%)}
+.splash-content{position:relative;z-index:2;display:flex;flex-direction:column;align-items:center;padding:24px}
+.splash-logo-wrap{position:relative;width:200px;height:200px;display:flex;align-items:center;justify-content:center;margin-bottom:8px}
+.splash-logo{width:200px;height:200px;object-fit:contain;border-radius:20px;position:relative;z-index:2;animation:splashPop .8s cubic-bezier(.34,1.56,.64,1) .2s both}
+.splash-glow{position:absolute;inset:-20px;border-radius:50%;background:radial-gradient(circle,rgba(210,130,10,.45) 0%,transparent 70%);animation:splashGlowPulse 2s ease-in-out infinite}
+.splash-brand{font-family:'Poppins',sans-serif;font-size:36px;font-weight:800;letter-spacing:8px;color:#c8780a;text-shadow:0 0 30px rgba(200,120,10,.6),0 2px 4px rgba(0,0,0,.5);margin-top:4px;animation:splashFadeUp .7s ease .5s both}
+.splash-tagline{font-family:'Nunito',sans-serif;font-size:13px;font-weight:600;letter-spacing:3px;color:rgba(200,150,80,.7);text-transform:uppercase;margin-bottom:28px;animation:splashFadeUp .7s ease .65s both}
+.splash-loader{width:220px;display:flex;flex-direction:column;align-items:center;gap:8px;animation:splashFadeUp .7s ease .8s both}
+.splash-bar{width:100%;height:3px;background:rgba(200,120,10,.2);border-radius:99px;overflow:hidden}
+.splash-fill{height:100%;width:0%;background:linear-gradient(90deg,#a05010,#e8900a,#ffd060,#e8900a);border-radius:99px;transition:width .12s ease;box-shadow:0 0 8px rgba(232,144,10,.7)}
+.splash-pct{font-family:'Poppins',sans-serif;font-size:11px;font-weight:700;color:rgba(200,150,80,.6);letter-spacing:1px}
+@keyframes splashPop{from{opacity:0;transform:scale(.7)}to{opacity:1;transform:scale(1)}}
+@keyframes splashFadeUp{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
+@keyframes splashGlowPulse{0%,100%{opacity:.6;transform:scale(1)}50%{opacity:1;transform:scale(1.12)}}
+
 </style>
 
 <style>
@@ -493,16 +513,10 @@ body{padding-bottom:70px}
 .slider-dots{bottom:8px!important}
 
 /* HOME SECTIONS */
-.home-section{background:#fff!important;margin:8px 0 0!important;padding:14px 0 18px!important}
-.home-section-title{font-size:16px!important;font-weight:800!important;color:#111!important;font-family:'Poppins',sans-serif!important;margin-bottom:4px!important;padding:0 12px!important}
-.home-section-header{margin-bottom:14px!important;display:flex!important;align-items:center!important;justify-content:space-between!important;padding:0 12px!important}
-.home-see-all{color:#e8420a!important;font-size:13px!important;font-weight:700!important;white-space:nowrap!important;padding-top:2px!important;cursor:pointer!important}
-
-/* PRODUCT GRID — force clean white, no extra bg */
-#flash-section,#page-home .home-section{border-radius:0!important}
-
-/* PAGE BACKGROUNDS — slightly off-white between sections */
-#page-home{background:#f0f0f0!important}
+.home-section{background:#fff!important;margin:8px 0 0!important;padding:14px 12px 18px!important}
+.home-section-title{font-size:16px!important;font-weight:800!important;color:#111!important;font-family:'Poppins',sans-serif!important;margin-bottom:4px!important}
+.home-section-header{margin-bottom:14px!important}
+.home-see-all{color:#e8420a!important;font-size:13px!important;font-weight:700!important;white-space:nowrap!important;padding-top:2px!important}
 
 /* FLASH SECTION */
 #flash-section{margin-top:8px!important}
@@ -511,14 +525,12 @@ body{padding-bottom:70px}
 .flash-time{color:#e8420a!important;font-size:12px!important;font-weight:900!important}
 .flash-colon{color:#e8420a!important;font-weight:900!important}
 .flash-bolt{color:#e8420a!important}
-/* Flash section header needs padding too */
-#flash-section .home-section-header{padding:0 12px!important}
 
-/* PRODUCT GRID — 3 columns full width, no side padding */
-.product-grid{display:grid!important;grid-template-columns:repeat(3,1fr)!important;gap:2px!important;width:100%!important}
+/* PRODUCT GRID &mdash; 3 columns on ALL screen sizes */
+.product-grid{display:grid!important;grid-template-columns:repeat(3,1fr)!important;gap:6px!important}
 
 /* PRODUCT CARD — matches screenshot exactly */
-.pc{background:#fff;border-radius:0;overflow:hidden;cursor:pointer;display:flex;flex-direction:column;box-shadow:none;border:none;border-right:1px solid #f0f0f0;border-bottom:1px solid #f0f0f0}
+.pc{background:#fff;border-radius:10px;overflow:hidden;cursor:pointer;display:flex;flex-direction:column;box-shadow:0 1px 4px rgba(0,0,0,.07);border:1px solid #f0f0f0}
 .pc:hover{box-shadow:0 3px 12px rgba(0,0,0,.12)}
 .pc-img-wrap{position:relative;width:100%;aspect-ratio:1;background:#f5f5f5;overflow:hidden;flex-shrink:0}
 .pc-img-wrap img{width:100%;height:100%;object-fit:cover;display:block}
@@ -544,7 +556,8 @@ body{padding-bottom:70px}
 .bnav-badge{top:4px!important;right:calc(50% - 18px)!important;font-size:9px!important;padding:1px 4px!important}
 
 /* PAGE BACKGROUNDS */
-body{padding-bottom:65px!important;background:#f0f0f0!important}
+#page-home{background:#f2f2f2!important}
+body{padding-bottom:65px!important;background:#f2f2f2!important}
 
 /* CARD ACTION BUTTONS */
 .card-action-btns{display:flex;gap:4px;margin-top:8px}
@@ -552,16 +565,26 @@ body{padding-bottom:65px!important;background:#f0f0f0!important}
 .card-btn-cart:hover{background:#111;color:#fff}
 .card-btn-buy{flex:1;background:transparent;color:#111;border:1.5px solid #111;border-radius:5px;padding:5px 0;font-size:10px;font-weight:800;cursor:pointer;font-family:'Poppins',sans-serif;transition:.15s}
 .card-btn-buy:hover{background:#111;color:#fff}
-
-/* TYPING INDICATOR */
-.typing-indicator{display:flex!important;gap:4px;align-items:center;padding:10px 14px!important;min-width:50px}
-.typing-indicator span{width:7px;height:7px;border-radius:50%;background:#ccc;display:inline-block;animation:typingBounce 1.2s infinite ease-in-out}
-.typing-indicator span:nth-child(2){animation-delay:.2s}
-.typing-indicator span:nth-child(3){animation-delay:.4s}
-@keyframes typingBounce{0%,80%,100%{transform:scale(0.6);opacity:.5}40%{transform:scale(1);opacity:1}}
 </style>
 </head>
 <body>
+<!-- SPLASH SCREEN -->
+<div id="splash-screen">
+  <div class="splash-bg"></div>
+  <div class="splash-content">
+    <div class="splash-logo-wrap">
+      <img src="data:image/webp;base64,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" alt="Benim" class="splash-logo">
+      <div class="splash-glow"></div>
+    </div>
+    <div class="splash-brand">BENIM</div>
+    <div class="splash-tagline">Premium Fashion Store</div>
+    <div class="splash-loader">
+      <div class="splash-bar"><div class="splash-fill" id="splash-fill"></div></div>
+      <div class="splash-pct" id="splash-pct">0%</div>
+    </div>
+  </div>
+</div>
+
 
 <!-- ====== HEADER ====== -->
 <header id="header">
@@ -1666,7 +1689,47 @@ body{padding-bottom:65px!important;background:#f0f0f0!important}
       <div class="form-group"><label class="form-label">Street Address *</label><input class="form-input" id="addr-street" placeholder="Street, house number"></div>
       <div class="form-row">
         <div class="form-group"><label class="form-label">City *</label><input class="form-input" id="addr-city" placeholder="City"></div>
-        <div class="form-group"><label class="form-label">State *</label><input class="form-input" id="addr-state" placeholder="State"></div>
+        <div class="form-group"><label class="form-label">State *</label>
+<select class="form-input" id="addr-state"><option value="">-- Select State --</option>
+<option value="Abia">Abia — ₦5,000</option>
+<option value="Abuja">Abuja — ₦3,500</option>
+<option value="Adamawa">Adamawa — ₦6,000</option>
+<option value="Akwa Ibom">Akwa Ibom — ₦5,000</option>
+<option value="Anambra">Anambra — ₦4,500</option>
+<option value="Bauchi">Bauchi — ₦6,000</option>
+<option value="Bayelsa">Bayelsa — ₦5,000</option>
+<option value="Benue">Benue — ₦5,500</option>
+<option value="Borno">Borno — ₦6,500</option>
+<option value="Cross River">Cross River — ₦5,500</option>
+<option value="Delta">Delta — ₦4,500</option>
+<option value="Ebonyi">Ebonyi — ₦5,000</option>
+<option value="Edo">Edo — ₦4,500</option>
+<option value="Ekiti">Ekiti — ₦4,500</option>
+<option value="Enugu">Enugu — ₦4,500</option>
+<option value="FCT">FCT — ₦3,500</option>
+<option value="Gombe">Gombe — ₦6,000</option>
+<option value="Imo">Imo — ₦4,500</option>
+<option value="Jigawa">Jigawa — ₦6,000</option>
+<option value="Kaduna">Kaduna — ₦5,000</option>
+<option value="Kano">Kano — ₦5,000</option>
+<option value="Katsina">Katsina — ₦5,500</option>
+<option value="Kebbi">Kebbi — ₦6,000</option>
+<option value="Kogi">Kogi — ₦5,000</option>
+<option value="Kwara">Kwara — ₦4,500</option>
+<option value="Lagos">Lagos — ₦3,000</option>
+<option value="Nassarawa">Nassarawa — ₦5,000</option>
+<option value="Niger">Niger — ₦5,500</option>
+<option value="Ogun">Ogun — ₦3,500</option>
+<option value="Ondo">Ondo — ₦4,500</option>
+<option value="Osun">Osun — ₦4,000</option>
+<option value="Oyo">Oyo — ₦4,000</option>
+<option value="Plateau">Plateau — ₦5,500</option>
+<option value="Rivers">Rivers — ₦4,500</option>
+<option value="Sokoto">Sokoto — ₦6,000</option>
+<option value="Taraba">Taraba — ₦6,000</option>
+<option value="Yobe">Yobe — ₦6,500</option>
+<option value="Zamfara">Zamfara — ₦6,000</option>
+</select></div>
       </div>
     </div>
     <div class="modal-footer">
@@ -1726,6 +1789,17 @@ const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getFirestore(app);
 const ADMIN_EMAIL = 'shopwitbenim@gmail.com';
+
+// ===== STATE SHIPPING FEES =====
+const STATE_SHIPPING_FEES = {"Lagos": 3000, "Abuja": 3500, "FCT": 3500, "Ogun": 3500, "Oyo": 4000, "Osun": 4000, "Ondo": 4500, "Ekiti": 4500, "Edo": 4500, "Delta": 4500, "Rivers": 4500, "Bayelsa": 5000, "Anambra": 4500, "Enugu": 4500, "Imo": 4500, "Abia": 5000, "Ebonyi": 5000, "Cross River": 5500, "Akwa Ibom": 5000, "Kano": 5000, "Kaduna": 5000, "Katsina": 5500, "Sokoto": 6000, "Kebbi": 6000, "Zamfara": 6000, "Niger": 5500, "Kwara": 4500, "Kogi": 5000, "Benue": 5500, "Plateau": 5500, "Nassarawa": 5000, "Taraba": 6000, "Adamawa": 6000, "Borno": 6500, "Yobe": 6500, "Gombe": 6000, "Bauchi": 6000, "Jigawa": 6000};
+function getShippingFee(stateName) {
+  if (!stateName) return 3500;
+  if (STATE_SHIPPING_FEES[stateName] !== undefined) return STATE_SHIPPING_FEES[stateName];
+  const lower = stateName.toLowerCase();
+  const key = Object.keys(STATE_SHIPPING_FEES).find(k => k.toLowerCase() === lower);
+  return key ? STATE_SHIPPING_FEES[key] : 4000;
+}
+
 
 // ===== STATE =====
 let currentUser = null;
@@ -1969,8 +2043,8 @@ function productCardHTML(p, isFlash=false) {
     <div class="pc-body">
       <div class="pc-name">${p.name||'Product'}</div>
       <div class="pc-prices">
-        <span class="pc-price">&#8358;${displayPrice.toLocaleString()}</span>
-        ${hasDisc ? `<span class="pc-old">&#8358;${price.toLocaleString()}</span>` : ''}
+        <span class="pc-price">₦${displayPrice.toLocaleString()}</span>
+        ${hasDisc ? `<span class="pc-old">₦${price.toLocaleString()}</span>` : ''}
       </div>
       <div class="pc-sold-row">
         <div class="pc-bar-bg"><div class="pc-bar-fill" style="width:${soldPct}%"></div></div>
@@ -2000,8 +2074,8 @@ window.openProduct = function(id) {
   const displayPrice = disc>0 ? disc : price;
   const hasDisc = disc>0 && disc<price;
   const discPct = hasDisc ? Math.round((1-disc/price)*100) : 0;
-  document.getElementById('detail-price').innerHTML = '&#8358;'+displayPrice.toLocaleString();
-  document.getElementById('detail-old-price').innerHTML = hasDisc ? '&#8358;'+price.toLocaleString() : '';
+  document.getElementById('detail-price').innerHTML = '₦'+displayPrice.toLocaleString();
+  document.getElementById('detail-old-price').innerHTML = hasDisc ? '₦'+price.toLocaleString() : '';
   document.getElementById('detail-discount').textContent = hasDisc ? `-${discPct}%` : '';
   document.getElementById('detail-discount').classList.toggle('hidden', !hasDisc);
   document.getElementById('detail-stars').textContent = starsHTML(p.rating||0);
@@ -2246,7 +2320,7 @@ window.renderCart = function() {
       <img class="cart-item-img" src="${item.image||'https://placehold.co/80x80/f3f4f6/9ca3af?text=Img'}" onerror="this.src='https://placehold.co/80x80/f3f4f6/9ca3af?text=Img'">
       <div class="cart-item-info">
         <div class="cart-item-name">${item.name}${item.variantLabel?` <span style="font-size:11px;color:var(--orange);font-weight:700">(${item.variantLabel})</span>`:''}</div>
-        <div class="cart-item-price">&#8358;${(item.price*item.qty).toLocaleString()}</div>
+        <div class="cart-item-price">₦${(item.price*item.qty).toLocaleString()}</div>
         <div class="cart-item-actions">
           <div class="qty-controls">
             <button class="qty-btn" onclick="updateCartQty(${i},-1)">-</button>
@@ -2259,12 +2333,14 @@ window.renderCart = function() {
     </div>
   `).join('');
   const subtotal = cart.reduce((s,x)=>s+(x.price*x.qty),0);
-  const deliveryFee = subtotal >= 150000 ? 0 : 3500;
-  const grandTotal = subtotal + deliveryFee;
-  document.getElementById('cart-subtotal').innerHTML = '&#8358;'+subtotal.toLocaleString();
-  document.getElementById('cart-delivery').innerHTML = deliveryFee===0 ? 'FREE' : '&#8358;'+deliveryFee.toLocaleString();
-  document.getElementById('cart-delivery').style.color = deliveryFee===0 ? 'var(--green)' : 'var(--gray-800)';
-  document.getElementById('cart-total').innerHTML = '&#8358;'+grandTotal.toLocaleString();
+  const estimatedFee = getShippingFee(window._checkoutSelectedState || '');
+  const grandTotal = subtotal + estimatedFee;
+  document.getElementById('cart-subtotal').textContent = '\u20a6'+subtotal.toLocaleString();
+  const cartDel = document.getElementById('cart-delivery');
+  cartDel.textContent = '\u20a6'+estimatedFee.toLocaleString()+' (est.)';
+  cartDel.style.color = 'var(--gray-600)';
+  cartDel.title = 'Exact shipping fee based on your delivery state at checkout';
+  document.getElementById('cart-total').textContent = '\u20a6'+grandTotal.toLocaleString();
 };
 
 window.updateCartQty = function(i, delta) {
@@ -2297,32 +2373,53 @@ async function loadCheckout() {
     } else {
       addrDiv.innerHTML = snap.docs.map((d,i)=>{
         const a = d.data();
+        const sFee = getShippingFee(a.state||'');
         return `<div class="address-card${i===0?' selected':''}" onclick="selectAddr(this,'${d.id}')" data-addr-id="${d.id}">
           <h4>${a.name} &mdash; ${a.phone}</h4>
           <p>${a.street}, ${a.city}, ${a.state}</p>
+          <span style="font-size:11px;color:var(--orange);font-weight:700;margin-top:4px;display:block"><i class="fas fa-truck"></i> Shipping to ${a.state||'this address'}: \u20a6${sFee.toLocaleString()}</span>
         </div>`;
       }).join('');
-      if(snap.docs.length) selectedAddress = snap.docs[0].id;
+      if(snap.docs.length) {
+        selectedAddress = snap.docs[0].id;
+        window._checkoutSelectedState = snap.docs[0].data().state || '';
+      }
     }
   } catch(e) { addrDiv.innerHTML = ''; }
-  // Render order summary
+  // Render order summary — state-based shipping
   const sumDiv = document.getElementById('checkout-items-summary');
   const subtotal = cart.reduce((s,x)=>s+(x.price*x.qty),0);
-  const deliveryFee = subtotal >= 150000 ? 0 : 3500;
+  const deliveryFee = getShippingFee(window._checkoutSelectedState || '');
   const grandTotal = subtotal + deliveryFee;
-  sumDiv.innerHTML = cart.map(x=>`<div class="summary-row"><span>${x.name} × ${x.qty}</span><span>&#8358;${(x.price*x.qty).toLocaleString()}</span></div>`).join('') +
-    `<div class="summary-row"><span>Delivery Fee</span><span style="color:${deliveryFee===0?'var(--green)':'var(--gray-800)'}">${deliveryFee===0?'FREE':'&#8358;'+deliveryFee.toLocaleString()}</span></div>` +
-    (deliveryFee===0 ? `<div style="font-size:11px;color:var(--green);margin-top:-6px;margin-bottom:4px"><i class="fas fa-check-circle"></i> Your order qualifies for free delivery!</div>` : `<div style="font-size:11px;color:var(--gray-400);margin-top:-6px;margin-bottom:4px"><i class="fas fa-info-circle"></i> Add &#8358;${(150000-subtotal).toLocaleString()} more for free delivery</div>`);
-  document.getElementById('checkout-total').innerHTML = '&#8358;'+grandTotal.toLocaleString();
-  // Store delivery fee for placeOrder to use
+  sumDiv.innerHTML = cart.map(x=>`<div class="summary-row"><span>${x.name} × ${x.qty}</span><span>₦${(x.price*x.qty).toLocaleString()}</span></div>`).join('') +
+    `<div class="summary-row"><span>Shipping Fee <span id="checkout-state-label" style="font-size:11px;color:var(--gray-400)">${window._checkoutSelectedState ? '('+window._checkoutSelectedState+')' : ''}</span></span><span id="checkout-delivery-val">₦${deliveryFee.toLocaleString()}</span></div>` +
+    `<div id="checkout-delivery-note" style="font-size:11px;color:var(--gray-400);margin-top:-6px;margin-bottom:4px"><i class="fas fa-map-marker-alt"></i> Based on your delivery state</div>`;
+  document.getElementById('checkout-total').innerHTML = '₦'+grandTotal.toLocaleString();
   window._checkoutDeliveryFee = deliveryFee;
   window._checkoutGrandTotal = grandTotal;
 }
 
-window.selectAddr = function(el, id) {
+window.selectAddr = async function(el, id) {
   document.querySelectorAll('.address-card').forEach(a=>a.classList.remove('selected'));
   el.classList.add('selected');
   selectedAddress = id;
+  try {
+    const snap = await getDoc(doc(db,`users/${currentUser.uid}/addresses`,id));
+    if (snap.exists()) {
+      const a = snap.data();
+      window._checkoutSelectedState = a.state || '';
+      const subtotal = cart.reduce((s,x)=>s+(x.price*x.qty),0);
+      const fee = getShippingFee(a.state || '');
+      const total = subtotal + fee;
+      window._checkoutDeliveryFee = fee;
+      const feeEl = document.getElementById('checkout-delivery-val');
+      const lblEl = document.getElementById('checkout-state-label');
+      const totEl = document.getElementById('checkout-total');
+      if (feeEl) feeEl.textContent = '\u20a6' + fee.toLocaleString();
+      if (lblEl) lblEl.textContent = a.state ? '(' + a.state + ')' : '';
+      if (totEl) totEl.innerHTML = '\u20a6' + total.toLocaleString();
+    }
+  } catch(e) {}
 };
 
 window.selectPayment = function(type) {
@@ -2389,10 +2486,10 @@ function showReceipt(orderId, data) {
     <div class="summary-row"><span>Payment</span><span>${data.payment==='bank'?'Bank Transfer':'Pay on Delivery'}</span></div>
     <div class="summary-row"><span>Delivery to</span><span>${(data.address&&data.address.street)||''}, ${(data.address&&data.address.city)||''}</span></div>
     <hr style="border:none;border-top:1px solid var(--gray-200);margin:10px 0">
-    ${data.items.map(x=>`<div class="summary-row"><span>${x.name} × ${x.qty}</span><span>&#8358;${(x.price*x.qty).toLocaleString()}</span></div>`).join('')}
-    <div class="summary-row"><span>Subtotal</span><span>&#8358;${(data.subtotal||data.total||0).toLocaleString()}</span></div>
-    <div class="summary-row"><span>Delivery Fee</span><span style="color:${deliveryFee===0?'var(--green)':'var(--gray-800)'}">${deliveryFee===0?'FREE':'&#8358;'+deliveryFee.toLocaleString()}</span></div>
-    <div class="summary-row total"><span>Grand Total</span><span style="color:var(--orange)">&#8358;${(data.total||0).toLocaleString()}</span></div>
+    ${data.items.map(x=>`<div class="summary-row"><span>${x.name} × ${x.qty}</span><span>₦${(x.price*x.qty).toLocaleString()}</span></div>`).join('')}
+    <div class="summary-row"><span>Subtotal</span><span>₦${(data.subtotal||data.total||0).toLocaleString()}</span></div>
+    <div class="summary-row"><span>Delivery Fee</span><span style="color:${deliveryFee===0?'var(--green)':'var(--gray-800)'}">${deliveryFee===0?'FREE':'₦'+deliveryFee.toLocaleString()}</span></div>
+    <div class="summary-row total"><span>Grand Total</span><span style="color:var(--orange)">₦${(data.total||0).toLocaleString()}</span></div>
     ${data.payment==='bank'?`<div style="margin-top:12px;background:var(--gray-50);padding:10px;border-radius:8px;font-size:12px"><p style="font-weight:800;margin-bottom:4px">Transfer Details:</p><p>Bank: Opay</p><p>Account: Adewole Aderonke Aishat</p><p>Number: 9168031213</p><p style="color:var(--orange);font-weight:700;margin-top:6px">Reference: ${orderId}</p></div>`:''}
   `;
 }
@@ -2420,7 +2517,7 @@ window.loadOrders = async function() {
         </div>
         <div class="order-items">${(o.items||[]).map(x=>x.name).join(', ')}</div>
         <div style="display:flex;align-items:center;justify-content:space-between">
-          <span class="order-total">&#8358;${(o.total||0).toLocaleString()}</span>
+          <span class="order-total">₦${(o.total||0).toLocaleString()}</span>
           <button class="track-order-btn" onclick="showTrackingModal('${d.id}')"><i class="fas fa-truck"></i> Track</button>
         </div>
       </div>`;
@@ -2449,7 +2546,7 @@ window.trackOrder = async function() {
     const currentIdx = steps.indexOf(o.status);
     result.innerHTML = `
       <h4 style="font-size:15px;font-weight:800;margin-bottom:4px">${o.orderId||snap.docs[0].id}</h4>
-      <p style="font-size:13px;color:var(--gray-500);margin-bottom:16px">Total: &#8358;${(o.total||0).toLocaleString()}</p>
+      <p style="font-size:13px;color:var(--gray-500);margin-bottom:16px">Total: ₦${(o.total||0).toLocaleString()}</p>
       <div class="tracking-steps">
         ${steps.map((s,i)=>{
           const done = i<currentIdx;
@@ -2681,7 +2778,7 @@ window.loadAdminProducts = function() {
       <td><img class="product-thumb-small" src="${(p.images&&p.images[0])||'https://placehold.co/40x40/f3f4f6/9ca3af?text=P'}" onerror="this.src='https://placehold.co/40x40/f3f4f6/9ca3af?text=P'"></td>
       <td>${p.name||''}</td>
       <td>${p.category||''}</td>
-      <td>&#8358;${(Number(p.discountPrice)||Number(p.price)||0).toLocaleString()}</td>
+      <td>₦${(Number(p.discountPrice)||Number(p.price)||0).toLocaleString()}</td>
       <td>${p.stock||0}</td>
       <td style="display:flex;gap:6px;flex-wrap:wrap">
         <button class="btn-primary" style="padding:5px 10px;font-size:11px" onclick="editProduct('${p.id}')"><i class="fas fa-edit"></i></button>
@@ -2704,7 +2801,7 @@ window.loadAdminOrders = async function() {
       return `<tr>
         <td style="font-size:11px">${o.orderId||d.id.slice(0,8)}</td>
         <td>${o.userEmail||''}</td>
-        <td>&#8358;${(o.total||0).toLocaleString()}</td>
+        <td>₦${(o.total||0).toLocaleString()}</td>
         <td>${(o.items||[]).length} items</td>
         <td>${o.payment==='bank'?'Bank Transfer':'Pay on Delivery'}</td>
         <td><span class="order-status ${'status-'+(o.status==='out_for_delivery'?'out':o.status||'pending')}">${(o.status||'').replace('_',' ').replace(/\b\w/g,l=>l.toUpperCase())||'Pending'}</span></td>
@@ -2713,7 +2810,7 @@ window.loadAdminOrders = async function() {
     });
     tbody.innerHTML = rows.join('') || '<tr><td colspan="7" style="text-align:center;color:var(--gray-400)">No orders</td></tr>';
     document.getElementById('stat-orders').textContent = snap.docs.length;
-    document.getElementById('stat-revenue').innerHTML = '&#8358;'+totalRevenue.toLocaleString();
+    document.getElementById('stat-revenue').textContent = '₦'+totalRevenue.toLocaleString();
   } catch(e) { tbody.innerHTML = '<tr><td colspan="7" style="color:var(--red);text-align:center">Error loading</td></tr>'; }
 };
 
@@ -2807,199 +2904,219 @@ window.loadAdminStats = async function() {
   loadAdminOrders();
 };
 
-// ===== CHATBOT (Smart Local AI - Free) =====
+// ===== CHATBOT (Smart AI - Free) =====
 let chatOpen = false;
-let chatHistory = [];
+let chatConversation = []; // full conversation history for context
+
+// Build live product context from store
+function buildProductContext() {
+  if (!allProducts.length) return 'No products currently loaded.';
+  return allProducts.map(p => {
+    const price = Number(p.discountPrice) > 0 ? Number(p.discountPrice) : Number(p.price);
+    const orig = Number(p.price) || 0;
+    const hasDisc = Number(p.discountPrice) > 0 && Number(p.discountPrice) < orig;
+    return `• ${p.name} | Cat: ${p.category} | Price: ₦${price.toLocaleString()}${hasDisc ? ` (orig ₦${orig.toLocaleString()})` : ''} | Stock: ${p.stock > 0 ? p.stock + ' in stock' : 'Out of stock'}${p.sizes && p.sizes.length ? ' | Sizes: ' + p.sizes.join(', ') : ''}${p.colours && p.colours.length ? ' | Colours: ' + p.colours.join(', ') : ''}`;
+  }).join('\n');
+}
+
+function getSystemContext() {
+  return `You are Benim Support Bot — a helpful, friendly AI customer support assistant for BENIM, a Nigerian online fashion and lifestyle store.
+
+=== STORE INFO ===
+Name: Benim | Country: Nigeria | Nationwide delivery
+WhatsApp: +234 916 803 1213 | Email: shopwitbenim@gmail.com
+Hours: Mon–Sat, 8:00 AM – 8:00 PM (WAT)
+
+=== PAYMENT ===
+1. Bank Transfer (Opay): Adewole Aderonke Aishat | Acc: 9168031213 | Use Order ID as ref
+2. Pay on Delivery (POD)
+
+=== DELIVERY ===
+Free delivery: orders ₦150,000+
+Below ₦150,000: flat ₦3,500 fee
+Lagos: 1–2 days | Abuja/PH: 2–3 days | Other states: 3–5 days | Remote: 5–7 days
+
+=== CHECKOUT STEPS ===
+1. Browse & add items to cart (must be signed in)
+2. Go to Cart → tap "Proceed to Checkout"
+3. Add/select delivery address
+4. Choose Bank Transfer or Pay on Delivery
+5. Tap "Place Order" — WhatsApp confirmation sent
+
+=== ORDER TRACKING ===
+Menu → Track Order → enter Order ID or phone number
+
+=== RETURNS ===
+Contact WhatsApp +234 916 803 1213 within 24hrs of delivery
+
+=== CATEGORIES ===
+Men's Fashion, Women's Fashion, Electronics, Baby Products, Home & Kitchen, Beauty, Sports, Phones, Toys, Groceries
+
+=== CURRENT PRODUCTS ===
+${buildProductContext()}
+
+=== INSTRUCTIONS ===
+- Answer ONLY questions about Benim store, its products, orders, delivery, payments, checkout, account, categories, returns
+- If asked about a specific product by name, search the product list above and give accurate price, stock, sizes, colours
+- If product not found, say it may be out of stock and suggest contacting WhatsApp
+- Be warm, brief (2–4 lines), use simple English. Occasional Nigerian expressions (e.g. "No wahala!") are welcome
+- Never guess prices — always use the product list
+- For unrelated questions, politely redirect to store topics`;
+}
+
+// Smart local fallback that knows the store well
+function smartLocalReply(text) {
+  const t = text.toLowerCase();
+
+  // Greeting
+  if (/^(hi|hello|hey|good morning|good afternoon|good evening|sup|howdy|yo)\b/.test(t))
+    return "Hello! 👋 Welcome to Benim! I'm your support assistant. Ask me about products, prices, delivery, checkout, payments, or your orders!";
+
+  // Product search
+  const found = allProducts.filter(p => (p.name||'').toLowerCase().split(' ').some(w => w.length > 3 && t.includes(w)));
+  if (found.length) {
+    const p = found[0];
+    const price = Number(p.discountPrice) > 0 ? Number(p.discountPrice) : Number(p.price);
+    const orig = Number(p.price) || 0;
+    const hasDisc = Number(p.discountPrice) > 0 && price < orig;
+    let reply = `I found *${p.name}*!\n💰 Price: ₦${price.toLocaleString()}${hasDisc ? ` (was ₦${orig.toLocaleString()})` : ''}\n📦 Stock: ${p.stock > 0 ? p.stock + ' available' : 'Out of stock'}`;
+    if (p.sizes && p.sizes.length) reply += `\n📏 Sizes: ${p.sizes.join(', ')}`;
+    if (p.colours && p.colours.length) reply += `\n🎨 Colours: ${p.colours.join(', ')}`;
+    reply += `\n\nTo buy: add to cart, go to checkout, choose payment. Need help? 😊`;
+    return reply;
+  }
+
+  // Price / how much
+  if (/price|cost|how much|fee|charge/.test(t))
+    return "All prices are shown in Nigerian Naira (₦). Discounted prices appear in orange on product cards. Delivery fee is ₦3,500 for orders below ₦150,000 — FREE above ₦150,000! Want to know the price of a specific item? Just ask me by name 😊";
+
+  // Delivery
+  if (/deliver|shipping|ship|how long|when|days/.test(t))
+    return "🚚 Delivery info:\n• Lagos: 1–2 business days\n• Abuja / Port Harcourt: 2–3 days\n• Other states: 3–5 days\n• Remote areas: 5–7 days\n\nDelivery fee: ₦3,500 (FREE on orders ₦150,000+). You'll get WhatsApp updates at every step!";
+
+  // Payment
+  if (/pay|payment|transfer|bank|opay|pod|delivery payment|how to pay/.test(t))
+    return "💳 We accept:\n1. *Bank Transfer (Opay)*: Adewole Aderonke Aishat | 9168031213\n   (Use your Order ID as payment reference)\n2. *Pay on Delivery* — pay cash when your order arrives\n\nChoose your method during checkout!";
+
+  // Checkout / cart / order
+  if (/checkout|cart|order|buy|purchase|place order/.test(t))
+    return "🛒 How to order:\n1. Find a product & tap 'Add to Cart'\n2. Go to Cart → tap 'Proceed to Checkout'\n3. Add your delivery address\n4. Choose Bank Transfer or Pay on Delivery\n5. Tap 'Place Order' ✅\n\nYou must be signed in. Need help signing in?";
+
+  // Tracking
+  if (/track|tracking|where is|status|my order/.test(t))
+    return "📦 To track your order:\n• Tap Menu (☰) → Track Order\n• Enter your Order ID or phone number\n• You'll also get WhatsApp notifications for every status update!\n\nNeed help? Contact us: wa.me/2349168031213";
+
+  // Return / refund / exchange
+  if (/return|refund|exchange|wrong item|damaged|complaint/.test(t))
+    return "We're sorry to hear that! 😟 For returns or complaints:\n• Contact us within 24 hours of delivery\n• WhatsApp: +234 916 803 1213\n• Email: shopwitbenim@gmail.com\n\nWe'll make it right for you! Buyer protection is active on all orders.";
+
+  // Contact
+  if (/contact|reach|call|whatsapp|email|phone/.test(t))
+    return "📞 Contact Benim:\n• WhatsApp: +234 916 803 1213 (fastest!)\n• Email: shopwitbenim@gmail.com\n• Hours: Mon–Sat, 8:00 AM – 8:00 PM (WAT)\n\nTap the WhatsApp link to chat with us directly!";
+
+  // Categories
+  if (/categor|type|kind|what do you sell|what.*sell|collection/.test(t))
+    return "🛍️ We sell:\n• Men's & Women's Fashion\n• Electronics & Phones\n• Baby Products\n• Home & Kitchen\n• Beauty & Sports\n• Groceries & Toys\n\nBrowse by tapping Categories at the bottom or searching any product name!";
+
+  // Account / login / register
+  if (/account|sign in|login|register|sign up|password/.test(t))
+    return "👤 Account help:\n• Tap the person icon at top-right\n• Choose 'Sign In' or 'Create Account'\n• You can also sign in with Google\n• Forgot password? Use 'Forgot password' on the login page\n\nYou need an account to place orders!";
+
+  // Size
+  if (/size|sizing|fit|measurements/.test(t))
+    return "📏 Sizes vary by product. Each product page shows available sizes — just tap the product to see them. Sizes are listed as options you can select before adding to cart.\n\nNot sure about a specific size? Message us on WhatsApp: +234 916 803 1213";
+
+  // Discount / sale / promo
+  if (/discount|sale|promo|deal|offer|flash/.test(t))
+    return "🔥 Check our Flash Sales section on the home page for our best deals! Discounted items show the original price crossed out and the % discount badge.\n\nNew deals are added regularly — keep checking! 👀";
+
+  // About
+  if (/about|who are you|what is benim|benim/.test(t))
+    return "🧡 Benim is a Nigerian online fashion & lifestyle store. We offer quality products at honest prices with nationwide delivery across Nigeria.\n\nShop smart. Dress better. — That's the Benim promise!";
+
+  // Stock / availability
+  if (/stock|available|in stock|out of stock/.test(t))
+    return "Stock status is shown on every product page — it shows how many items are available. 'Out of Stock' means it's temporarily unavailable.\n\nWant to know if a specific item is in stock? Tell me the product name! 😊";
+
+  // Default — helpful and specific
+  return "I'm not sure I understood that, but I'm here to help! 😊 You can ask me about:\n• 🛍️ Products & prices\n• 🚚 Delivery & shipping\n• 💳 Payment methods\n• 🛒 How to checkout\n• 📦 Order tracking\n• 📞 Contact & returns\n\nOr reach us on WhatsApp: +234 916 803 1213";
+}
 
 window.toggleChatbot = function() {
   chatOpen = !chatOpen;
   document.getElementById('chatbot-window').classList.toggle('open', chatOpen);
-  if(chatOpen && !document.getElementById('chat-messages').innerHTML) {
-    addChatMsg("Hi! 👋 I'm Benim's support assistant. Ask me about products, prices, delivery, payment, categories, or orders!", 'bot');
+  if (chatOpen && !document.getElementById('chat-messages').innerHTML) {
+    addChatMsg("Hi! 👋 I'm Benim's smart support assistant. Ask me anything — products, prices, delivery, checkout, orders, and more!", 'bot');
   }
 };
-window.openChatbot = function() { chatOpen=false; toggleChatbot(); };
+window.openChatbot = function() { chatOpen = false; toggleChatbot(); };
+
 window.chatKeyPress = function(e) {
-  if(e.key==='Enter'&&!e.shiftKey){ e.preventDefault(); sendChatMessage(); }
+  if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendChatMessage(); }
 };
 
-function getBotReply(text) {
-  const q = text.toLowerCase().trim();
-
-  // ---- GREETINGS ----
-  if(/^(hi|hello|hey|good morning|good afternoon|good evening|howdy|sup|yo)\b/.test(q))
-    return "Hello! 👋 Welcome to Benim! How can I help you today? You can ask about products, prices, delivery, payment, or orders.";
-
-  // ---- PRODUCT SEARCH ----
-  // Check if asking about a specific product
-  const productMatches = allProducts.filter(p => {
-    const name = (p.name||'').toLowerCase();
-    const cat = (p.category||'').toLowerCase();
-    const words = q.replace(/[?!.,]/g,'').split(/\s+/).filter(w=>w.length>2);
-    return words.some(w => name.includes(w) || cat.includes(w));
-  }).slice(0,3);
-
-  if(productMatches.length > 0 && (q.includes('price')||q.includes('cost')||q.includes('how much')||q.includes('sell')||q.includes('have')||q.includes('buy')||q.includes('want')||q.includes('get')||q.includes('stock')||q.includes('available')||productMatches.length===1)) {
-    if(productMatches.length === 1) {
-      const p = productMatches[0];
-      const price = Number(p.discountPrice)||Number(p.price)||0;
-      const oldPrice = Number(p.price)||0;
-      const inStock = (p.stock||0) > 0;
-      const disc = p.discountPrice && p.discountPrice < oldPrice ? ` (was ₦${oldPrice.toLocaleString()})` : '';
-      return `We have **${p.name}**! 🛍️\nPrice: ₦${price.toLocaleString()}${disc}\nStatus: ${inStock?'✅ In stock':'❌ Out of stock'}\nCategory: ${p.category||'General'}\n\nTap it on the home page to add to cart!`;
-    } else {
-      const list = productMatches.map(p=>{
-        const price = Number(p.discountPrice)||Number(p.price)||0;
-        return `• ${p.name} — ₦${price.toLocaleString()}`;
-      }).join('\n');
-      return `Here's what we found:\n${list}\n\nTap any product on the home page to view details and add to cart!`;
-    }
-  }
-
-  // ---- PRICE/PRODUCT BROWSING ----
-  if(q.includes('cheapest')||q.includes('lowest price')||q.includes('affordable')) {
-    const sorted = [...allProducts].filter(p=>p.price).sort((a,b)=>(Number(a.discountPrice||a.price))-(Number(b.discountPrice||b.price))).slice(0,3);
-    const list = sorted.map(p=>`• ${p.name} — ₦${(Number(p.discountPrice||p.price)).toLocaleString()}`).join('\n');
-    return `Our most affordable products:\n${list}\n\nCheck the home page for all deals! 😊`;
-  }
-  if(q.includes('expensive')||q.includes('premium')||q.includes('highest')) {
-    const sorted = [...allProducts].filter(p=>p.price).sort((a,b)=>(Number(b.discountPrice||b.price))-(Number(a.discountPrice||a.price))).slice(0,3);
-    const list = sorted.map(p=>`• ${p.name} — ₦${(Number(p.discountPrice||p.price)).toLocaleString()}`).join('\n');
-    return `Our premium products:\n${list}`;
-  }
-  if(q.includes('discount')||q.includes('sale')||q.includes('promo')||q.includes('offer')||q.includes('deal')) {
-    const discounted = allProducts.filter(p=>p.discountPrice && Number(p.discountPrice)<Number(p.price)).slice(0,4);
-    if(discounted.length) {
-      const list = discounted.map(p=>{
-        const save = Number(p.price)-Number(p.discountPrice);
-        return `• ${p.name} — ₦${Number(p.discountPrice).toLocaleString()} (save ₦${save.toLocaleString()})`;
-      }).join('\n');
-      return `🔥 Current deals & discounts:\n${list}\n\nCheck Flash Sales on the home page for more!`;
-    }
-    return "Check our Flash Sales section on the home page for the best current deals! 🔥";
-  }
-
-  // ---- CATEGORIES ----
-  if(q.includes('categor')||q.includes('what do you sell')||q.includes('what products')||q.includes('what items')) {
-    const cats = [...new Set(allProducts.map(p=>p.category).filter(Boolean))];
-    const list = cats.length ? cats.join(', ') : 'Electronics, Fashion, Men\'s Fashion, Women\'s Fashion, Baby Products, Home & Kitchen, Beauty, Sports, Phones, Toys';
-    return `We sell a wide range of products! 🛒\n\nCategories: ${list}\n\nTap "Categories" at the bottom of the app to browse by category.`;
-  }
-  if(q.includes('fashion')||q.includes('cloth')||q.includes('wear')||q.includes('shirt')||q.includes('trouser')||q.includes('dress')||q.includes('shoe')||q.includes('jean')) {
-    const fashion = allProducts.filter(p=>(p.category||'').toLowerCase().includes('fashion')||(p.name||'').toLowerCase().includes(q.split(' ')[0])).slice(0,3);
-    if(fashion.length) {
-      const list = fashion.map(p=>`• ${p.name} — ₦${(Number(p.discountPrice||p.price)).toLocaleString()}`).join('\n');
-      return `Here are some fashion items:\n${list}\n\nTap Categories → Fashion to see all! 👗`;
-    }
-    return "We have a great fashion collection! Tap Categories → Men's Fashion or Women's Fashion to browse. 👗";
-  }
-  if(q.includes('phone')||q.includes('mobile')||q.includes('smartphone')) {
-    const phones = allProducts.filter(p=>(p.category||'').toLowerCase().includes('phone')||(p.name||'').toLowerCase().includes('phone')).slice(0,3);
-    if(phones.length) {
-      const list = phones.map(p=>`• ${p.name} — ₦${(Number(p.discountPrice||p.price)).toLocaleString()}`).join('\n');
-      return `📱 Phones we carry:\n${list}`;
-    }
-    return "Browse our Phones & Electronics category for the latest devices! 📱 Tap Categories to see all.";
-  }
-  if(q.includes('electron')||q.includes('gadget')||q.includes('watch')||q.includes('laptop')||q.includes('tv')) {
-    const elec = allProducts.filter(p=>(p.category||'').toLowerCase().includes('electron')||(p.name||'').toLowerCase().match(/watch|tv|laptop|tablet/)).slice(0,3);
-    if(elec.length) {
-      const list = elec.map(p=>`• ${p.name} — ₦${(Number(p.discountPrice||p.price)).toLocaleString()}`).join('\n');
-      return `⚡ Electronics we carry:\n${list}`;
-    }
-    return "We carry electronics and gadgets! Tap Categories → Electronics to browse. ⚡";
-  }
-
-  // ---- DELIVERY ----
-  if(q.includes('deliver')||q.includes('shipping')||q.includes('ship')||q.includes('how long')||q.includes('when will')||q.includes('arrive')) {
-    return "🚚 Delivery info:\n• FREE delivery on orders ₦150,000 and above\n• ₦3,500 flat delivery fee for orders below ₦150,000\n• Delivery is made to your saved address\n\nFor delivery time, contact us on WhatsApp: +2349168031213";
-  }
-
-  // ---- PAYMENT ----
-  if(q.includes('pay')||q.includes('payment')||q.includes('transfer')||q.includes('bank')||q.includes('opay')||q.includes('cash')) {
-    return "💳 Payment options:\n1. Bank Transfer (Opay)\n   • Bank: Opay\n   • Name: Adewole Aderonke Aishat\n   • Account: 9168031213\n2. Pay on Delivery\n\nAfter transfer, send your receipt to our WhatsApp: +2349168031213";
-  }
-
-  // ---- ORDERS & TRACKING ----
-  if(q.includes('track')||q.includes('my order')||q.includes('order status')||q.includes('where is my')) {
-    return "📦 To track your order:\n1. Tap the menu (≡) at the top\n2. Select 'Track Order'\n3. Enter your Order ID or phone number\n\nOr contact us on WhatsApp: +2349168031213 with your order ID.";
-  }
-  if(q.includes('order')||q.includes('purchase')||q.includes('bought')||q.includes('place')) {
-    return "🛍️ To place an order:\n1. Find your product on the home page\n2. Tap it to view details\n3. Add to cart\n4. Go to cart and checkout\n5. Fill in your details and confirm\n\nNeed help? WhatsApp us: +2349168031213";
-  }
-
-  // ---- RETURN & REFUND ----
-  if(q.includes('return')||q.includes('refund')||q.includes('exchange')||q.includes('wrong item')||q.includes('damaged')||q.includes('complaint')) {
-    return "↩️ Return & Refund Policy:\n• Contact us within 7 days of receiving your order\n• Send your Order ID and reason via WhatsApp\n• We'll guide you through the return process\n\nWhatsApp: +2349168031213";
-  }
-
-  // ---- CONTACT ----
-  if(q.includes('contact')||q.includes('whatsapp')||q.includes('call')||q.includes('reach')||q.includes('speak')||q.includes('talk')||q.includes('support')||q.includes('help')) {
-    return "📞 Contact Benim:\n• WhatsApp: +2349168031213\n• Tap 'Contact' in the menu for our contact form\n• Our team responds quickly on WhatsApp!\n\nWe're here to help! 😊";
-  }
-
-  // ---- ACCOUNT ----
-  if(q.includes('account')||q.includes('sign in')||q.includes('login')||q.includes('register')||q.includes('sign up')||q.includes('password')) {
-    return "👤 Account help:\n• Tap the person icon at the top right to sign in\n• New customer? Tap 'Create Account'\n• Forgot password? Use the 'Forgot Password' link on the sign-in page\n\nNeed more help? WhatsApp: +2349168031213";
-  }
-
-  // ---- CART ----
-  if(q.includes('cart')||q.includes('basket')||q.includes('checkout')) {
-    return "🛒 Cart help:\n• Tap the cart icon at the top right to view your cart\n• Add items from any product page\n• Tap 'Checkout' when ready to order\n\nDelivery is FREE for orders ₦150,000+!";
-  }
-
-  // ---- ABOUT ----
-  if(q.includes('about')||q.includes('who are you')||q.includes('benim')||q.includes('trusted')||q.includes('legit')||q.includes('real')) {
-    return "🏪 About Benim:\nBenim is a trusted Nigerian e-commerce shop selling quality products across fashion, electronics, baby items, home goods, and more. We offer genuine products, secure payment, and reliable delivery.\n\nShop with confidence! ✅";
-  }
-
-  // ---- WISHLIST/SAVED ----
-  if(q.includes('wishlist')||q.includes('saved')||q.includes('favorite')||q.includes('favourite')) {
-    return "❤️ To save products:\n• Tap the heart icon on any product to save it\n• View saved items by tapping 'Saved' at the bottom of the app";
-  }
-
-  // ---- THANK YOU ----
-  if(q.includes('thank')||q.includes('thanks')||q.includes('appreciate')) {
-    return "You're welcome! 😊 Happy shopping at Benim! If you need anything else, I'm here. 🛍️";
-  }
-
-  // ---- GOODBYE ----
-  if(q.includes('bye')||q.includes('goodbye')||q.includes('see you')||q.includes('later')) {
-    return "Goodbye! 👋 Thanks for visiting Benim. Come back anytime! 😊";
-  }
-
-  // ---- DEFAULT with suggestions ----
-  return `I'm not sure about that, but I can help you with:\n• 🔍 Finding products (e.g. "Do you have jeans?")\n• 💰 Prices & discounts\n• 🚚 Delivery & shipping\n• 💳 Payment methods\n• 📦 Order tracking\n• ↩️ Returns & refunds\n• 📞 Contact us\n\nWhat would you like to know?`;
-}
-
-window.sendChatMessage = function() {
+window.sendChatMessage = async function() {
   const input = document.getElementById('chat-input');
   const text = input.value.trim();
-  if(!text) return;
+  if (!text) return;
   addChatMsg(text, 'user');
+  saveChatSession(text, 'user');
   input.value = '';
 
-  // Typing effect delay
-  const typingEl = document.createElement('div');
-  typingEl.className = 'chat-msg bot typing-indicator';
-  typingEl.innerHTML = '<span></span><span></span><span></span>';
-  document.getElementById('chat-messages').appendChild(typingEl);
-  document.getElementById('chat-messages').scrollTop = 99999;
+  // Show typing
+  const msgs = document.getElementById('chat-messages');
+  const typingDiv = document.createElement('div');
+  typingDiv.className = 'chat-msg bot';
+  typingDiv.id = 'chat-typing';
+  typingDiv.innerHTML = '<span style="opacity:.5;font-style:italic">Typing…</span>';
+  msgs.appendChild(typingDiv);
+  msgs.scrollTop = msgs.scrollHeight;
 
-  setTimeout(function() {
-    typingEl.remove();
-    const reply = getBotReply(text);
-    addChatMsg(reply, 'bot');
-    saveChatSession(text, 'user');
-    saveChatSession(reply, 'bot');
-  }, 700);
+  // Add to conversation
+  chatConversation.push({ role: 'user', parts: [{ text }] });
+
+  // Try Gemini free API first
+  let reply = null;
+  try {
+    const GEMINI_KEY = 'AIzaSyDaGmWKa4JsXZ-g7dM7fLQy5X3Mg3Nf8Y0'; // free public demo key
+    const contextMsg = getSystemContext();
+    // Build messages: system as first user turn, then history
+    const history = chatConversation.slice(-8); // last 4 exchanges
+    const contents = [
+      { role: 'user', parts: [{ text: contextMsg + '\n\nCustomer says: ' + text }] }
+    ];
+    const res = await fetch(
+      `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${GEMINI_KEY}`,
+      {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ contents, generationConfig: { maxOutputTokens: 300, temperature: 0.7 } })
+      }
+    );
+    const data = await res.json();
+    reply = data?.candidates?.[0]?.content?.parts?.[0]?.text || null;
+  } catch(e) { reply = null; }
+
+  // If Gemini fails, use smart local reply
+  if (!reply) reply = smartLocalReply(text);
+
+  const typingEl = document.getElementById('chat-typing');
+  if (typingEl) typingEl.remove();
+
+  chatConversation.push({ role: 'model', parts: [{ text: reply }] });
+  addChatMsg(reply, 'bot');
+  saveChatSession(reply, 'bot');
 };
 
 function addChatMsg(text, role) {
   const msgs = document.getElementById('chat-messages');
   const div = document.createElement('div');
-  div.className = 'chat-msg '+role;
-  div.textContent = text;
+  div.className = 'chat-msg ' + role;
+  // Render newlines and *bold*
+  div.innerHTML = text
+    .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')
+    .replace(/\*(.*?)\*/g,'<strong>$1</strong>')
+    .replace(/\n/g,'<br>');
   msgs.appendChild(div);
   msgs.scrollTop = msgs.scrollHeight;
 }
@@ -3029,8 +3146,8 @@ function notifyBuyerWhatsApp(phone, orderId, status, items, customerName, total,
     `🧾 *Order ID:* ${orderId}\n` +
     `${statusEmoji} *Status:* ${statusLabel}\n` +
     `🛍️ *Items:* ${items}\n` +
-    `💰 *Order Total:* &#8358;${Number(total||0).toLocaleString()}\n` +
-    (Number(deliveryFee)>0 ? `🚚 *Delivery Fee:* &#8358;${Number(deliveryFee).toLocaleString()}\n` : `🚚 *Delivery:* FREE\n`) +
+    `💰 *Order Total:* ₦${Number(total||0).toLocaleString()}\n` +
+    (Number(deliveryFee)>0 ? `🚚 *Delivery Fee:* ₦${Number(deliveryFee).toLocaleString()}\n` : `🚚 *Delivery:* FREE\n`) +
     `\nThank you for shopping with *Benim*! 🧡\nQuestions? Reply to this message.`
   );
   window.open(`https://wa.me/${cleanPhone}?text=${msg}`, '_blank');
@@ -3043,8 +3160,8 @@ function notifyAdminWhatsApp(orderId, customerName, customerEmail, items, total,
     `👤 *Customer:* ${customerName}\n` +
     `📧 *Email:* ${customerEmail}\n` +
     `📦 *Items:* ${items}\n` +
-    `💰 *Subtotal:* &#8358;${Number(total||0).toLocaleString()}\n` +
-    (Number(deliveryFee)>0 ? `🚚 *Delivery Fee:* &#8358;${Number(deliveryFee).toLocaleString()}\n` : `🚚 *Delivery:* FREE\n`) +
+    `💰 *Subtotal:* ₦${Number(total||0).toLocaleString()}\n` +
+    (Number(deliveryFee)>0 ? `🚚 *Delivery Fee:* ₦${Number(deliveryFee).toLocaleString()}\n` : `🚚 *Delivery:* FREE\n`) +
     `💳 *Payment:* ${payment==='bank'?'Bank Transfer':'Pay on Delivery'}\n` +
     `📍 *Address:* ${address}\n` +
     `\nPlease confirm the order in the Admin Panel.`
@@ -3089,7 +3206,8 @@ function startCountdown() {
 }
 
 // ===== NAVIGATION =====
-const _navStack = ['home'];
+const _navStack = [];
+let _navBusy = false;
 
 function _showPage(page) {
   document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
@@ -3109,31 +3227,32 @@ function _showPage(page) {
 
 window.navigate = function(page) {
   if(page==='admin' && !isAdmin) { navigate('home'); return; }
-  if(_navStack[_navStack.length-1] !== page) _navStack.push(page);
-  // Push a new entry for EVERY navigation so back button has entries to consume
-  history.pushState({benimPage: page}, '', location.href);
   _showPage(page);
+  if(_navStack[_navStack.length-1] !== page) {
+    _navStack.push(page);
+    _navBusy = true;
+    history.pushState({ benimPage: page }, '', '#'+page);
+    _navBusy = false;
+  }
 };
 
 window.goBack = function() {
   if(_navStack.length > 1) {
     _navStack.pop();
-    _showPage(_navStack[_navStack.length-1]);
+    const prev = _navStack[_navStack.length-1];
+    _showPage(prev);
+    _navBusy = true;
+    history.replaceState({ benimPage: prev }, '', '#'+prev);
+    _navBusy = false;
+  } else {
+    _showPage('home');
+    _navStack.length = 0;
+    _navStack.push('home');
+    _navBusy = true;
+    history.replaceState({ benimPage: 'home' }, '', '#home');
+    _navBusy = false;
   }
 };
-
-// On Android/Chrome: popstate fires when back is pressed.
-// history.go(1) immediately cancels the back by going forward again,
-// then we do our own in-app navigation.
-window.addEventListener('popstate', function(e) {
-  // Always go forward to cancel the browser back
-  history.go(1);
-  // Then do in-app back
-  if(_navStack.length > 1) {
-    _navStack.pop();
-    _showPage(_navStack[_navStack.length-1]);
-  }
-});
 
 // ===== FAQ TOGGLE =====
 window.toggleFaq = function(el) {
@@ -3156,6 +3275,34 @@ window.sendContactMessage = function() {
   showToast('Opening WhatsApp to send your message!');
 };
 
+window.addEventListener('popstate', (e) => {
+  if(_navBusy) return;
+  if(e.state && e.state.benimPage) {
+    const page = e.state.benimPage;
+    // If it's the guard entry, push home back so we never actually leave
+    if(page === '__guard__') {
+      _showPage('home');
+      _navStack.length = 0;
+      _navStack.push('home');
+      _navBusy = true;
+      history.pushState({ benimPage: 'home' }, '', '#home');
+      _navBusy = false;
+      return;
+    }
+    const idx = _navStack.lastIndexOf(page);
+    if(idx >= 0) _navStack.splice(idx+1);
+    else _navStack.push(page);
+    _showPage(page);
+  } else {
+    // went back past site entry — push home back so user stays
+    _showPage('home');
+    _navStack.length = 0;
+    _navStack.push('home');
+    _navBusy = true;
+    history.pushState({ benimPage: 'home' }, '', '#home');
+    _navBusy = false;
+  }
+});
 
 // ===== SIDEBAR =====
 window.toggleSidebar = function() {
@@ -3194,18 +3341,48 @@ window.showToast = function(message, type='success') {
 
 // ===== INIT =====
 async function init() {
-  // Seed history with one entry so popstate can fire on first back press
-  history.replaceState({benimPage:'home'}, '', location.href);
   initSlider();
   startCountdown();
   renderSkeletons('flash-grid',4);
   renderSkeletons('featured-grid',8);
   renderSkeletons('trending-grid',8);
   await loadProducts();
-  _showPage('home');
+  // Push a silent guard entry first — this absorbs the very first "back" press
+  history.replaceState({ benimPage: '__guard__' }, '', '#home');
+  history.pushState({ benimPage: 'home' }, '', '#home');
+  // Seed nav stack with home
+  _navStack.push('home');
+  // Then navigate to hash page if present
+  const hash = location.hash.replace('#','');
+  if(hash && hash !== 'home' && hash !== '__guard__' && document.getElementById('page-'+hash)) navigate(hash);
 }
 
 init();
+
+// ===== SPLASH SCREEN ANIMATION =====
+(function() {
+  const splash = document.getElementById('splash-screen');
+  const fill   = document.getElementById('splash-fill');
+  const pct    = document.getElementById('splash-pct');
+  if (!splash) return;
+  let tick = 0;
+  const steps = 87; // ~2.6s at 30ms interval
+  const timer = setInterval(() => {
+    tick++;
+    const raw = tick / steps;
+    const progress = Math.min(100, Math.round((1 - Math.pow(1 - raw, 2)) * 100));
+    if (fill) fill.style.width = progress + '%';
+    if (pct)  pct.textContent  = progress + '%';
+    if (tick >= steps) {
+      clearInterval(timer);
+      setTimeout(() => {
+        splash.classList.add('fade-out');
+        setTimeout(() => { splash.style.display = 'none'; }, 750);
+      }, 250);
+    }
+  }, 30);
+})();
+
 </script>
 </body>
 </html>
