@@ -460,10 +460,6 @@ body{padding-bottom:70px}
 .faq-item.open .faq-a{display:block}
 </style>
 
-<!-- Firebase Compat SDK — works on GitHub Pages without module/CORS issues -->
-<script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
 <style>
 /* ========= FINAL OVERRIDE &mdash; clean Jumia-style UI ========= */
 
@@ -497,10 +493,16 @@ body{padding-bottom:70px}
 .slider-dots{bottom:8px!important}
 
 /* HOME SECTIONS */
-.home-section{background:#fff!important;margin:8px 0 0!important;padding:14px 12px 18px!important}
-.home-section-title{font-size:16px!important;font-weight:800!important;color:#111!important;font-family:'Poppins',sans-serif!important;margin-bottom:4px!important}
-.home-section-header{margin-bottom:14px!important}
-.home-see-all{color:#e8420a!important;font-size:13px!important;font-weight:700!important;white-space:nowrap!important;padding-top:2px!important}
+.home-section{background:#fff!important;margin:8px 0 0!important;padding:14px 0 18px!important}
+.home-section-title{font-size:16px!important;font-weight:800!important;color:#111!important;font-family:'Poppins',sans-serif!important;margin-bottom:4px!important;padding:0 12px!important}
+.home-section-header{margin-bottom:14px!important;display:flex!important;align-items:center!important;justify-content:space-between!important;padding:0 12px!important}
+.home-see-all{color:#e8420a!important;font-size:13px!important;font-weight:700!important;white-space:nowrap!important;padding-top:2px!important;cursor:pointer!important}
+
+/* PRODUCT GRID — force clean white, no extra bg */
+#flash-section,#page-home .home-section{border-radius:0!important}
+
+/* PAGE BACKGROUNDS — slightly off-white between sections */
+#page-home{background:#f0f0f0!important}
 
 /* FLASH SECTION */
 #flash-section{margin-top:8px!important}
@@ -509,12 +511,14 @@ body{padding-bottom:70px}
 .flash-time{color:#e8420a!important;font-size:12px!important;font-weight:900!important}
 .flash-colon{color:#e8420a!important;font-weight:900!important}
 .flash-bolt{color:#e8420a!important}
+/* Flash section header needs padding too */
+#flash-section .home-section-header{padding:0 12px!important}
 
-/* PRODUCT GRID &mdash; 3 columns on ALL screen sizes */
-.product-grid{display:grid!important;grid-template-columns:repeat(3,1fr)!important;gap:6px!important}
+/* PRODUCT GRID — 3 columns full width, no side padding */
+.product-grid{display:grid!important;grid-template-columns:repeat(3,1fr)!important;gap:2px!important;width:100%!important}
 
 /* PRODUCT CARD — matches screenshot exactly */
-.pc{background:#fff;border-radius:10px;overflow:hidden;cursor:pointer;display:flex;flex-direction:column;box-shadow:0 1px 4px rgba(0,0,0,.07);border:1px solid #f0f0f0}
+.pc{background:#fff;border-radius:0;overflow:hidden;cursor:pointer;display:flex;flex-direction:column;box-shadow:none;border:none;border-right:1px solid #f0f0f0;border-bottom:1px solid #f0f0f0}
 .pc:hover{box-shadow:0 3px 12px rgba(0,0,0,.12)}
 .pc-img-wrap{position:relative;width:100%;aspect-ratio:1;background:#f5f5f5;overflow:hidden;flex-shrink:0}
 .pc-img-wrap img{width:100%;height:100%;object-fit:cover;display:block}
@@ -539,12 +543,8 @@ body{padding-bottom:70px}
 .bnav-item.active{color:#e8420a!important}
 .bnav-badge{top:4px!important;right:calc(50% - 18px)!important;font-size:9px!important;padding:1px 4px!important}
 
-/* Typing animation */
-@keyframes typingDot{0%,80%,100%{transform:scale(0);opacity:.3}40%{transform:scale(1);opacity:1}}
-
 /* PAGE BACKGROUNDS */
-#page-home{background:#f2f2f2!important}
-body{padding-bottom:65px!important;background:#f2f2f2!important}
+body{padding-bottom:65px!important;background:#f0f0f0!important}
 
 /* CARD ACTION BUTTONS */
 .card-action-btns{display:flex;gap:4px;margin-top:8px}
@@ -552,6 +552,13 @@ body{padding-bottom:65px!important;background:#f2f2f2!important}
 .card-btn-cart:hover{background:#111;color:#fff}
 .card-btn-buy{flex:1;background:transparent;color:#111;border:1.5px solid #111;border-radius:5px;padding:5px 0;font-size:10px;font-weight:800;cursor:pointer;font-family:'Poppins',sans-serif;transition:.15s}
 .card-btn-buy:hover{background:#111;color:#fff}
+
+/* TYPING INDICATOR */
+.typing-indicator{display:flex!important;gap:4px;align-items:center;padding:10px 14px!important;min-width:50px}
+.typing-indicator span{width:7px;height:7px;border-radius:50%;background:#ccc;display:inline-block;animation:typingBounce 1.2s infinite ease-in-out}
+.typing-indicator span:nth-child(2){animation-delay:.2s}
+.typing-indicator span:nth-child(3){animation-delay:.4s}
+@keyframes typingBounce{0%,80%,100%{transform:scale(0.6);opacity:.5}40%{transform:scale(1);opacity:1}}
 </style>
 </head>
 <body>
@@ -1701,9 +1708,10 @@ body{padding-bottom:65px!important;background:#f2f2f2!important}
 <div id="toast-container"></div>
 
 <!-- ====== FIREBASE + APP SCRIPT ====== -->
-<script>
-// Firebase compat SDK loaded via CDN scripts in <head> — works on GitHub Pages
-// All firebase functions available via window.firebase global
+<script type="module">
+import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js';
+import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, onAuthStateChanged, sendPasswordResetEmail, GoogleAuthProvider, signInWithPopup, updatePassword } from 'https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js';
+import { getFirestore, collection, doc, addDoc, getDoc, getDocs, setDoc, updateDoc, deleteDoc, query, where, orderBy, limit, onSnapshot, serverTimestamp } from 'https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js';
 
 const firebaseConfig = {
   apiKey: "AIzaSyA-jgBpKJMPd0Jz1Ro_U9RrAd45jGl_gJw",
@@ -1714,18 +1722,9 @@ const firebaseConfig = {
   appId: "1:574386699126:web:a0c4b4626539f495b15857"
 };
 
-// Initialize Firebase using compat SDK (works on GitHub Pages)
-firebase.initializeApp(firebaseConfig);
-const auth = firebase.auth();
-const db = firebase.firestore();
-
-// ── Compat SDK helpers ───────────────────────────────────────────────────────
-const serverTimestamp = () => firebase.firestore.FieldValue.serverTimestamp();
-const getDoc = (ref) => ref.get();
-const getDocs = (ref) => ref.get();
-const setDoc = (ref, data, opts) => opts && opts.merge ? ref.set(data, {merge:true}) : ref.set(data);
-const updateDoc = (ref, data) => ref.update(data);
-const deleteDoc = (ref) => ref.delete();
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const db = getFirestore(app);
 const ADMIN_EMAIL = 'shopwitbenim@gmail.com';
 
 // ===== STATE =====
@@ -1769,7 +1768,7 @@ function setLogos() {
 setLogos();
 
 // ===== AUTH =====
-auth.onAuthStateChanged(async (user) => {
+onAuthStateChanged(auth, async (user) => {
   currentUser = user;
   isAdmin = user && user.email === ADMIN_EMAIL;
   updateAuthUI();
@@ -1807,7 +1806,7 @@ function updateAuthUI() {
 async function loadUserProfile() {
   if(!currentUser) return;
   try {
-    const snap = await getDoc(db.collection('users').doc(currentUser.uid));
+    const snap = await getDoc(doc(db,'users',currentUser.uid));
     if(snap.exists()) {
       const d = snap.data();
       const pn = document.getElementById('profile-name');
@@ -1824,7 +1823,7 @@ window.doLogin = async function() {
   const pass = document.getElementById('login-password').value;
   if(!email||!pass) return showToast('Please fill all fields','error');
   try {
-    await auth.signInWithEmailAndPassword(email, pass);
+    await signInWithEmailAndPassword(auth, email, pass);
     showToast('Welcome back!');
     navigate('home');
   } catch(e) {
@@ -1840,8 +1839,8 @@ window.doRegister = async function() {
   if(!name||!email||!pass) return showToast('Please fill required fields','error');
   if(pass.length<6) return showToast('Password must be at least 6 characters','error');
   try {
-    const cred = await auth.createUserWithEmailAndPassword(email, pass);
-    await setDoc(db.collection('users').doc(cred.user.uid), { name, email, phone, createdAt: serverTimestamp() });
+    const cred = await createUserWithEmailAndPassword(auth, email, pass);
+    await setDoc(doc(db,'users',cred.user.uid), { name, email, phone, createdAt: serverTimestamp() });
     showToast('Account created! Welcome to Benim!');
     navigate('home');
   } catch(e) {
@@ -1851,11 +1850,11 @@ window.doRegister = async function() {
 
 window.loginWithGoogle = async function() {
   try {
-    const provider = new firebase.auth.GoogleAuthProvider();
-    const cred = await auth.signInWithPopup(provider);
-    const snap = await getDoc(db.collection('users').doc(cred.user.uid));
+    const provider = new GoogleAuthProvider();
+    const cred = await signInWithPopup(auth, provider);
+    const snap = await getDoc(doc(db,'users',cred.user.uid));
     if(!snap.exists()) {
-      await setDoc(db.collection('users').doc(cred.user.uid), { name: cred.user.displayName, email: cred.user.email, createdAt: serverTimestamp() });
+      await setDoc(doc(db,'users',cred.user.uid), { name: cred.user.displayName, email: cred.user.email, createdAt: serverTimestamp() });
     }
     showToast('Signed in with Google!');
     navigate('home');
@@ -1865,7 +1864,7 @@ window.loginWithGoogle = async function() {
 };
 
 window.doLogout = async function() {
-  await auth.signOut();
+  await signOut(auth);
   cart = []; wishlist = [];
   updateCartBadge(); updateWishBadge();
   navigate('home');
@@ -1876,7 +1875,7 @@ window.doForgotPassword = async function() {
   const email = document.getElementById('forgot-email').value.trim();
   if(!email) return showToast('Enter your email','error');
   try {
-    await auth.sendPasswordResetEmail(email);
+    await sendPasswordResetEmail(auth, email);
     showToast('Reset link sent! Check your email.');
     navigate('login');
   } catch(e) {
@@ -1889,7 +1888,7 @@ window.saveProfile = async function() {
   const name = document.getElementById('profile-name').value.trim();
   const phone = document.getElementById('profile-phone').value.trim();
   try {
-    await setDoc(db.collection('users').doc(currentUser.uid), { name, phone, email: currentUser.email }, { merge: true });
+    await setDoc(doc(db,'users',currentUser.uid), { name, phone, email: currentUser.email }, { merge: true });
     document.getElementById('profile-display-name').textContent = name;
     document.getElementById('sb-name').textContent = name;
     showToast('Profile updated!');
@@ -1901,7 +1900,7 @@ window.changePassword = async function() {
   const np = document.getElementById('new-password').value;
   if(np.length<6) return showToast('Password too short','error');
   try {
-    await currentUser.updatePassword(np);
+    await updatePassword(currentUser, np);
     showToast('Password updated!');
     document.getElementById('new-password').value = '';
   } catch(e) { showToast('Please re-login and try again','error'); }
@@ -1910,7 +1909,7 @@ window.changePassword = async function() {
 // ===== PRODUCTS =====
 async function loadProducts() {
   try {
-    const snap = await getDocs(db.collection('products'));
+    const snap = await getDocs(collection(db,'products'));
     allProducts = snap.docs.map(d => ({id:d.id,...d.data()}));
     renderHome();
   } catch(e) { console.error(e); }
@@ -2001,8 +2000,8 @@ window.openProduct = function(id) {
   const displayPrice = disc>0 ? disc : price;
   const hasDisc = disc>0 && disc<price;
   const discPct = hasDisc ? Math.round((1-disc/price)*100) : 0;
-  document.getElementById('detail-price').textContent = '&#8358;'+displayPrice.toLocaleString();
-  document.getElementById('detail-old-price').textContent = hasDisc ? '&#8358;'+price.toLocaleString() : '';
+  document.getElementById('detail-price').innerHTML = '&#8358;'+displayPrice.toLocaleString();
+  document.getElementById('detail-old-price').innerHTML = hasDisc ? '&#8358;'+price.toLocaleString() : '';
   document.getElementById('detail-discount').textContent = hasDisc ? `-${discPct}%` : '';
   document.getElementById('detail-discount').classList.toggle('hidden', !hasDisc);
   document.getElementById('detail-stars').textContent = starsHTML(p.rating||0);
@@ -2075,8 +2074,8 @@ async function loadProductReviews(productId) {
   const list = document.getElementById('reviews-list');
   list.innerHTML = '<p style="color:var(--gray-400);font-size:13px">Loading reviews...</p>';
   try {
-    const q = db.collection('reviews').where('productId','==',productId).where('status','==','approved');
-    const snap = await q.get();
+    const q = query(collection(db,'reviews'), where('productId','==',productId), where('status','==','approved'));
+    const snap = await getDocs(q);
     if(snap.empty) {
       list.innerHTML = '<p style="color:var(--gray-400);font-size:13px;margin-bottom:16px">No reviews yet. Be the first!</p>';
       return;
@@ -2101,7 +2100,7 @@ window.submitReview = async function() {
   const text = document.getElementById('review-text').value.trim();
   if(!text) return showToast('Write your review first','error');
   try {
-    await db.collection('reviews').add({
+    await addDoc(collection(db,'reviews'), {
       productId: currentProduct.id,
       userId: currentUser.uid,
       userName: currentUser.displayName || currentUser.email.split('@')[0],
@@ -2117,7 +2116,7 @@ window.submitReview = async function() {
 async function loadCart() {
   if(!currentUser) return;
   try {
-    const snap = await getDoc(db.collection('carts').doc(currentUser.uid));
+    const snap = await getDoc(doc(db,'carts',currentUser.uid));
     cart = snap.exists() ? (snap.data().items||[]) : [];
     updateCartBadge();
   } catch(e){}
@@ -2126,7 +2125,7 @@ async function loadCart() {
 async function saveCart() {
   if(!currentUser) return;
   try {
-    await setDoc(db.collection('carts').doc(currentUser.uid), { items: cart, updatedAt: serverTimestamp() });
+    await setDoc(doc(db,'carts',currentUser.uid), { items: cart, updatedAt: serverTimestamp() });
   } catch(e){}
 }
 
@@ -2262,10 +2261,10 @@ window.renderCart = function() {
   const subtotal = cart.reduce((s,x)=>s+(x.price*x.qty),0);
   const deliveryFee = subtotal >= 150000 ? 0 : 3500;
   const grandTotal = subtotal + deliveryFee;
-  document.getElementById('cart-subtotal').textContent = '&#8358;'+subtotal.toLocaleString();
-  document.getElementById('cart-delivery').textContent = deliveryFee===0 ? 'FREE' : '&#8358;'+deliveryFee.toLocaleString();
+  document.getElementById('cart-subtotal').innerHTML = '&#8358;'+subtotal.toLocaleString();
+  document.getElementById('cart-delivery').innerHTML = deliveryFee===0 ? 'FREE' : '&#8358;'+deliveryFee.toLocaleString();
   document.getElementById('cart-delivery').style.color = deliveryFee===0 ? 'var(--green)' : 'var(--gray-800)';
-  document.getElementById('cart-total').textContent = '&#8358;'+grandTotal.toLocaleString();
+  document.getElementById('cart-total').innerHTML = '&#8358;'+grandTotal.toLocaleString();
 };
 
 window.updateCartQty = function(i, delta) {
@@ -2292,7 +2291,7 @@ async function loadCheckout() {
   const addrDiv = document.getElementById('saved-addresses');
   addrDiv.innerHTML = '<p style="color:var(--gray-400);font-size:13px">Loading addresses...</p>';
   try {
-    const snap = await getDocs(db.collection('users').doc(currentUser.uid).collection('addresses'));
+    const snap = await getDocs(collection(db,`users/${currentUser.uid}/addresses`));
     if(snap.empty) {
       addrDiv.innerHTML = '<p style="color:var(--gray-400);font-size:13px">No saved addresses. Add one below.</p>';
     } else {
@@ -2314,7 +2313,7 @@ async function loadCheckout() {
   sumDiv.innerHTML = cart.map(x=>`<div class="summary-row"><span>${x.name} × ${x.qty}</span><span>&#8358;${(x.price*x.qty).toLocaleString()}</span></div>`).join('') +
     `<div class="summary-row"><span>Delivery Fee</span><span style="color:${deliveryFee===0?'var(--green)':'var(--gray-800)'}">${deliveryFee===0?'FREE':'&#8358;'+deliveryFee.toLocaleString()}</span></div>` +
     (deliveryFee===0 ? `<div style="font-size:11px;color:var(--green);margin-top:-6px;margin-bottom:4px"><i class="fas fa-check-circle"></i> Your order qualifies for free delivery!</div>` : `<div style="font-size:11px;color:var(--gray-400);margin-top:-6px;margin-bottom:4px"><i class="fas fa-info-circle"></i> Add &#8358;${(150000-subtotal).toLocaleString()} more for free delivery</div>`);
-  document.getElementById('checkout-total').textContent = '&#8358;'+grandTotal.toLocaleString();
+  document.getElementById('checkout-total').innerHTML = '&#8358;'+grandTotal.toLocaleString();
   // Store delivery fee for placeOrder to use
   window._checkoutDeliveryFee = deliveryFee;
   window._checkoutGrandTotal = grandTotal;
@@ -2343,7 +2342,7 @@ window.placeOrder = async function() {
   if(!cart.length) return showToast('Your cart is empty','error');
 
   try {
-    const addrSnap = await getDoc(db.collection('users').doc(currentUser.uid).collection('addresses').doc(selectedAddress));
+    const addrSnap = await getDoc(doc(db,`users/${currentUser.uid}/addresses`,selectedAddress));
     const addr = addrSnap.exists() ? addrSnap.data() : {};
     const subtotal = cart.reduce((s,x)=>s+(x.price*x.qty),0);
     const deliveryFee = window._checkoutDeliveryFee !== undefined ? window._checkoutDeliveryFee : (subtotal >= 150000 ? 0 : 3500);
@@ -2357,7 +2356,7 @@ window.placeOrder = async function() {
       createdAt: serverTimestamp(),
       phone: addr.phone || ''
     };
-    const orderRef = await db.collection('orders').add(orderData);
+    const orderRef = await addDoc(collection(db,'orders'), orderData);
     lastOrderId = orderRef.id;
     // Clear cart BEFORE notifications (so items don't appear empty)
     const itemNames = itemsCopy.map(x=>x.name).join(', ');
@@ -2407,8 +2406,8 @@ window.loadOrders = async function() {
   const empty = document.getElementById('orders-empty');
   list.innerHTML = '<div class="empty-state"><i class="fas fa-spinner fa-spin"></i><p>Loading...</p></div>';
   try {
-    const q = db.collection('orders').where('userId','==',currentUser.uid).orderBy('createdAt','desc');
-    const snap = await q.get();
+    const q = query(collection(db,'orders'), where('userId','==',currentUser.uid), orderBy('createdAt','desc'));
+    const snap = await getDocs(q);
     if(snap.empty) { list.innerHTML=''; empty.classList.remove('hidden'); return; }
     empty.classList.add('hidden');
     list.innerHTML = snap.docs.map(d=>{
@@ -2438,11 +2437,11 @@ window.trackOrder = async function() {
   try {
     let snap;
     // Try by orderId
-    let q = db.collection('orders').where('orderId','==',input);
-    snap = await q.get();
+    let q = query(collection(db,'orders'), where('orderId','==',input));
+    snap = await getDocs(q);
     if(snap.empty) {
-      q = db.collection('orders').where('phone','==',input);
-      snap = await q.get();
+      q = query(collection(db,'orders'), where('phone','==',input));
+      snap = await getDocs(q);
     }
     if(snap.empty) { result.innerHTML = '<p style="color:var(--red);text-align:center">No order found for that ID or phone number.</p>'; return; }
     const o = snap.docs[0].data();
@@ -2475,7 +2474,7 @@ window.showTrackingModal = function(orderId) {
 async function loadWishlist() {
   if(!currentUser) return;
   try {
-    const snap = await getDoc(db.collection('wishlist').doc(currentUser.uid));
+    const snap = await getDoc(doc(db,'wishlist',currentUser.uid));
     wishlist = snap.exists() ? (snap.data().items||[]) : [];
     updateWishBadge();
   } catch(e){}
@@ -2483,7 +2482,7 @@ async function loadWishlist() {
 
 async function saveWishlist() {
   if(!currentUser) return;
-  await setDoc(db.collection('wishlist').doc(currentUser.uid), { items: wishlist });
+  await setDoc(doc(db,'wishlist',currentUser.uid), { items: wishlist });
 }
 
 window.toggleWishlist = async function(productId) {
@@ -2575,7 +2574,7 @@ window.saveAddress = async function() {
   const state = document.getElementById('addr-state').value.trim();
   if(!name||!phone||!street||!city||!state) return showToast('Fill all fields','error');
   try {
-    await db.collection('users').doc(currentUser.uid).collection('addresses').add({ name, phone, street, city, state });
+    await addDoc(collection(db,`users/${currentUser.uid}/addresses`), { name, phone, street, city, state });
     closeModal('modal-address');
     showToast('Address saved!');
     loadAddresses();
@@ -2587,7 +2586,7 @@ window.loadAddresses = async function() {
   if(!currentUser) return;
   const list = document.getElementById('addresses-list');
   try {
-    const snap = await getDocs(db.collection('users').doc(currentUser.uid).collection('addresses'));
+    const snap = await getDocs(collection(db,`users/${currentUser.uid}/addresses`));
     if(snap.empty) { list.innerHTML = '<p style="color:var(--gray-400)">No addresses saved.</p>'; return; }
     list.innerHTML = snap.docs.map(d=>{
       const a = d.data();
@@ -2602,7 +2601,7 @@ window.loadAddresses = async function() {
 
 window.deleteAddress = async function(id) {
   if(!currentUser) return;
-  await deleteDoc(db.collection('users').doc(currentUser.uid).collection('addresses').doc(id));
+  await deleteDoc(doc(db,`users/${currentUser.uid}/addresses`,id));
   loadAddresses();
 };
 
@@ -2653,12 +2652,12 @@ window.saveProduct = async function() {
   try {
     const data = { name, price, discountPrice, category, stock, description, images, sizes, colours, isFlash, updatedAt: serverTimestamp() };
     if(editId) {
-      await updateDoc(db.collection('products').doc(editId), data);
+      await updateDoc(doc(db,'products',editId), data);
       showToast('Product updated!');
     } else {
       data.createdAt = serverTimestamp();
       data.rating = 0; data.reviewCount = 0;
-      await db.collection('products').add(data);
+      await addDoc(collection(db,'products'), data);
       showToast('Product added!');
     }
     closeModal('modal-product');
@@ -2696,8 +2695,8 @@ window.loadAdminOrders = async function() {
   const tbody = document.getElementById('admin-orders-body');
   tbody.innerHTML = '<tr><td colspan="7" style="text-align:center;color:var(--gray-400)">Loading...</td></tr>';
   try {
-    const q = db.collection('orders').orderBy('createdAt','desc');
-    const snap = await q.get();
+    const q = query(collection(db,'orders'), orderBy('createdAt','desc'));
+    const snap = await getDocs(q);
     let totalRevenue = 0;
     const rows = snap.docs.map(d=>{
       const o = d.data();
@@ -2714,7 +2713,7 @@ window.loadAdminOrders = async function() {
     });
     tbody.innerHTML = rows.join('') || '<tr><td colspan="7" style="text-align:center;color:var(--gray-400)">No orders</td></tr>';
     document.getElementById('stat-orders').textContent = snap.docs.length;
-    document.getElementById('stat-revenue').textContent = '&#8358;'+totalRevenue.toLocaleString();
+    document.getElementById('stat-revenue').innerHTML = '&#8358;'+totalRevenue.toLocaleString();
   } catch(e) { tbody.innerHTML = '<tr><td colspan="7" style="color:var(--red);text-align:center">Error loading</td></tr>'; }
 };
 
@@ -2729,9 +2728,9 @@ window.updateOrderStatus = async function() {
   const id = document.getElementById('status-order-id').value;
   const status = document.getElementById('status-select').value;
   try {
-    const orderDoc = await getDoc(db.collection('orders').doc(id));
+    const orderDoc = await getDoc(doc(db,'orders',id));
     const o = orderDoc.data();
-    await updateDoc(db.collection('orders').doc(id), { status });
+    await updateDoc(doc(db,'orders',id), { status });
     closeModal('modal-status');
     loadAdminOrders();
     showToast('Order status updated!');
@@ -2747,8 +2746,8 @@ window.loadAdminReviews = async function() {
   const wrap = document.getElementById('admin-reviews-list');
   wrap.innerHTML = '<p style="color:var(--gray-400)">Loading...</p>';
   try {
-    const q = db.collection('reviews').where('status','==','pending');
-    const snap = await q.get();
+    const q = query(collection(db,'reviews'), where('status','==','pending'));
+    const snap = await getDocs(q);
     if(snap.empty) { wrap.innerHTML = '<p style="color:var(--gray-400)">No pending reviews.</p>'; return; }
     wrap.innerHTML = snap.docs.map(d=>{
       const r = d.data();
@@ -2765,18 +2764,18 @@ window.loadAdminReviews = async function() {
 };
 
 window.approveReview = async function(id) {
-  await updateDoc(db.collection('reviews').doc(id), { status: 'approved' });
+  await updateDoc(doc(db,'reviews',id), { status: 'approved' });
   loadAdminReviews(); showToast('Review approved!');
 };
 window.rejectReview = async function(id) {
-  await deleteDoc(db.collection('reviews').doc(id));
+  await deleteDoc(doc(db,'reviews',id));
   loadAdminReviews(); showToast('Review rejected');
 };
 
 window.loadAdminChats = async function() {
   const wrap = document.getElementById('admin-chats-list');
   try {
-    const snap = await getDocs(db.collection('chatbot_sessions'));
+    const snap = await getDocs(collection(db,'chatbot_sessions'));
     if(snap.empty) { wrap.innerHTML = '<p style="color:var(--gray-400)">No chat sessions.</p>'; return; }
     wrap.innerHTML = snap.docs.map(d=>{
       const s = d.data();
@@ -2802,358 +2801,198 @@ window.switchAdminTab = function(tab, btn) {
 window.loadAdminStats = async function() {
   document.getElementById('stat-products').textContent = allProducts.length;
   try {
-    const usersSnap = await getDocs(db.collection('users'));
+    const usersSnap = await getDocs(collection(db,'users'));
     document.getElementById('stat-users').textContent = usersSnap.size;
   } catch(e){}
   loadAdminOrders();
 };
 
-// ===== CHATBOT =====
+// ===== CHATBOT (Smart Local AI - Free) =====
 let chatOpen = false;
-
-// Smart intent matcher — checks if message contains ANY of the keywords
-function matchesAny(msg, keywords) {
-  return keywords.some(k => msg.includes(k));
-}
-
-function getBotResponse(text) {
-  const q = text.toLowerCase().trim();
-
-  // ── Greetings ──────────────────────────────────────────────────────────────
-  if(matchesAny(q,['hello','hi ','hey','good morning','good afternoon','good evening','howdy','sup ','hiya'])) {
-    return `Hi there! 👋 Welcome to BENIM! I'm your shopping assistant. I can help you with:
-
-🛍️ Products & categories
-🚚 Delivery & shipping
-💳 Payment & orders
-📞 Contact & support
-
-What would you like to know?`;
-  }
-
-  // ── Product search — check product list first ─────────────────────────────
-  const productMatches = allProducts.filter(p => {
-    const name = (p.name||'').toLowerCase();
-    const cat = (p.category||'').toLowerCase();
-    const desc = (p.description||'').toLowerCase();
-    return name.includes(q) || q.includes(name.split(' ')[0]) || cat.includes(q) || desc.includes(q);
-  });
-  if(productMatches.length > 0) {
-    const topMatches = productMatches.slice(0,3);
-    const list = topMatches.map(p => {
-      const price = Number(p.discountPrice)>0 ? Number(p.discountPrice) : Number(p.price);
-      const stock = p.stock>0 ? '✅ In stock' : '❌ Out of stock';
-      return `• ${p.name} — ₦${price.toLocaleString()} (${stock})`;
-    }).join('
-');
-    const more = productMatches.length > 3 ? `
-
-...and ${productMatches.length-3} more. Use the search bar to see all results!` : '';
-    return `I found ${productMatches.length} product(s) matching "${text}":
-
-${list}${more}
-
-Tap any product on the homepage to view full details, sizes, and colours. 🛍️`;
-  }
-
-  // ── Categories ────────────────────────────────────────────────────────────
-  if(matchesAny(q,['categor','fashion','men','women','baby','electronic','phone','beauty','sport','grocer','kitchen','toys','footwear','shoe','sneaker','bag','cloth','wear','dress','shirt','jean','trouser','pant'])) {
-    const cats = [...new Set(allProducts.map(p=>p.category).filter(Boolean))];
-    if(cats.length > 0) {
-      return `We have products in these categories:
-
-${cats.map(c=>'🏷️ '+c).join('
-')}
-
-Tap the ☰ menu or use the search bar to browse by category!`;
-    }
-    return `We stock Men's Fashion, Women's Fashion, Baby Products, Electronics, Phones, Beauty, Sports, Home & Kitchen, Groceries, and more!
-
-Tap the ☰ menu to browse categories. 🏷️`;
-  }
-
-  // ── Specific product type searches ────────────────────────────────────────
-  if(matchesAny(q,['jean','jeans','denim pant'])) {
-    const found = allProducts.filter(p=>(p.name+' '+(p.description||'')).toLowerCase().includes('jean'));
-    if(found.length) {
-      return `I found ${found.length} jean(s) available:
-
-${found.slice(0,3).map(p=>`• ${p.name} — ₦${(Number(p.discountPrice)||Number(p.price)||0).toLocaleString()}`).join('
-')}
-
-Use the search bar and type "jean" to see all! 👖`;
-    }
-    return `We don't have jeans listed yet, but new products are added regularly! Check back soon or contact us on WhatsApp: +234 916 803 1213 📲`;
-  }
-
-  // ── Price / discount ──────────────────────────────────────────────────────
-  if(matchesAny(q,['price','cost','how much','expensive','cheap','afford','discount','offer','sale','promo','deal'])) {
-    const sorted = [...allProducts].sort((a,b)=>(Number(a.discountPrice)||Number(a.price))-(Number(b.discountPrice)||Number(b.price)));
-    if(sorted.length) {
-      const cheapest = sorted[0];
-      const pricest = sorted[sorted.length-1];
-      const cp = Number(cheapest.discountPrice)||Number(cheapest.price)||0;
-      const pp = Number(pricest.discountPrice)||Number(pricest.price)||0;
-      return `Our prices range from ₦${cp.toLocaleString()} (${cheapest.name}) to ₦${pp.toLocaleString()} (${pricest.name}).
-
-💰 We always offer honest, affordable prices!
-🔥 Check the Flash Sales section for the best discounts.
-
-You can also filter products by price using the search/filter feature.`;
-    }
-    return `All our prices are in Nigerian Naira (₦) and are clearly shown on each product. We offer the best prices with regular flash sales and discounts! 💰`;
-  }
-
-  // ── Delivery / shipping ───────────────────────────────────────────────────
-  if(matchesAny(q,['deliver','shipping','ship','send','dispatch','logistics','arrive','when will','how long','days'])) {
-    return `🚚 BENIM Delivery Information:
-
-📍 Lagos: 1–2 business days
-📍 Abuja & Port Harcourt: 2–3 business days
-📍 Other states: 3–5 business days
-📍 Remote areas: 5–7 business days
-
-💸 Delivery Fees:
-• Ibadan: ₦1,500–₦2,500
-• Lagos: ₦2,500–₦3,500
-• Abuja/PH: ₦4,500–₦6,000
-• Other states: ₦3,000–₦6,000
-• Orders above ₦150,000: FREE 🎉
-
-You'll get WhatsApp updates at every step!`;
-  }
-
-  // ── Payment ───────────────────────────────────────────────────────────────
-  if(matchesAny(q,['pay','payment','transfer','bank','opay','cash','cod','card','checkout'])) {
-    return `💳 We accept two payment methods:
-
-1️⃣ Bank Transfer (Opay)
-   Bank: Opay
-   Account Name: Adewole Aderonke Aishat
-   Account Number: 9168031213
-   📌 Use your Order ID as reference
-
-2️⃣ Pay on Delivery
-   Pay cash when your order arrives
-
-After bank transfer, send your receipt to our WhatsApp: +234 916 803 1213 ✅`;
-  }
-
-  // ── Order tracking ────────────────────────────────────────────────────────
-  if(matchesAny(q,['track','where is my order','order status','find my order','locate'])) {
-    return `📦 To track your order:
-
-1. Tap the ☰ menu
-2. Select "Track My Order"
-3. Enter your Order ID or phone number
-
-OR go to the Orders section to see all your orders with live status updates.
-
-You also receive automatic WhatsApp updates at every stage:
-⏳ Pending → ✅ Confirmed → ⚙️ Processing → 🚚 Out for Delivery → 🎉 Delivered`;
-  }
-
-  // ── Order issues ─────────────────────────────────────────────────────────
-  if(matchesAny(q,['cancel','return','refund','wrong item','damaged','broken','exchange','complain','complaint','problem with order'])) {
-    return `😟 Sorry to hear that! Here's how we handle issues:
-
-🔄 Returns: Within 7 days of delivery
-✅ Item must be unused and in original packaging
-📸 Send photos of the issue
-
-📞 Contact us immediately:
-WhatsApp: +234 916 803 1213
-Email: shopwitbenim@gmail.com
-
-We resolve all issues promptly! 💪`;
-  }
-
-  // ── Stock / availability ──────────────────────────────────────────────────
-  if(matchesAny(q,['stock','available','availability','do you have','in stock','out of stock'])) {
-    const inStock = allProducts.filter(p=>p.stock>0).length;
-    const total = allProducts.length;
-    return `📦 Stock Update:
-
-✅ ${inStock} of ${total} products are currently in stock.
-
-Each product page shows live stock availability. If something is out of stock, contact us on WhatsApp and we'll notify you when it's back:
-
-📲 +234 916 803 1213`;
-  }
-
-  // ── Size & colour ─────────────────────────────────────────────────────────
-  if(matchesAny(q,['size','colour','color','fit','fitting','measure','small','medium','large','xl','xxl'])) {
-    return `👗 Sizes & Colours:
-
-Available sizes and colours are shown on each product page. Simply:
-
-1. Tap on a product
-2. Select your size (e.g. S, M, L, XL or shoe size)
-3. Select your colour
-4. Add to cart
-
-Not sure about sizing? WhatsApp us and we'll guide you:
-📲 +234 916 803 1213`;
-  }
-
-  // ── Contact ───────────────────────────────────────────────────────────────
-  if(matchesAny(q,['contact','reach you','whatsapp','call','phone number','email','address','speak to','talk to','agent','human'])) {
-    return `📞 Contact BENIM:
-
-💬 WhatsApp: +234 916 803 1213
-📧 Email: shopwitbenim@gmail.com
-🕐 Hours: Mon–Sat, 8am–8pm (WAT)
-
-For fastest response, WhatsApp us directly! We typically reply within minutes during business hours. 🚀
-
-You can also visit our Contact Us page from the menu.`;
-  }
-
-  // ── Account / login / signup ──────────────────────────────────────────────
-  if(matchesAny(q,['account','login','sign in','sign up','register','password','forgot','profile','my account'])) {
-    return `👤 Account Help:
-
-• To create an account: tap the 👤 icon → "Create Account"
-• To sign in: tap the 👤 icon → "Sign In"
-• Forgot password: tap "Forgot Password" on the sign-in page
-• To update your profile: go to Account → Profile & Settings
-
-You need an account to place orders and save your wishlist. 🛒`;
-  }
-
-  // ── Cart / wishlist ───────────────────────────────────────────────────────
-  if(matchesAny(q,['cart','basket','wishlist','saved','favourite','favorite','add to cart'])) {
-    return `🛒 Cart & Wishlist:
-
-• Tap any product to view it, then tap "Add to Cart"
-• View your cart by tapping the cart icon at the top
-• Save products for later using the ♡ Saved section
-• Your cart is saved automatically — even if you close the app
-
-You must be signed in to place an order. 🔐`;
-  }
-
-  // ── About BENIM ───────────────────────────────────────────────────────────
-  if(matchesAny(q,['about','who are you','what is benim','benim','your brand','company','story','what do you sell'])) {
-    return `🧡 About BENIM:
-
-BENIM INTERNATIONAL TRADE LIMITED is a modern Nigerian trading & fashion brand built on quality, trust, and value.
-
-We curate footwear and fashion essentials designed to match everyday style with a premium feel — without the premium price.
-
-🎯 Our mission: bridge the gap between affordability and style.
-
-Shop: tap any category to explore! 🛍️`;
-  }
-
-  // ── Thank you ─────────────────────────────────────────────────────────────
-  if(matchesAny(q,['thank','thanks','ok thanks','great','awesome','perfect','cool','nice','wonderful'])) {
-    return `You're welcome! 😊 Happy shopping at BENIM! 🛍️
-
-Feel free to ask me anything else. If you need human support, WhatsApp us at +234 916 803 1213 anytime! 🧡`;
-  }
-
-  // ── Bye ───────────────────────────────────────────────────────────────────
-  if(matchesAny(q,['bye','goodbye','see you','later','done','exit','quit'])) {
-    return `Goodbye! 👋 Thanks for visiting BENIM. Have a great day and happy shopping! 🛍️🧡`;
-  }
-
-  // ── Flash sale ────────────────────────────────────────────────────────────
-  if(matchesAny(q,['flash','flash sale','hot deal','best deal','today deal','sale today'])) {
-    const flash = allProducts.filter(p=>p.isFlash);
-    if(flash.length) {
-      return `🔥 Flash Sales are LIVE right now!
-
-${flash.slice(0,3).map(p=>{
-        const price = Number(p.discountPrice)||Number(p.price)||0;
-        const old = Number(p.price)||0;
-        const disc = p.discountPrice ? Math.round((1-p.discountPrice/old)*100) : 0;
-        return `• ${p.name} — ₦${price.toLocaleString()}${disc?` (-${disc}%)` : ''}`;
-      }).join('
-')}
-
-Scroll up on the homepage to see all flash deals! ⚡`;
-    }
-    return `🔥 Check the Flash Sales section right at the top of the homepage for our best limited-time deals! New deals are added regularly. ⚡`;
-  }
-
-  // ── Default — smart fallback ──────────────────────────────────────────────
-  // Last attempt: search product names with individual words
-  const words = q.split(/\s+/).filter(w=>w.length>2);
-  for(const word of words) {
-    const found = allProducts.filter(p=>(p.name||'').toLowerCase().includes(word));
-    if(found.length) {
-      return `I found ${found.length} product(s) related to "${word}":
-
-${found.slice(0,3).map(p=>`• ${p.name} — ₦${(Number(p.discountPrice)||Number(p.price)||0).toLocaleString()}`).join('
-')}
-
-Tap any product to view details. 🛍️`;
-    }
-  }
-
-  return `🤔 I'm not sure about that, but I'm here to help!
-
-You can ask me about:
-• 🛍️ Products & what's in stock
-• 🚚 Delivery & shipping fees
-• 💳 How to pay
-• 📦 Tracking your order
-• 📞 How to contact us
-• 🔥 Flash sales & deals
-
-Or WhatsApp us directly: +234 916 803 1213 💬`;
-}
+let chatHistory = [];
 
 window.toggleChatbot = function() {
   chatOpen = !chatOpen;
   document.getElementById('chatbot-window').classList.toggle('open', chatOpen);
   if(chatOpen && !document.getElementById('chat-messages').innerHTML) {
-    addChatMsg("Hi! 👋 I'm BENIM's shopping assistant. Ask me about products, delivery, payment, or anything else! 🛍️", 'bot');
-    // Quick reply buttons
-    const msgs = document.getElementById('chat-messages');
-    const quickDiv = document.createElement('div');
-    quickDiv.style.cssText = 'display:flex;flex-wrap:wrap;gap:6px;margin-top:4px';
-    quickDiv.innerHTML = ['🛍️ Products','🚚 Delivery','💳 Payment','📦 Track order','📞 Contact'].map(label=>
-      `<button onclick="quickReply('${label}')" style="background:#fff3ee;border:1px solid #e8420a;color:#e8420a;border-radius:16px;padding:5px 10px;font-size:11px;font-weight:700;cursor:pointer;font-family:Poppins,sans-serif">${label}</button>`
-    ).join('');
-    msgs.appendChild(quickDiv);
-    msgs.scrollTop = msgs.scrollHeight;
+    addChatMsg("Hi! 👋 I'm Benim's support assistant. Ask me about products, prices, delivery, payment, categories, or orders!", 'bot');
   }
 };
 window.openChatbot = function() { chatOpen=false; toggleChatbot(); };
-
-window.quickReply = function(label) {
-  document.getElementById('chat-input').value = label.replace(/[🛍️🚚💳📦📞]/g,'').trim();
-  sendChatMessage();
-};
-
 window.chatKeyPress = function(e) {
-  if(e.key==='Enter'&&!e.shiftKey) { e.preventDefault(); sendChatMessage(); }
+  if(e.key==='Enter'&&!e.shiftKey){ e.preventDefault(); sendChatMessage(); }
 };
+
+function getBotReply(text) {
+  const q = text.toLowerCase().trim();
+
+  // ---- GREETINGS ----
+  if(/^(hi|hello|hey|good morning|good afternoon|good evening|howdy|sup|yo)\b/.test(q))
+    return "Hello! 👋 Welcome to Benim! How can I help you today? You can ask about products, prices, delivery, payment, or orders.";
+
+  // ---- PRODUCT SEARCH ----
+  // Check if asking about a specific product
+  const productMatches = allProducts.filter(p => {
+    const name = (p.name||'').toLowerCase();
+    const cat = (p.category||'').toLowerCase();
+    const words = q.replace(/[?!.,]/g,'').split(/\s+/).filter(w=>w.length>2);
+    return words.some(w => name.includes(w) || cat.includes(w));
+  }).slice(0,3);
+
+  if(productMatches.length > 0 && (q.includes('price')||q.includes('cost')||q.includes('how much')||q.includes('sell')||q.includes('have')||q.includes('buy')||q.includes('want')||q.includes('get')||q.includes('stock')||q.includes('available')||productMatches.length===1)) {
+    if(productMatches.length === 1) {
+      const p = productMatches[0];
+      const price = Number(p.discountPrice)||Number(p.price)||0;
+      const oldPrice = Number(p.price)||0;
+      const inStock = (p.stock||0) > 0;
+      const disc = p.discountPrice && p.discountPrice < oldPrice ? ` (was ₦${oldPrice.toLocaleString()})` : '';
+      return `We have **${p.name}**! 🛍️\nPrice: ₦${price.toLocaleString()}${disc}\nStatus: ${inStock?'✅ In stock':'❌ Out of stock'}\nCategory: ${p.category||'General'}\n\nTap it on the home page to add to cart!`;
+    } else {
+      const list = productMatches.map(p=>{
+        const price = Number(p.discountPrice)||Number(p.price)||0;
+        return `• ${p.name} — ₦${price.toLocaleString()}`;
+      }).join('\n');
+      return `Here's what we found:\n${list}\n\nTap any product on the home page to view details and add to cart!`;
+    }
+  }
+
+  // ---- PRICE/PRODUCT BROWSING ----
+  if(q.includes('cheapest')||q.includes('lowest price')||q.includes('affordable')) {
+    const sorted = [...allProducts].filter(p=>p.price).sort((a,b)=>(Number(a.discountPrice||a.price))-(Number(b.discountPrice||b.price))).slice(0,3);
+    const list = sorted.map(p=>`• ${p.name} — ₦${(Number(p.discountPrice||p.price)).toLocaleString()}`).join('\n');
+    return `Our most affordable products:\n${list}\n\nCheck the home page for all deals! 😊`;
+  }
+  if(q.includes('expensive')||q.includes('premium')||q.includes('highest')) {
+    const sorted = [...allProducts].filter(p=>p.price).sort((a,b)=>(Number(b.discountPrice||b.price))-(Number(a.discountPrice||a.price))).slice(0,3);
+    const list = sorted.map(p=>`• ${p.name} — ₦${(Number(p.discountPrice||p.price)).toLocaleString()}`).join('\n');
+    return `Our premium products:\n${list}`;
+  }
+  if(q.includes('discount')||q.includes('sale')||q.includes('promo')||q.includes('offer')||q.includes('deal')) {
+    const discounted = allProducts.filter(p=>p.discountPrice && Number(p.discountPrice)<Number(p.price)).slice(0,4);
+    if(discounted.length) {
+      const list = discounted.map(p=>{
+        const save = Number(p.price)-Number(p.discountPrice);
+        return `• ${p.name} — ₦${Number(p.discountPrice).toLocaleString()} (save ₦${save.toLocaleString()})`;
+      }).join('\n');
+      return `🔥 Current deals & discounts:\n${list}\n\nCheck Flash Sales on the home page for more!`;
+    }
+    return "Check our Flash Sales section on the home page for the best current deals! 🔥";
+  }
+
+  // ---- CATEGORIES ----
+  if(q.includes('categor')||q.includes('what do you sell')||q.includes('what products')||q.includes('what items')) {
+    const cats = [...new Set(allProducts.map(p=>p.category).filter(Boolean))];
+    const list = cats.length ? cats.join(', ') : 'Electronics, Fashion, Men\'s Fashion, Women\'s Fashion, Baby Products, Home & Kitchen, Beauty, Sports, Phones, Toys';
+    return `We sell a wide range of products! 🛒\n\nCategories: ${list}\n\nTap "Categories" at the bottom of the app to browse by category.`;
+  }
+  if(q.includes('fashion')||q.includes('cloth')||q.includes('wear')||q.includes('shirt')||q.includes('trouser')||q.includes('dress')||q.includes('shoe')||q.includes('jean')) {
+    const fashion = allProducts.filter(p=>(p.category||'').toLowerCase().includes('fashion')||(p.name||'').toLowerCase().includes(q.split(' ')[0])).slice(0,3);
+    if(fashion.length) {
+      const list = fashion.map(p=>`• ${p.name} — ₦${(Number(p.discountPrice||p.price)).toLocaleString()}`).join('\n');
+      return `Here are some fashion items:\n${list}\n\nTap Categories → Fashion to see all! 👗`;
+    }
+    return "We have a great fashion collection! Tap Categories → Men's Fashion or Women's Fashion to browse. 👗";
+  }
+  if(q.includes('phone')||q.includes('mobile')||q.includes('smartphone')) {
+    const phones = allProducts.filter(p=>(p.category||'').toLowerCase().includes('phone')||(p.name||'').toLowerCase().includes('phone')).slice(0,3);
+    if(phones.length) {
+      const list = phones.map(p=>`• ${p.name} — ₦${(Number(p.discountPrice||p.price)).toLocaleString()}`).join('\n');
+      return `📱 Phones we carry:\n${list}`;
+    }
+    return "Browse our Phones & Electronics category for the latest devices! 📱 Tap Categories to see all.";
+  }
+  if(q.includes('electron')||q.includes('gadget')||q.includes('watch')||q.includes('laptop')||q.includes('tv')) {
+    const elec = allProducts.filter(p=>(p.category||'').toLowerCase().includes('electron')||(p.name||'').toLowerCase().match(/watch|tv|laptop|tablet/)).slice(0,3);
+    if(elec.length) {
+      const list = elec.map(p=>`• ${p.name} — ₦${(Number(p.discountPrice||p.price)).toLocaleString()}`).join('\n');
+      return `⚡ Electronics we carry:\n${list}`;
+    }
+    return "We carry electronics and gadgets! Tap Categories → Electronics to browse. ⚡";
+  }
+
+  // ---- DELIVERY ----
+  if(q.includes('deliver')||q.includes('shipping')||q.includes('ship')||q.includes('how long')||q.includes('when will')||q.includes('arrive')) {
+    return "🚚 Delivery info:\n• FREE delivery on orders ₦150,000 and above\n• ₦3,500 flat delivery fee for orders below ₦150,000\n• Delivery is made to your saved address\n\nFor delivery time, contact us on WhatsApp: +2349168031213";
+  }
+
+  // ---- PAYMENT ----
+  if(q.includes('pay')||q.includes('payment')||q.includes('transfer')||q.includes('bank')||q.includes('opay')||q.includes('cash')) {
+    return "💳 Payment options:\n1. Bank Transfer (Opay)\n   • Bank: Opay\n   • Name: Adewole Aderonke Aishat\n   • Account: 9168031213\n2. Pay on Delivery\n\nAfter transfer, send your receipt to our WhatsApp: +2349168031213";
+  }
+
+  // ---- ORDERS & TRACKING ----
+  if(q.includes('track')||q.includes('my order')||q.includes('order status')||q.includes('where is my')) {
+    return "📦 To track your order:\n1. Tap the menu (≡) at the top\n2. Select 'Track Order'\n3. Enter your Order ID or phone number\n\nOr contact us on WhatsApp: +2349168031213 with your order ID.";
+  }
+  if(q.includes('order')||q.includes('purchase')||q.includes('bought')||q.includes('place')) {
+    return "🛍️ To place an order:\n1. Find your product on the home page\n2. Tap it to view details\n3. Add to cart\n4. Go to cart and checkout\n5. Fill in your details and confirm\n\nNeed help? WhatsApp us: +2349168031213";
+  }
+
+  // ---- RETURN & REFUND ----
+  if(q.includes('return')||q.includes('refund')||q.includes('exchange')||q.includes('wrong item')||q.includes('damaged')||q.includes('complaint')) {
+    return "↩️ Return & Refund Policy:\n• Contact us within 7 days of receiving your order\n• Send your Order ID and reason via WhatsApp\n• We'll guide you through the return process\n\nWhatsApp: +2349168031213";
+  }
+
+  // ---- CONTACT ----
+  if(q.includes('contact')||q.includes('whatsapp')||q.includes('call')||q.includes('reach')||q.includes('speak')||q.includes('talk')||q.includes('support')||q.includes('help')) {
+    return "📞 Contact Benim:\n• WhatsApp: +2349168031213\n• Tap 'Contact' in the menu for our contact form\n• Our team responds quickly on WhatsApp!\n\nWe're here to help! 😊";
+  }
+
+  // ---- ACCOUNT ----
+  if(q.includes('account')||q.includes('sign in')||q.includes('login')||q.includes('register')||q.includes('sign up')||q.includes('password')) {
+    return "👤 Account help:\n• Tap the person icon at the top right to sign in\n• New customer? Tap 'Create Account'\n• Forgot password? Use the 'Forgot Password' link on the sign-in page\n\nNeed more help? WhatsApp: +2349168031213";
+  }
+
+  // ---- CART ----
+  if(q.includes('cart')||q.includes('basket')||q.includes('checkout')) {
+    return "🛒 Cart help:\n• Tap the cart icon at the top right to view your cart\n• Add items from any product page\n• Tap 'Checkout' when ready to order\n\nDelivery is FREE for orders ₦150,000+!";
+  }
+
+  // ---- ABOUT ----
+  if(q.includes('about')||q.includes('who are you')||q.includes('benim')||q.includes('trusted')||q.includes('legit')||q.includes('real')) {
+    return "🏪 About Benim:\nBenim is a trusted Nigerian e-commerce shop selling quality products across fashion, electronics, baby items, home goods, and more. We offer genuine products, secure payment, and reliable delivery.\n\nShop with confidence! ✅";
+  }
+
+  // ---- WISHLIST/SAVED ----
+  if(q.includes('wishlist')||q.includes('saved')||q.includes('favorite')||q.includes('favourite')) {
+    return "❤️ To save products:\n• Tap the heart icon on any product to save it\n• View saved items by tapping 'Saved' at the bottom of the app";
+  }
+
+  // ---- THANK YOU ----
+  if(q.includes('thank')||q.includes('thanks')||q.includes('appreciate')) {
+    return "You're welcome! 😊 Happy shopping at Benim! If you need anything else, I'm here. 🛍️";
+  }
+
+  // ---- GOODBYE ----
+  if(q.includes('bye')||q.includes('goodbye')||q.includes('see you')||q.includes('later')) {
+    return "Goodbye! 👋 Thanks for visiting Benim. Come back anytime! 😊";
+  }
+
+  // ---- DEFAULT with suggestions ----
+  return `I'm not sure about that, but I can help you with:\n• 🔍 Finding products (e.g. "Do you have jeans?")\n• 💰 Prices & discounts\n• 🚚 Delivery & shipping\n• 💳 Payment methods\n• 📦 Order tracking\n• ↩️ Returns & refunds\n• 📞 Contact us\n\nWhat would you like to know?`;
+}
 
 window.sendChatMessage = function() {
   const input = document.getElementById('chat-input');
   const text = input.value.trim();
   if(!text) return;
   addChatMsg(text, 'user');
-  saveChatSession(text, 'user');
   input.value = '';
-  // Show typing indicator
-  const msgs = document.getElementById('chat-messages');
-  const typing = document.createElement('div');
-  typing.className = 'chat-msg bot';
-  typing.id = 'typing-indicator';
-  typing.innerHTML = '<span style="display:flex;gap:3px;align-items:center"><span style="width:6px;height:6px;background:#aaa;border-radius:50%;animation:typingDot 1s infinite .0s"></span><span style="width:6px;height:6px;background:#aaa;border-radius:50%;animation:typingDot 1s infinite .2s"></span><span style="width:6px;height:6px;background:#aaa;border-radius:50%;animation:typingDot 1s infinite .4s"></span></span>';
-  msgs.appendChild(typing);
-  msgs.scrollTop = msgs.scrollHeight;
-  setTimeout(()=>{
-    const t = document.getElementById('typing-indicator');
-    if(t) t.remove();
-    const response = getBotResponse(text);
-    addChatMsg(response, 'bot');
-    saveChatSession(response, 'bot');
-  }, 800);
+
+  // Typing effect delay
+  const typingEl = document.createElement('div');
+  typingEl.className = 'chat-msg bot typing-indicator';
+  typingEl.innerHTML = '<span></span><span></span><span></span>';
+  document.getElementById('chat-messages').appendChild(typingEl);
+  document.getElementById('chat-messages').scrollTop = 99999;
+
+  setTimeout(function() {
+    typingEl.remove();
+    const reply = getBotReply(text);
+    addChatMsg(reply, 'bot');
+    saveChatSession(text, 'user');
+    saveChatSession(reply, 'bot');
+  }, 700);
 };
 
 function addChatMsg(text, role) {
@@ -3168,7 +3007,7 @@ function addChatMsg(text, role) {
 async function saveChatSession(text, role) {
   try {
     if(!chatSessionId) chatSessionId = 'session-'+Date.now();
-    const ref = db.collection('chatbot_sessions').doc(chatSessionId);
+    const ref = doc(db,'chatbot_sessions',chatSessionId);
     const snap = await getDoc(ref);
     const existing = snap.exists() ? (snap.data().messages||[]) : [];
     existing.push({ text, role, ts: Date.now() });
@@ -3250,8 +3089,7 @@ function startCountdown() {
 }
 
 // ===== NAVIGATION =====
-const _navStack = [];
-let _navBusy = false;
+const _navStack = ['home'];
 
 function _showPage(page) {
   document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
@@ -3271,32 +3109,31 @@ function _showPage(page) {
 
 window.navigate = function(page) {
   if(page==='admin' && !isAdmin) { navigate('home'); return; }
+  if(_navStack[_navStack.length-1] !== page) _navStack.push(page);
+  // Push a new entry for EVERY navigation so back button has entries to consume
+  history.pushState({benimPage: page}, '', location.href);
   _showPage(page);
-  if(_navStack[_navStack.length-1] !== page) {
-    _navStack.push(page);
-    _navBusy = true;
-    history.pushState({ benimPage: page }, '', '#'+page);
-    _navBusy = false;
-  }
 };
 
 window.goBack = function() {
   if(_navStack.length > 1) {
     _navStack.pop();
-    const prev = _navStack[_navStack.length-1];
-    _showPage(prev);
-    _navBusy = true;
-    history.replaceState({ benimPage: prev }, '', '#'+prev);
-    _navBusy = false;
-  } else {
-    _showPage('home');
-    _navStack.length = 0;
-    _navStack.push('home');
-    _navBusy = true;
-    history.replaceState({ benimPage: 'home' }, '', '#home');
-    _navBusy = false;
+    _showPage(_navStack[_navStack.length-1]);
   }
 };
+
+// On Android/Chrome: popstate fires when back is pressed.
+// history.go(1) immediately cancels the back by going forward again,
+// then we do our own in-app navigation.
+window.addEventListener('popstate', function(e) {
+  // Always go forward to cancel the browser back
+  history.go(1);
+  // Then do in-app back
+  if(_navStack.length > 1) {
+    _navStack.pop();
+    _showPage(_navStack[_navStack.length-1]);
+  }
+});
 
 // ===== FAQ TOGGLE =====
 window.toggleFaq = function(el) {
@@ -3319,24 +3156,6 @@ window.sendContactMessage = function() {
   showToast('Opening WhatsApp to send your message!');
 };
 
-window.addEventListener('popstate', (e) => {
-  if(_navBusy) return;
-  if(e.state && e.state.benimPage) {
-    const page = e.state.benimPage;
-    const idx = _navStack.lastIndexOf(page);
-    if(idx >= 0) _navStack.splice(idx+1);
-    else _navStack.push(page);
-    _showPage(page);
-  } else {
-    // went back past site entry — push home back so user stays
-    _showPage('home');
-    _navStack.length = 0;
-    _navStack.push('home');
-    _navBusy = true;
-    history.pushState({ benimPage: 'home' }, '', '#home');
-    _navBusy = false;
-  }
-});
 
 // ===== SIDEBAR =====
 window.toggleSidebar = function() {
@@ -3375,19 +3194,15 @@ window.showToast = function(message, type='success') {
 
 // ===== INIT =====
 async function init() {
+  // Seed history with one entry so popstate can fire on first back press
+  history.replaceState({benimPage:'home'}, '', location.href);
   initSlider();
   startCountdown();
   renderSkeletons('flash-grid',4);
   renderSkeletons('featured-grid',8);
   renderSkeletons('trending-grid',8);
   await loadProducts();
-  // Handle hash navigation
-  // Seed the nav stack with home first
-  _navStack.push('home');
-  history.replaceState({ benimPage: 'home' }, '', '#home');
-  // Then navigate to hash page if present
-  const hash = location.hash.replace('#','');
-  if(hash && hash !== 'home' && document.getElementById('page-'+hash)) navigate(hash);
+  _showPage('home');
 }
 
 init();
