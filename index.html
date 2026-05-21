@@ -1164,6 +1164,7 @@ body{padding-bottom:65px!important;background:#f2f2f2!important}
     <div class="admin-tabs">
       <button class="admin-tab active" onclick="switchAdminTab('products',this)">Products</button>
       <button class="admin-tab" onclick="switchAdminTab('orders',this)">Orders</button>
+      <button class="admin-tab" onclick="switchAdminTab('users',this)">Users</button>
       <button class="admin-tab" onclick="switchAdminTab('reviews',this)">Reviews</button>
       <button class="admin-tab" onclick="switchAdminTab('chats',this)">Chat Sessions</button>
     </div>
@@ -1188,7 +1189,7 @@ body{padding-bottom:65px!important;background:#f2f2f2!important}
         <div class="admin-card-title"><span>All Orders</span></div>
         <div style="overflow-x:auto">
           <table class="admin-table">
-            <thead><tr><th>Order ID</th><th>Customer</th><th>Total</th><th>Items</th><th>Payment</th><th>Status</th><th>Actions</th></tr></thead>
+            <thead><tr><th>Order ID</th><th>Customer</th><th>Total</th><th>Items</th><th>Payment</th><th>Status</th><th>Action</th></tr></thead>
             <tbody id="admin-orders-body"></tbody>
           </table>
         </div>
@@ -1206,6 +1207,21 @@ body{padding-bottom:65px!important;background:#f2f2f2!important}
       <div class="admin-card">
         <div class="admin-card-title"><span>Chatbot Sessions</span></div>
         <div id="admin-chats-list"></div>
+      </div>
+    </div>
+    <!-- Users Tab -->
+    <div id="admin-users" class="admin-tab-content hidden">
+      <div class="admin-card">
+        <div class="admin-card-title">
+          <span>Registered Users</span>
+          <span id="admin-users-count" style="font-size:13px;font-weight:600;color:var(--gray-500)"></span>
+        </div>
+        <div style="overflow-x:auto">
+          <table class="admin-table">
+            <thead><tr><th>Name</th><th>Email</th><th>Phone</th><th>Joined</th><th>Orders</th><th>WhatsApp</th></tr></thead>
+            <tbody id="admin-users-body"></tbody>
+          </table>
+        </div>
       </div>
     </div>
   </div>
@@ -2752,7 +2768,8 @@ window.placeOrder = async function() {
       pickupStation: dType === 'pickup' ? (window._selectedPickupStation?.name || '') : '',
       subtotal, deliveryFee, total: grandTotal, status: 'pending',
       createdAt: serverTimestamp(),
-      phone: addr.phone || ''
+      phone: addr.phone || addr.buyerPhone || '',
+      buyerPhone: addr.phone || ''
     };
     const orderRef = await addDoc(collection(db,'orders'), orderData);
     lastOrderId = orderRef.id;
@@ -3100,13 +3117,19 @@ window.loadAdminOrders = async function() {
       const o = d.data();
       totalRevenue += o.total||0;
       return `<tr>
-        <td style="font-size:11px">${o.orderId||d.id.slice(0,8)}</td>
-        <td>${o.userEmail||''}</td>
-        <td>₦${(o.total||0).toLocaleString()}</td>
-        <td>${(o.items||[]).length} items</td>
-        <td>${o.payment==='bank'?'Bank Transfer':'Pay on Delivery'}</td>
-        <td><span class="order-status ${'status-'+(o.status==='out_for_delivery'?'out':o.status||'pending')}">${(o.status||'').replace('_',' ').replace(/\b\w/g,l=>l.toUpperCase())||'Pending'}</span></td>
-        <td><button class="btn-success" onclick="openStatusModal('${d.id}','${o.status||'pending'}','${o.userEmail||''}')">Update</button></td>
+        <td style="font-size:11px;font-weight:800">${o.orderId||d.id.slice(0,8)}</td>
+        <td style="font-size:12px">
+          <div style="font-weight:700">${(o.address&&o.address.name)||o.buyerName||'—'}</div>
+          <div style="color:var(--gray-400);font-size:11px">${o.userEmail||''}</div>
+          ${(o.phone||(o.address&&o.address.phone)) ? `<div style="font-size:11px;color:var(--green)"><i class="fab fa-whatsapp"></i> ${o.phone||(o.address&&o.address.phone)}</div>` : ''}
+        </td>
+        <td style="font-weight:800">₦${(o.total||0).toLocaleString()}</td>
+        <td style="font-size:12px">${(o.items||[]).map(x=>`${x.name}${x.qty>1?' ×'+x.qty:''}`).join('<br>')}</td>
+        <td style="font-size:12px">${o.payment==='bank'?'🏦 Bank':'💵 POD'}</td>
+        <td><span class="order-status ${'status-'+(o.status==='out_for_delivery'?'out':o.status||'pending')}">${(o.status||'').replace(/_/g,' ').replace(/\b\w/g,l=>l.toUpperCase())||'Pending'}</span></td>
+        <td>
+          <button class="btn-success" style="font-size:12px;padding:6px 10px" onclick="openStatusModal('${d.id}','${o.status||'pending'}','${o.userEmail||''}')"><i class="fas fa-edit"></i> Update</button>
+        </td>
       </tr>`;
     });
     tbody.innerHTML = rows.join('') || '<tr><td colspan="7" style="text-align:center;color:var(--gray-400)">No orders</td></tr>';
@@ -3128,16 +3151,28 @@ window.updateOrderStatus = async function() {
   try {
     const orderDoc = await getDoc(doc(db,'orders',id));
     const o = orderDoc.data();
-    await updateDoc(doc(db,'orders',id), { status });
+    await updateDoc(doc(db,'orders',id), { status, updatedAt: serverTimestamp() });
     closeModal('modal-status');
     loadAdminOrders();
-    showToast('Order status updated!');
-    // Notify BUYER on WhatsApp with full order details
-    const buyerPhone = o.phone || (o.address && o.address.phone) || '';
-    const buyerName = (o.address && o.address.name) || o.userEmail || 'Customer';
-    const itemNames = (o.items||[]).map(x=>x.name).join(', ');
-    notifyBuyerWhatsApp(buyerPhone, o.orderId||id, status, itemNames, buyerName, o.total||0, o.deliveryFee||0);
-  } catch(e) { showToast('Failed to update','error'); }
+    showToast('Status updated! Opening WhatsApp to notify buyer... 📲');
+    // Get buyer phone — try multiple fields
+    const buyerPhone = o.phone
+      || (o.address && o.address.phone)
+      || o.buyerPhone
+      || '';
+    const buyerName = (o.address && o.address.name)
+      || o.buyerName
+      || o.userEmail?.split('@')[0]
+      || 'Customer';
+    const itemNames = (o.items||[]).map(x=>`${x.name}${x.qty>1?' x'+x.qty:''}`).join(', ');
+    // Open WhatsApp after short delay so toast shows first
+    setTimeout(() => {
+      notifyBuyerWhatsApp(buyerPhone || '', o.orderId||id, status, itemNames, buyerName, o.total||0, o.deliveryFee||0);
+    }, 600);
+  } catch(e) {
+    console.error('updateOrderStatus error:', e);
+    showToast('Failed to update order: ' + e.message, 'error');
+  }
 };
 
 window.loadAdminReviews = async function() {
@@ -3192,8 +3227,69 @@ window.switchAdminTab = function(tab, btn) {
   btn.classList.add('active');
   if(tab==='products') loadAdminProducts();
   else if(tab==='orders') loadAdminOrders();
+  else if(tab==='users') loadAdminUsers();
   else if(tab==='reviews') loadAdminReviews();
   else if(tab==='chats') loadAdminChats();
+};
+
+
+window.loadAdminUsers = async function() {
+  const tbody = document.getElementById('admin-users-body');
+  const countEl = document.getElementById('admin-users-count');
+  tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;color:var(--gray-400)">Loading users...</td></tr>';
+  try {
+    // Load all users
+    const usersSnap = await getDocs(collection(db, 'users'));
+    // Load all orders to count per user
+    const ordersSnap = await getDocs(collection(db, 'orders'));
+    const orderCountMap = {};
+    ordersSnap.docs.forEach(d => {
+      const uid = d.data().userId;
+      if (uid) orderCountMap[uid] = (orderCountMap[uid] || 0) + 1;
+    });
+
+    if (usersSnap.empty) {
+      tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;color:var(--gray-400)">No registered users yet.</td></tr>';
+      if (countEl) countEl.textContent = '0 users';
+      return;
+    }
+
+    if (countEl) countEl.textContent = usersSnap.size + ' user' + (usersSnap.size !== 1 ? 's' : '');
+    document.getElementById('stat-users').textContent = usersSnap.size;
+
+    const rows = usersSnap.docs.map(d => {
+      const u = d.data();
+      const uid = d.id;
+      const name = u.name || u.displayName || '—';
+      const email = u.email || '—';
+      const phone = u.phone || '—';
+      const orders = orderCountMap[uid] || 0;
+      // Format join date
+      let joined = '—';
+      if (u.createdAt && u.createdAt.toDate) {
+        joined = u.createdAt.toDate().toLocaleDateString('en-NG', { day:'numeric', month:'short', year:'numeric' });
+      }
+      // WhatsApp link — only if phone is available
+      const cleanPhone = String(u.phone || '').replace(/[^0-9]/g, '');
+      const waBtn = cleanPhone
+        ? `<a href="https://wa.me/${cleanPhone.startsWith('0') ? '234'+cleanPhone.slice(1) : cleanPhone}" target="_blank" style="background:#25d366;color:#fff;padding:4px 10px;border-radius:6px;font-size:11px;font-weight:700;text-decoration:none;display:inline-flex;align-items:center;gap:4px"><i class="fab fa-whatsapp"></i> Chat</a>`
+        : '<span style="color:var(--gray-400);font-size:11px">No phone</span>';
+
+      return `<tr>
+        <td style="font-weight:700">${name}</td>
+        <td style="font-size:12px">${email}</td>
+        <td style="font-size:12px">${phone}</td>
+        <td style="font-size:12px">${joined}</td>
+        <td style="text-align:center"><span style="background:var(--orange);color:#fff;padding:2px 8px;border-radius:99px;font-size:11px;font-weight:800">${orders}</span></td>
+        <td>${waBtn}</td>
+      </tr>`;
+    });
+
+    tbody.innerHTML = rows.join('');
+  } catch(e) {
+    console.error('loadAdminUsers error:', e);
+    tbody.innerHTML = `<tr><td colspan="6" style="color:var(--red);text-align:center">Error: ${e.message}</td></tr>`;
+  }
 };
 
 window.loadAdminStats = async function() {
@@ -3437,35 +3533,105 @@ async function saveChatSession(text, role) {
 const ADMIN_WHATSAPP = '2349168031213';
 
 function notifyBuyerWhatsApp(phone, orderId, status, items, customerName, total, deliveryFee) {
-  if(!phone) return;
-  const cleanPhone = String(phone).replace(/[^0-9]/g,'');
-  if(!cleanPhone) return;
-  const statusEmoji = {pending:'⏳',confirmed:'✅',processing:'⚙️',out_for_delivery:'🚚',delivered:'🎉',cancelled:'❌'}[status]||'📦';
-  const statusLabel = status.replace(/_/g,' ').replace(/\b\w/g,l=>l.toUpperCase());
+  if (!phone) return;
+  let cleanPhone = String(phone).replace(/[^0-9]/g, '');
+  if (!cleanPhone) return;
+  // Convert 0xxxxxxxx to 234xxxxxxxx
+  if (cleanPhone.startsWith('0')) cleanPhone = '234' + cleanPhone.slice(1);
+
+  const STATUS_MESSAGES = {
+    pending: {
+      emoji: '⏳',
+      label: 'Order Received',
+      body: `We've received your order and it's currently being reviewed. You'll get another update once we confirm it.`
+    },
+    confirmed: {
+      emoji: '✅',
+      label: 'Order Confirmed',
+      body: `Great news! Your order has been *confirmed* by our team. We are now preparing your items for dispatch.`
+    },
+    processing: {
+      emoji: '⚙️',
+      label: 'Order Processing',
+      body: `Your order is currently being *processed and packaged* with care. It will be handed over to our delivery team soon.`
+    },
+    out_for_delivery: {
+      emoji: '🚚',
+      label: 'Out for Delivery',
+      body: `Your order is *on its way* to you right now! Our delivery agent will contact you before arrival. Please keep your phone reachable.`
+    },
+    delivered: {
+      emoji: '🎉',
+      label: 'Order Delivered',
+      body: `Your order has been *successfully delivered*! We hope you love your purchase. 😊
+
+Please drop a review — it means a lot to us!
+
+If you have any issues, reply to this message within 24 hours.`
+    },
+    cancelled: {
+      emoji: '❌',
+      label: 'Order Cancelled',
+      body: `We're sorry, your order has been *cancelled*. If this was a mistake or you have questions, please reply to this message or contact us directly.`
+    }
+  };
+
+  const s = STATUS_MESSAGES[status] || { emoji: '📦', label: status.replace(/_/g,' ').replace(/\w/g,l=>l.toUpperCase()), body: 'Your order status has been updated.' };
+
   const msg = encodeURIComponent(
-    `Hi ${customerName}! 👋\n\nYour *Benim* order has been updated.\n\n` +
-    `🧾 *Order ID:* ${orderId}\n` +
-    `${statusEmoji} *Status:* ${statusLabel}\n` +
-    `🛍️ *Items:* ${items}\n` +
-    `💰 *Order Total:* ₦${Number(total||0).toLocaleString()}\n` +
-    (Number(deliveryFee)>0 ? `🚚 *Delivery Fee:* ₦${Number(deliveryFee).toLocaleString()}\n` : `🚚 *Delivery:* FREE\n`) +
-    `\nThank you for shopping with *Benim*! 🧡\nQuestions? Reply to this message.`
+    `Hello *${customerName}*! 👋
+
+` +
+    `${s.emoji} *${s.label}* — Benim Order Update
+
+` +
+    `${s.body}
+
+` +
+    `━━━━━━━━━━━━━━━
+` +
+    `🧾 *Order ID:* ${orderId}
+` +
+    `🛍️ *Items:* ${items}
+` +
+    `💰 *Total Paid:* ₦${Number(total||0).toLocaleString()}
+` +
+    (Number(deliveryFee) > 0 ? `🚚 *Delivery Fee:* ₦${Number(deliveryFee).toLocaleString()}
+` : '') +
+    `━━━━━━━━━━━━━━━
+
+` +
+    `Thank you for shopping with *Benim*! 🧡
+` +
+    `Need help? Call/WhatsApp: +234 916 803 1213`
   );
   window.open(`https://wa.me/${cleanPhone}?text=${msg}`, '_blank');
 }
 
 function notifyAdminWhatsApp(orderId, customerName, customerEmail, items, total, deliveryFee, payment, address) {
   const msg = encodeURIComponent(
-    `🛒 *New Order Received &mdash; Benim!*\n\n` +
-    `🧾 *Order ID:* ${orderId}\n` +
-    `👤 *Customer:* ${customerName}\n` +
-    `📧 *Email:* ${customerEmail}\n` +
-    `📦 *Items:* ${items}\n` +
-    `💰 *Subtotal:* ₦${Number(total||0).toLocaleString()}\n` +
-    (Number(deliveryFee)>0 ? `🚚 *Delivery Fee:* ₦${Number(deliveryFee).toLocaleString()}\n` : `🚚 *Delivery:* FREE\n`) +
-    `💳 *Payment:* ${payment==='bank'?'Bank Transfer':'Pay on Delivery'}\n` +
-    `📍 *Address:* ${address}\n` +
-    `\nPlease confirm the order in the Admin Panel.`
+    `🛒 *NEW ORDER — Benim!*
+
+` +
+    `🧾 *Order ID:* ${orderId}
+` +
+    `👤 *Customer:* ${customerName}
+` +
+    `📧 *Email:* ${customerEmail}
+` +
+    `📦 *Items:* ${items}
+` +
+    `💰 *Subtotal:* ₦${Number(total||0).toLocaleString()}
+` +
+    (Number(deliveryFee)>0 ? `🚚 *Delivery Fee:* ₦${Number(deliveryFee).toLocaleString()}
+` : `🚚 *Delivery:* FREE
+`) +
+    `💳 *Payment:* ${payment==='bank'?'Bank Transfer':'Pay on Delivery'}
+` +
+    `📍 *Address:* ${address}
+
+` +
+    `👉 Go to Admin Panel → Orders to confirm this order.`
   );
   window.open(`https://wa.me/${ADMIN_WHATSAPP}?text=${msg}`, '_blank');
 }
