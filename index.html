@@ -1822,7 +1822,7 @@ body{padding-bottom:65px!important;background:#f2f2f2!important}
 <!-- ====== FIREBASE + APP SCRIPT ====== -->
 <script type="module">
 import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js';
-import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, onAuthStateChanged, sendPasswordResetEmail, GoogleAuthProvider, signInWithPopup, signInWithRedirect, getRedirectResult, updatePassword } from 'https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js';
+import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, onAuthStateChanged, sendPasswordResetEmail, GoogleAuthProvider, signInWithPopup, updatePassword } from 'https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js';
 import { getFirestore, collection, doc, addDoc, getDoc, getDocs, setDoc, updateDoc, deleteDoc, query, where, orderBy, limit, onSnapshot, serverTimestamp } from 'https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js';
 
 const firebaseConfig = {
@@ -1902,15 +1902,11 @@ onAuthStateChanged(auth, async (user) => {
     await loadCart();
     await loadWishlist();
     loadUserProfile();
-    // Handle Google redirect sign-in after Firebase is confirmed ready
-    await handleGoogleRedirectResult();
   } else {
     cart = [];
     wishlist = [];
     updateCartBadge();
     updateWishBadge();
-    // Also handle redirect result when user is null (cancelled or failed)
-    await handleGoogleRedirectResult();
   }
 });
 
@@ -1980,72 +1976,40 @@ window.doRegister = async function() {
 
 window.loginWithGoogle = async function() {
   const provider = new GoogleAuthProvider();
-  provider.addScope('email');
-  provider.addScope('profile');
-  const isMobile = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
+  provider.setCustomParameters({ prompt: 'select_account' });
   try {
-    if (isMobile) {
-      sessionStorage.setItem('_benimGooglePending', '1');
-      await signInWithRedirect(auth, provider);
-      // Page will reload — result handled by getRedirectResult below
-    } else {
-      const cred = await signInWithPopup(auth, provider);
-      const snap = await getDoc(doc(db,'users',cred.user.uid));
+    const cred = await signInWithPopup(auth, provider);
+    try {
+      const snap = await getDoc(doc(db, 'users', cred.user.uid));
       if (!snap.exists()) {
-        await setDoc(doc(db,'users',cred.user.uid), { name: cred.user.displayName, email: cred.user.email, createdAt: serverTimestamp() });
+        await setDoc(doc(db, 'users', cred.user.uid), {
+          name: cred.user.displayName || '',
+          email: cred.user.email || '',
+          createdAt: serverTimestamp()
+        });
       }
-      showToast('Signed in with Google! 🎉');
-      navigate('home');
-    }
+    } catch(e) {}
+    showToast('Signed in with Google! 🎉');
+    navigate('home');
   } catch(e) {
-    const msg = e.code === 'auth/popup-blocked'
-      ? 'Popup blocked — trying redirect...'
-      : (e.message||'Google sign-in failed');
-    showToast(msg, 'error');
-    // Fallback to redirect if popup blocked
-    if (e.code === 'auth/popup-blocked') {
-      try { sessionStorage.setItem('_benimGooglePending', '1'); await signInWithRedirect(auth, provider); } catch(e2){}
+    if (e.code === 'auth/popup-closed-by-user' || e.code === 'auth/cancelled-popup-request') {
+      // User closed the popup — silent, no error toast needed
+      return;
     }
+    if (e.code === 'auth/unauthorized-domain') {
+      showToast('Add your GitHub Pages domain in Firebase Console → Authentication → Authorized Domains', 'error');
+      return;
+    }
+    if (e.code === 'auth/popup-blocked') {
+      showToast('Popup was blocked by your browser. Please allow popups for this site and try again.', 'error');
+      return;
+    }
+    showToast('Google sign-in failed: ' + (e.code || e.message || 'Unknown error'), 'error');
   }
 };
 
-// Handle Google redirect result — runs once on first auth state change
-let _googleRedirectHandled = false;
-async function handleGoogleRedirectResult() {
-  if (_googleRedirectHandled) return;
-  _googleRedirectHandled = true;
-  const pending = sessionStorage.getItem('_benimGooglePending');
-  if (!pending) return;
-  sessionStorage.removeItem('_benimGooglePending');
-  try {
-    const result = await getRedirectResult(auth);
-    if (result && result.user) {
-      // Save user to Firestore if new
-      try {
-        const snap = await getDoc(doc(db, 'users', result.user.uid));
-        if (!snap.exists()) {
-          await setDoc(doc(db, 'users', result.user.uid), {
-            name: result.user.displayName || '',
-            email: result.user.email || '',
-            createdAt: serverTimestamp()
-          });
-        }
-      } catch(e) {}
-      showToast('Signed in with Google! 🎉');
-      navigate('home');
-    } else {
-      // No result — sign-in may have been cancelled
-      showToast('Google sign-in was cancelled. Please try again.', 'error');
-    }
-  } catch(e) {
-    sessionStorage.removeItem('_benimGooglePending');
-    if (e.code === 'auth/unauthorized-domain') {
-      showToast('Domain not authorised. Add this domain in Firebase Console → Authentication → Authorized Domains.', 'error');
-    } else {
-      showToast('Google sign-in failed: ' + (e.message || e.code || 'Unknown error'), 'error');
-    }
-  }
-}
+// Stub so onAuthStateChanged calls don't break
+async function handleGoogleRedirectResult() {}
 
 window.doLogout = async function() {
   await signOut(auth);
@@ -3702,14 +3666,7 @@ init();
   const fill   = document.getElementById('splash-fill');
   const pct    = document.getElementById('splash-pct');
   if (!splash) return;
-  // Skip splash if returning from Google OAuth redirect
-  const isGoogleReturn = document.referrer.includes('accounts.google.com')
-    || location.hash.includes('google')
-    || sessionStorage.getItem('_benimGooglePending') === '1';
-  if (isGoogleReturn) {
-    splash.style.display = 'none';
-    return;
-  }
+  // Normal load — always show splash
   let tick = 0;
   const steps = 87;
   const timer = setInterval(() => {
