@@ -623,7 +623,7 @@ body{padding-bottom:65px!important;background:#f2f2f2!important}
   <div class="header-search-row">
     <div class="header-search-wrap">
       <button class="header-search-btn" onclick="doSearch()" style="color:var(--gray-500)"><i class="fas fa-search"></i></button>
-      <input class="header-search" id="search-input" type="text" placeholder="Search products, brands and categories" onkeyup="handleSearchKey(event)">
+      <input class="header-search" id="search-input" type="text" placeholder="Search products, brands and categories" onkeyup="handleSearchKey(event)" onfocus="goToSearchPage()">
     </div>
   </div>
 </header>
@@ -2775,12 +2775,12 @@ window.placeOrder = async function() {
     cart = [];
     await saveCart();
     updateCartBadge();
-    // Notify BUYER via WhatsApp (order placed = status "Pending")
-    notifyBuyerWhatsApp(addr.phone||'', orderId, 'pending', itemNames, addr.name||currentUser.email.split('@')[0], grandTotal, deliveryFee);
-    // Notify ADMIN via WhatsApp about new order
+    // Notify ADMIN first (gets the browser popup, most important)
+    notifyAdminWhatsApp(orderId, addr.name||currentUser.email.split('@')[0], currentUser.email, itemNames, subtotal, deliveryFee, selectedPayment, addrStr, addr.phone||'');
+    // Notify BUYER after a short delay (secondary popup — buyer gets receipt on screen anyway)
     setTimeout(()=>{
-      notifyAdminWhatsApp(orderId, addr.name||currentUser.email.split('@')[0], currentUser.email, itemNames, subtotal, deliveryFee, selectedPayment, addrStr);
-    }, 1500);
+      notifyBuyerWhatsApp(addr.phone||'', orderId, 'pending', itemNames, addr.name||currentUser.email.split('@')[0], grandTotal, deliveryFee);
+    }, 2000);
     // Show receipt
     showReceipt(orderId, orderData);
     navigate('success');
@@ -2969,6 +2969,18 @@ window.renderWishlist = async function() {
 // ===== SEARCH =====
 window.handleSearchKey = function(e) {
   if(e.key==='Enter') doSearch();
+};
+window.goToSearchPage = function() {
+  // Navigate to search page immediately when user taps the search bar
+  if(document.getElementById('page-search') && !document.getElementById('page-search').classList.contains('active')) {
+    searchQuery = '';
+    document.getElementById('cat-filter').value = 'all';
+    searchCategory = 'all';
+    navigate('search');
+    applyFilters();
+  }
+  // Keep focus on input after navigation
+  setTimeout(()=>{ const el = document.getElementById('search-input'); if(el) el.focus(); }, 50);
 };
 window.doSearch = function() {
   searchQuery = document.getElementById('search-input').value.trim().toLowerCase();
@@ -3670,29 +3682,21 @@ If you have any issues, reply to this message within 24 hours.`
   window.open(`https://wa.me/${cleanPhone}?text=${msg}`, '_blank');
 }
 
-function notifyAdminWhatsApp(orderId, customerName, customerEmail, items, total, deliveryFee, payment, address) {
+function notifyAdminWhatsApp(orderId, customerName, customerEmail, items, total, deliveryFee, payment, address, buyerPhone) {
+  const grandTotal = Number(total||0) + Number(deliveryFee||0);
+  const cleanBuyerPhone = String(buyerPhone||'').replace(/[^0-9]/g,'');
   const msg = encodeURIComponent(
-    `🛒 *NEW ORDER — Benim!*
-
-` +
-    `🧾 *Order ID:* ${orderId}
-` +
-    `👤 *Customer:* ${customerName}
-` +
-    `📧 *Email:* ${customerEmail}
-` +
-    `📦 *Items:* ${items}
-` +
-    `💰 *Subtotal:* ₦${Number(total||0).toLocaleString()}
-` +
-    (Number(deliveryFee)>0 ? `🚚 *Delivery Fee:* ₦${Number(deliveryFee).toLocaleString()}
-` : `🚚 *Delivery:* FREE
-`) +
-    `💳 *Payment:* ${payment==='bank'?'Bank Transfer':'Pay on Delivery'}
-` +
-    `📍 *Address:* ${address}
-
-` +
+    `🛒 *NEW ORDER — Benim!*\n\n` +
+    `🧾 *Order ID:* ${orderId}\n` +
+    `👤 *Customer:* ${customerName}\n` +
+    `📧 *Email:* ${customerEmail}\n` +
+    (cleanBuyerPhone ? `📱 *Phone:* ${buyerPhone}\n` : '') +
+    `📦 *Items:* ${items}\n` +
+    `💰 *Subtotal:* ₦${Number(total||0).toLocaleString()}\n` +
+    (Number(deliveryFee)>0 ? `🚚 *Delivery Fee:* ₦${Number(deliveryFee).toLocaleString()}\n` : `🚚 *Delivery:* FREE\n`) +
+    `💵 *Grand Total:* ₦${grandTotal.toLocaleString()}\n` +
+    `💳 *Payment:* ${payment==='bank'?'Bank Transfer (Opay)':'Pay on Delivery'}\n` +
+    `📍 *Address:* ${address}\n\n` +
     `👉 Go to Admin Panel → Orders to confirm this order.`
   );
   window.open(`https://wa.me/${ADMIN_WHATSAPP}?text=${msg}`, '_blank');
