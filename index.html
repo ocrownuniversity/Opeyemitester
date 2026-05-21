@@ -642,8 +642,8 @@ body{padding-bottom:65px!important;background:#f2f2f2!important}
       <div class="sidebar-item" onclick="filterByCategory('all');toggleSidebar()"><i class="fas fa-th"></i> All Products</div>
       <div class="sidebar-item" onclick="filterByCategory('Electronics');toggleSidebar()"><i class="fas fa-laptop"></i> Electronics</div>
       <div class="sidebar-item" onclick="filterByCategory('Fashion');toggleSidebar()"><i class="fas fa-tshirt"></i> Fashion</div>
-      <div class="sidebar-item" onclick="filterByCategory("Men's Fashion");toggleSidebar()"><i class="fas fa-male"></i> Men's Fashion</div>
-      <div class="sidebar-item" onclick="filterByCategory("Women's Fashion");toggleSidebar()"><i class="fas fa-female"></i> Women's Fashion</div>
+      <div class="sidebar-item" onclick="filterByCategory('Men\'s Fashion');toggleSidebar()"><i class="fas fa-male"></i> Men's Fashion</div>
+      <div class="sidebar-item" onclick="filterByCategory('Women\'s Fashion');toggleSidebar()"><i class="fas fa-female"></i> Women's Fashion</div>
       <div class="sidebar-item" onclick="filterByCategory('Baby Products');toggleSidebar()"><i class="fas fa-baby"></i> Baby Products</div>
       <div class="sidebar-item" onclick="filterByCategory('Home & Kitchen');toggleSidebar()"><i class="fas fa-home"></i> Home & Kitchen</div>
       <div class="sidebar-item" onclick="filterByCategory('Beauty');toggleSidebar()"><i class="fas fa-spa"></i> Beauty</div>
@@ -795,10 +795,6 @@ body{padding-bottom:65px!important;background:#f2f2f2!important}
           <option>Phones</option>
           <option>Toys</option>
         </select>
-      </div>
-      <div class="filter-group">
-        <label>Max Price: &#8358;<span id="price-val">999999</span></label>
-        <input type="range" min="0" max="999999" value="999999" id="price-range" style="accent-color:var(--orange)" onchange="applyFilters()">
       </div>
     </div>
     <div class="product-grid" id="search-grid"></div>
@@ -2861,12 +2857,22 @@ window.trackOrder = async function() {
   result.classList.remove('hidden');
   try {
     let snap;
-    // Try by orderId
+    // Try by orderId field
     let q = query(collection(db,'orders'), where('orderId','==',input));
     snap = await getDocs(q);
+    // Try by phone
     if(snap.empty) {
       q = query(collection(db,'orders'), where('phone','==',input));
       snap = await getDocs(q);
+    }
+    // Try by Firestore document ID (used when clicking Track from My Orders)
+    if(snap.empty) {
+      try {
+        const docSnap = await getDoc(doc(db,'orders',input));
+        if(docSnap.exists()) {
+          snap = { empty: false, docs: [docSnap] };
+        }
+      } catch(e2) {}
     }
     if(snap.empty) { result.innerHTML = '<p style="color:var(--red);text-align:center">No order found for that ID or phone number.</p>'; return; }
     const o = snap.docs[0].data();
@@ -2940,9 +2946,13 @@ function updateWishBadge() {
   if(el) { el.textContent = wishlist.length; el.classList.toggle('hidden', wishlist.length===0); }
 }
 
-window.renderWishlist = function() {
+window.renderWishlist = async function() {
   const grid = document.getElementById('wishlist-grid');
   const empty = document.getElementById('wishlist-empty');
+  if(!allProducts.length) {
+    grid.innerHTML = '<div style="grid-column:1/-1;text-align:center;padding:30px;color:var(--gray-400)"><i class="fas fa-spinner fa-spin" style="font-size:24px"></i></div>';
+    await loadProducts();
+  }
   const items = allProducts.filter(p=>wishlist.includes(p.id));
   if(!items.length) { grid.innerHTML=''; empty.classList.remove('hidden'); return; }
   empty.classList.add('hidden');
@@ -2967,15 +2977,9 @@ window.filterByCategory = function(cat) {
 window.applyFilters = function() {
   const sort = document.getElementById('sort-select').value;
   const cat = document.getElementById('cat-filter').value;
-  const maxPrice = Number(document.getElementById('price-range').value);
-  document.getElementById('price-val').textContent = maxPrice.toLocaleString();
   let results = [...allProducts];
   if(searchQuery) results = results.filter(p=>(p.name||'').toLowerCase().includes(searchQuery)||(p.description||'').toLowerCase().includes(searchQuery));
-  if(cat&&cat!=='all') results = results.filter(p=>p.category===cat);
-  results = results.filter(p=>{
-    const price = Number(p.discountPrice)>0 ? Number(p.discountPrice) : Number(p.price);
-    return price<=maxPrice;
-  });
+  if(cat&&cat!=='all') results = results.filter(p=>(p.category||'').toLowerCase()===cat.toLowerCase());
   if(sort==='price-low') results.sort((a,b)=>{const ap=Number(a.discountPrice)||Number(a.price);const bp=Number(b.discountPrice)||Number(b.price);return ap-bp;});
   else if(sort==='price-high') results.sort((a,b)=>{const ap=Number(a.discountPrice)||Number(a.price);const bp=Number(b.discountPrice)||Number(b.price);return bp-ap;});
   else if(sort==='popular') results.sort((a,b)=>(b.reviewCount||0)-(a.reviewCount||0));
