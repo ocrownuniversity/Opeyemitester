@@ -566,6 +566,10 @@ body{padding-bottom:70px}
 /* hide action buttons — not in screenshot design */
 .card-action-btns{display:none!important}
 
+/* WISHLIST HEART BUTTON ON PRODUCT CARDS */
+.pc-wish-btn{position:absolute;top:7px;right:7px;background:rgba(255,255,255,.92);border:none;width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:13px;color:#ccc;cursor:pointer;z-index:3;box-shadow:0 1px 4px rgba(0,0,0,.12);transition:.2s}
+.pc-wish-btn:hover,.pc-wish-btn.active{color:#e53e3e;background:#fff}
+
 /* BOTTOM NAV */
 .bottom-nav{background:#fff!important;border-top:1px solid #eee!important;padding:0!important}
 .bnav-item{padding:8px 4px 6px!important;font-size:10px!important;font-weight:600!important;color:#aaa!important;gap:2px!important}
@@ -2115,12 +2119,14 @@ function productCardHTML(p, isFlash=false) {
   const soldCount = p.soldCount || Math.floor(Math.random()*150+20);
   const stock = p.stock||50;
   const soldPct = Math.min(95, Math.round(soldCount/(soldCount+stock)*100));
-  return `<div class="pc" onclick="openProduct('${p.id}')">
-    <div class="pc-img-wrap">
+  const isWished = wishlist.includes(p.id);
+  return `<div class="pc" data-product-id="${p.id}">
+    <div class="pc-img-wrap" onclick="openProduct('${p.id}')">
       <img src="${img}" alt="${p.name||''}" loading="lazy" onerror="this.src='https://placehold.co/300x300/f5f5f5/cccccc?text=Benim'">
       ${hasDisc ? `<span class="pc-badge">-${discPct}%</span>` : ''}
+      <button class="pc-wish-btn${isWished?' active':''}" onclick="event.stopPropagation();toggleWishlist('${p.id}')" title="${isWished?'Remove from wishlist':'Add to wishlist'}"><i class="fas fa-heart"></i></button>
     </div>
-    <div class="pc-body">
+    <div class="pc-body" onclick="openProduct('${p.id}')">
       <div class="pc-name">${p.name||'Product'}</div>
       <div class="pc-prices">
         <span class="pc-price">₦${displayPrice.toLocaleString()}</span>
@@ -2917,7 +2923,7 @@ async function saveWishlist() {
 }
 
 window.toggleWishlist = async function(productId) {
-  if(!currentUser) { showToast('Please sign in','info'); navigate('login'); return; }
+  if(!currentUser) { showToast('Please sign in to save to wishlist','info'); navigate('login'); return; }
   if(wishlist.includes(productId)) {
     wishlist = wishlist.filter(x=>x!==productId);
     showToast('Removed from wishlist');
@@ -2927,14 +2933,15 @@ window.toggleWishlist = async function(productId) {
   }
   await saveWishlist();
   updateWishBadge();
-  // update all heart buttons
-  document.querySelectorAll('.product-wishlist-btn').forEach(btn=>{
-    const pid = btn.closest('.product-card')?.getAttribute('onclick')?.match(/'([^']+)'/)?.[1];
-    if(pid) btn.classList.toggle('active', wishlist.includes(pid));
+  // Update all heart buttons on product cards
+  document.querySelectorAll('.pc[data-product-id]').forEach(card=>{
+    const pid = card.getAttribute('data-product-id');
+    const btn = card.querySelector('.pc-wish-btn');
+    if(btn) btn.classList.toggle('active', wishlist.includes(pid));
   });
-  if(document.getElementById('detail-wish-btn')) {
-    document.getElementById('detail-wish-btn').classList.toggle('active', currentProduct && wishlist.includes(currentProduct.id));
-  }
+  // Update detail page heart button
+  const wb = document.getElementById('detail-wish-btn');
+  if(wb && currentProduct) wb.classList.toggle('active', wishlist.includes(currentProduct.id));
 };
 
 window.toggleWishlistDetail = function() {
@@ -2965,12 +2972,18 @@ window.handleSearchKey = function(e) {
 };
 window.doSearch = function() {
   searchQuery = document.getElementById('search-input').value.trim().toLowerCase();
+  // Reset category when doing a text search so results aren't double-filtered
+  document.getElementById('cat-filter').value = 'all';
+  searchCategory = 'all';
   navigate('search');
   applyFilters();
 };
 window.filterByCategory = function(cat) {
   document.getElementById('cat-filter').value = cat;
   searchCategory = cat;
+  // Reset text search when browsing by category
+  searchQuery = '';
+  document.getElementById('search-input').value = '';
   navigate('search');
   applyFilters();
 };
