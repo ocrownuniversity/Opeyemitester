@@ -513,7 +513,7 @@ body{padding-bottom:70px}
 .slider-dots{bottom:8px!important}
 
 /* HOME SECTIONS */
-.home-section{background:#fff!important;margin:8px 0 0!important;padding:14px 12px 18px!important}
+.home-section{background:#fff!important;margin:8px 0 0!important;padding:14px 12px 16px!important}
 .home-section-title{font-size:16px!important;font-weight:800!important;color:#111!important;font-family:'Poppins',sans-serif!important;margin-bottom:4px!important}
 .home-section-header{margin-bottom:14px!important}
 .home-see-all{color:#e8420a!important;font-size:13px!important;font-weight:700!important;white-space:nowrap!important;padding-top:2px!important}
@@ -526,27 +526,29 @@ body{padding-bottom:70px}
 .flash-colon{color:#e8420a!important;font-weight:900!important}
 .flash-bolt{color:#e8420a!important}
 
-/* PRODUCT GRID &mdash; 3 columns on ALL screen sizes */
-.product-grid{display:grid!important;grid-template-columns:repeat(3,1fr)!important;gap:6px!important}
+/* PRODUCT GRID — 3 columns */
+.product-grid{display:grid!important;grid-template-columns:repeat(3,1fr)!important;gap:8px!important;padding:0 2px!important}
 
-/* PRODUCT CARD — matches screenshot exactly */
-.pc{background:#fff;border-radius:10px;overflow:hidden;cursor:pointer;display:flex;flex-direction:column;box-shadow:0 1px 4px rgba(0,0,0,.07);border:1px solid #f0f0f0}
-.pc:hover{box-shadow:0 3px 12px rgba(0,0,0,.12)}
-.pc-img-wrap{position:relative;width:100%;aspect-ratio:1;background:#f5f5f5;overflow:hidden;flex-shrink:0}
+/* PRODUCT CARD — pixel-perfect match to screenshot */
+.pc{background:#fff;border-radius:12px;overflow:hidden;cursor:pointer;display:flex;flex-direction:column;box-shadow:0 2px 8px rgba(0,0,0,.06);border:none;transition:box-shadow .2s}
+.pc:active{box-shadow:0 1px 3px rgba(0,0,0,.1)}
+.pc-img-wrap{position:relative;width:100%;aspect-ratio:1/1;background:#f5f5f5;overflow:hidden;flex-shrink:0}
 .pc-img-wrap img{width:100%;height:100%;object-fit:cover;display:block}
-.pc-badge{position:absolute;top:7px;left:7px;background:#e8420a;color:#fff;font-size:10px;font-weight:800;padding:3px 7px;border-radius:4px;z-index:2}
-.pc-body{padding:8px 8px 10px;display:flex;flex-direction:column;gap:4px;flex:1}
-.pc-name{font-size:12px;font-weight:700;color:#111;line-height:1.3;font-family:'Poppins',sans-serif;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
-.pc-prices{display:flex;align-items:baseline;gap:5px;flex-wrap:wrap}
-.pc-price{font-size:13px;font-weight:900;color:#e8420a;font-family:'Poppins',sans-serif}
-.pc-old{font-size:10px;color:#aaa;text-decoration:line-through;font-family:'Poppins',sans-serif}
-.pc-sold-row{display:flex;align-items:center;gap:6px;margin-top:2px}
-.pc-bar-bg{flex:1;height:4px;background:#fde8e0;border-radius:2px;overflow:hidden}
-.pc-bar-fill{height:100%;background:#e8420a;border-radius:2px}
-.pc-sold-txt{font-size:10px;color:#888;white-space:nowrap;font-weight:600}
+.pc-badge{position:absolute;top:7px;left:7px;background:#e8420a;color:#fff;font-size:10px;font-weight:800;padding:2px 7px;border-radius:4px;z-index:2;letter-spacing:.3px}
+.pc-body{padding:7px 8px 9px;display:flex;flex-direction:column;gap:3px;flex:1}
+.pc-name{font-size:11.5px;font-weight:700;color:#111;line-height:1.3;font-family:'Poppins',sans-serif;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;min-height:30px}
+.pc-prices{display:flex;align-items:baseline;gap:5px;flex-wrap:nowrap;margin-top:1px}
+.pc-price{font-size:13px;font-weight:900;color:#e8420a;font-family:'Poppins',sans-serif;white-space:nowrap}
+.pc-old{font-size:10px;color:#bbb;text-decoration:line-through;font-family:'Poppins',sans-serif;white-space:nowrap}
+.pc-sold-row{display:flex;align-items:center;gap:5px;margin-top:3px}
+.pc-bar-bg{flex:1;height:4px;background:#fde0d8;border-radius:2px;overflow:hidden}
+.pc-bar-fill{height:100%;background:linear-gradient(90deg,#e8420a,#ff7a3c);border-radius:2px}
+.pc-sold-txt{font-size:10px;color:#999;white-space:nowrap;font-weight:600}
 /* hide old .product-card styles */
 .product-card{display:none!important}
 .product-img-wrap,.product-info,.product-name,.product-price,.product-badge,.product-wishlist-btn,.product-price-row{all:unset!important}
+/* hide action buttons — not in screenshot design */
+.card-action-btns{display:none!important}
 
 /* BOTTOM NAV */
 .bottom-nav{background:#fff!important;border-top:1px solid #eee!important;padding:0!important}
@@ -1773,7 +1775,7 @@ body{padding-bottom:65px!important;background:#f2f2f2!important}
 <!-- ====== FIREBASE + APP SCRIPT ====== -->
 <script type="module">
 import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js';
-import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, onAuthStateChanged, sendPasswordResetEmail, GoogleAuthProvider, signInWithPopup, updatePassword } from 'https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js';
+import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, onAuthStateChanged, sendPasswordResetEmail, GoogleAuthProvider, signInWithPopup, signInWithRedirect, getRedirectResult, updatePassword } from 'https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js';
 import { getFirestore, collection, doc, addDoc, getDoc, getDocs, setDoc, updateDoc, deleteDoc, query, where, orderBy, limit, onSnapshot, serverTimestamp } from 'https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js';
 
 const firebaseConfig = {
@@ -1923,19 +1925,49 @@ window.doRegister = async function() {
 };
 
 window.loginWithGoogle = async function() {
+  const provider = new GoogleAuthProvider();
+  provider.addScope('email');
+  provider.addScope('profile');
+  const isMobile = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
   try {
-    const provider = new GoogleAuthProvider();
-    const cred = await signInWithPopup(auth, provider);
-    const snap = await getDoc(doc(db,'users',cred.user.uid));
-    if(!snap.exists()) {
-      await setDoc(doc(db,'users',cred.user.uid), { name: cred.user.displayName, email: cred.user.email, createdAt: serverTimestamp() });
+    if (isMobile) {
+      await signInWithRedirect(auth, provider);
+      // Page will reload — result handled in onAuthStateChanged / getRedirectResult below
+    } else {
+      const cred = await signInWithPopup(auth, provider);
+      const snap = await getDoc(doc(db,'users',cred.user.uid));
+      if (!snap.exists()) {
+        await setDoc(doc(db,'users',cred.user.uid), { name: cred.user.displayName, email: cred.user.email, createdAt: serverTimestamp() });
+      }
+      showToast('Signed in with Google! 🎉');
+      navigate('home');
     }
-    showToast('Signed in with Google!');
-    navigate('home');
   } catch(e) {
-    showToast('Google sign-in failed','error');
+    const msg = e.code === 'auth/popup-blocked'
+      ? 'Popup blocked — trying redirect...'
+      : (e.message||'Google sign-in failed');
+    showToast(msg, 'error');
+    // Fallback to redirect if popup blocked
+    if (e.code === 'auth/popup-blocked') {
+      try { await signInWithRedirect(auth, provider); } catch(e2){}
+    }
   }
 };
+
+// Handle redirect result after page reload
+(async () => {
+  try {
+    const result = await getRedirectResult(auth);
+    if (result && result.user) {
+      const snap = await getDoc(doc(db,'users',result.user.uid));
+      if (!snap.exists()) {
+        await setDoc(doc(db,'users',result.user.uid), { name: result.user.displayName, email: result.user.email, createdAt: serverTimestamp() });
+      }
+      showToast('Signed in with Google! 🎉');
+      navigate('home');
+    }
+  } catch(e) {}
+})();
 
 window.doLogout = async function() {
   await signOut(auth);
@@ -2037,7 +2069,7 @@ function productCardHTML(p, isFlash=false) {
   const soldPct = Math.min(95, Math.round(soldCount/(soldCount+stock)*100));
   return `<div class="pc" onclick="openProduct('${p.id}')">
     <div class="pc-img-wrap">
-      <img src="${img}" alt="${p.name||''}" loading="lazy" onerror="this.src='https://placehold.co/300x300/f0f0f0/aaaaaa?text=No+Image'">
+      <img src="${img}" alt="${p.name||''}" loading="lazy" onerror="this.src='https://placehold.co/300x300/f5f5f5/cccccc?text=Benim'">
       ${hasDisc ? `<span class="pc-badge">-${discPct}%</span>` : ''}
     </div>
     <div class="pc-body">
