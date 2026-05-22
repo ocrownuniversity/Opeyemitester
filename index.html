@@ -703,21 +703,21 @@ body{padding-bottom:65px!important;background:#f2f2f2!important}
         <div class="slide-content">
           <h2>Shop Smart.<br>Dress Better.</h2>
           <p>Premium fashion at honest prices.</p>
-          <button class="slide-btn" onclick="navigate('search')">Shop Now</button>
+          <button class="slide-btn" onclick="filterByCategory('all')">Shop Now</button>
         </div>
       </div>
       <div class="slide slide-2">
         <div class="slide-content">
           <h2>Hot Deals<br>Every Day</h2>
           <p>Unbeatable prices on top brands</p>
-          <button class="slide-btn" onclick="navigate('search')">Explore Deals</button>
+          <button class="slide-btn" onclick="filterByCategory('all')">Explore Deals</button>
         </div>
       </div>
       <div class="slide slide-3">
         <div class="slide-content">
           <h2>Flash Sale<br>Is Live 🔥</h2>
           <p>Limited time offers &mdash; grab before it's gone</p>
-          <button class="slide-btn" onclick="navigate('search')">View Flash Sale</button>
+          <button class="slide-btn" onclick="filterByCategory('all')">View Flash Sale</button>
         </div>
       </div>
     </div>
@@ -787,17 +787,17 @@ body{padding-bottom:65px!important;background:#f2f2f2!important}
         <label>Category:</label>
         <select class="filter-select" id="cat-filter" onchange="applyFilters()">
           <option value="all">All</option>
-          <option>Electronics</option>
-          <option>Fashion</option>
-          <option>Men's Fashion</option>
-          <option>Women's Fashion</option>
-          <option>Baby Products</option>
-          <option>Home & Kitchen</option>
-          <option>Beauty</option>
-          <option>Sports</option>
-          <option>Groceries</option>
-          <option>Phones</option>
-          <option>Toys</option>
+          <option value="Electronics">Electronics</option>
+          <option value="Fashion">Fashion</option>
+          <option value="Men's Fashion">Men's Fashion</option>
+          <option value="Women's Fashion">Women's Fashion</option>
+          <option value="Baby Products">Baby Products</option>
+          <option value="Home & Kitchen">Home & Kitchen</option>
+          <option value="Beauty">Beauty</option>
+          <option value="Sports">Sports</option>
+          <option value="Groceries">Groceries</option>
+          <option value="Phones">Phones</option>
+          <option value="Toys">Toys</option>
         </select>
       </div>
     </div>
@@ -1284,7 +1284,7 @@ body{padding-bottom:65px!important;background:#f2f2f2!important}
     <div style="background:var(--gray-800);border-radius:var(--radius-xl);padding:20px 24px;text-align:center;color:#fff;margin-top:8px">
       <p style="font-size:15px;font-weight:700;opacity:.9;margin-bottom:12px">Ready to experience BENIM?</p>
       <div style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap">
-        <button class="btn-primary" onclick="navigate('search')" style="font-size:14px"><i class="fas fa-shopping-bag"></i> Shop Now</button>
+        <button class="btn-primary" onclick="filterByCategory('all')" style="font-size:14px"><i class="fas fa-shopping-bag"></i> Shop Now</button>
         <button onclick="navigate('contact')" style="background:transparent;border:2px solid rgba(255,255,255,.4);color:#fff;padding:9px 18px;border-radius:8px;font-size:13px;font-weight:700;cursor:pointer"><i class="fas fa-headset"></i> Contact Us</button>
       </div>
     </div>
@@ -2982,37 +2982,44 @@ window.goToSearchPage = function() {
   // Keep focus on input after navigation
   setTimeout(()=>{ const el = document.getElementById('search-input'); if(el) el.focus(); }, 50);
 };
-window.doSearch = function() {
+window.doSearch = async function() {
   searchQuery = document.getElementById('search-input').value.trim().toLowerCase();
-  // Reset category when doing a text search so results aren't double-filtered
   document.getElementById('cat-filter').value = 'all';
   searchCategory = 'all';
   navigate('search');
+  if(!allProducts.length) await loadProducts();
   applyFilters();
 };
-window.filterByCategory = function(cat) {
+window.filterByCategory = async function(cat) {
   document.getElementById('cat-filter').value = cat;
   searchCategory = cat;
-  // Reset text search when browsing by category
   searchQuery = '';
   document.getElementById('search-input').value = '';
   navigate('search');
+  // If products haven't loaded yet, load them first
+  if(!allProducts.length) {
+    document.getElementById('search-page-title').textContent = cat === 'all' ? 'All Products' : cat;
+    document.getElementById('search-grid').innerHTML = '<div style="grid-column:1/-1;text-align:center;padding:40px;color:var(--gray-400)"><i class="fas fa-spinner fa-spin" style="font-size:28px"></i><p style="margin-top:10px;font-size:13px">Loading products...</p></div>';
+    document.getElementById('search-empty').classList.add('hidden');
+    await loadProducts();
+  }
   applyFilters();
 };
 window.applyFilters = function() {
   const sort = document.getElementById('sort-select').value;
   const cat = document.getElementById('cat-filter').value;
   let results = [...allProducts];
+  if(!results.length) return; // products not loaded yet, filterByCategory will retry
   if(searchQuery) results = results.filter(p=>(p.name||'').toLowerCase().includes(searchQuery)||(p.description||'').toLowerCase().includes(searchQuery));
-  if(cat&&cat!=='all') results = results.filter(p=>(p.category||'').toLowerCase()===cat.toLowerCase());
+  if(cat && cat !== 'all') results = results.filter(p => (p.category||'').toLowerCase() === cat.toLowerCase());
   if(sort==='price-low') results.sort((a,b)=>{const ap=Number(a.discountPrice)||Number(a.price);const bp=Number(b.discountPrice)||Number(b.price);return ap-bp;});
   else if(sort==='price-high') results.sort((a,b)=>{const ap=Number(a.discountPrice)||Number(a.price);const bp=Number(b.discountPrice)||Number(b.price);return bp-ap;});
   else if(sort==='popular') results.sort((a,b)=>(b.reviewCount||0)-(a.reviewCount||0));
   else results.sort((a,b)=>(b.createdAt?.seconds||0)-(a.createdAt?.seconds||0));
-  const title = searchQuery ? `Results for "${searchQuery}"` : cat!=='all' ? cat : 'All Products';
+  const title = searchQuery ? `Results for "${searchQuery}"` : cat !== 'all' ? cat : 'All Products';
   document.getElementById('search-page-title').textContent = title;
   renderProductGrid('search-grid', results);
-  document.getElementById('search-empty').classList.toggle('hidden', results.length>0);
+  document.getElementById('search-empty').classList.toggle('hidden', results.length > 0);
 };
 
 // ===== ADDRESSES =====
