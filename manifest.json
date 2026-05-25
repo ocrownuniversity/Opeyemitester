@@ -5,48 +5,18 @@
   "start_url": "./index.html",
   "scope": "./",
   "display": "standalone",
-  "background_color": "#000000",
-  "theme_color": "#000000",
+  "background_color": "#DC3C0A",
+  "theme_color": "#DC3C0A",
   "orientation": "portrait-primary",
   "icons": [
-    {
-      "src": "icon-192.png",
-      "sizes": "192x192",
-      "type": "image/png",
-      "purpose": "any"
-    },
-    {
-      "src": "icon-192.png",
-      "sizes": "192x192",
-      "type": "image/png",
-      "purpose": "maskable"
-    },
-    {
-      "src": "icon-512.png",
-      "sizes": "512x512",
-      "type": "image/png",
-      "purpose": "any"
-    },
-    {
-      "src": "icon-512.png",
-      "sizes": "512x512",
-      "type": "image/png",
-      "purpose": "maskable"
-    },
-    {
-      "src": "splash.png",
-      "sizes": "1024x1024",
-      "type": "image/png",
-      "purpose": "any"
-    }
+    { "src": "icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "maskable" },
+    { "src": "icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" },
+    { "src": "splash.png", "sizes": "1080x1920", "type": "image/png", "purpose": "any" }
   ],
   "screenshots": [
-    {
-      "src": "splash.png",
-      "sizes": "1024x1024",
-      "type": "image/png",
-      "form_factor": "narrow"
-    }
+    { "src": "splash.png", "sizes": "1080x1920", "type": "image/png", "form_factor": "narrow" }
   ],
   "categories": ["shopping", "lifestyle"],
   "lang": "en",
