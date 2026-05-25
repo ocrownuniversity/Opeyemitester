@@ -770,17 +770,15 @@ body{padding-bottom:65px!important;background:#f2f2f2!important}
     <button class="hamburger" onclick="toggleSidebar()"><i class="fas fa-bars"></i></button>
     <!-- Logo: show image if available, fallback to styled text -->
     <div style="flex:1;display:flex;align-items:center">
-      <svg id="logo-text" onclick="navigate('home')" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 130 30" style="height:28px;width:auto;cursor:pointer;display:inline-block;vertical-align:middle" aria-label="BENIM">
+      <svg id="logo-text" onclick="navigate('home')" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 148 32" style="height:26px;width:auto;cursor:pointer;display:inline-block;vertical-align:middle" aria-label="BENIM">
         <!-- B -->
-        <text x="0" y="23" font-family="Poppins,sans-serif" font-weight="900" font-size="26" fill="#e8420a" letter-spacing="-0.5">B</text>
-        <!-- E as three horizontal bars -->
-        <g transform="translate(19,2)">
-          <rect x="0" y="0"  width="13" height="3.8" rx="1" fill="#e8420a"/>
-          <rect x="0" y="8.1" width="10" height="3.8" rx="1" fill="#e8420a"/>
-          <rect x="0" y="16.2" width="13" height="3.8" rx="1" fill="#e8420a"/>
-        </g>
-        <!-- N -->
-        <text x="34" y="23" font-family="Poppins,sans-serif" font-weight="900" font-size="26" fill="#e8420a" letter-spacing="-0.5">NIM</text>
+        <text x="0" y="24" font-family="Poppins,sans-serif" font-weight="900" font-size="26" fill="#e8420a">B</text>
+        <!-- E as 3 horizontal bars — aligned to match cap-height of other letters (top=1, bottom=21) -->
+        <rect x="20" y="1"  width="14" height="4" rx="1.2" fill="#e8420a"/>
+        <rect x="20" y="9"  width="10" height="4" rx="1.2" fill="#e8420a"/>
+        <rect x="20" y="17" width="14" height="4" rx="1.2" fill="#e8420a"/>
+        <!-- NIM -->
+        <text x="36" y="24" font-family="Poppins,sans-serif" font-weight="900" font-size="26" fill="#e8420a">NIM</text>
       </svg>
       <img id="site-logo" src="IMG-20260507-WA0041_1_.jpg" alt="Benim" class="header-logo" onclick="navigate('home')" onerror="this.style.display='none'" style="display:none;margin-left:6px">
     </div>
