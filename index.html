@@ -828,6 +828,7 @@ const titles={airtime:'Buy Airtime',data:'Buy Data',cable:'Cable TV',electricity
 document.getElementById('svc-ttl').textContent=titles[type]||type;
 document.getElementById('svc-body').innerHTML=svcForm(type);
 openM('m-svc');
+if(type==='result') fetchWAECPlans();
 }
 function svcForm(t){
 const nets=['MTN','Airtel','Glo','9mobile'];
@@ -839,7 +840,7 @@ if(t==='cable')return`<div style="display:grid;grid-template-columns:repeat(3,1f
 if(t==='electricity')return`<div style="margin-bottom:13px"><label style="font-size:12px;font-weight:600;color:var(--g600);margin-bottom:6px;display:block">Distribution Company</label><select class="inp" id="s-phone"><option value="EKEDC">EKEDC - Eko Electric</option><option value="IKEDC">IKEDC - Ikeja Electric</option><option value="AEDC">AEDC - Abuja Electric</option><option value="IBEDC">IBEDC - Ibadan Electric</option><option value="PHEDC">PHEDC - Port Harcourt Electric</option><option value="EEDC">EEDC - Enugu Electric</option><option value="KEDC">KEDC - Kano Electric</option><option value="JEDC">JEDC - Jos Electric</option></select></div>
 <div style="margin-bottom:13px"><label style="font-size:12px;font-weight:600;color:var(--g600);margin-bottom:6px;display:block">Meter Type</label><select class="inp" id="s-meter-type"><option value="prepaid">Prepaid</option><option value="postpaid">Postpaid</option></select></div><div style="margin-bottom:13px"><label style="font-size:12px;font-weight:600;color:var(--g600);margin-bottom:6px;display:block">Meter Number</label><input class="inp" id="s-meter" placeholder="Meter number"/></div><div style="margin-bottom:20px"><label style="font-size:12px;font-weight:600;color:var(--g600);margin-bottom:6px;display:block">Amount</label><input class="inp" id="s-amt" type="number" placeholder="1000"/>${qk([1000,2000,5000,10000])}</div><button onclick="procSvc('electricity')" class="btn-g" style="width:100%;padding:13px;border-radius:11px;font-size:15px">Pay Electricity</button>`;
 if(t==='loan')return`<div class="info-box"><p style="font-size:13px;color:var(--green-d);line-height:1.6">Quick loans reviewed within 24 hours. Amount credited to wallet on approval.</p></div><div style="margin-bottom:13px"><label style="font-size:12px;font-weight:600;color:var(--g600);margin-bottom:6px;display:block">Loan Amount</label><select class="inp" id="s-amt"><option value="5000">NGN 5,000</option><option value="10000">NGN 10,000</option><option value="20000">NGN 20,000</option><option value="50000">NGN 50,000</option><option value="100000">NGN 100,000</option><option value="200000">NGN 200,000</option><option value="500000">NGN 500,000</option></select></div><div style="margin-bottom:13px"><label style="font-size:12px;font-weight:600;color:var(--g600);margin-bottom:6px;display:block">Purpose</label><input class="inp" id="s-phone" placeholder="Brief purpose of loan"/></div><div style="margin-bottom:20px"><label style="font-size:12px;font-weight:600;color:var(--g600);margin-bottom:6px;display:block">Repayment Period</label><select class="inp" id="s-meter"><option>7 days</option><option>14 days</option><option>30 days</option></select></div><button onclick="procLoan()" class="btn-g" style="width:100%;padding:13px;border-radius:11px;font-size:15px">Apply for Loan</button>`;
-if(t==='result')return`<div class="info-box"><p style="font-size:13px;color:var(--green-d);line-height:1.6">Check WAEC, NECO, JAMB, NABTEB results. Scratch card PIN delivered instantly.</p></div><div style="margin-bottom:13px"><label style="font-size:12px;font-weight:600;color:var(--g600);margin-bottom:6px;display:block">Exam Type</label><select class="inp" id="s-phone"><option>WAEC - West African Examinations Council</option><option>NECO - National Examinations Council</option><option>JAMB - Joint Admissions Board</option><option>NABTEB - National Business and Technical Board</option></select></div><div style="margin-bottom:13px"><label style="font-size:12px;font-weight:600;color:var(--g600);margin-bottom:6px;display:block">Year</label><select class="inp" id="s-meter"><option>2025</option><option>2024</option><option>2023</option><option>2022</option></select></div><div style="margin-bottom:20px"><label style="font-size:12px;font-weight:600;color:var(--g600);margin-bottom:6px;display:block">Result Checker</label><select class="inp" id="s-amt"><option value="800">WAEC Scratch Card - NGN 800</option><option value="700">NECO Scratch Card - NGN 700</option><option value="500">JAMB Profile Code - NGN 500</option><option value="750">NABTEB Scratch Card - NGN 750</option></select></div><button onclick="procSvc('result')" class="btn-g" style="width:100%;padding:13px;border-radius:11px;font-size:15px">Buy Result Checker</button>`;
+if(t==='result')return`<div class="info-box"><p style="font-size:13px;color:var(--green-d);line-height:1.6">Check WAEC results. Scratch card PIN delivered instantly.</p></div><div style="margin-bottom:13px"><label style="font-size:12px;font-weight:600;color:var(--g600);margin-bottom:6px;display:block">Exam Type</label><select class="inp" id="s-phone" onchange="fetchWAECPlans()"><option value="WAEC">WAEC - West African Examinations Council</option><option value="NECO" disabled>NECO (Coming Soon)</option><option value="JAMB" disabled>JAMB (Coming Soon)</option><option value="NABTEB" disabled>NABTEB (Coming Soon)</option></select></div><div id="data-loading" style="display:none;text-align:center;padding:10px;color:var(--g400);font-size:12px"></div><div style="margin-bottom:20px"><label style="font-size:12px;font-weight:600;color:var(--g600);margin-bottom:6px;display:block">Result Checker PIN</label><select class="inp" id="s-amt"><option value="">Loading price...</option></select><div id="data-info" style="display:none;margin-top:8px;padding:10px;border-radius:8px;background:var(--green-xl);font-size:12px"></div></div><button onclick="procSvc('result')" class="btn-g" style="width:100%;padding:13px;border-radius:11px;font-size:15px">Buy Result Checker</button>`;
 }
 async function procLoan(){closeM('m-svc');openM('m-loan-apply');}
 function procSvc(type){
@@ -903,11 +904,9 @@ const meterType=document.getElementById('s-meter-type')?.value||'prepaid';
 const custPhone=CU?.phoneNumber||UD?.phone||'08000000000';
 extra={meter,serviceId,meterType,planName:disco+' NGN '+fmt(amt),custPhone};
 }else if(type==='result'){
-const exam=document.getElementById('s-phone')?.value||'';
-const year=document.getElementById('s-meter')?.value||String(new Date().getFullYear());
-const examMap={'WAEC':'waec','NECO':'neco','JAMB':'jamb','NABTEB':'nabteb'};
-const svcKey=Object.keys(examMap).find(k=>exam.includes(k));
-extra={serviceId:examMap[svcKey]||'waec',quantity:1,examYear:year,planName:exam+' '+year+' Checker'};
+const examType=document.getElementById('s-phone')?.value||'WAEC';
+const custPhone=CU?.phoneNumber||UD?.phone||'08000000000';
+extra={serviceId:examType.toLowerCase(),custPhone,planName:examType+' Result Checker PIN'};
 }
 pSvc={type,amt,extra};
 closeM('m-svc');
@@ -971,15 +970,18 @@ apiResult = await apiAirtime(extra.phone, extra.networkId, amt, ref);
 }else if(type==='data'){
 apiResult = await apiData(extra.phone, extra.networkId, extra.variationCode, amt, ref, extra.variationSno);
 }else if(type==='cable'){
-apiResult = await apiCable(extra.smartcard, extra.serviceId, extra.variationCode, amt, ref);
+const custPhone = extra.custPhone||UD?.phone||'';
+apiResult = await apiCable(extra.smartcard, extra.serviceId, extra.variationCode, amt, ref, custPhone);
 }else if(type==='electricity'){
 const custPhone = extra.custPhone||UD?.phone||'08011111111';
 apiResult = await apiElectricity(extra.meter, extra.serviceId, extra.meterType, amt, custPhone, ref);
 }else if(type==='result'){
-const examMap={'waec':'WAEC','neco':'NECO','jamb':'JAMB','nabteb':'NABTEB'};
-const examType = examMap[extra.serviceId] || String(extra.serviceId||'WAEC').toUpperCase();
-const examYear = extra.examYear || new Date().getFullYear().toString();
-apiResult = await apiResultChecker(examType, examYear, extra.quantity||1, amt, ref);
+if((extra.serviceId||'').toLowerCase()!=='waec'){
+apiResult = {status:'error', message:'This exam type is not yet confirmed with the provider. Only WAEC is currently available.'};
+}else{
+const custPhone = extra.custPhone||UD?.phone||'';
+apiResult = await apiWAEC('WAEC', custPhone, amt, ref);
+}
 }else{
 apiResult = {status:'error', message:'Service not supported yet.'};
 }
@@ -1075,14 +1077,18 @@ apiKey       : '',   // entered by admin after deployment
 callbackUrl  : '',
 enabled      : true,
 endpoints    : {
-airtime     : 'APIAirtimeV1.asp',
-data        : 'APIDatabundleV1.asp',
-cable       : 'APICableTVV1.asp',
-electricity : 'APIElectricityV1.asp',
-balance     : 'APIWalletBalance.asp',
-dataPlans   : 'APIDataBundlePlansV1.asp',
-cablePlans  : 'APICableTVPlansV1.asp',
-result      : 'APIResultCheckerV1.asp'
+airtime         : 'APIAirtimeV1.asp',
+data            : 'APIDatabundleV1.asp',
+cable           : 'APICableTVV1.asp',
+cableVerify     : 'APIVerifyCableTVV1.asp',
+electricity     : 'APIElectricityV1.asp',
+electricityVerify: 'APIVerifyElectricityV1.asp',
+balance         : 'APIWalletBalance.asp',
+dataPlans       : 'APIDataBundlePlansV1.asp',
+cablePlans      : 'APICableTVPackagesV2.asp',
+waec            : 'APIWAECV1.asp',
+waecPlans       : 'APIWAECPackagesV2.asp',
+status          : 'APIQueryV1.asp'
 }
 };
 const API_CFG = Object.assign({}, API_DEFAULTS);
@@ -1378,13 +1384,14 @@ if(loadEl){ loadEl.style.display='block'; loadEl.textContent='&#9203; Loading pa
 sel.innerHTML = '<option value="">Loading packages...</option>';
 console.log('[PLANS] Fetching cable plans for:', provider);
 try{
-// Try all known parameter combinations that different providers accept
+// CableTV is the CONFIRMED param name from the real purchase endpoint docs.
+// Package-list endpoint isn't separately documented, so we try the confirmed
+// name first, then fall back to older guesses as a safety net.
 const attempts = [
-{ CableNetwork: provider },                          // ClubKonnect / Nellobytes primary
-{ NetworkID: provider },                             // Some providers use NetworkID
-{ CableNetwork: provider.toLowerCase() },            // Lowercase variant
-{ NetworkID: provider.toLowerCase() },
-{ MobileNetwork: provider },                         // Last resort
+{ CableTV: provider },                               // Confirmed real param (matches purchase endpoint)
+{ CableTV: provider.toLowerCase() },                 // Lowercase variant
+{ CableNetwork: provider },                          // Fallback guess
+{ NetworkID: provider },                             // Fallback guess
 ];
 let res = null;
 for(const params of attempts){
@@ -1416,6 +1423,48 @@ if(loadEl) loadEl.style.display='none';
 sel.innerHTML = '<option value="">&#9888; '+e.message.slice(0,60)+'</option>';
 if(infoEl){ infoEl.style.display='block'; infoEl.style.color='#dc2626'; infoEl.textContent='&#10060; '+e.message; }
 console.error('[PLANS] fetchCablePlans error:', e.message);
+}
+}
+async function fetchWAECPlans(){
+const sel    = document.getElementById('s-amt');
+const loadEl = document.getElementById('data-loading');
+const infoEl = document.getElementById('data-info');
+if(!sel) return;
+const examSel = document.getElementById('s-phone');
+if(examSel && examSel.value!=='WAEC'){
+sel.innerHTML='<option value="">Not yet available</option>';
+return;
+}
+if(planCache['waec_WAEC']){ renderPlans(planCache['waec_WAEC'], sel, infoEl); return; }
+if(loadEl){ loadEl.style.display='block'; loadEl.textContent='&#9203; Loading price...'; }
+sel.innerHTML='<option value="">Loading price...</option>';
+console.log('[PLANS] Fetching WAEC packages');
+try{
+let res = await apiFetch('waecPlans', { ExamType:'WAEC' });
+let plans = extractNBSPlans(res, 'WAEC');
+if(!plans.length){
+res = await apiFetch('waecPlans', {});
+plans = extractNBSPlans(res, 'WAEC');
+}
+if(loadEl) loadEl.style.display='none';
+console.log('[PLANS] WAEC final response:', JSON.stringify(res));
+console.log('[PLANS] WAEC plans count:', plans.length);
+if(plans.length){
+planCache['waec_WAEC']=plans;
+renderPlans(plans, sel, infoEl);
+}else{
+const rawStr=JSON.stringify(res).slice(0,300);
+sel.innerHTML='<option value="">No price available</option>';
+if(infoEl){ infoEl.style.display='block'; infoEl.style.color='#dc2626';
+infoEl.innerHTML='<strong>&#9888; No WAEC packages returned</strong><br/>'
++'<span style="font-size:11px;color:var(--g500)">The provider returned no pricing data. Please contact ClubKonnect support to confirm WAEC e-PIN is activated on your account.</span><br/>'
++'<span style="font-size:10px;font-family:monospace;word-break:break-all;color:var(--g400)">Raw: '+rawStr+'</span>'; }
+}
+}catch(e){
+if(loadEl) loadEl.style.display='none';
+sel.innerHTML='<option value="">&#9888; '+e.message.slice(0,60)+'</option>';
+if(infoEl){ infoEl.style.display='block'; infoEl.style.color='#dc2626'; infoEl.textContent='&#10060; '+e.message; }
+console.error('[PLANS] fetchWAECPlans error:', e.message);
 }
 }
 function extractPlansArray(res){
@@ -1578,34 +1627,30 @@ Amount       : amount,
 RequestID    : reqId
 },{ type:'data', amount, userId:CU?.uid||'' });
 }
-async function apiCable(smartcard, provider, planCode, amount, reqId){
+async function apiCable(smartcard, provider, planCode, amount, reqId, phone){
 return apiFetch('cable',{
-SmartCardNo:smartcard,
-CableNetwork:provider,
-DataPlan:planCode,
-Amount:amount,
-RequestID:reqId
+CableTV    : provider,
+Package    : planCode,
+SmartCardNo: smartcard,
+PhoneNo    : phone||UD?.phone||'',
+RequestID  : reqId
 },{ type:'cable', amount, userId:CU?.uid||'' });
 }
-async function apiResultChecker(examType, examYear, quantity, amount, reqId){
-const params = {
+async function apiWAEC(examType, phone, amount, reqId){
+return apiFetch('waec',{
 ExamType : examType,
-ExamYear : examYear,
-Quantity : quantity||1,
-Amount   : amount,
+PhoneNo  : phone||UD?.phone||'',
 RequestID: reqId
-};
-console.log('[API] ResultChecker params:', JSON.stringify(params));
-return apiFetch('result', params, { type:'result', amount, userId:CU?.uid||'' });
+},{ type:'result', amount, userId:CU?.uid||'' });
 }
 async function apiElectricity(meter, disco, meterType, amount, phone, reqId){
 return apiFetch('electricity',{
-MeterNo:meter,
-DiscoNetwork:disco,
-MeterType:meterType,
-Amount:amount,
-MobileNumber:phone,
-RequestID:reqId
+ElectricCompany: disco,
+MeterType      : meterType,
+MeterNo        : meter,
+Amount         : amount,
+PhoneNo        : phone,
+RequestID      : reqId
 },{ type:'electricity', amount, userId:CU?.uid||'' });
 }
 async function checkTxStatus(requestId){
@@ -3797,7 +3842,7 @@ res = await apiFetch('airtime',{MobileNumber:t.phone,NetworkID:t.network,Amount:
 } else if(t.key==='data'){
 res = await apiFetch('dataPlans',{NetworkID:t.network},{type:'diag'});
 } else if(t.key==='cable'){
-res = await apiFetch('cablePlans',{CableNetwork:t.network},{type:'diag'});
+res = await apiFetch('cablePlans',{CableTV:t.network},{type:'diag'});
 } else {
 res = await apiFetch('balance',{},{type:'diag'});
 }
