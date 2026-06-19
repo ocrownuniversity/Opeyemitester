@@ -740,11 +740,11 @@ const avLtr=document.getElementById('d-avatar-letter');if(avLtr)avLtr.textConten
 const prLtr=document.getElementById('pr-av-letter');if(prLtr)prLtr.textContent=initials;
 document.getElementById('d-name').textContent=safeName;
 document.getElementById('d-bal').textContent=bHid?'NGN ****':'NGN '+fmt(UD.balance||0);
-document.getElementById('d-accnum').textContent='Account: '+(UD.phone||'&mdash;');
+document.getElementById('d-accnum').textContent='Account: '+(UD.phone||' - ');
 document.getElementById('pr-name').textContent=safeName;
-document.getElementById('pr-em').textContent=UD.email||CU.email||'&mdash;';
+document.getElementById('pr-em').textContent=UD.email||CU.email||' - ';
 const prAccNum=document.getElementById('pr-accnum');
-if(prAccNum)prAccNum.textContent=UD.phone||'&mdash;';
+if(prAccNum)prAccNum.textContent=UD.phone||' - ';
 const nameParts=safeName.split(' ');
 const epFirst=document.getElementById('ep-firstname');
 const epLast=document.getElementById('ep-lastname');
@@ -854,7 +854,7 @@ if(rwBal>0 && rwNote){
 rwNote.style.display='flex';
 const covers=Math.min(rwBal,amt);
 const remainder=amt-covers;
-rwNote.querySelector('#pin-rw-bal').textContent='NGN '+fmt(rwBal)+(remainder>0?' (covers NGN '+fmt(covers)+' &mdash; remainder of NGN '+fmt(remainder)+' from wallet)':' (covers full amount)');
+rwNote.querySelector('#pin-rw-bal').textContent='NGN '+fmt(rwBal)+(remainder>0?' (covers NGN '+fmt(covers)+'  -  remainder of NGN '+fmt(remainder)+' from wallet)':' (covers full amount)');
 }else if(rwNote){
 rwNote.style.display='none';
 }
@@ -1224,9 +1224,9 @@ if(idx===0) console.log('[NBS] IDs &rarr; PRODUCT_ID:',pid,' CODE:',pcode,' SNO:
 plans.push({
 variation_code   : String(planId),
 variation_sno    : String(psno),
-variation_name   : String(prod.PRODUCT_NAME || prod.product_name || prod.PACKAGE_NAME || prod.package_name || prod.name || prod.PLAN || ''),
+variation_name   : String(prod.PRODUCT_NAME || prod.product_name || prod.PACKAGE_NAME || prod.package_name || prod.ExamType || prod.EXAMTYPE || prod.name || prod.PLAN || ''),
 variation_amount : String(prod.PRODUCT_AMOUNT || prod.product_amount || prod.PACKAGE_AMOUNT || prod.package_amount || prod.price || prod.AMOUNT || prod.PRICE || 0),
-description      : String(prod.PRODUCT_NAME || prod.product_name || prod.PACKAGE_NAME || prod.package_name || prod.name || '')
+description      : String(prod.PRODUCT_NAME || prod.product_name || prod.PACKAGE_NAME || prod.package_name || prod.ExamType || prod.EXAMTYPE || prod.name || '')
 });
 });
 });
@@ -1259,9 +1259,9 @@ return plans;
 if(Array.isArray(res)){
 return res.map(p => ({
 variation_code   : String(p.PRODUCT_ID||p.product_id||p.PRODUCT_CODE||p.PACKAGE_ID||p.package_id||p.PACKAGE_CODE||p.package_code||p.DataPlanID||p.PlanID||p.id||p.code||''),
-variation_name   : String(p.PRODUCT_NAME||p.PACKAGE_NAME||p.package_name||p.DataPlan||p.Plan||p.name||''),
+variation_name   : String(p.PRODUCT_NAME||p.PACKAGE_NAME||p.package_name||p.ExamType||p.DataPlan||p.Plan||p.name||''),
 variation_amount : String(p.PRODUCT_AMOUNT||p.PACKAGE_AMOUNT||p.Price||p.PRICE||p.price||p.Amount||0),
-description      : String(p.PRODUCT_NAME||p.PACKAGE_NAME||p.package_name||p.DataPlan||p.Plan||p.name||'')
+description      : String(p.PRODUCT_NAME||p.PACKAGE_NAME||p.package_name||p.ExamType||p.DataPlan||p.Plan||p.name||'')
 }));
 }
 for(const key of Object.keys(res)){
@@ -1271,9 +1271,9 @@ if(typeof first === 'object' && first !== null){
 console.log('[NBS] Fallback array under key:', key, '| sample:', JSON.stringify(first).slice(0,100));
 return res[key].map(p => ({
 variation_code   : String(p.PRODUCT_ID||p.product_id||p.PRODUCT_CODE||p.PACKAGE_ID||p.package_id||p.PACKAGE_CODE||p.package_code||p.DataPlanID||p.PlanID||p.code||p.id||''),
-variation_name   : String(p.PRODUCT_NAME||p.PACKAGE_NAME||p.package_name||p.DataPlan||p.Plan||p.name||''),
+variation_name   : String(p.PRODUCT_NAME||p.PACKAGE_NAME||p.package_name||p.ExamType||p.DataPlan||p.Plan||p.name||''),
 variation_amount : String(p.PRODUCT_AMOUNT||p.PACKAGE_AMOUNT||p.Price||p.PRICE||p.price||p.Amount||0),
-description      : String(p.PRODUCT_NAME||p.PACKAGE_NAME||p.package_name||p.DataPlan||p.Plan||p.name||'')
+description      : String(p.PRODUCT_NAME||p.PACKAGE_NAME||p.package_name||p.ExamType||p.DataPlan||p.Plan||p.name||'')
 }));
 }
 }
@@ -1288,7 +1288,7 @@ const loadEl = document.getElementById('data-loading');
 const infoEl = document.getElementById('data-info');
 if(!sel) return;
 if(planCache[networkId]){ renderPlansWithAdminSettings(planCache[networkId], sel, infoEl, networkId); return; }
-if(loadEl){ loadEl.style.display='block'; loadEl.textContent='&#9203; Loading plans...'; }
+if(loadEl){ loadEl.style.display='block'; loadEl.textContent='[Loading] Loading plans...'; }
 sel.innerHTML = '<option value="">Loading plans...</option>';
 console.log('[PLANS] Fetching plans for network:', networkId);
 try{
@@ -1369,7 +1369,7 @@ console.warn('[PLANS] No plans extracted. Full response:', JSON.stringify(res));
 }catch(e){
 if(loadEl) loadEl.style.display='none';
 sel.innerHTML = '<option value="">&#9888; '+e.message.slice(0,60)+'</option>';
-if(infoEl){ infoEl.style.display='block'; infoEl.style.color='#dc2626'; infoEl.textContent='&#10060; '+e.message; }
+if(infoEl){ infoEl.style.display='block'; infoEl.style.color='#dc2626'; infoEl.textContent='[Error] '+e.message; }
 console.error('[PLANS] fetchPlansForNetwork error:', e.message, e);
 }
 }
@@ -1380,7 +1380,7 @@ const infoEl = document.getElementById('data-info');
 if(!sel) return;
 const cacheKey = 'cable_'+provider;
 if(planCache[cacheKey]){ renderPlans(planCache[cacheKey], sel, infoEl); return; }
-if(loadEl){ loadEl.style.display='block'; loadEl.textContent='&#9203; Loading packages...'; }
+if(loadEl){ loadEl.style.display='block'; loadEl.textContent='[Loading] Loading packages...'; }
 sel.innerHTML = '<option value="">Loading packages...</option>';
 console.log('[PLANS] Fetching cable plans for:', provider);
 try{
@@ -1421,7 +1421,7 @@ infoEl.innerHTML='<strong>&#9888; No packages from provider for: '+provider+'</s
 }catch(e){
 if(loadEl) loadEl.style.display='none';
 sel.innerHTML = '<option value="">&#9888; '+e.message.slice(0,60)+'</option>';
-if(infoEl){ infoEl.style.display='block'; infoEl.style.color='#dc2626'; infoEl.textContent='&#10060; '+e.message; }
+if(infoEl){ infoEl.style.display='block'; infoEl.style.color='#dc2626'; infoEl.textContent='[Error] '+e.message; }
 console.error('[PLANS] fetchCablePlans error:', e.message);
 }
 }
@@ -1436,7 +1436,7 @@ sel.innerHTML='<option value="">Not yet available</option>';
 return;
 }
 if(planCache['waec_WAEC']){ renderPlans(planCache['waec_WAEC'], sel, infoEl); return; }
-if(loadEl){ loadEl.style.display='block'; loadEl.textContent='&#9203; Loading price...'; }
+if(loadEl){ loadEl.style.display='block'; loadEl.textContent='[Loading] Loading price...'; }
 sel.innerHTML='<option value="">Loading price...</option>';
 console.log('[PLANS] Fetching WAEC packages');
 try{
@@ -1463,7 +1463,7 @@ infoEl.innerHTML='<strong>&#9888; No WAEC packages returned</strong><br/>'
 }catch(e){
 if(loadEl) loadEl.style.display='none';
 sel.innerHTML='<option value="">&#9888; '+e.message.slice(0,60)+'</option>';
-if(infoEl){ infoEl.style.display='block'; infoEl.style.color='#dc2626'; infoEl.textContent='&#10060; '+e.message; }
+if(infoEl){ infoEl.style.display='block'; infoEl.style.color='#dc2626'; infoEl.textContent='[Error] '+e.message; }
 console.error('[PLANS] fetchWAECPlans error:', e.message);
 }
 }
@@ -1544,7 +1544,7 @@ opt.dataset.code     = p.variation_code  || code;
 opt.dataset.sno      = p.variation_sno   || '';
 opt.dataset.validity = validity;
 opt.dataset.name     = name;
-opt.textContent      = name+(validity?' ('+validity+')':'')+' &mdash; NGN '+fmt(price);
+opt.textContent      = name+(validity?' ('+validity+')':'')+'  -  NGN '+fmt(price);
 grp.appendChild(opt);
 });
 sel.appendChild(grp);
@@ -3781,11 +3781,11 @@ await db.collection('settings').doc('apiconfig').set(data, {merge:true});
 await loadApiConfig();
 clearPlanCache();
 r.style.background='#dcfce7'; r.style.color='#15803d';
-r.textContent='&#9989; Configuration saved! System is ready.';
+r.textContent='[OK] Configuration saved! System is ready.';
 toast('API config saved!');
 }catch(e){
 r.style.background='#fef2f2'; r.style.color='#dc2626';
-r.textContent='&#10060; Error: '+e.message;
+r.textContent='[Error] Error: '+e.message;
 }
 }
 async function testApiConnection(){
@@ -4753,10 +4753,10 @@ if(!amt||amt<1000){el.style.display='none';return;}
 el.style.display='block';
 if((UD?.balance||0)<amt){
 el.style.cssText='display:block;background:#fef2f2;border:1px solid #fecaca;border-radius:9px;padding:10px 12px;margin-bottom:12px;font-size:12px;color:#dc2626';
-el.textContent='&#9888; Insufficient balance. Your balance: NGN '+fmt(UD?.balance||0);
+el.textContent='[!] Insufficient balance. Your balance: NGN '+fmt(UD?.balance||0);
 }else{
 el.style.cssText='display:block;background:#fef3c7;border:1px solid #fde047;border-radius:9px;padding:10px 12px;margin-bottom:12px;font-size:12px;color:#92400e';
-el.textContent='&#10003; Withdrawal processed immediately upon admin approval.';
+el.textContent='[OK] Withdrawal processed immediately upon admin approval.';
 }
 }
 async function submitWithdrawal(){
@@ -5463,12 +5463,12 @@ return;
 const deposit=Math.round(price*0.25*100)/100;
 if(depositHidden)depositHidden.value=deposit;
 if(depositDisplay)depositDisplay.textContent='NGN '+fmt(deposit)+' (25% of NGN '+fmt(price)+')';
-if(hint)hint.textContent='Deposit fixed at 25% &mdash; balance of NGN '+fmt(price-deposit)+' spread over '+days+' days';
+if(hint)hint.textContent='Deposit fixed at 25%  -  balance of NGN '+fmt(price-deposit)+' spread over '+days+' days';
 const balance=price-deposit;
 const daily=balance>0?Math.round((balance/days)*100)/100:0;
 document.getElementById('eb-calc-deposit').textContent='NGN '+fmt(deposit);
 document.getElementById('eb-calc-balance').textContent='NGN '+fmt(balance);
-document.getElementById('eb-calc-daily').textContent=balance>0?'NGN '+fmt(daily)+'/day':'NGN 0 &mdash; Fully Paid!';
+document.getElementById('eb-calc-daily').textContent=balance>0?'NGN '+fmt(daily)+'/day':'NGN 0  -  Fully Paid!';
 document.getElementById('eb-calc-days').textContent=balance>0?days+' days':'Complete at deposit';
 if(warn)warn.style.display='none';
 prev.style.display='block';
