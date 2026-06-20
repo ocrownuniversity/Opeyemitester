@@ -840,7 +840,7 @@ if(t==='cable')return`<div style="display:grid;grid-template-columns:repeat(4,1f
 if(t==='electricity')return`<div style="margin-bottom:13px"><label style="font-size:12px;font-weight:600;color:var(--g600);margin-bottom:6px;display:block">Distribution Company</label><select class="inp" id="s-phone"><option value="EKEDC">EKEDC - Eko Electric</option><option value="IKEDC">IKEDC - Ikeja Electric</option><option value="AEDC">AEDC - Abuja Electric</option><option value="IBEDC">IBEDC - Ibadan Electric</option><option value="PHEDC">PHEDC - Port Harcourt Electric</option><option value="EEDC">EEDC - Enugu Electric</option><option value="KEDC">KEDC - Kano Electric</option><option value="JEDC">JEDC - Jos Electric</option></select></div>
 <div style="margin-bottom:13px"><label style="font-size:12px;font-weight:600;color:var(--g600);margin-bottom:6px;display:block">Meter Type</label><select class="inp" id="s-meter-type"><option value="prepaid">Prepaid</option><option value="postpaid">Postpaid</option></select></div><div style="margin-bottom:13px"><label style="font-size:12px;font-weight:600;color:var(--g600);margin-bottom:6px;display:block">Meter Number</label><input class="inp" id="s-meter" placeholder="Meter number"/></div><div style="margin-bottom:20px"><label style="font-size:12px;font-weight:600;color:var(--g600);margin-bottom:6px;display:block">Amount</label><input class="inp" id="s-amt" type="number" placeholder="1000"/>${qk([1000,2000,5000,10000])}</div><button onclick="procSvc('electricity')" class="btn-g" style="width:100%;padding:13px;border-radius:11px;font-size:15px">Pay Electricity</button>`;
 if(t==='loan')return`<div class="info-box"><p style="font-size:13px;color:var(--green-d);line-height:1.6">Quick loans reviewed within 24 hours. Amount credited to wallet on approval.</p></div><div style="margin-bottom:13px"><label style="font-size:12px;font-weight:600;color:var(--g600);margin-bottom:6px;display:block">Loan Amount</label><select class="inp" id="s-amt"><option value="5000">NGN 5,000</option><option value="10000">NGN 10,000</option><option value="20000">NGN 20,000</option><option value="50000">NGN 50,000</option><option value="100000">NGN 100,000</option><option value="200000">NGN 200,000</option><option value="500000">NGN 500,000</option></select></div><div style="margin-bottom:13px"><label style="font-size:12px;font-weight:600;color:var(--g600);margin-bottom:6px;display:block">Purpose</label><input class="inp" id="s-phone" placeholder="Brief purpose of loan"/></div><div style="margin-bottom:20px"><label style="font-size:12px;font-weight:600;color:var(--g600);margin-bottom:6px;display:block">Repayment Period</label><select class="inp" id="s-meter"><option>7 days</option><option>14 days</option><option>30 days</option></select></div><button onclick="procLoan()" class="btn-g" style="width:100%;padding:13px;border-radius:11px;font-size:15px">Apply for Loan</button>`;
-if(t==='result')return`<div class="info-box"><p style="font-size:13px;color:var(--green-d);line-height:1.6">Check WAEC results. Scratch card PIN delivered instantly.</p></div><div style="margin-bottom:13px"><label style="font-size:12px;font-weight:600;color:var(--g600);margin-bottom:6px;display:block">Exam Type</label><select class="inp" id="s-phone" onchange="fetchWAECPlans()"><option value="WAEC">WAEC - West African Examinations Council</option><option value="NECO" disabled>NECO (Coming Soon)</option><option value="JAMB" disabled>JAMB (Coming Soon)</option><option value="NABTEB" disabled>NABTEB (Coming Soon)</option></select></div><div id="data-loading" style="display:none;text-align:center;padding:10px;color:var(--g400);font-size:12px"></div><div style="margin-bottom:20px"><label style="font-size:12px;font-weight:600;color:var(--g600);margin-bottom:6px;display:block">Result Checker PIN</label><select class="inp" id="s-amt"><option value="">Loading price...</option></select><div id="data-info" style="display:none;margin-top:8px;padding:10px;border-radius:8px;background:var(--green-xl);font-size:12px"></div></div><button onclick="procSvc('result')" class="btn-g" style="width:100%;padding:13px;border-radius:11px;font-size:15px">Buy Result Checker</button>`;
+if(t==='result')return`<div class="info-box"><p style="font-size:13px;color:var(--green-d);line-height:1.6">Check WAEC or JAMB results. PIN delivered instantly.</p></div><div style="margin-bottom:13px"><label style="font-size:12px;font-weight:600;color:var(--g600);margin-bottom:6px;display:block">Exam Type</label><select class="inp" id="s-phone" onchange="onExamTypeChange()"><option value="WAEC">WAEC - West African Examinations Council</option><option value="JAMB">JAMB - Joint Admissions and Matriculation Board</option></select></div><div id="jamb-extra-fields" style="display:none"><div style="margin-bottom:13px"><label style="font-size:12px;font-weight:600;color:var(--g600);margin-bottom:6px;display:block">JAMB Service Type</label><select class="inp" id="s-meter" onchange="fetchJAMBPlans()"><option value="UTME">UTME</option><option value="DE">Direct Entry (DE)</option><option value="RESULT">Result Checker</option></select></div><div style="margin-bottom:13px"><label style="font-size:12px;font-weight:600;color:var(--g600);margin-bottom:6px;display:block">JAMB Profile ID</label><input class="inp" id="s-profileid" placeholder="Enter your JAMB Profile ID"/></div></div><div id="data-loading" style="display:none;text-align:center;padding:10px;color:var(--g400);font-size:12px"></div><div style="margin-bottom:20px"><label style="font-size:12px;font-weight:600;color:var(--g600);margin-bottom:6px;display:block">Result Checker PIN</label><select class="inp" id="s-amt"><option value="">Loading price...</option></select><div id="data-info" style="display:none;margin-top:8px;padding:10px;border-radius:8px;background:var(--green-xl);font-size:12px"></div></div><button onclick="procSvc('result')" class="btn-g" style="width:100%;padding:13px;border-radius:11px;font-size:15px">Buy Result Checker</button>`;
 }
 async function procLoan(){closeM('m-svc');openM('m-loan-apply');}
 function procSvc(type){
@@ -906,7 +906,14 @@ extra={meter,serviceId,meterType,planName:disco+' NGN '+fmt(amt),custPhone};
 }else if(type==='result'){
 const examType=document.getElementById('s-phone')?.value||'WAEC';
 const custPhone=CU?.phoneNumber||UD?.phone||'08000000000';
+if(examType==='JAMB'){
+const jambType=document.getElementById('s-meter')?.value||'UTME';
+const profileId=document.getElementById('s-profileid')?.value?.trim();
+if(!profileId){toast('Enter your JAMB Profile ID');return;}
+extra={serviceId:'jamb',jambType,profileId,custPhone,planName:'JAMB '+jambType+' PIN'};
+}else{
 extra={serviceId:examType.toLowerCase(),custPhone,planName:examType+' Result Checker PIN'};
+}
 }
 pSvc={type,amt,extra};
 closeM('m-svc');
@@ -976,11 +983,14 @@ apiResult = await apiCable(extra.smartcard, extra.serviceId, extra.variationCode
 const custPhone = extra.custPhone||UD?.phone||'08011111111';
 apiResult = await apiElectricity(extra.meter, extra.serviceId, extra.meterType, amt, custPhone, ref);
 }else if(type==='result'){
-if((extra.serviceId||'').toLowerCase()!=='waec'){
-apiResult = {status:'error', message:'This exam type is not yet confirmed with the provider. Only WAEC is currently available.'};
-}else{
+const svcId = (extra.serviceId||'').toLowerCase();
 const custPhone = extra.custPhone||UD?.phone||'';
+if(svcId==='waec'){
 apiResult = await apiWAEC('WAEC', custPhone, amt, ref);
+}else if(svcId==='jamb'){
+apiResult = await apiJAMB(extra.jambType||'UTME', extra.profileId, custPhone, amt, ref);
+}else{
+apiResult = {status:'error', message:'This exam type is not yet confirmed with the provider. Only WAEC and JAMB are currently available.'};
 }
 }else{
 apiResult = {status:'error', message:'Service not supported yet.'};
@@ -1088,6 +1098,8 @@ dataPlans       : 'APIDataBundlePlansV1.asp',
 cablePlans      : 'APICableTVPackagesV2.asp',
 waec            : 'APIWAECV1.asp',
 waecPlans       : 'APIWAECPackagesV2.asp',
+jamb            : 'APIJAMBV1.asp',
+jambPlans       : 'APIJAMBPackagesV2.asp',
 status          : 'APIQueryV1.asp'
 }
 };
@@ -1423,6 +1435,58 @@ if(infoEl){ infoEl.style.display='block'; infoEl.style.color='#dc2626'; infoEl.t
 console.error('[PLANS] fetchCablePlans error:', e.message);
 }
 }
+async function fetchJAMBPlans(){
+const sel    = document.getElementById('s-amt');
+const loadEl = document.getElementById('data-loading');
+const infoEl = document.getElementById('data-info');
+if(!sel) return;
+const examSel = document.getElementById('s-phone');
+if(examSel && examSel.value!=='JAMB'){ return; }
+const jambType = document.getElementById('s-meter')?.value||'UTME';
+const cacheKey = 'jamb_'+jambType;
+if(planCache[cacheKey]){ renderPlans(planCache[cacheKey], sel, infoEl); return; }
+if(loadEl){ loadEl.style.display='block'; loadEl.textContent='[Loading] Loading price...'; }
+sel.innerHTML='<option value="">Loading price...</option>';
+console.log('[PLANS] Fetching JAMB packages for type:', jambType);
+try{
+let res = await apiFetch('jambPlans', { ExamType: jambType });
+let plans = extractNBSPlans(res, jambType);
+if(!plans.length){
+res = await apiFetch('jambPlans', {});
+plans = extractNBSPlans(res, jambType);
+}
+if(loadEl) loadEl.style.display='none';
+console.log('[PLANS] JAMB final response:', JSON.stringify(res));
+console.log('[PLANS] JAMB plans count:', plans.length);
+if(plans.length){
+planCache[cacheKey]=plans;
+renderPlans(plans, sel, infoEl);
+}else{
+const rawStr=JSON.stringify(res).slice(0,300);
+sel.innerHTML='<option value="">No price available</option>';
+if(infoEl){ infoEl.style.display='block'; infoEl.style.color='#dc2626';
+infoEl.innerHTML='<strong>&#9888; No JAMB packages returned</strong><br/>'
++'<span style="font-size:11px;color:var(--g500)">Check Admin &rarr; API Logs for the raw response.</span><br/>'
++'<span style="font-size:10px;font-family:monospace;word-break:break-all;color:var(--g400)">Raw: '+rawStr+'</span>'; }
+}
+}catch(e){
+if(loadEl) loadEl.style.display='none';
+sel.innerHTML='<option value="">&#9888; '+e.message.slice(0,60)+'</option>';
+if(infoEl){ infoEl.style.display='block'; infoEl.style.color='#dc2626'; infoEl.textContent='[Error] '+e.message; }
+console.error('[PLANS] fetchJAMBPlans error:', e.message);
+}
+}
+function onExamTypeChange(){
+const examType = document.getElementById('s-phone')?.value;
+const jambFields = document.getElementById('jamb-extra-fields');
+if(examType==='JAMB'){
+if(jambFields) jambFields.style.display='block';
+fetchJAMBPlans();
+}else{
+if(jambFields) jambFields.style.display='none';
+fetchWAECPlans();
+}
+}
 async function fetchWAECPlans(){
 const sel    = document.getElementById('s-amt');
 const loadEl = document.getElementById('data-loading');
@@ -1637,6 +1701,14 @@ RequestID  : reqId
 async function apiWAEC(examType, phone, amount, reqId){
 return apiFetch('waec',{
 ExamType : examType,
+PhoneNo  : phone||UD?.phone||'',
+RequestID: reqId
+},{ type:'result', amount, userId:CU?.uid||'' });
+}
+async function apiJAMB(jambType, profileId, phone, amount, reqId){
+return apiFetch('jamb',{
+ExamType : jambType,
+ProfileID: profileId,
 PhoneNo  : phone||UD?.phone||'',
 RequestID: reqId
 },{ type:'result', amount, userId:CU?.uid||'' });
