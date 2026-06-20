@@ -3751,7 +3751,7 @@ el.innerHTML=`
 <label style="font-size:12px;font-weight:600;color:var(--g600);margin-bottom:5px;display:block">
 API Key &nbsp;<span style="color:#dc2626;font-size:10px;background:#fef2f2;padding:2px 7px;border-radius:4px">Enter after deployment</span>
 </label>
-<input class="inp" type="password" id="api-apiKey" placeholder="Enter your Nellobytesystems API Key" value="${cfg.apiKey?'&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;':''}" autocomplete="off"/>
+<input class="inp" type="password" id="api-apiKey" placeholder="Enter your Nellobytesystems API Key" value="${cfg.apiKey?'\u2022\u2022\u2022\u2022\u2022\u2022\u2022\u2022\u2022\u2022\u2022\u2022':''}" autocomplete="off" data-has-saved-key="${cfg.apiKey?'1':'0'}"/>
 <div style="font-size:11px;color:var(--g400);margin-top:4px">Stored encrypted in database. Never exposed to users.</div>
 </div>
 <div style="margin-bottom:12px">
@@ -3796,7 +3796,9 @@ const r = document.getElementById('api-save-result');
 r.style.display='block'; r.style.background='#fef3c7'; r.style.color='#92400e';
 r.textContent='Saving...';
 try{
-const apiKeyInput = (document.getElementById('api-apiKey')?.value||'').trim();
+const apiKeyEl = document.getElementById('api-apiKey');
+const apiKeyInput = (apiKeyEl?.value||'').trim();
+const isBulletPlaceholder = /^\u2022+$/.test(apiKeyInput) || (apiKeyEl?.dataset.hasSavedKey==='1' && apiKeyInput.includes('\u2022'));
 const eps = {};
 Object.keys(API_DEFAULTS.endpoints).forEach(k=>{
 const v=(document.getElementById('api-ep-'+k)?.value||'').trim();
@@ -3812,7 +3814,7 @@ endpoints    : eps,
 updatedAt    : firebase.firestore.FieldValue.serverTimestamp(),
 updatedBy    : CU?.email||''
 };
-if(apiKeyInput && !apiKeyInput.includes('&bull;')){ data.apiKey = apiKeyInput; }
+if(apiKeyInput && !isBulletPlaceholder){ data.apiKey = apiKeyInput; }
 await db.collection('settings').doc('apiconfig').set(data, {merge:true});
 await loadApiConfig();
 clearPlanCache();
