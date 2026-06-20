@@ -836,7 +836,7 @@ const nbtns=`<div style="display:grid;grid-template-columns:repeat(4,1fr);gap:7p
 const qk=(amts)=>`<div style="display:flex;gap:6px;margin-top:8px">${amts.map(a=>`<button onclick="document.getElementById('s-amt').value=${a}" style="flex:1;padding:7px 2px;border:1.5px solid var(--g200);border-radius:8px;background:#fff;font-size:11px;font-weight:600;cursor:pointer;font-family:'Inter',sans-serif" onmouseover="this.style.borderColor='var(--green)'" onmouseout="this.style.borderColor='var(--g200)'">NGN ${a>=1000?(a/1000)+'K':a}</button>`).join('')}</div>`;
 if(t==='airtime')return`${nbtns}<div style="margin-bottom:13px"><label style="font-size:12px;font-weight:600;color:var(--g600);margin-bottom:6px;display:block">Phone Number</label><input class="inp" id="s-phone" type="tel" placeholder="080XXXXXXXX"/></div><div style="margin-bottom:20px"><label style="font-size:12px;font-weight:600;color:var(--g600);margin-bottom:6px;display:block">Amount</label><input class="inp" id="s-amt" type="number" placeholder="100"/>${qk([100,200,500,1000])}</div><button onclick="procSvc('airtime')" class="btn-g" style="width:100%;padding:13px;border-radius:11px;font-size:15px">Buy Airtime</button>`;
 if(t==='data')return`${nbtns}<div style="margin-bottom:13px"><label style="font-size:12px;font-weight:600;color:var(--g600);margin-bottom:6px;display:block">Phone Number</label><input class="inp" id="s-phone" type="tel" placeholder="080XXXXXXXX" oninput="fetchDataPlans()"/></div><div style="margin-bottom:4px"><label style="font-size:12px;font-weight:600;color:var(--g600);margin-bottom:6px;display:block">Data Plan</label><select class="inp" id="s-amt" onchange="updateDataAmt(this)"><option value="">-- Select network first --</option></select></div><div id="data-loading" style="display:none;font-size:12px;color:var(--g500);padding:6px 2px;margin-bottom:8px">Fetching plans...</div><div id="data-info" style="display:none;background:var(--green-xl);border:1px solid #bbf7d0;border-radius:9px;padding:10px 12px;margin-bottom:14px;font-size:12px;color:var(--green-d)"></div><button onclick="procSvc('data')" class="btn-g" style="width:100%;padding:13px;border-radius:11px;font-size:15px;margin-top:6px">Buy Data</button>`;
-if(t==='cable')return`<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:7px;margin-bottom:13px">${['DSTV','GOtv','StarTimes'].map(p=>`<button onclick="selCable(this)" style="padding:9px 2px;border:1.5px solid var(--g200);border-radius:9px;background:#fff;font-size:11px;font-weight:700;cursor:pointer;font-family:'Inter',sans-serif">${p}</button>`).join('')}</div><div style="margin-bottom:13px"><label style="font-size:12px;font-weight:600;color:var(--g600);margin-bottom:6px;display:block">Smart Card Number</label><input class="inp" id="s-phone" placeholder="e.g. 1212121212"/></div><div style="margin-bottom:4px"><label style="font-size:12px;font-weight:600;color:var(--g600);margin-bottom:6px;display:block">Package</label><select class="inp" id="s-amt" onchange="updateDataAmt(this)"><option value="">&mdash; Select provider first &mdash;</option></select></div><div id="data-loading" style="display:none;font-size:12px;color:var(--g500);padding:6px 2px;margin-bottom:8px">Loading packages...</div><div id="data-info" style="display:none;background:var(--green-xl);border:1px solid #bbf7d0;border-radius:9px;padding:10px 12px;margin-bottom:14px;font-size:12px;color:var(--green-d)"></div><button onclick="procSvc('cable')" class="btn-g" style="width:100%;padding:13px;border-radius:11px;font-size:15px;margin-top:6px">Pay Subscription</button>`;
+if(t==='cable')return`<div style="display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-bottom:13px">${['DSTV','GOtv','StarTimes','Showmax'].map(p=>`<button onclick="selCable(this)" style="padding:9px 1px;border:1.5px solid var(--g200);border-radius:9px;background:#fff;font-size:10px;font-weight:700;cursor:pointer;font-family:'Inter',sans-serif">${p}</button>`).join('')}</div>`+`<div style="margin-bottom:13px"><label style="font-size:12px;font-weight:600;color:var(--g600);margin-bottom:6px;display:block">Smart Card Number</label><input class="inp" id="s-phone" placeholder="e.g. 1212121212"/></div><div style="margin-bottom:4px"><label style="font-size:12px;font-weight:600;color:var(--g600);margin-bottom:6px;display:block">Package</label><select class="inp" id="s-amt" onchange="updateDataAmt(this)"><option value="">&mdash; Select provider first &mdash;</option></select></div><div id="data-loading" style="display:none;font-size:12px;color:var(--g500);padding:6px 2px;margin-bottom:8px">Loading packages...</div><div id="data-info" style="display:none;background:var(--green-xl);border:1px solid #bbf7d0;border-radius:9px;padding:10px 12px;margin-bottom:14px;font-size:12px;color:var(--green-d)"></div><button onclick="procSvc('cable')" class="btn-g" style="width:100%;padding:13px;border-radius:11px;font-size:15px;margin-top:6px">Pay Subscription</button>`;
 if(t==='electricity')return`<div style="margin-bottom:13px"><label style="font-size:12px;font-weight:600;color:var(--g600);margin-bottom:6px;display:block">Distribution Company</label><select class="inp" id="s-phone"><option value="EKEDC">EKEDC - Eko Electric</option><option value="IKEDC">IKEDC - Ikeja Electric</option><option value="AEDC">AEDC - Abuja Electric</option><option value="IBEDC">IBEDC - Ibadan Electric</option><option value="PHEDC">PHEDC - Port Harcourt Electric</option><option value="EEDC">EEDC - Enugu Electric</option><option value="KEDC">KEDC - Kano Electric</option><option value="JEDC">JEDC - Jos Electric</option></select></div>
 <div style="margin-bottom:13px"><label style="font-size:12px;font-weight:600;color:var(--g600);margin-bottom:6px;display:block">Meter Type</label><select class="inp" id="s-meter-type"><option value="prepaid">Prepaid</option><option value="postpaid">Postpaid</option></select></div><div style="margin-bottom:13px"><label style="font-size:12px;font-weight:600;color:var(--g600);margin-bottom:6px;display:block">Meter Number</label><input class="inp" id="s-meter" placeholder="Meter number"/></div><div style="margin-bottom:20px"><label style="font-size:12px;font-weight:600;color:var(--g600);margin-bottom:6px;display:block">Amount</label><input class="inp" id="s-amt" type="number" placeholder="1000"/>${qk([1000,2000,5000,10000])}</div><button onclick="procSvc('electricity')" class="btn-g" style="width:100%;padding:13px;border-radius:11px;font-size:15px">Pay Electricity</button>`;
 if(t==='loan')return`<div class="info-box"><p style="font-size:13px;color:var(--green-d);line-height:1.6">Quick loans reviewed within 24 hours. Amount credited to wallet on approval.</p></div><div style="margin-bottom:13px"><label style="font-size:12px;font-weight:600;color:var(--g600);margin-bottom:6px;display:block">Loan Amount</label><select class="inp" id="s-amt"><option value="5000">NGN 5,000</option><option value="10000">NGN 10,000</option><option value="20000">NGN 20,000</option><option value="50000">NGN 50,000</option><option value="100000">NGN 100,000</option><option value="200000">NGN 200,000</option><option value="500000">NGN 500,000</option></select></div><div style="margin-bottom:13px"><label style="font-size:12px;font-weight:600;color:var(--g600);margin-bottom:6px;display:block">Purpose</label><input class="inp" id="s-phone" placeholder="Brief purpose of loan"/></div><div style="margin-bottom:20px"><label style="font-size:12px;font-weight:600;color:var(--g600);margin-bottom:6px;display:block">Repayment Period</label><select class="inp" id="s-meter"><option>7 days</option><option>14 days</option><option>30 days</option></select></div><button onclick="procLoan()" class="btn-g" style="width:100%;padding:13px;border-radius:11px;font-size:15px">Apply for Loan</button>`;
@@ -887,8 +887,8 @@ const opt=amtEl?.options[amtEl.selectedIndex];
 const code=opt?.dataset?.code||opt?.value||'';
 const netBtn=document.querySelector('#svc-body div button[style*="green-xl"]');
 const provider=(netBtn?netBtn.textContent.trim():'DSTV').toLowerCase().replace(/\s/g,'');
-const svcMap={'dstv':'DSTV','gotv':'GOTV','startimes':'STARTIMES'};
-extra={smartcard,serviceId:svcMap[provider]||'dstv',variationCode:code,planName:opt?.text||'Cable TV'};
+const validProviders=['dstv','gotv','startimes','showmax'];
+extra={smartcard,serviceId:validProviders.includes(provider)?provider:'dstv',variationCode:code,planName:opt?.text||'Cable TV'};
 }else if(type==='electricity'){
 const meter=document.getElementById('s-meter')?.value?.trim();
 if(!meter){toast('Enter your meter number');return;}
@@ -1202,8 +1202,7 @@ console.log('[NBS] extractNBSPlans for:', networkId, '| keys:', Object.keys(res)
 const wrapperKey = Object.keys(res).find(k => /MOBILE_NETWORK|CABLE_TV|CABLETV|TV_PACKAGE|TV_ID|PACKAGE|NETWORK/i.test(k));
 if(wrapperKey){
 const wrapper = res[wrapperKey];
-const wrapperKeys = Object.keys(wrapper||{});
-console.log('[NBS] Found wrapper:', wrapperKey, '| inner keys:', wrapperKeys);
+console.log('[NBS] Found wrapper:', wrapperKey, '| type:', Array.isArray(wrapper)?'array':typeof wrapper);
 function extractFromProviders(providers, netName, nId){
 const plans = [];
 (providers||[]).forEach(prov => {
@@ -1224,14 +1223,25 @@ if(idx===0) console.log('[NBS] IDs &rarr; PRODUCT_ID:',pid,' CODE:',pcode,' SNO:
 plans.push({
 variation_code   : String(planId),
 variation_sno    : String(psno),
-variation_name   : String(prod.PRODUCT_NAME || prod.product_name || prod.PACKAGE_NAME || prod.package_name || prod.ExamType || prod.EXAMTYPE || prod.name || prod.PLAN || ''),
-variation_amount : String(prod.PRODUCT_AMOUNT || prod.product_amount || prod.PACKAGE_AMOUNT || prod.package_amount || prod.price || prod.AMOUNT || prod.PRICE || 0),
-description      : String(prod.PRODUCT_NAME || prod.product_name || prod.PACKAGE_NAME || prod.package_name || prod.ExamType || prod.EXAMTYPE || prod.name || '')
+variation_name   : String(prod.PRODUCT_NAME || prod.product_name || prod.PACKAGE_NAME || prod.package_name || prod.description || prod.DESCRIPTION || prod.ExamType || prod.EXAMTYPE || prod.name || prod.PLAN || ''),
+variation_amount : String(prod.PRODUCT_AMOUNT || prod.product_amount || prod.PACKAGE_AMOUNT || prod.package_amount || prod.price || prod.AMOUNT || prod.PRICE || prod.amount || 0),
+description      : String(prod.PRODUCT_NAME || prod.product_name || prod.PACKAGE_NAME || prod.package_name || prod.description || prod.DESCRIPTION || prod.ExamType || prod.EXAMTYPE || prod.name || '')
 });
 });
 });
 return plans;
 }
+// Case A: wrapper value is itself a flat array of product objects directly
+// (e.g. {"PACKAGE":[{code:"dstv-padi",description:"...",amount:"4400"},...]})
+if(Array.isArray(wrapper)){
+const direct = extractFromProviders([{PRODUCT:wrapper}], wrapperKey, networkId);
+if(direct.length){
+console.log('[NBS] Flat array under wrapper key, extracted', direct.length, 'items directly');
+return direct;
+}
+}
+const wrapperKeys = Object.keys(wrapper||{});
+console.log('[NBS] inner keys:', wrapperKeys);
 const netKey = wrapperKeys.find(k => k.toUpperCase() === networkId.toUpperCase())
 || wrapperKeys.find(k => k.toUpperCase().includes(networkId.toUpperCase()))
 || wrapperKeys.find(k => networkId.toUpperCase().includes(k.toUpperCase()));
@@ -1259,9 +1269,9 @@ return plans;
 if(Array.isArray(res)){
 return res.map(p => ({
 variation_code   : String(p.PRODUCT_ID||p.product_id||p.PRODUCT_CODE||p.PACKAGE_ID||p.package_id||p.PACKAGE_CODE||p.package_code||p.DataPlanID||p.PlanID||p.id||p.code||''),
-variation_name   : String(p.PRODUCT_NAME||p.PACKAGE_NAME||p.package_name||p.ExamType||p.DataPlan||p.Plan||p.name||''),
-variation_amount : String(p.PRODUCT_AMOUNT||p.PACKAGE_AMOUNT||p.Price||p.PRICE||p.price||p.Amount||0),
-description      : String(p.PRODUCT_NAME||p.PACKAGE_NAME||p.package_name||p.ExamType||p.DataPlan||p.Plan||p.name||'')
+variation_name   : String(p.PRODUCT_NAME||p.PACKAGE_NAME||p.package_name||p.description||p.ExamType||p.DataPlan||p.Plan||p.name||''),
+variation_amount : String(p.PRODUCT_AMOUNT||p.PACKAGE_AMOUNT||p.Price||p.PRICE||p.price||p.Amount||p.amount||0),
+description      : String(p.PRODUCT_NAME||p.PACKAGE_NAME||p.package_name||p.description||p.ExamType||p.DataPlan||p.Plan||p.name||'')
 }));
 }
 for(const key of Object.keys(res)){
@@ -1378,44 +1388,39 @@ const sel    = document.getElementById('s-amt');
 const loadEl = document.getElementById('data-loading');
 const infoEl = document.getElementById('data-info');
 if(!sel) return;
-const cacheKey = 'cable_'+provider;
-if(planCache[cacheKey]){ renderPlans(planCache[cacheKey], sel, infoEl); return; }
+const providerLc = provider.toLowerCase();
+if(planCache['cable_all']){
+const filtered = planCache['cable_all'].filter(p=>p.variation_code.toLowerCase().startsWith(providerLc));
+renderPlans(filtered, sel, infoEl);
+return;
+}
 if(loadEl){ loadEl.style.display='block'; loadEl.textContent='[Loading] Loading packages...'; }
 sel.innerHTML = '<option value="">Loading packages...</option>';
-console.log('[PLANS] Fetching cable plans for:', provider);
+console.log('[PLANS] Fetching cable plans (combined list) for provider filter:', providerLc);
 try{
-// CableTV is the CONFIRMED param name from the real purchase endpoint docs.
-// Package-list endpoint isn't separately documented, so we try the confirmed
-// name first, then fall back to older guesses as a safety net.
-const attempts = [
-{ CableTV: provider },                               // Confirmed real param (matches purchase endpoint)
-{ CableTV: provider.toLowerCase() },                 // Lowercase variant
-{ CableNetwork: provider },                          // Fallback guess
-{ NetworkID: provider },                             // Fallback guess
-];
-let res = null;
-for(const params of attempts){
-console.log('[PLANS] Cable attempt with params:', JSON.stringify(params));
-res = await apiFetch('cablePlans', params);
-const plans = extractNBSPlans(res, provider);
-if(plans.length > 0){
-console.log('[PLANS] Cable plans found with params:', JSON.stringify(params), '| count:', plans.length);
-break;
-}
+// Confirmed real endpoint takes no provider filter -- it returns ALL
+// providers' packages together (codes prefixed e.g. dstv-padi, gotv-jolli).
+let res = await apiFetch('cablePlans', {});
+let allPlans = extractNBSPlans(res, provider);
+if(!allPlans.length){
+// Fallback: maybe filtering by CableTV IS supported/required after all
+res = await apiFetch('cablePlans', { CableTV: providerLc });
+allPlans = extractNBSPlans(res, provider);
 }
 if(loadEl) loadEl.style.display='none';
-console.log('[PLANS] Cable final response:', JSON.stringify(res));
-const plans = res ? extractNBSPlans(res, provider) : [];
-console.log('[PLANS] Cable plans count:', plans.length);
-if(plans.length){
-planCache[cacheKey] = plans;
-renderPlans(plans, sel, infoEl);
+console.log('[PLANS] Cable final response:', JSON.stringify(res).slice(0,500));
+console.log('[PLANS] Cable total plans (all providers):', allPlans.length);
+if(allPlans.length){
+planCache['cable_all'] = allPlans;
+const filtered = allPlans.filter(p=>p.variation_code.toLowerCase().startsWith(providerLc));
+console.log('[PLANS] Cable plans for', providerLc, ':', filtered.length);
+renderPlans(filtered.length?filtered:allPlans, sel, infoEl);
 } else {
 const rawStr = JSON.stringify(res).slice(0,300);
 sel.innerHTML = '<option value="">No packages available</option>';
 if(infoEl){ infoEl.style.display='block'; infoEl.style.color='#dc2626';
 infoEl.innerHTML='<strong>&#9888; No packages from provider for: '+provider+'</strong><br/>'
-+'<span style="font-size:11px;color:var(--g500)">The API returned no packages. Check that your API key supports Cable TV and the provider name is correct in your VTPass/ClubKonnect dashboard.</span><br/>'
++'<span style="font-size:11px;color:var(--g500)">The API returned no packages. Check Admin &rarr; API Logs for the raw response.</span><br/>'
 +'<span style="font-size:10px;font-family:monospace;word-break:break-all;color:var(--g400)">Raw: '+rawStr+'</span>'; }
 }
 }catch(e){
@@ -1602,7 +1607,7 @@ function selCable(btn){
 btn.closest('div').querySelectorAll('button').forEach(b=>{ b.style.borderColor='var(--g200)'; b.style.background='#fff'; });
 btn.style.borderColor='var(--green)'; btn.style.background='var(--green-xl)';
 const name = btn.textContent.trim().toUpperCase();
-const svcId = name.includes('GOTV')?'GOTV':name.includes('STAR')?'STARTIMES':'DSTV';
+const svcId = name.includes('GOTV')?'gotv':name.includes('STAR')?'startimes':name.includes('SHOWMAX')?'showmax':'dstv';
 fetchCablePlans(svcId);
 }
 async function apiAirtime(phone, network, amount, reqId){
@@ -3842,7 +3847,7 @@ res = await apiFetch('airtime',{MobileNumber:t.phone,NetworkID:t.network,Amount:
 } else if(t.key==='data'){
 res = await apiFetch('dataPlans',{NetworkID:t.network},{type:'diag'});
 } else if(t.key==='cable'){
-res = await apiFetch('cablePlans',{CableTV:t.network},{type:'diag'});
+res = await apiFetch('cablePlans',{},{type:'diag'});
 } else {
 res = await apiFetch('balance',{},{type:'diag'});
 }
