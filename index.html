@@ -1,15 +1,9 @@
 <!DOCTYPE html>
-<html lang="en" class="dark-mode-default">
+<html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Benim Shop</title>
-<script>
-// Always black background unless user chose light
-if(localStorage.getItem('benim-theme') !== 'light') {
-  document.documentElement.style.background = '#0f0f0f';
-}
-</script>
 <meta name="description" content="Benim — Your trusted online shopping destination. Quality products, fast delivery, great prices.">
 <meta name="theme-color" content="#DC3C0A">
 <meta name="mobile-web-app-capable" content="yes">
@@ -27,41 +21,7 @@ if(localStorage.getItem('benim-theme') !== 'light') {
   --orange: #e8420a;
   --orange-light: #ff6b35;
   --orange-dark: #c23608;
-  --white: #1a1a1a;
-  --gray-50: #1a1a1a;
-  --gray-100: #242424;
-  --gray-200: #2e2e2e;
-  --gray-300: #3a3a3a;
-  --gray-400: #6b7280;
-  --gray-500: #9ca3af;
-  --gray-600: #b0b8c4;
-  --gray-700: #d1d5db;
-  --gray-800: #f0f0f0;
-  --gray-900: #f9fafb;
-  --green: #16a34a;
-  --red: #dc2626;
-  --yellow: #f59e0b;
-  --shadow-sm: 0 1px 2px rgba(0,0,0,.3);
-  --shadow: 0 2px 8px rgba(0,0,0,.4);
-  --shadow-md: 0 4px 16px rgba(0,0,0,.5);
-  --shadow-lg: 0 8px 32px rgba(0,0,0,.6);
-  --radius: 8px;
-  --radius-lg: 12px;
-  --radius-xl: 16px;
-  --bg: #0f0f0f;
-  --surface: #1a1a1a;
-  --surface2: #242424;
-  --border: #2e2e2e;
-  --text: #f0f0f0;
-  --text-muted: #9ca3af;
-}
-body.light-mode {
-  --bg: #f5f5f5;
-  --surface: #ffffff;
-  --surface2: #f9fafb;
-  --border: #e5e7eb;
-  --text: #1f2937;
-  --text-muted: #6b7280;
+  --white: #ffffff;
   --gray-50: #f9fafb;
   --gray-100: #f3f4f6;
   --gray-200: #e5e7eb;
@@ -72,11 +32,45 @@ body.light-mode {
   --gray-700: #374151;
   --gray-800: #1f2937;
   --gray-900: #111827;
-  --white: #ffffff;
+  --green: #16a34a;
+  --red: #dc2626;
+  --yellow: #f59e0b;
   --shadow-sm: 0 1px 2px rgba(0,0,0,.05);
   --shadow: 0 2px 8px rgba(0,0,0,.1);
   --shadow-md: 0 4px 16px rgba(0,0,0,.12);
   --shadow-lg: 0 8px 32px rgba(0,0,0,.15);
+  --radius: 8px;
+  --radius-lg: 12px;
+  --radius-xl: 16px;
+  --bg: #f5f5f5;
+  --surface: #ffffff;
+  --surface2: #f9fafb;
+  --border: #e5e7eb;
+  --text: #1f2937;
+  --text-muted: #6b7280;
+}
+body.dark-mode {
+  --bg: #0f0f0f;
+  --surface: #1a1a1a;
+  --surface2: #242424;
+  --border: #2e2e2e;
+  --text: #f0f0f0;
+  --text-muted: #9ca3af;
+  --gray-50: #1a1a1a;
+  --gray-100: #242424;
+  --gray-200: #2e2e2e;
+  --gray-300: #3a3a3a;
+  --gray-400: #6b7280;
+  --gray-500: #9ca3af;
+  --gray-600: #b0b8c4;
+  --gray-700: #d1d5db;
+  --gray-800: #f0f0f0;
+  --gray-900: #f9fafb;
+  --white: #1a1a1a;
+  --shadow-sm: 0 1px 2px rgba(0,0,0,.3);
+  --shadow: 0 2px 8px rgba(0,0,0,.4);
+  --shadow-md: 0 4px 16px rgba(0,0,0,.5);
+  --shadow-lg: 0 8px 32px rgba(0,0,0,.6);
 }
 /* dark-mode class = same as default root (kept for backwards compat) */
 body.dark-mode {
@@ -186,7 +180,6 @@ body.dark-mode .home-section{background:#0f0f0f!important}
 body.dark-mode .pwa-install-banner{background:linear-gradient(135deg,#1a0800,#2d1000)!important}
 *{box-sizing:border-box;margin:0;padding:0}
 body{font-family:'Nunito',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;transition:background .3s,color .3s}
-body.light-mode{background:#0f0f0f;color:#f0f0f0}
 a{text-decoration:none;color:inherit}
 button{cursor:pointer;border:none;outline:none;font-family:inherit}
 input,select,textarea{font-family:inherit;outline:none}
@@ -207,12 +200,10 @@ img{max-width:100%;display:block}
 .absolute{position:absolute}
 
 /* ====== HEADER ====== */
-#header{background:#141414;position:sticky;top:0;z-index:1000;box-shadow:0 1px 4px rgba(0,0,0,.4);border-bottom:1px solid #222}
-body.light-mode #header{background:#fff;box-shadow:0 1px 4px rgba(0,0,0,.08);border-bottom:1px solid #f3f4f6}
+#header{background:var(--surface);position:sticky;top:0;z-index:1000;box-shadow:var(--shadow-sm);border-bottom:1px solid var(--border)}
 .header-top{display:flex;align-items:center;gap:10px;padding:8px 16px;max-width:1400px;margin:0 auto}
 .header-logo{height:36px;width:auto;cursor:pointer;object-fit:contain}
-.header-search-row{background:#141414;padding:8px 16px 12px;max-width:1400px;margin:0 auto}.header-search-wrap{display:flex;align-items:center;background:#1e1e1e;border-radius:50px;padding:0 16px;gap:10px;width:100%;border:1px solid #2a2a2a}
-body.light-mode .header-search-row{background:#fff}.body.light-mode .header-search-wrap{background:var(--gray-100);border:none}
+.header-search-row{background:var(--surface);padding:8px 16px 12px;max-width:1400px;margin:0 auto}.header-search-wrap{display:flex;align-items:center;background:var(--gray-100);border-radius:50px;padding:0 16px;gap:10px;width:100%;border:1px solid var(--border)}
 .header-search{flex:1;padding:11px 4px;border:none;font-size:14px;color:var(--gray-800);background:transparent;outline:none}.header-search::placeholder{color:var(--gray-400)}
 .header-search-btn{background:transparent;color:var(--gray-400);border:none;padding:0;font-size:17px;cursor:pointer;transition:.2s;display:flex;align-items:center}
 .header-search-btn:hover{color:var(--orange)}
@@ -226,8 +217,7 @@ body.light-mode .header-search-row{background:#fff}.body.light-mode .header-sear
 /* ====== SIDEBAR ====== */
 #sidebar-overlay{position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:2000;opacity:0;pointer-events:none;transition:.3s}
 #sidebar-overlay.open{opacity:1;pointer-events:all}
-#sidebar{position:fixed;left:0;top:0;bottom:0;width:300px;background:#141414;z-index:2001;transform:translateX(-100%);transition:.3s;overflow-y:auto;display:flex;flex-direction:column}
-body.light-mode #sidebar{background:#fff}
+#sidebar{position:fixed;left:0;top:0;bottom:0;width:300px;background:var(--surface);z-index:2001;transform:translateX(-100%);transition:.3s;overflow-y:auto;display:flex;flex-direction:column}
 #sidebar.open{transform:translateX(0)}
 .sidebar-header{background:var(--orange);padding:20px 16px;display:flex;align-items:center;gap:12px}
 .sidebar-avatar{width:48px;height:48px;border-radius:50%;background:rgba(255,255,255,.2);display:flex;align-items:center;justify-content:center;font-size:22px;color:#fff}
@@ -244,8 +234,7 @@ body.light-mode #sidebar{background:#fff}
 /* ====== PAGES ====== */
 .page{display:none}
 .page.active{display:block}
-#page-home{background:#0f0f0f}
-body.light-mode #page-home{background:#f5f5f5}
+#page-home{background:var(--bg)}
 
 /* ====== HERO SLIDER ====== */
 /* hero-slider css moved below */
@@ -360,14 +349,14 @@ body.dark-mode .skeleton{background:linear-gradient(90deg,#1c1c1c 25%,#2a2a2a 37
 
 /* ====== CART ====== */
 .cart-wrap{max-width:900px;margin:0 auto;padding:16px}
-.cart-item{background:#1a1a1a;border:1px solid #222;border-radius:var(--radius-lg);padding:14px;display:flex;gap:14px;margin-bottom:10px;box-shadow:var(--shadow-sm)}
+.cart-item{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg);padding:14px;display:flex;gap:14px;margin-bottom:10px;box-shadow:var(--shadow-sm)}
 .cart-item-img{width:80px;height:80px;border-radius:8px;object-fit:cover;flex-shrink:0}
 .cart-item-info{flex:1}
 .cart-item-name{font-size:14px;font-weight:700;margin-bottom:4px;color:var(--gray-800)}
 .cart-item-price{font-size:16px;font-weight:900;color:var(--orange)}
 .cart-item-actions{display:flex;align-items:center;gap:10px;margin-top:8px}
 .cart-remove{background:none;border:none;color:var(--red);font-size:13px;cursor:pointer;font-weight:600}
-.cart-summary{background:#1a1a1a;border:1px solid #222;border-radius:var(--radius-lg);padding:16px;box-shadow:var(--shadow-sm);margin-top:16px}
+.cart-summary{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg);padding:16px;box-shadow:var(--shadow-sm);margin-top:16px}
 .summary-row{display:flex;justify-content:space-between;margin-bottom:10px;font-size:14px;color:var(--gray-600)}
 .summary-row.total{font-size:18px;font-weight:900;color:var(--gray-800);border-top:2px solid var(--gray-200);padding-top:10px;margin-top:10px}
 .btn-checkout{width:100%;background:var(--orange);color:#fff;padding:14px;border-radius:8px;font-size:16px;font-weight:800;border:none;cursor:pointer;margin-top:12px;transition:.2s}
@@ -375,12 +364,12 @@ body.dark-mode .skeleton{background:linear-gradient(90deg,#1c1c1c 25%,#2a2a2a 37
 
 /* ====== CHECKOUT ====== */
 .checkout-wrap{max-width:800px;margin:0 auto;padding:16px}
-.checkout-section{background:#1a1a1a;border:1px solid #222;border-radius:var(--radius-lg);padding:16px;margin-bottom:12px;box-shadow:var(--shadow-sm)}
+.checkout-section{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg);padding:16px;margin-bottom:12px;box-shadow:var(--shadow-sm)}
 .checkout-title{font-size:16px;font-weight:800;color:var(--gray-800);margin-bottom:14px;display:flex;align-items:center;gap:8px}
 .checkout-title i{color:var(--orange)}
 .form-group{margin-bottom:12px}
 .form-label{font-size:13px;font-weight:700;color:var(--gray-600);margin-bottom:5px;display:block}
-.form-input{background:#1e1e1e;border-color:#2a2a2a;color:#f0f0f0;width:100%;padding:10px 12px;border:2px solid var(--gray-200);border-radius:8px;font-size:14px;transition:.2s;background:#fff}
+.form-input{width:100%;padding:10px 12px;border:2px solid var(--gray-200);border-radius:8px;font-size:14px;transition:.2s;background:var(--surface);color:var(--text)}
 .form-input:focus{border-color:var(--orange)}
 .form-row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
 .address-card{border:2px solid var(--gray-200);border-radius:8px;padding:12px;cursor:pointer;transition:.2s;margin-bottom:8px}
@@ -396,7 +385,7 @@ body.dark-mode .skeleton{background:linear-gradient(90deg,#1c1c1c 25%,#2a2a2a 37
 
 /* ====== ORDERS ====== */
 .orders-wrap{max-width:900px;margin:0 auto;padding:16px}
-.order-card{background:#1a1a1a;border:1px solid #222;border-radius:var(--radius-lg);padding:16px;margin-bottom:12px;box-shadow:var(--shadow-sm)}
+.order-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg);padding:16px;margin-bottom:12px;box-shadow:var(--shadow-sm)}
 .order-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px}
 .order-id{font-size:13px;font-weight:700;color:var(--gray-500)}
 .order-status{font-size:12px;font-weight:800;padding:4px 10px;border-radius:20px}
@@ -424,14 +413,14 @@ body.dark-mode .skeleton{background:linear-gradient(90deg,#1c1c1c 25%,#2a2a2a 37
 
 /* ====== SEARCH RESULTS ====== */
 .search-wrap{max-width:1400px;margin:0 auto;padding:16px}
-.search-filters{background:#1a1a1a;border:1px solid #222;border-radius:var(--radius);padding:14px;margin-bottom:14px;box-shadow:var(--shadow-sm);display:flex;flex-wrap:wrap;gap:10px;align-items:center}
+.search-filters{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:14px;margin-bottom:14px;box-shadow:var(--shadow-sm);display:flex;flex-wrap:wrap;gap:10px;align-items:center}
 .filter-group{display:flex;align-items:center;gap:6px;font-size:13px;font-weight:700;color:var(--gray-600)}
 .filter-select{border:2px solid var(--gray-200);border-radius:6px;padding:5px 10px;font-size:13px;font-weight:600;color:var(--gray-700);cursor:pointer}
 .filter-select:focus{border-color:var(--orange)}
 
 /* ====== AUTH ====== */
 .auth-wrap{max-width:440px;margin:40px auto;padding:16px}
-.auth-card{background:#1a1a1a;border:1px solid #222;border-radius:var(--radius-xl);padding:32px;box-shadow:var(--shadow-md)}
+.auth-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-xl);padding:32px;box-shadow:var(--shadow-md)}
 .auth-logo{display:flex;justify-content:center;margin-bottom:24px}
 .auth-logo img{height:60px;object-fit:contain}
 .auth-title{font-size:22px;font-weight:900;color:var(--gray-800);text-align:center;margin-bottom:4px}
@@ -451,7 +440,7 @@ body.dark-mode .skeleton{background:linear-gradient(90deg,#1c1c1c 25%,#2a2a2a 37
 .profile-avatar{width:80px;height:80px;border-radius:50%;background:rgba(255,255,255,.2);margin:0 auto 12px;display:flex;align-items:center;justify-content:center;font-size:36px}
 .profile-name{font-size:20px;font-weight:900}
 .profile-email{font-size:14px;opacity:.8;margin-top:4px}
-.profile-section{background:#1a1a1a;border:1px solid #222;border-radius:var(--radius-lg);padding:16px;margin-bottom:12px;box-shadow:var(--shadow-sm)}
+.profile-section{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg);padding:16px;margin-bottom:12px;box-shadow:var(--shadow-sm)}
 .profile-section-title{font-size:15px;font-weight:800;color:var(--gray-800);margin-bottom:14px;display:flex;align-items:center;gap:8px}
 .profile-section-title i{color:var(--orange)}
 
@@ -770,19 +759,19 @@ body.dark-mode #pwreset-audit-log { background: #111 !important; border-color: #
 <style>
 
 /* HEADER &mdash; white bg */
-#header{background:#141414!important;box-shadow:0 1px 3px rgba(0,0,0,.08)!important}
+#header{background:var(--surface)!important;box-shadow:0 1px 3px rgba(0,0,0,.08)!important}
 .header-top{padding:12px 14px 10px!important;gap:8px!important}
-.hamburger{color:#222!important;font-size:22px!important;background:none!important;border:none!important;padding:0!important}
+.hamburger{color:var(--gray-800)!important;font-size:22px!important;background:none!important;border:none!important;padding:0!important}
 #logo-text,#header-logo-img{cursor:pointer!important;display:inline-block!important;vertical-align:middle!important;height:40px!important;width:auto!important;max-width:150px!important}
-.hicon{background:transparent!important;color:#333!important;font-size:22px!important;padding:4px 6px!important;border:none!important}
+.hicon{background:transparent!important;color:var(--gray-700)!important;font-size:22px!important;padding:4px 6px!important;border:none!important}
 .hicon .badge{background:#e8420a!important;color:#fff!important;top:-5px!important;right:-4px!important;width:17px!important;height:17px!important;font-size:9px!important}
 .hicon-label{display:none!important}
 .header-icons{gap:6px!important}
 
 /* SEARCH BAR &mdash; full-width pill below header row */
-.header-search-row{background:#141414!important;padding:0 14px 12px!important}
-.header-search-wrap{background:#f2f2f2!important;border-radius:50px!important;padding:0 16px!important;display:flex!important;align-items:center!important;gap:8px!important;border:none!important}
-.header-search{background:transparent!important;border:none!important;padding:12px 0!important;font-size:13px!important;flex:1!important;outline:none!important;color:#333!important}
+.header-search-row{background:var(--surface)!important;padding:0 14px 12px!important}
+.header-search-wrap{background:var(--gray-100)!important;border-radius:50px!important;padding:0 16px!important;display:flex!important;align-items:center!important;gap:8px!important;border:none!important}
+.header-search{background:transparent!important;border:none!important;padding:12px 0!important;font-size:13px!important;flex:1!important;outline:none!important;color:var(--gray-700)!important}
 .header-search::placeholder{color:#aaa!important;font-size:13px!important}
 .header-search-btn{background:transparent!important;color:#aaa!important;border:none!important;font-size:16px!important;padding:0!important;display:flex!important;align-items:center!important;cursor:pointer!important}
 .header-search-btn:hover{color:#e8420a!important}
@@ -794,8 +783,8 @@ body.dark-mode #pwreset-audit-log { background: #111 !important; border-color: #
 .slider-dots{bottom:8px!important}
 
 /* HOME SECTIONS */
-.home-section{background:#0f0f0f!important;margin:8px 0 0!important;padding:14px 12px 16px!important}
-.home-section-title{font-size:16px!important;font-weight:800!important;color:#111!important;font-family:'Poppins',sans-serif!important;margin-bottom:4px!important}
+.home-section{background:var(--bg)!important;margin:8px 0 0!important;padding:14px 12px 16px!important}
+.home-section-title{font-size:16px!important;font-weight:800!important;color:var(--text)!important;font-family:'Poppins',sans-serif!important;margin-bottom:4px!important}
 .home-section-header{margin-bottom:14px!important}
 .home-see-all{color:#e8420a!important;font-size:13px!important;font-weight:700!important;white-space:nowrap!important;padding-top:2px!important}
 
@@ -836,15 +825,15 @@ body.dark-mode #pwreset-audit-log { background: #111 !important; border-color: #
 .pc-wish-btn:hover,.pc-wish-btn.active{color:#e53e3e;background:#fff}
 
 /* BOTTOM NAV */
-.bottom-nav{background:#141414!important;border-top:1px solid #eee!important;padding:0!important}
-.bnav-item{padding:8px 4px 6px!important;font-size:10px!important;font-weight:600!important;color:#aaa!important;gap:2px!important}
+.bottom-nav{background:var(--surface)!important;border-top:1px solid var(--border)!important;padding:0!important}
+.bnav-item{padding:8px 4px 6px!important;font-size:10px!important;font-weight:600!important;color:var(--gray-400)!important;gap:2px!important}
 .bnav-item i{font-size:20px!important}
 .bnav-item.active{color:#e8420a!important}
 .bnav-badge{top:4px!important;right:calc(50% - 18px)!important;font-size:9px!important;padding:1px 4px!important}
 
 /* PAGE BACKGROUNDS */
-#page-home{background:#f2f2f2!important}
-body{padding-bottom:65px!important;background:#f2f2f2!important}
+#page-home{background:var(--bg)!important}
+body{padding-bottom:65px!important;background:var(--bg)!important}
 
 /* CARD ACTION BUTTONS */
 .card-action-btns{display:flex;gap:4px;margin-top:8px}
@@ -854,7 +843,7 @@ body{padding-bottom:65px!important;background:#f2f2f2!important}
 .card-btn-buy:hover{background:#111;color:#fff}
 </style>
 </head>
-<body class="dark-mode">
+<body>
 <!-- PWA INSTALL BANNER -->
 <div id="pwa-install-banner">
   <img class="pwa-banner-icon" src="icon-192.png" alt="Benim" style="border-radius:12px" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
@@ -913,7 +902,7 @@ body{padding-bottom:65px!important;background:#f2f2f2!important}
       <span onclick="navigate('home')" style="font-family:'Poppins',sans-serif;font-weight:900;font-size:26px;color:#e8420a;cursor:pointer;letter-spacing:-0.5px;line-height:1">BENIM</span>
     </div>
     <div class="header-icons" style="display:flex;align-items:center;gap:4px">
-      <button id="dark-mode-btn" onclick="toggleDarkMode()" title="Toggle dark/light mode">☀️</button>
+      <button id="dark-mode-btn" onclick="toggleDarkMode()" title="Toggle dark/light mode">🌙</button>
       <button class="hicon" onclick="navigate('profile')" title="Account"><i class="fas fa-user-circle"></i><span class="badge hidden" id="wish-count">0</span></button>
       <button class="hicon" onclick="navigate('cart')" title="Cart" style="position:relative"><i class="fas fa-shopping-cart"></i><span class="badge hidden" id="cart-count">0</span></button>
     </div>
@@ -5118,7 +5107,21 @@ window.placeOrder = async function() {
     const orderRef = await addDoc(collection(db,'orders'), orderData);
     lastOrderId = orderRef.id;
 
-    // ---- Debit wallet if paying with wallet ----
+    // Build items summary + address string early so we can notify admin immediately
+    const itemNames = itemsCopy.map(x=>{
+      let detail = x.name;
+      if(x.size) detail += ` (Size: ${x.size})`;
+      if(x.colour||x.color) detail += ` (Colour: ${x.colour||x.color})`;
+      if(x.qty>1) detail += ` ×${x.qty}`;
+      return detail;
+    }).join('\n');
+    const addrStr = [addr.street,addr.city,addr.state].filter(Boolean).join(', ');
+
+    // Notify ADMIN immediately — must happen right after the click/await chain
+    // with minimal delay, or mobile browsers will block the WhatsApp popup.
+    notifyAdminWhatsApp(orderId, addr.name||currentUser.email.split('@')[0], currentUser.email, itemNames, subtotal, deliveryFee, selectedPayment, addrStr, addr.phone||'', couponDiscount, appliedCoupon?.code||'', loyaltyDiscount);
+
+    // ---- Debit wallet if paying with wallet (after notifying admin) ----
     if (selectedPayment === 'wallet') {
       await debitWallet(currentUser.uid, grandTotal, 'purchase', `Order payment: ${orderId}`, orderId);
       await loadWalletBalance();
@@ -5130,15 +5133,7 @@ window.placeOrder = async function() {
     if(appliedCoupon && appliedCoupon.firestoreId) {
       try { await updateDoc(doc(db,'coupons',appliedCoupon.firestoreId), { usageCount: (appliedCoupon.usageCount||0)+1 }); } catch(e) {}
     }
-    // Clear cart BEFORE notifications
-    const itemNames = itemsCopy.map(x=>{
-      let detail = x.name;
-      if(x.size) detail += ` (Size: ${x.size})`;
-      if(x.colour||x.color) detail += ` (Colour: ${x.colour||x.color})`;
-      if(x.qty>1) detail += ` ×${x.qty}`;
-      return detail;
-    }).join('\n');
-    const addrStr = [addr.street,addr.city,addr.state].filter(Boolean).join(', ');
+    // Clear cart
     cart = [];
     await saveCart();
     updateCartBadge();
@@ -5157,8 +5152,6 @@ window.placeOrder = async function() {
         }
       } catch(e) { console.warn('Stock update failed for', pid, e); }
     }
-    // Notify ADMIN first
-    notifyAdminWhatsApp(orderId, addr.name||currentUser.email.split('@')[0], currentUser.email, itemNames, subtotal, deliveryFee, selectedPayment, addrStr, addr.phone||'', couponDiscount, appliedCoupon?.code||'', loyaltyDiscount);
     setTimeout(()=>{
       notifyBuyerWhatsApp(addr.phone||'', orderId, 'pending', itemNames, addr.name||currentUser.email.split('@')[0], grandTotal, deliveryFee);
     }, 2000);
@@ -5166,7 +5159,8 @@ window.placeOrder = async function() {
     navigate('success');
     showToast('Order placed successfully! 🎉');
   } catch(e) {
-    showToast('Failed to place order: '+e.message,'error');
+    console.error('placeOrder error:', e);
+    showToast('Failed to place order: '+(e.message||e.code||'Unknown error'),'error');
   }
 };
 
@@ -5457,18 +5451,18 @@ window.toggleDarkMode = function() {
   document.getElementById('dark-mode-btn').textContent = isDark ? '☀️' : '🌙';
   localStorage.setItem('benim-theme', isDark ? 'dark' : 'light');
 };
-// Dark is the default — only go light if user explicitly chose it
+// Light mode is the default — only go dark if user explicitly chose it
 (function(){
   const saved = localStorage.getItem('benim-theme');
-  if(saved === 'light') {
-    document.body.classList.remove('dark-mode');
-    const btn = document.getElementById('dark-mode-btn');
-    if(btn) btn.textContent = '🌙';
-  } else {
-    // Ensure dark mode is on (it's already in the class, this just syncs the button)
+  if(saved === 'dark') {
     document.body.classList.add('dark-mode');
     const btn = document.getElementById('dark-mode-btn');
     if(btn) btn.textContent = '☀️';
+  } else {
+    // Ensure light mode is on (default)
+    document.body.classList.remove('dark-mode');
+    const btn = document.getElementById('dark-mode-btn');
+    if(btn) btn.textContent = '🌙';
   }
 })();
 window.handleSearchKey = function(e) {
@@ -5667,16 +5661,20 @@ window.loadAdminProducts = function() {
   `).join('');
 };
 
-window.loadAdminOrders = async function() {
+let _adminOrdersUnsub = null;
+window.loadAdminOrders = function() {
   const tbody = document.getElementById('admin-orders-body');
   tbody.innerHTML = skelTableRows(7, 6);
-  try {
-    const q = collection(db,'orders');
-    const snap = await getDocs(q);
+
+  // Stop any previous listener so we don't stack duplicates
+  if (_adminOrdersUnsub) { try { _adminOrdersUnsub(); } catch(e) {} _adminOrdersUnsub = null; }
+
+  const q = collection(db,'orders');
+  _adminOrdersUnsub = onSnapshot(q, (snap) => {
     let totalRevenue = 0;
 
     // Show cancellation notifications
-    const cancelled = snap.docs.filter(d=>d.data().status==='cancelled' && !d.data().adminAcknowledged);
+    const cancelled = snap.docs.filter(d=>{ try { return d.data().status==='cancelled' && !d.data().adminAcknowledged; } catch(e){ return false; } });
     const cancelCard = document.getElementById('admin-cancel-notif-card');
     const cancelList = document.getElementById('admin-cancel-notif-list');
     const cancelCount = document.getElementById('cancel-notif-count');
@@ -5699,32 +5697,60 @@ window.loadAdminOrders = async function() {
       cancelCard.style.display = 'none';
     }
 
-    const rows = snap.docs.map(d=>{
-      const o = d.data();
-      totalRevenue += o.total||0;
-      const itemCount = (o.items||[]).reduce((s,x)=>s+(x.qty||1),0);
-      const statusKey = o.status==='out_for_delivery'?'out':o.status||'pending';
-      return `<tr>
-        <td style="font-size:11px;font-weight:800">${o.orderId||d.id.slice(0,8)}</td>
-        <td style="font-size:12px">
-          <div style="font-weight:700">${(o.address&&o.address.name)||o.buyerName||'—'}</div>
-          <div style="color:var(--gray-400);font-size:11px">${o.userEmail||''}</div>
-          ${(o.phone||(o.address&&o.address.phone)) ? `<div style="font-size:11px;color:var(--green)"><i class="fab fa-whatsapp"></i> ${o.phone||(o.address&&o.address.phone)}</div>` : ''}
-        </td>
-        <td style="font-weight:800">₦${(o.total||0).toLocaleString()}</td>
-        <td style="font-size:12px"><span style="background:var(--gray-100);padding:2px 8px;border-radius:99px;font-weight:700;font-size:11px">${itemCount} item${itemCount!==1?'s':''}</span></td>
-        <td style="font-size:12px">${o.payment==='bank'?'🏦 Bank':'💵 POD'}</td>
-        <td><span class="order-status status-${statusKey}">${(o.status||'pending').replace(/_/g,' ').replace(/\b\w/g,l=>l.toUpperCase())}</span></td>
-        <td style="display:flex;flex-direction:column;gap:5px;padding:8px 6px">
-          <button style="background:var(--orange);color:#fff;border:none;border-radius:6px;font-size:11px;font-weight:700;padding:5px 8px;cursor:pointer;white-space:nowrap" onclick="viewOrderDetails('${d.id}')"><i class="fas fa-eye"></i> Details</button>
-          <button class="btn-success" style="font-size:11px;padding:5px 8px;white-space:nowrap" onclick="openStatusModal('${d.id}','${o.status||'pending'}','${o.userEmail||''}')"><i class="fas fa-edit"></i> Update</button>
-        </td>
-      </tr>`;
+    // Sort newest first (client-side, since createdAt may be a pending server timestamp briefly)
+    const sortedDocs = [...snap.docs].sort((a,b) => {
+      const at = a.data().createdAt?.toMillis?.() || 0;
+      const bt = b.data().createdAt?.toMillis?.() || 0;
+      return bt - at;
     });
-    tbody.innerHTML = rows.join('') || '<tr><td colspan="7" style="text-align:center;color:var(--gray-400)">No orders</td></tr>';
+
+    const paymentLabels = {
+      bank: '🏦 Bank',
+      wallet: '💰 Wallet',
+      paystack: '⚡ Paystack',
+      cod: '💵 POD'
+    };
+
+    // Render each row independently — one malformed order document
+    // must never blank out the rest of the table.
+    const rows = sortedDocs.map(d => {
+      try {
+        const o = d.data();
+        totalRevenue += o.total||0;
+        const itemCount = (o.items||[]).reduce((s,x)=>s+(x.qty||1),0);
+        const statusKey = o.status==='out_for_delivery'?'out':o.status||'pending';
+        const paymentLabel = paymentLabels[o.payment] || (o.payment ? escHtml(o.payment) : '—');
+        return `<tr>
+          <td style="font-size:11px;font-weight:800">${escHtml(o.orderId||d.id.slice(0,8))}</td>
+          <td style="font-size:12px">
+            <div style="font-weight:700">${escHtml((o.address&&o.address.name)||o.buyerName||'—')}</div>
+            <div style="color:var(--gray-400);font-size:11px">${escHtml(o.userEmail||'')}</div>
+            ${(o.phone||(o.address&&o.address.phone)) ? `<div style="font-size:11px;color:var(--green)"><i class="fab fa-whatsapp"></i> ${escHtml(o.phone||(o.address&&o.address.phone))}</div>` : ''}
+          </td>
+          <td style="font-weight:800">₦${(o.total||0).toLocaleString()}</td>
+          <td style="font-size:12px"><span style="background:var(--gray-100);padding:2px 8px;border-radius:99px;font-weight:700;font-size:11px">${itemCount} item${itemCount!==1?'s':''}</span></td>
+          <td style="font-size:12px">${paymentLabel}</td>
+          <td><span class="order-status status-${statusKey}">${(o.status||'pending').replace(/_/g,' ').replace(/\b\w/g,l=>l.toUpperCase())}</span></td>
+          <td style="display:flex;flex-direction:column;gap:5px;padding:8px 6px">
+            <button style="background:var(--orange);color:#fff;border:none;border-radius:6px;font-size:11px;font-weight:700;padding:5px 8px;cursor:pointer;white-space:nowrap" onclick="viewOrderDetails('${d.id}')"><i class="fas fa-eye"></i> Details</button>
+            <button class="btn-success" style="font-size:11px;padding:5px 8px;white-space:nowrap" onclick="openStatusModal('${d.id}','${o.status||'pending'}','${o.userEmail||''}')"><i class="fas fa-edit"></i> Update</button>
+          </td>
+        </tr>`;
+      } catch(rowErr) {
+        console.error('Order row render error for doc', d.id, rowErr);
+        return `<tr><td colspan="7" style="font-size:11px;color:var(--red)">⚠️ Could not render order ${d.id.slice(0,8)} (${rowErr.message})</td></tr>`;
+      }
+    });
+    tbody.innerHTML = rows.join('') || '<tr><td colspan="7" style="text-align:center;color:var(--gray-400)">No orders yet</td></tr>';
     document.getElementById('stat-orders').textContent = snap.docs.length;
     document.getElementById('stat-revenue').textContent = '₦'+totalRevenue.toLocaleString();
-  } catch(e) { tbody.innerHTML = '<tr><td colspan="7" style="color:var(--red);text-align:center">Error loading</td></tr>'; }
+  }, (err) => {
+    console.error('loadAdminOrders listener error:', err);
+    tbody.innerHTML = `<tr><td colspan="7" style="color:var(--red);text-align:center;padding:16px">
+      Error loading orders: ${escHtml(err.message||err.code||'Unknown error')}<br>
+      <span style="font-size:11px;color:var(--gray-400)">This is usually a Firestore permissions issue — check your security rules allow admin to read the 'orders' collection.</span>
+    </td></tr>`;
+  });
 };
 
 window.openStatusModal = function(orderId, status, email) {
@@ -6670,7 +6696,7 @@ function _showPage(page) {
   if(page==='wishlist') renderWishlist();
   if(page==='addresses') loadAddresses();
   if(page==='search') { if(!allProducts.length) loadProducts(); applyFilters(); }
-  if(page==='admin') { loadAdminProducts(); loadAdminStats(); updatePWResetBadge(); }
+  if(page==='admin') { loadAdminProducts(); loadAdminStats(); loadAdminOrders(); updatePWResetBadge(); }
   if(page==='profile') loadUserProfile();
   if(page==='wallet') { loadWalletBalance(); loadWalletTransactions(); loadPaystackSettings(); }
   if(page==='forgot') {
