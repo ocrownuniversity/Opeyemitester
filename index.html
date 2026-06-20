@@ -2263,7 +2263,7 @@ body{padding-bottom:65px!important;background:#f2f2f2!important}
     </div>
     <div class="faq-item" onclick="toggleFaq(this)">
       <div class="faq-q">What payment methods do you accept? <i class="fas fa-chevron-down"></i></div>
-      <div class="faq-a">We accept Bank Transfer (Opay) and Pay on Delivery. Bank details: Opay | Adewole Aderonke Aishat | Account Number: 9168031213. Please use your Order ID as the transfer reference.</div>
+      <div class="faq-a" id="faq-bank-details">We accept Bank Transfer and Pay on Delivery. Please use your Order ID as the transfer reference.</div>
     </div>
     <div class="faq-item" onclick="toggleFaq(this)">
       <div class="faq-q">How do I track my order? <i class="fas fa-chevron-down"></i></div>
@@ -2898,6 +2898,8 @@ onAuthStateChanged(auth, async (user) => {
 
 // Load Paystack settings on startup (for all users)
 loadPaystackSettings();
+// Load bank account details on startup (for all users) — keeps checkout, wallet funding, FAQ, receipts in sync
+loadAccountDetails();
 
 function updateAuthUI() {
   const loggedIn = !!currentUser;
@@ -4681,6 +4683,8 @@ window.goToCheckout = function() {
 };
 
 async function loadCheckout() {
+  // Ensure bank account details are current before showing checkout
+  applyAccountDetailsToDOM();
   // Load addresses
   const addrDiv = document.getElementById('saved-addresses');
   addrDiv.innerHTML = '<p style="color:var(--gray-400);font-size:13px">Loading addresses...</p>';
@@ -5209,7 +5213,7 @@ function showReceipt(orderId, data) {
     ${loyaltyDiscount>0 ? '<div class="summary-row"><span style="color:var(--green)">⭐ Loyalty Points</span><span style="color:var(--green);font-weight:800">-₦'+loyaltyDiscount.toLocaleString()+'</span></div>' : ''}
     ${savings>0 ? '<div style="background:#f0fdf4;border:1px solid #bbf7d0;border-radius:6px;padding:6px 10px;margin:6px 0;font-size:12px;color:var(--green);font-weight:700;text-align:center">🎉 You saved ₦'+savings.toLocaleString()+' on this order!</div>' : ''}
     <div class="summary-row total" style="border-top:2px solid var(--gray-200);padding-top:10px;margin-top:6px"><span>Grand Total</span><span style="color:var(--orange)">₦${(data.total||0).toLocaleString()}</span></div>
-    ${data.payment==='bank'?'<div style="margin-top:12px;background:var(--gray-50);padding:10px;border-radius:8px;font-size:12px"><p style="font-weight:800;margin-bottom:4px">Transfer Details:</p><p>Bank: Opay</p><p>Account: Adewole Aderonke Aishat</p><p>Number: 9168031213</p><p style="color:var(--orange);font-weight:700;margin-top:6px">Reference: '+orderId+'</p></div>':''}
+    ${data.payment==='bank'?'<div style="margin-top:12px;background:var(--gray-50);padding:10px;border-radius:8px;font-size:12px"><p style="font-weight:800;margin-bottom:4px">Transfer Details:</p><p>Bank: '+escHtml(_accountDetails.bankName)+'</p><p>Account: '+escHtml(_accountDetails.accountName)+'</p><p>Number: '+escHtml(_accountDetails.accountNumber)+'</p><p style="color:var(--orange);font-weight:700;margin-top:6px">Reference: '+orderId+'</p></div>':''}
   `;
 }
 
@@ -5741,7 +5745,7 @@ window.viewOrderDetails = async function(docId) {
       <!-- PAYMENT SUMMARY -->
       <div style="padding:16px">
         <div style="font-size:12px;font-weight:800;text-transform:uppercase;color:var(--gray-500);letter-spacing:.5px;margin-bottom:10px">💰 Payment Summary</div>
-        <div style="display:flex;justify-content:space-between;font-size:13px;margin-bottom:6px"><span style="color:var(--gray-500)">Payment Method</span><span style="font-weight:700">${o.payment==='bank'?'🏦 Bank Transfer (Opay)':'💵 Pay on Delivery'}</span></div>
+        <div style="display:flex;justify-content:space-between;font-size:13px;margin-bottom:6px"><span style="color:var(--gray-500)">Payment Method</span><span style="font-weight:700">${o.payment==='bank'?'🏦 Bank Transfer ('+escHtml(_accountDetails.bankName)+')':'💵 Pay on Delivery'}</span></div>
         <div style="display:flex;justify-content:space-between;font-size:13px;margin-bottom:6px"><span style="color:var(--gray-500)">Subtotal</span><span style="font-weight:700">₦${((o.total||0)-(o.deliveryFee||0)).toLocaleString()}</span></div>
         ${(o.deliveryFee||0)>0 ? '<div style="display:flex;justify-content:space-between;font-size:13px;margin-bottom:6px"><span style="color:var(--gray-500)">Delivery Fee</span><span style="font-weight:700">₦'+(o.deliveryFee||0).toLocaleString()+'</span></div>' : ''}
         <div style="display:flex;justify-content:space-between;font-size:15px;font-weight:900;border-top:2px solid var(--gray-200);padding-top:10px;margin-top:4px"><span>Total</span><span style="color:var(--orange)">₦${(o.total||0).toLocaleString()}</span></div>
@@ -6001,7 +6005,7 @@ function smartLocalReply(text) {
   }
   if (/price|cost|how much|fee/.test(t)) return "Prices are in ₦ on each product. Delivery: ₦3,500 (FREE above ₦150,000). Ask me any product name for its price!";
   if (/deliver|shipping|how long|when|days/.test(t)) return "🚚 Delivery:\n• Lagos: 1–2 days\n• Abuja/PH: 2–3 days\n• Others: 3–5 days\nFree delivery on orders ₦150,000+";
-  if (/pay|payment|transfer|bank|opay/.test(t)) return "💳 Payment options:\n1. Bank Transfer (Opay): Adewole Aderonke Aishat | 9168031213\n2. Pay on Delivery\nChoose at checkout!";
+  if (/pay|payment|transfer|bank|opay/.test(t)) return `💳 Payment options:\n1. Bank Transfer (${_accountDetails.bankName}): ${_accountDetails.accountName} | ${_accountDetails.accountNumber}\n2. Pay on Delivery\nChoose at checkout!`;
   if (/track|where is|my order|status/.test(t)) return "📦 Track order: Menu → Track Order → enter Order ID or phone. You also get WhatsApp updates automatically!";
   if (/return|refund|exchange|wrong|damaged/.test(t)) return "😟 For returns/refunds, contact us within 24hrs of delivery via WhatsApp: +234 916 803 1213";
   if (/contact|whatsapp|call|reach/.test(t)) return "📞 Contact: WhatsApp +234 916 803 1213 | Email: shopwitbenim@gmail.com\nMon–Sat 8AM–8PM";
