@@ -1080,7 +1080,7 @@ endpoints    : {
 airtime         : 'APIAirtimeV1.asp',
 data            : 'APIDatabundleV1.asp',
 cable           : 'APICableTVV1.asp',
-cableVerify     : 'APIVerifyCableTVV1.0.asp',
+cableVerify     : 'APIVerifyCableTVV1.asp',
 electricity     : 'APIElectricityV1.asp',
 electricityVerify: 'APIVerifyElectricityV1.asp',
 balance         : 'APIWalletBalance.asp',
@@ -1123,8 +1123,8 @@ throw new Error('API Key not configured. Admin must set the API Key in API Setti
 const endpoint = API_CFG.endpoints[endpointKey] || endpointKey;
 const url      = API_CFG.baseUrl + endpoint;
 const allParams = Object.assign({
-UserID : String(API_CFG.userId||'').trim(),
-APIKey : String(API_CFG.apiKey||'').trim(),
+UserID : API_CFG.userId,
+APIKey : API_CFG.apiKey,
 output : 'JSON'
 }, params);
 const qs  = Object.entries(allParams).map(([k,v])=>encodeURIComponent(k)+'='+encodeURIComponent(v)).join('&');
@@ -1153,16 +1153,8 @@ raw = await res.text();
 console.log('[API] &larr; HTTP', httpStatus, raw.slice(0,300));
 try{ parsed = JSON.parse(raw); }catch(e){ parsed = { status: raw.trim(), raw }; }
 }catch(netErr){
-// A TypeError with "Failed to fetch" here almost always means the request never
-// reached the provider at all — most commonly a CORS block from the browser,
-// not a credentials problem. Surface that distinction clearly instead of letting
-// it look like an "invalid credentials" provider response.
-const isCorsLike = netErr instanceof TypeError || /failed to fetch|networkerror|load failed/i.test(netErr.message||'');
-const friendly = isCorsLike
-? 'Could not reach '+API_CFG.providerName+' (request blocked before it left the browser — this is almost always CORS, not bad credentials). Check console for the blocked URL, or verify Base URL is exactly https://www.nellobytesystems.com/ and your site is served over HTTPS.'
-: netErr.message;
-await logRef.update({ status:'net_error', error:friendly, respondedAt:firebase.firestore.FieldValue.serverTimestamp() }).catch(()=>{});
-throw new Error(friendly);
+await logRef.update({ status:'net_error', error:netErr.message, respondedAt:firebase.firestore.FieldValue.serverTimestamp() }).catch(()=>{});
+throw new Error('Network error: '+netErr.message);
 }
 await logRef.update({
 httpStatus,
@@ -2196,17 +2188,8 @@ document.getElementById('a-title').textContent={overview:'Overview',users:'Users
 if(window.innerWidth<=768)closeAdminMenu();
 const el=document.getElementById('a-content');
 const rev=AD.txs.reduce((s,t)=>s+(t.amount||0),0);
-if(tab==='overview')el.innerHTML=`<div id="api-cred-banner-wrap">${(!API_CFG.apiKey||!API_CFG.userId)?`<div style="background:#fef2f2;border:1.5px solid #fca5a5;border-radius:12px;padding:14px 16px;margin-bottom:14px;display:flex;align-items:center;gap:12px"><div style="font-size:22px;flex-shrink:0">&#9888;</div><div style="flex:1"><div style="font-weight:800;font-size:13px;color:#dc2626;margin-bottom:2px">VTU API credentials not set</div><div style="font-size:12px;color:#991b1b">Airtime, data, cable and electricity purchases will fail until you enter your real Nellobytesystems UserID and API Key.</div></div><button onclick="aTab('api-mgmt')" style="flex-shrink:0;padding:9px 14px;background:#dc2626;color:#fff;border:none;border-radius:9px;font-size:12px;font-weight:700;cursor:pointer;font-family:'Inter',sans-serif;white-space:nowrap">Set Now &rarr;</button></div>`:''}</div><div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(155px,1fr));gap:11px;margin-bottom:16px"><div class="statc" style="background:linear-gradient(135deg,#15803d,#16a34a)"><div style="font-size:22px;margin-bottom:3px">&#128101;</div><div style="font-size:26px;font-weight:800">${AD.users.length}</div><div style="opacity:.65;font-size:12px;margin-top:1px">Total Users</div></div><div class="statc" style="background:linear-gradient(135deg,#1e3a5f,#2563eb)"><div style="font-size:22px;margin-bottom:3px">&#128179;</div><div style="font-size:26px;font-weight:800">${AD.txs.length}</div><div style="opacity:.65;font-size:12px;margin-top:1px">Transactions</div></div><div class="statc" style="background:linear-gradient(135deg,#b45309,#d97706)"><div style="font-size:22px;margin-bottom:3px">&#128176;</div><div style="font-size:20px;font-weight:800">NGN ${fmt(rev)}</div><div style="opacity:.65;font-size:12px;margin-top:1px">Revenue</div></div><div class="statc" style="background:linear-gradient(135deg,#7c3aed,#6d28d9)"><div style="font-size:22px;margin-bottom:3px">&#128274;</div><div style="font-size:26px;font-weight:800">${AD.pins.length}</div><div style="opacity:.65;font-size:12px;margin-top:1px">PIN Requests</div></div></div><div class="card" style="overflow:hidden"><div style="padding:13px 16px;border-bottom:1px solid #f8fafc;font-weight:700;font-size:14px">Recent Transactions</div>${AD.txs.slice(0,10).map(t=>`<div class="txr"><div style="flex:1;min-width:0"><div style="font-weight:600;font-size:13px">${t.description||t.type}</div><div style="font-size:11px;color:var(--g400)">${fdate(t.createdAt)}</div></div><div style="color:var(--err);font-weight:700;font-size:13px">NGN ${fmt(t.amount)}</div></div>`).join('')||'<div style="padding:22px;text-align:center;color:var(--g400);font-size:13px">No transactions yet</div>'}</div>`;
+if(tab==='overview')el.innerHTML=`<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(155px,1fr));gap:11px;margin-bottom:16px"><div class="statc" style="background:linear-gradient(135deg,#15803d,#16a34a)"><div style="font-size:22px;margin-bottom:3px">&#128101;</div><div style="font-size:26px;font-weight:800">${AD.users.length}</div><div style="opacity:.65;font-size:12px;margin-top:1px">Total Users</div></div><div class="statc" style="background:linear-gradient(135deg,#1e3a5f,#2563eb)"><div style="font-size:22px;margin-bottom:3px">&#128179;</div><div style="font-size:26px;font-weight:800">${AD.txs.length}</div><div style="opacity:.65;font-size:12px;margin-top:1px">Transactions</div></div><div class="statc" style="background:linear-gradient(135deg,#b45309,#d97706)"><div style="font-size:22px;margin-bottom:3px">&#128176;</div><div style="font-size:20px;font-weight:800">NGN ${fmt(rev)}</div><div style="opacity:.65;font-size:12px;margin-top:1px">Revenue</div></div><div class="statc" style="background:linear-gradient(135deg,#7c3aed,#6d28d9)"><div style="font-size:22px;margin-bottom:3px">&#128274;</div><div style="font-size:26px;font-weight:800">${AD.pins.length}</div><div style="opacity:.65;font-size:12px;margin-top:1px">PIN Requests</div></div></div><div class="card" style="overflow:hidden"><div style="padding:13px 16px;border-bottom:1px solid #f8fafc;font-weight:700;font-size:14px">Recent Transactions</div>${AD.txs.slice(0,10).map(t=>`<div class="txr"><div style="flex:1;min-width:0"><div style="font-weight:600;font-size:13px">${t.description||t.type}</div><div style="font-size:11px;color:var(--g400)">${fdate(t.createdAt)}</div></div><div style="color:var(--err);font-weight:700;font-size:13px">NGN ${fmt(t.amount)}</div></div>`).join('')||'<div style="padding:22px;text-align:center;color:var(--g400);font-size:13px">No transactions yet</div>'}</div>`;
 if(tab==='overview'){
-loadApiConfig().then(()=>{
-const stillOnOverview = document.querySelector('#admin-tabbar button[data-tab="overview"]')?.style.background;
-const banner = document.getElementById('api-cred-banner-wrap');
-if(stillOnOverview && banner){
-banner.innerHTML = (!API_CFG.apiKey||!API_CFG.userId)
-? `<div style="background:#fef2f2;border:1.5px solid #fca5a5;border-radius:12px;padding:14px 16px;margin-bottom:14px;display:flex;align-items:center;gap:12px"><div style="font-size:22px;flex-shrink:0">&#9888;</div><div style="flex:1"><div style="font-weight:800;font-size:13px;color:#dc2626;margin-bottom:2px">VTU API credentials not set</div><div style="font-size:12px;color:#991b1b">Airtime, data, cable and electricity purchases will fail until you enter your real Nellobytesystems UserID and API Key.</div></div><button onclick="aTab(&apos;api-mgmt&apos;)" style="flex-shrink:0;padding:9px 14px;background:#dc2626;color:#fff;border:none;border-radius:9px;font-size:12px;font-weight:700;cursor:pointer;font-family:&apos;Inter&apos;,sans-serif;white-space:nowrap">Set Now &rarr;</button></div>`
-: '';
-}
-}).catch(()=>{});
 setTimeout(()=>{
 const ac=document.getElementById('a-content');
 if(ac&&!ac.querySelector('#vt-quick-btn')){
@@ -3751,8 +3734,8 @@ el.innerHTML=`
 <label style="font-size:12px;font-weight:600;color:var(--g600);margin-bottom:5px;display:block">
 API Key &nbsp;<span style="color:#dc2626;font-size:10px;background:#fef2f2;padding:2px 7px;border-radius:4px">Enter after deployment</span>
 </label>
-<input class="inp" type="password" id="api-apiKey" placeholder="Enter your Nellobytesystems API Key" value="${cfg.apiKey?'\u2022\u2022\u2022\u2022\u2022\u2022\u2022\u2022\u2022\u2022\u2022\u2022':''}" autocomplete="off" data-has-saved-key="${cfg.apiKey?'1':'0'}"/>
-<div style="font-size:11px;color:var(--g400);margin-top:4px">Stored encrypted in database. Never exposed to users.</div>
+<input class="inp" type="password" id="api-apiKey" placeholder="${cfg.apiKey?'Key already saved (ends in ...'+String(cfg.apiKey).slice(-4)+') - leave blank to keep it':'Enter your Nellobytesystems API Key'}" value="" autocomplete="off"/>
+<div style="font-size:11px;color:var(--g400);margin-top:4px">Leave blank to keep your current key. Only fill this in to change it.</div>
 </div>
 <div style="margin-bottom:12px">
 <label style="font-size:12px;font-weight:600;color:var(--g600);margin-bottom:5px;display:block">Callback URL <span style="font-size:10px;color:var(--g400)">(optional)</span></label>
@@ -3796,9 +3779,7 @@ const r = document.getElementById('api-save-result');
 r.style.display='block'; r.style.background='#fef3c7'; r.style.color='#92400e';
 r.textContent='Saving...';
 try{
-const apiKeyEl = document.getElementById('api-apiKey');
-const apiKeyInput = (apiKeyEl?.value||'').trim();
-const isBulletPlaceholder = /^\u2022+$/.test(apiKeyInput) || (apiKeyEl?.dataset.hasSavedKey==='1' && apiKeyInput.includes('\u2022'));
+const apiKeyInput = (document.getElementById('api-apiKey')?.value||'').trim();
 const eps = {};
 Object.keys(API_DEFAULTS.endpoints).forEach(k=>{
 const v=(document.getElementById('api-ep-'+k)?.value||'').trim();
@@ -3814,13 +3795,12 @@ endpoints    : eps,
 updatedAt    : firebase.firestore.FieldValue.serverTimestamp(),
 updatedBy    : CU?.email||''
 };
-if(apiKeyInput && !isBulletPlaceholder){ data.apiKey = apiKeyInput; }
+if(apiKeyInput){ data.apiKey = apiKeyInput; }
 await db.collection('settings').doc('apiconfig').set(data, {merge:true});
 await loadApiConfig();
 clearPlanCache();
 r.style.background='#dcfce7'; r.style.color='#15803d';
-const savedKeyNote = API_CFG.apiKey ? (' API Key saved: '+API_CFG.apiKey.length+' chars ('+API_CFG.apiKey.slice(0,4)+'...'+API_CFG.apiKey.slice(-4)+'). Compare this against your ClubKonnect dashboard to confirm it matches exactly.') : ' [Warning] No API Key is currently saved.';
-r.innerHTML='[OK] Configuration saved! System is ready.<br/><span style="font-size:11px;font-weight:600">'+savedKeyNote+'</span>';
+r.textContent='[OK] Configuration saved! System is ready.';
 toast('API config saved!');
 }catch(e){
 r.style.background='#fef2f2'; r.style.color='#dc2626';
@@ -3865,7 +3845,7 @@ let html = `
 <div style="font-size:11px;color:var(--g500);margin-bottom:14px">
 Provider: <strong>${API_CFG.providerName}</strong> &bull;
 UserID: <strong>${API_CFG.userId||'&#9888; Not set'}</strong> &bull;
-API Key: <strong>${API_CFG.apiKey?('Set ('+API_CFG.apiKey.length+' chars: '+API_CFG.apiKey.slice(0,4)+'...'+API_CFG.apiKey.slice(-4)+')'):'&#9888; NOT SET'}</strong> &bull;
+API Key: <strong>${API_CFG.apiKey?'Set ('+API_CFG.apiKey.length+' chars)':'&#9888; NOT SET'}</strong> &bull;
 Enabled: <strong>${API_CFG.enabled?'Yes':'No'}</strong>
 </div>
 ${!API_CFG.apiKey?'<div style="background:#fef2f2;border:1px solid #fca5a5;border-radius:8px;padding:10px;margin-bottom:12px;font-size:12px;color:#dc2626">&#9888; API Key is not set. Go to Settings tab and enter your API Key.</div>':''}
@@ -3877,9 +3857,9 @@ try{
 const start = Date.now();
 let res;
 if(t.key==='airtime'){
-res = await apiFetch('airtime',{MobileNumber:t.phone,MobileNetwork:t.network,Amount:t.amount,RequestID:'DIAG_'+Date.now()},{type:'diag'});
+res = await apiFetch('airtime',{MobileNumber:t.phone,NetworkID:t.network,Amount:t.amount,RequestID:'DIAG_'+Date.now()},{type:'diag'});
 } else if(t.key==='data'){
-res = await apiFetch('dataPlans',{MobileNetwork:t.network},{type:'diag'});
+res = await apiFetch('dataPlans',{NetworkID:t.network},{type:'diag'});
 } else if(t.key==='cable'){
 res = await apiFetch('cablePlans',{},{type:'diag'});
 } else {
@@ -3907,7 +3887,7 @@ el.innerHTML = `
 <div style="font-size:11px;color:var(--g500);margin-bottom:14px">
 Provider: <strong>${API_CFG.providerName}</strong> &bull;
 UserID: <strong>${API_CFG.userId||'&#9888; Not set'}</strong> &bull;
-API Key: <strong>${API_CFG.apiKey?('&#9989; Set ('+API_CFG.apiKey.length+' chars: '+API_CFG.apiKey.slice(0,4)+'...'+API_CFG.apiKey.slice(-4)+')'):'&#10060; NOT SET'}</strong> &bull;
+API Key: <strong>${API_CFG.apiKey?'&#9989; Set':'&#10060; NOT SET'}</strong> &bull;
 Base URL: <strong>${API_CFG.baseUrl}</strong>
 </div>
 ${!API_CFG.apiKey?'<div style="background:#fef2f2;border:1px solid #fca5a5;border-radius:8px;padding:10px;margin-bottom:12px;font-size:12px;color:#dc2626">&#9888; API Key not set. Enter it in Settings tab then Save.</div>':''}
