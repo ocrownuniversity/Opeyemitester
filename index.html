@@ -1158,8 +1158,8 @@ throw new Error('Network error: '+netErr.message);
 }
 await logRef.update({
 httpStatus,
-rawResponse : raw.slice(0,4000),
-parsed      : parsed ? JSON.stringify(parsed).slice(0,8000) : '',
+rawResponse : raw.slice(0,1500),
+parsed      : parsed ? JSON.stringify(parsed).slice(0,2000) : '',
 status      : 'completed',
 respondedAt : firebase.firestore.FieldValue.serverTimestamp()
 }).catch(()=>{});
@@ -3742,19 +3742,12 @@ API Key &nbsp;<span style="color:#dc2626;font-size:10px;background:#fef2f2;paddi
 <input class="inp" id="api-callbackUrl" value="${cfg.callbackUrl||''}" placeholder="https://yourapp.com/callback"/>
 </div>
 <div style="background:#f8fafc;border-radius:10px;padding:12px;margin-bottom:14px">
-<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
-<div style="font-size:11px;font-weight:700;color:var(--g500);text-transform:uppercase;letter-spacing:.05em">API Endpoints</div>
-<button onclick="resetEndpointsToDefaults()" style="padding:5px 10px;background:#fef3c7;border:1px solid #fcd34d;color:#92400e;border-radius:7px;font-size:10px;font-weight:700;cursor:pointer;font-family:'Inter',sans-serif">&#9889; Reset to Latest</button>
-</div>
-<div style="font-size:10px;color:var(--g400);margin-bottom:8px">Highlighted fields differ from the current app's built-in defaults &mdash; usually means they're stale.</div>
-${Object.entries(API_DEFAULTS.endpoints).map(([k,v])=>{
-const savedVal = (cfg.endpoints&&cfg.endpoints[k])||v;
-const isStale = savedVal !== v;
-return `
+<div style="font-size:11px;font-weight:700;color:var(--g500);margin-bottom:8px;text-transform:uppercase;letter-spacing:.05em">API Endpoints</div>
+${Object.entries(API_DEFAULTS.endpoints).map(([k,v])=>`
 <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px">
 <span style="font-size:11px;color:var(--g500);min-width:80px;text-transform:capitalize">${k}</span>
-<input class="inp" id="api-ep-${k}" data-default="${v}" value="${savedVal}" style="padding:7px 10px;font-size:12px;${isStale?'border-color:#f59e0b;background:#fffbeb':''}"/>
-</div>`;}).join('')}
+<input class="inp" id="api-ep-${k}" value="${(cfg.endpoints&&cfg.endpoints[k])||v}" style="padding:7px 10px;font-size:12px"/>
+</div>`).join('')}
 </div>
 <div style="display:flex;gap:8px">
 <button onclick="testApiConnection()" style="flex:1;padding:11px;border-radius:10px;background:#dbeafe;border:1px solid #93c5fd;color:#1d4ed8;font-size:13px;font-weight:700;cursor:pointer;font-family:'Inter',sans-serif">&#128279; Test Connection</button>
@@ -3762,13 +3755,6 @@ return `
 </div>
 <div id="api-save-result" style="display:none;border-radius:10px;padding:11px;font-size:13px;margin-top:10px"></div>
 </div>`;
-}
-function resetEndpointsToDefaults(){
-Object.entries(API_DEFAULTS.endpoints).forEach(([k,v])=>{
-const inp = document.getElementById('api-ep-'+k);
-if(inp) inp.value = v;
-});
-toast('Endpoints reset to latest defaults. Click "Save Config" below to apply.');
 }
 function toggleApiEnabled(el){
 el.classList.toggle('on');
@@ -3905,9 +3891,8 @@ el.innerHTML=`
 <div style="font-weight:700;font-size:14px;margin-bottom:10px">&#128203; API Request Logs (last 50)</div>
 ${logs.map(lg=>{
 const ok = lg.status==='completed';
-let parsed = {};
-try{ parsed = lg.parsed ? JSON.parse(lg.parsed) : {}; }catch(e){ parsed = { _parseError:true, _raw:lg.parsed||lg.rawResponse||'' }; }
-const success = parsed._parseError ? false : isApiSuccess(parsed);
+const parsed = lg.parsed ? JSON.parse(lg.parsed||'{}') : {};
+const success = isApiSuccess(parsed);
 return `<div class="card" style="padding:12px;margin-bottom:8px;border-left:4px solid ${success?'var(--green)':lg.status==='pending'?'#d97706':'#dc2626'}">
 <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:6px">
 <div>
