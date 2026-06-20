@@ -2837,6 +2837,7 @@ const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getFirestore(app);
 const ADMIN_EMAIL = 'shopwitbenim@gmail.com';
+const ADMIN_WHATSAPP = '2349168031213';
 
 // ===== STATE SHIPPING FEES =====
 const STATE_SHIPPING_FEES = {"Lagos": 2500, "Abuja": 3500, "FCT": 3500, "Ogun": 3500, "Oyo": 1500, "Osun": 2000, "Ondo": 3500, "Ekiti": 3500, "Edo": 4500, "Delta": 4500, "Rivers": 4500, "Bayelsa": 5000, "Anambra": 4500, "Enugu": 4500, "Imo": 4500, "Abia": 5000, "Ebonyi": 5000, "Cross River": 5500, "Akwa Ibom": 5000, "Kano": 5000, "Kaduna": 5000, "Katsina": 5500, "Sokoto": 6000, "Kebbi": 6000, "Zamfara": 6000, "Niger": 5500, "Kwara": 3500, "Kogi": 5000, "Benue": 5500, "Plateau": 5500, "Nassarawa": 5000, "Taraba": 6000, "Adamawa": 6000, "Borno": 6500, "Yobe": 6500, "Gombe": 6000, "Bauchi": 6000, "Jigawa": 6000};
@@ -4984,6 +4985,68 @@ window.setDeliveryType = function(type) {
     if (totEl) totEl.innerHTML = '₦' + (subtotal + fee).toLocaleString();
   }
 };
+
+// ===== WHATSAPP ORDER NOTIFICATIONS =====
+// Notify admin (you) on WhatsApp when a new order comes in
+function notifyAdminWhatsApp(orderId, buyerName, buyerEmail, itemNames, subtotal, deliveryFee, payment, addrStr, buyerPhone, couponDiscount, couponCode, loyaltyDiscount) {
+  const paymentLabel = payment === 'bank' ? `🏦 Bank Transfer (${_accountDetails.bankName})`
+    : payment === 'wallet' ? '💰 Wallet'
+    : payment === 'paystack' ? '⚡ Paystack'
+    : '💵 Pay on Delivery';
+  const grandTotal = Math.max(0, subtotal - (couponDiscount||0) - (loyaltyDiscount||0) + (deliveryFee||0));
+  let msg = `🛍️ *New Order — Benim!*\n\n`
+    + `🆔 *Order ID:* ${orderId}\n`
+    + `👤 *Customer:* ${buyerName}\n`
+    + `📧 *Email:* ${buyerEmail}\n`
+    + (buyerPhone ? `📱 *Phone:* ${buyerPhone}\n` : '')
+    + (addrStr ? `📍 *Address:* ${addrStr}\n` : '')
+    + `\n📦 *Items:*\n${itemNames}\n\n`
+    + `💳 *Payment:* ${paymentLabel}\n`
+    + `💵 *Subtotal:* ₦${(subtotal||0).toLocaleString()}\n`
+    + (couponDiscount>0 ? `🏷️ *Coupon (${couponCode}):* -₦${couponDiscount.toLocaleString()}\n` : '')
+    + (loyaltyDiscount>0 ? `⭐ *Loyalty Discount:* -₦${loyaltyDiscount.toLocaleString()}\n` : '')
+    + `🚚 *Delivery Fee:* ₦${(deliveryFee||0).toLocaleString()}\n`
+    + `\n💰 *Grand Total:* ₦${grandTotal.toLocaleString()}\n\n`
+    + `Go to Admin Panel to process this order.`;
+  window.open('https://wa.me/'+ADMIN_WHATSAPP+'?text='+encodeURIComponent(msg), '_blank');
+}
+
+// Notify the buyer on WhatsApp about their order (placed or status-updated)
+function notifyBuyerWhatsApp(phone, orderId, status, itemNames, buyerName, total, deliveryFee) {
+  if (!phone) return; // no phone on file — skip silently
+  const cleanPhone = phone.replace(/[^0-9]/g,'');
+  const waNum = cleanPhone.startsWith('0') ? '234'+cleanPhone.slice(1) : cleanPhone;
+  const statusLabels = {
+    pending: '⏳ Pending Confirmation',
+    confirmed: '✅ Confirmed',
+    processing: '📦 Processing',
+    out_for_delivery: '🚚 Out for Delivery',
+    delivered: '🎉 Delivered',
+    cancelled: '❌ Cancelled'
+  };
+  const statusLabel = statusLabels[status] || status;
+  let msg;
+  if (status === 'pending') {
+    msg = `🛍️ *Order Confirmation — Benim!*\n\n`
+      + `Hi ${buyerName},\n\n`
+      + `Thank you for your order! Here's a summary:\n\n`
+      + `🆔 *Order ID:* ${orderId}\n`
+      + `📦 *Items:* ${itemNames}\n`
+      + `💰 *Total:* ₦${(total||0).toLocaleString()}\n`
+      + `🚚 *Delivery Fee:* ₦${(deliveryFee||0).toLocaleString()}\n\n`
+      + `Status: ${statusLabel}\n\n`
+      + `We'll keep you updated as your order progresses. Thank you for shopping with Benim! 🧡`;
+  } else {
+    msg = `📦 *Order Update — Benim!*\n\n`
+      + `Hi ${buyerName},\n\n`
+      + `Your order *${orderId}* status has been updated:\n\n`
+      + `${statusLabel}\n\n`
+      + `📦 *Items:* ${itemNames}\n`
+      + `💰 *Total:* ₦${(total||0).toLocaleString()}\n\n`
+      + `Thank you for shopping with Benim! 🧡`;
+  }
+  window.open('https://wa.me/'+waNum+'?text='+encodeURIComponent(msg), '_blank');
+}
 
 window.placeOrder = async function() {
   if(!currentUser) { navigate('login'); return; }
