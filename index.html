@@ -259,7 +259,11 @@ body.dark-mode .skeleton{background:linear-gradient(90deg,#1c1c1c 25%,#2a2a2a 37
 
 /* Product card skeleton */
 .skel-card{background:var(--surface);border-radius:var(--radius-lg);overflow:hidden;box-shadow:var(--shadow-sm);border:1px solid var(--border)}
-.skel-img{aspect-ratio:1;width:100%}
+.skel-img{aspect-ratio:1;width:100%;position:relative;display:flex;align-items:center;justify-content:center}
+.skel-img::after{content:'';position:absolute;width:34px;height:34px;border-radius:50%;background:var(--surface);display:flex;align-items:center;justify-content:center;box-shadow:0 1px 4px rgba(0,0,0,.1)}
+.skel-img::before{content:'\f290';font-family:'Font Awesome 6 Free';font-weight:900;position:absolute;z-index:1;font-size:14px;color:var(--gray-300);animation:none;background:none}
+body.dark-mode .skel-img::after{background:var(--surface)}
+body.dark-mode .skel-img::before{color:var(--gray-400)}
 .skel-line{height:12px;margin:10px 10px 0;border-radius:4px}
 .skel-line.short{width:55%;margin-top:8px;margin-bottom:10px}
 .skel-line.price{width:45%;height:16px;margin-top:8px}
@@ -627,6 +631,11 @@ body{padding-bottom:70px}
 
 /* ====== HERO SLIDER ref style ====== */
 .hero-slider{position:relative;overflow:hidden;border-radius:12px;margin:10px 14px;height:190px}
+.hero-slider-skel{width:100%;height:100%;position:relative;display:flex;align-items:center;justify-content:center}
+.hero-slider-skel::after{content:'';position:absolute;width:46px;height:46px;border-radius:50%;background:var(--surface);display:flex;align-items:center;justify-content:center;box-shadow:0 1px 4px rgba(0,0,0,.1)}
+.hero-slider-skel::before{content:'\f290';font-family:'Font Awesome 6 Free';font-weight:900;position:absolute;z-index:1;font-size:18px;color:var(--gray-300)}
+body.dark-mode .hero-slider-skel::after{background:var(--surface)}
+body.dark-mode .hero-slider-skel::before{color:var(--gray-400)}
 @media(min-width:480px){.hero-slider{height:220px}}
 @media(min-width:768px){.hero-slider{height:320px;margin:16px 20px}}
 .slides-container{display:flex;transition:transform .5s cubic-bezier(.4,0,.2,1);height:100%;will-change:transform}
@@ -989,7 +998,9 @@ body{padding-bottom:65px!important;background:var(--bg)!important}
   <!-- Hero Slider -->
   <div class="hero-slider">
     <div class="slides-container" id="slides">
-      <!-- Slides rendered by JS from Firestore / defaults -->
+      <!-- Static skeleton shown instantly on page load, before Firestore/JS finishes.
+           JS replaces this content once real slides are ready. -->
+      <div class="skeleton hero-slider-skel"></div>
     </div>
     <button class="slider-prev" onclick="changeSlide(-1)"><i class="fas fa-chevron-left"></i></button>
     <button class="slider-next" onclick="changeSlide(1)"><i class="fas fa-chevron-right"></i></button>
@@ -1013,7 +1024,7 @@ body{padding-bottom:65px!important;background:var(--bg)!important}
       </div>
       <a class="home-see-all" onclick="navigate('search')">See All <i class="fas fa-chevron-right"></i></a>
     </div>
-    <div class="product-grid" id="flash-grid"></div>
+    <div class="product-grid skel-wrap" id="flash-grid"><div class="skel-card"><div class="skel-img skeleton"></div><div class="skel-line skeleton"></div><div class="skel-line short skeleton"></div><div class="skel-line price skeleton"></div><div class="skel-line btn skeleton"></div></div><div class="skel-card"><div class="skel-img skeleton"></div><div class="skel-line skeleton"></div><div class="skel-line short skeleton"></div><div class="skel-line price skeleton"></div><div class="skel-line btn skeleton"></div></div><div class="skel-card"><div class="skel-img skeleton"></div><div class="skel-line skeleton"></div><div class="skel-line short skeleton"></div><div class="skel-line price skeleton"></div><div class="skel-line btn skeleton"></div></div><div class="skel-card"><div class="skel-img skeleton"></div><div class="skel-line skeleton"></div><div class="skel-line short skeleton"></div><div class="skel-line price skeleton"></div><div class="skel-line btn skeleton"></div></div></div>
   </div>
 
   <!-- Featured Products -->
@@ -1022,7 +1033,7 @@ body{padding-bottom:65px!important;background:var(--bg)!important}
       <div class="home-section-title">Featured Products</div>
       <a class="home-see-all" onclick="navigate('search')">See All <i class="fas fa-chevron-right"></i></a>
     </div>
-    <div class="product-grid" id="featured-grid"></div>
+    <div class="product-grid skel-wrap" id="featured-grid"><div class="skel-card"><div class="skel-img skeleton"></div><div class="skel-line skeleton"></div><div class="skel-line short skeleton"></div><div class="skel-line price skeleton"></div><div class="skel-line btn skeleton"></div></div><div class="skel-card"><div class="skel-img skeleton"></div><div class="skel-line skeleton"></div><div class="skel-line short skeleton"></div><div class="skel-line price skeleton"></div><div class="skel-line btn skeleton"></div></div><div class="skel-card"><div class="skel-img skeleton"></div><div class="skel-line skeleton"></div><div class="skel-line short skeleton"></div><div class="skel-line price skeleton"></div><div class="skel-line btn skeleton"></div></div><div class="skel-card"><div class="skel-img skeleton"></div><div class="skel-line skeleton"></div><div class="skel-line short skeleton"></div><div class="skel-line price skeleton"></div><div class="skel-line btn skeleton"></div></div></div>
   </div>
 
   <!-- Trending -->
@@ -1031,7 +1042,7 @@ body{padding-bottom:65px!important;background:var(--bg)!important}
       <div class="home-section-title">Trending Now</div>
       <a class="home-see-all" onclick="navigate('search')">See All <i class="fas fa-chevron-right"></i></a>
     </div>
-    <div class="product-grid" id="trending-grid"></div>
+    <div class="product-grid skel-wrap" id="trending-grid"><div class="skel-card"><div class="skel-img skeleton"></div><div class="skel-line skeleton"></div><div class="skel-line short skeleton"></div><div class="skel-line price skeleton"></div><div class="skel-line btn skeleton"></div></div><div class="skel-card"><div class="skel-img skeleton"></div><div class="skel-line skeleton"></div><div class="skel-line short skeleton"></div><div class="skel-line price skeleton"></div><div class="skel-line btn skeleton"></div></div><div class="skel-card"><div class="skel-img skeleton"></div><div class="skel-line skeleton"></div><div class="skel-line short skeleton"></div><div class="skel-line price skeleton"></div><div class="skel-line btn skeleton"></div></div><div class="skel-card"><div class="skel-img skeleton"></div><div class="skel-line skeleton"></div><div class="skel-line short skeleton"></div><div class="skel-line price skeleton"></div><div class="skel-line btn skeleton"></div></div></div>
   </div>
   <!-- RECENTLY VIEWED -->
   <div class="home-section" id="recently-viewed-section" style="display:none">
@@ -4311,6 +4322,7 @@ function swapSkeletonContent(el, htmlOrFn) {
 function renderProductGrid(gridId, products, isFlash=false) {
   const grid = document.getElementById(gridId);
   if(!grid) return;
+  grid.classList.remove('skel-wrap');
   if(!products||!products.length) {
     grid.innerHTML = `<div style="grid-column:1/-1;text-align:center;padding:30px;color:var(--gray-400)">No products found</div>`;
     return;
