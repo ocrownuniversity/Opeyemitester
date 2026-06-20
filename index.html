@@ -1383,74 +1383,31 @@ if(infoEl){ infoEl.style.display='block'; infoEl.style.color='#dc2626'; infoEl.t
 console.error('[PLANS] fetchPlansForNetwork error:', e.message, e);
 }
 }
-function extractAllCablePackages(res){
-if(!res || typeof res !== 'object') return [];
-function productToplan(prod, idx){
-const pid   = prod.PRODUCT_ID   || prod.product_id   || prod.PACKAGE_ID   || prod.package_id   || '';
-const pcode = prod.PRODUCT_CODE || prod.product_code || prod.PACKAGE_CODE || prod.package_code || prod.code || '';
-const psno  = prod.PRODUCT_SNO  || prod.SNO          || '';
-const planId = pid || pcode || psno || String(idx+1);
-return {
-variation_code   : String(planId),
-variation_sno    : String(psno),
-variation_name   : String(prod.PRODUCT_NAME || prod.product_name || prod.PACKAGE_NAME || prod.package_name || prod.description || prod.DESCRIPTION || prod.name || ''),
-variation_amount : String(prod.PRODUCT_AMOUNT || prod.product_amount || prod.PACKAGE_AMOUNT || prod.package_amount || prod.price || prod.AMOUNT || prod.PRICE || prod.amount || 0),
-description      : String(prod.PRODUCT_NAME || prod.product_name || prod.PACKAGE_NAME || prod.package_name || prod.description || prod.DESCRIPTION || prod.name || '')
-};
-}
-function collectFromArray(arr){ return (arr||[]).map((p,i)=>productToplan(p,i)); }
-const wrapperKey = Object.keys(res).find(k => /MOBILE_NETWORK|CABLE_TV|CABLETV|TV_PACKAGE|TV_ID|PACKAGE|NETWORK/i.test(k));
-const root = wrapperKey ? res[wrapperKey] : res;
-console.log('[CABLE-ALL] wrapperKey:', wrapperKey, '| root type:', Array.isArray(root)?'array':typeof root);
-let all = [];
-if(Array.isArray(root)){
-all = collectFromArray(root);
-}else if(root && typeof root === 'object'){
-Object.keys(root).forEach(provKey=>{
-const section = root[provKey];
-if(Array.isArray(section)){
-all = all.concat(collectFromArray(section));
-}else if(section && typeof section === 'object'){
-const inner = section.PRODUCT || section.products || section.Plans || section.PACKAGE || section.Packages;
-if(Array.isArray(inner)) all = all.concat(collectFromArray(inner));
-}
-});
-}
-console.log('[CABLE-ALL] Total packages extracted across all providers:', all.length);
-return all;
-}
 async function fetchCablePlans(provider){
 const sel    = document.getElementById('s-amt');
 const loadEl = document.getElementById('data-loading');
 const infoEl = document.getElementById('data-info');
 if(!sel) return;
-const providerLc = provider.toLowerCase();
-if(planCache['cable_all']){
-const filtered = planCache['cable_all'].filter(p=>p.variation_code.toLowerCase().startsWith(providerLc));
-renderPlans(filtered, sel, infoEl);
+// Confirmed real response shape: {"TV_ID":{"DStv":[{"ID":"dstv","PRODUCT":[...]}], "GOtv":[...], ...}}
+// This is the SAME pattern as Data plans, so we reuse the already-proven extractNBSPlans
+// function instead of custom logic. Cache the raw combined response once, then re-extract
+// per provider on each switch (cheap, synchronous, no extra network calls needed).
+if(planCache['cable_raw_response']){
+const plans = extractNBSPlans(planCache['cable_raw_response'], provider);
+renderPlans(plans, sel, infoEl);
 return;
 }
 if(loadEl){ loadEl.style.display='block'; loadEl.textContent='[Loading] Loading packages...'; }
 sel.innerHTML = '<option value="">Loading packages...</option>';
-console.log('[PLANS] Fetching cable plans (combined list) for provider filter:', providerLc);
+console.log('[PLANS] Fetching cable plans (combined list) for provider:', provider);
 try{
-// Confirmed real endpoint takes no provider filter -- it returns ALL
-// providers' packages together (codes prefixed e.g. dstv-padi, gotv-jolli).
-let res = await apiFetch('cablePlans', {});
-let allPlans = extractAllCablePackages(res);
-if(!allPlans.length){
-// Fallback: maybe filtering by CableTV IS supported/required after all
-res = await apiFetch('cablePlans', { CableTV: providerLc });
-allPlans = extractAllCablePackages(res);
-}
+const res = await apiFetch('cablePlans', {});
+planCache['cable_raw_response'] = res;
+const plans = extractNBSPlans(res, provider);
 if(loadEl) loadEl.style.display='none';
-console.log('[PLANS] Cable final response:', JSON.stringify(res).slice(0,500));
-console.log('[PLANS] Cable total plans (all providers):', allPlans.length);
-if(allPlans.length){
-planCache['cable_all'] = allPlans;
-const filtered = allPlans.filter(p=>p.variation_code.toLowerCase().startsWith(providerLc));
-console.log('[PLANS] Cable plans for', providerLc, ':', filtered.length);
-renderPlans(filtered.length?filtered:allPlans, sel, infoEl);
+console.log('[PLANS] Cable plans for', provider, ':', plans.length);
+if(plans.length){
+renderPlans(plans, sel, infoEl);
 } else {
 const rawStr = JSON.stringify(res).slice(0,300);
 sel.innerHTML = '<option value="">No packages available</option>';
