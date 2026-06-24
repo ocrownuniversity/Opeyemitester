@@ -22,43 +22,7 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 <style>
 :root{
---orange:#f68b1e;
---orange-light:#ffa040;
---orange-dark:#e07b10;
---white:#ffffff;
---bg:#f5f5f5;
---surface:#ffffff;
---surface2:#f9fafb;
---border:#e5e7eb;
---text:#1f2937;
---text-muted:#6b7280;
---gray-50:#f9fafb;
---gray-100:#f3f4f6;
---gray-200:#e5e7eb;
---gray-300:#d1d5db;
---gray-400:#9ca3af;
---gray-500:#6b7280;
---gray-600:#4b5563;
---gray-700:#374151;
---gray-800:#1f2937;
---gray-900:#111827;
---green:#3a7d2c;
---red:#c1001f;
---yellow:#f59e0b;
---shadow-sm:0 1px 2px rgba(0,0,0,.05);
---shadow:0 2px 8px rgba(0,0,0,.1);
---shadow-md:0 4px 16px rgba(0,0,0,.12);
---shadow-lg:0 8px 32px rgba(0,0,0,.15);
---radius:8px;
---radius-lg:12px;
---radius-xl:16px;
---bg:#f5f5f5;
---surface:#ffffff;
---surface2:#f9fafb;
---border:#e5e7eb;
---text:#1f2937;
---text-muted:#6b7280;
-}
+--orange:#f68b1e;--orange-light:#ffa040;--orange-dark:#e07b10;--white:#ffffff;--bg:#f5f5f5;--surface:#ffffff;--surface2:#f9fafb;--border:#e5e7eb;--text:#1f2937;--text-muted:#6b7280;--gray-50:#f9fafb;--gray-100:#f3f4f6;--gray-200:#e5e7eb;--gray-300:#d1d5db;--gray-400:#9ca3af;--gray-500:#6b7280;--gray-600:#4b5563;--gray-700:#374151;--gray-800:#1f2937;--gray-900:#111827;--green:#3a7d2c;--red:#c1001f;--yellow:#f59e0b;--shadow-sm:0 1px 2px rgba(0,0,0,.05);--shadow:0 2px 8px rgba(0,0,0,.1);--shadow-md:0 4px 16px rgba(0,0,0,.12);--shadow-lg:0 8px 32px rgba(0,0,0,.15);--radius:8px;--radius-lg:12px;--radius-xl:16px;--bg:#f5f5f5;--surface:#ffffff;--surface2:#f9fafb;--border:#e5e7eb;--text:#1f2937;--text-muted:#6b7280;}
 #pwa-install-banner{
 position:fixed!important;top:0!important;left:0!important;right:0!important;z-index:99999!important;background:linear-gradient(135deg,#f68b1e,#c1001f)!important;color:#fff!important;padding:12px 14px!important;display:none!important;align-items:center!important;gap:10px!important;box-shadow:0 4px 16px rgba(0,0,0,.35)!important;border-bottom:none!important}
 #pwa-install-banner.show{
@@ -1162,12 +1126,6 @@ input:focus,textarea:focus,select:focus{border-color:#f68b1e !important;box-shad
 .switch input:checked + .slider:before{transform:translateX(22px)}
 .pw-eye-btn{position:absolute;right:8px;top:50%;transform:translateY(-50%);background:none;border:none;color:var(--gray-400);font-size:16px;cursor:pointer;padding:6px;display:flex;align-items:center;justify-content:center}
 .pw-eye-btn:hover{color:var(--gray-600)}
-
-.skel-hero{position:absolute;inset:0;background:linear-gradient(90deg,#ebebeb 25%,#f5f5f5 50%,#ebebeb 75%);background-size:200% 100%;animation:shimmer 1.4s infinite;display:flex;align-items:center;justify-content:center;z-index:1}
-.skel-hero-inner{display:flex;flex-direction:column;align-items:center;gap:14px}
-.skel-hero-circle{width:90px;height:90px;border-radius:50%;background:#fff;box-shadow:0 4px 24px rgba(0,0,0,.13);display:flex;align-items:center;justify-content:center}
-.skel-hero-logo{width:56px;height:56px;border-radius:14px;background:linear-gradient(135deg,#ffb347,#f68b1e);display:flex;align-items:center;justify-content:center;font-family:Arial Black,sans-serif;font-weight:900;font-size:28px;color:#fff}
-.skel-hero-name{font-family:Poppins,sans-serif;font-weight:900;font-size:18px;color:rgba(0,0,0,.18);letter-spacing:1px}
 </style>
 </head>
 <body>
@@ -1335,13 +1293,17 @@ input:focus,textarea:focus,select:focus{border-color:#f68b1e !important;box-shad
 
 <!-- HERO SLIDER -->
 <div class="hero-slider">
-  <div class="slides-container" id="slides"></div>
-  <div id="slider-skeleton" class="skel-hero">
-    <div class="skel-hero-inner">
-      <div class="skel-hero-circle">
-        <div class="skel-hero-logo">Z</div>
+  <div class="slides-container" id="slides">
+    <!-- ZMARKET pre-load placeholder shown before Firebase loads banners -->
+    <div class="slide slide-1" id="slide-preload" style="display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden;min-width:100%">
+      <div style="position:absolute;inset:0;background:linear-gradient(110deg,#f68b1e 0%,#ff7a3c 100%)"></div>
+      <div style="position:relative;z-index:2;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;text-align:center">
+        <div style="width:72px;height:72px;border-radius:20px;background:rgba(255,255,255,0.18);display:flex;align-items:center;justify-content:center;box-shadow:0 4px 24px rgba(0,0,0,0.18)">
+          <svg viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg" style="width:56px;height:56px"><defs><linearGradient id="zg2" x1="0" y1="0" x2="80" y2="80" gradientUnits="userSpaceOnUse"><stop offset="0%" stop-color="#fff"/><stop offset="100%" stop-color="#ffe0b2"/></linearGradient></defs><rect width="80" height="80" rx="18" fill="url(#zg2)" fill-opacity="0.15"/><text x="50%" y="58%" text-anchor="middle" dominant-baseline="middle" font-family="Arial Black,Arial,sans-serif" font-weight="900" font-size="52" fill="#fff" letter-spacing="-2">Z</text></svg>
+        </div>
+        <span style="font-family:'Poppins',sans-serif;font-weight:900;font-size:28px;color:#fff;letter-spacing:-0.5px;line-height:1;text-shadow:0 2px 8px rgba(0,0,0,0.18)">ZMARKET</span>
+        <span style="font-size:12px;color:rgba(255,255,255,0.85);font-weight:600;letter-spacing:0.5px">Shop Smart. Save More.</span>
       </div>
-      <div class="skel-hero-name">ZMARKET</div>
     </div>
   </div>
   <button class="slider-prev" onclick="changeSlide(-1)"><i class="fas fa-chevron-left"></i></button>
@@ -1710,7 +1672,7 @@ input:focus,textarea:focus,select:focus{border-color:#f68b1e !important;box-shad
       <div class="bank-info hidden" id="bank-info">
         <p style="font-weight:800;margin-bottom:8px;color:var(--orange)"><i class="fas fa-university"></i> Transfer Details</p>
         <p><strong>Bank:</strong> Opay</p>
-        <p><strong>Account Name:</strong> Zmarket Service</p>
+        <p><strong>Account Name:</strong> ZMARKET Service</p>
         <p><strong>Account Number:</strong> <strong style="font-size:22px;color:var(--orange);letter-spacing:3px">6559561420</strong></p>
         <p style="margin-top:10px;color:var(--red);font-size:12px"><i class="fas fa-exclamation-triangle"></i> Transfer exact amount and send payment proof to WhatsApp: <a href="https://wa.me/2348149825555" target="_blank" style="color:var(--orange);font-weight:700">+234 814 982 5555</a></p>
       </div>
@@ -1859,26 +1821,8 @@ input:focus,textarea:focus,select:focus{border-color:#f68b1e !important;box-shad
       <h2 class="auth-title">Create New Password</h2>
       <p class="auth-subtitle" id="reset-subtitle">Enter your new password below</p>
       <div id="reset-form-wrap">
-        <div class="form-group">
-        <label class="form-label">New Password</label>
-        <div style="position:relative">
-        <input class="form-input" id="reset-new-password" type="password" placeholder="Minimum 6 characters" style="padding-right:42px">
-        <button type="button" class="pw-eye-btn" onclick="togglePwVisibility('reset-new-password',this)" aria-label="Show password">
-        <i class="fas fa-eye">
-        </i>
-        </button>
-        </div>
-        </div>
-        <div class="form-group">
-        <label class="form-label">Confirm Password</label>
-        <div style="position:relative">
-        <input class="form-input" id="reset-confirm-password" type="password" placeholder="Re-enter new password" style="padding-right:42px">
-        <button type="button" class="pw-eye-btn" onclick="togglePwVisibility('reset-confirm-password',this)" aria-label="Show password">
-        <i class="fas fa-eye">
-        </i>
-        </button>
-        </div>
-        </div>
+        <div class="form-group"><label class="form-label">New Password</label><div style="position:relative"><input class="form-input" id="reset-new-password" type="password" placeholder="Minimum 6 characters" style="padding-right:42px"><button type="button" class="pw-eye-btn" onclick="togglePwVisibility('reset-new-password',this)" aria-label="Show password"><i class="fas fa-eye"></i></button></div></div>
+        <div class="form-group"><label class="form-label">Confirm Password</label><div style="position:relative"><input class="form-input" id="reset-confirm-password" type="password" placeholder="Re-enter new password" style="padding-right:42px"><button type="button" class="pw-eye-btn" onclick="togglePwVisibility('reset-confirm-password',this)" aria-label="Show password"><i class="fas fa-eye"></i></button></div></div>
         <button class="btn-auth" id="reset-submit-btn" onclick="submitNewPassword()"><i class="fas fa-key"></i> Set New Password</button>
       </div>
       <div id="reset-invalid" class="hidden" style="background:#fef2f2;border:1px solid #fca5a5;border-radius:8px;padding:14px;margin-top:14px;text-align:center">
@@ -1917,38 +1861,7 @@ input:focus,textarea:focus,select:focus{border-color:#f68b1e !important;box-shad
 
     <!-- Transaction history -->
     <h3 style="font-size:15px;font-weight:800;margin-bottom:10px;color:var(--text)">Transaction History</h3>
-    <div id="wallet-transactions-list">
-    <div class="skel-row">
-    <div class="skel-avatar skeleton">
-    </div>
-    <div class="skel-row-body">
-    <div class="skel-row-line w80 skeleton">
-    </div>
-    <div class="skel-row-line w50 skeleton">
-    </div>
-    </div>
-    </div>
-    <div class="skel-row">
-    <div class="skel-avatar skeleton">
-    </div>
-    <div class="skel-row-body">
-    <div class="skel-row-line w80 skeleton">
-    </div>
-    <div class="skel-row-line w50 skeleton">
-    </div>
-    </div>
-    </div>
-    <div class="skel-row">
-    <div class="skel-avatar skeleton">
-    </div>
-    <div class="skel-row-body">
-    <div class="skel-row-line w80 skeleton">
-    </div>
-    <div class="skel-row-line w50 skeleton">
-    </div>
-    </div>
-    </div>
-    </div>
+    <div id="wallet-transactions-list"><div class="skel-row"><div class="skel-avatar skeleton"></div><div class="skel-row-body"><div class="skel-row-line w80 skeleton"></div><div class="skel-row-line w50 skeleton"></div></div></div><div class="skel-row"><div class="skel-avatar skeleton"></div><div class="skel-row-body"><div class="skel-row-line w80 skeleton"></div><div class="skel-row-line w50 skeleton"></div></div></div><div class="skel-row"><div class="skel-avatar skeleton"></div><div class="skel-row-body"><div class="skel-row-line w80 skeleton"></div><div class="skel-row-line w50 skeleton"></div></div></div></div>
   </div>
 </div>
 
@@ -2019,38 +1932,7 @@ input:focus,textarea:focus,select:focus{border-color:#f68b1e !important;box-shad
       </div>
 
       <h3 style="font-size:15px;font-weight:800;margin-bottom:10px;color:var(--text)">Referral History</h3>
-      <div id="referral-history-list">
-      <div class="skel-row">
-      <div class="skel-avatar skeleton">
-      </div>
-      <div class="skel-row-body">
-      <div class="skel-row-line w80 skeleton">
-      </div>
-      <div class="skel-row-line w50 skeleton">
-      </div>
-      </div>
-      </div>
-      <div class="skel-row">
-      <div class="skel-avatar skeleton">
-      </div>
-      <div class="skel-row-body">
-      <div class="skel-row-line w80 skeleton">
-      </div>
-      <div class="skel-row-line w50 skeleton">
-      </div>
-      </div>
-      </div>
-      <div class="skel-row">
-      <div class="skel-avatar skeleton">
-      </div>
-      <div class="skel-row-body">
-      <div class="skel-row-line w80 skeleton">
-      </div>
-      <div class="skel-row-line w50 skeleton">
-      </div>
-      </div>
-      </div>
-      </div>
+      <div id="referral-history-list"><div class="skel-row"><div class="skel-avatar skeleton"></div><div class="skel-row-body"><div class="skel-row-line w80 skeleton"></div><div class="skel-row-line w50 skeleton"></div></div></div><div class="skel-row"><div class="skel-avatar skeleton"></div><div class="skel-row-body"><div class="skel-row-line w80 skeleton"></div><div class="skel-row-line w50 skeleton"></div></div></div><div class="skel-row"><div class="skel-avatar skeleton"></div><div class="skel-row-body"><div class="skel-row-line w80 skeleton"></div><div class="skel-row-line w50 skeleton"></div></div></div></div>
     </div>
   </div>
 </div>
@@ -2129,11 +2011,9 @@ input:focus,textarea:focus,select:focus{border-color:#f68b1e !important;box-shad
       <button class="admin-tab" data-admin-tab="chats" data-role-tab="superadmin,manager,subadmin" onclick="switchAdminTab('chats',this)">&#128172; Chats</button>
       <button class="admin-tab" data-admin-tab="manageadmins" data-role-tab="superadmin" onclick="switchAdminTab('manageadmins',this)" style="background:#1e3a8a;color:#fff;border-color:#1e3a8a">&#128737; Manage Admins</button>
       <button class="admin-tab" data-admin-tab="bulkimport" data-role-tab="superadmin,manager,uploader" onclick="switchAdminTab('bulkimport',this)" style="background:#065f46;color:#fff;border-color:#065f46">&#128196; Bulk Import</button>
-      <button class="admin-tab" data-admin-tab="resetrequests" data-role-tab="superadmin,manager,subadmin" onclick="switchAdminTab('resetrequests',this)" style="background:#7c2d12;color:#fff;border-color:#7c2d12">&#128273; Reset Requests <span id="reset-pending-badge" class="hidden" style="background:#fff;color:#7c2d12;font-size:10px;font-weight:900;padding:2px 6px;border-radius:10px;margin-left:4px">0</span>
-      </button>
+      <button class="admin-tab" data-admin-tab="resetrequests" data-role-tab="superadmin,manager,subadmin" onclick="switchAdminTab('resetrequests',this)" style="background:#7c2d12;color:#fff;border-color:#7c2d12">&#128273; Reset Requests <span id="reset-pending-badge" class="hidden" style="background:#fff;color:#7c2d12;font-size:10px;font-weight:900;padding:2px 6px;border-radius:10px;margin-left:4px">0</span></button>
       <button class="admin-tab" data-admin-tab="paymentsettings" data-role-tab="superadmin" onclick="switchAdminTab('paymentsettings',this)" style="background:#0f766e;color:#fff;border-color:#0f766e">&#128179; Paystack Settings</button>
-      <button class="admin-tab" data-admin-tab="walletmgmt" data-role-tab="superadmin,manager" onclick="switchAdminTab('walletmgmt',this)" style="background:#92400e;color:#fff;border-color:#92400e">&#128176; Wallet &amp; Funding <span id="funding-pending-badge" class="hidden" style="background:#fff;color:#92400e;font-size:10px;font-weight:900;padding:2px 6px;border-radius:10px;margin-left:4px">0</span>
-      </button>
+      <button class="admin-tab" data-admin-tab="walletmgmt" data-role-tab="superadmin,manager" onclick="switchAdminTab('walletmgmt',this)" style="background:#92400e;color:#fff;border-color:#92400e">&#128176; Wallet &amp; Funding <span id="funding-pending-badge" class="hidden" style="background:#fff;color:#92400e;font-size:10px;font-weight:900;padding:2px 6px;border-radius:10px;margin-left:4px">0</span></button>
       <button class="admin-tab" data-admin-tab="referralsettings" data-role-tab="superadmin" onclick="switchAdminTab('referralsettings',this)" style="background:#6d28d9;color:#fff;border-color:#6d28d9">&#127873; Referral Settings</button>
     </div>
     
@@ -2144,38 +2024,7 @@ input:focus,textarea:focus,select:focus{border-color:#f68b1e !important;box-shad
           <button class="btn-primary" onclick="showCouponModal()"><i class="fas fa-plus"></i> New Coupon</button>
         </div>
         <p style="font-size:12px;color:var(--gray-500);margin-bottom:14px">Create and manage coupon codes with expiry date, usage limit, and minimum order amount.</p>
-        <div id="admin-coupons-list">
-        <div class="skel-row">
-        <div class="skel-avatar skeleton">
-        </div>
-        <div class="skel-row-body">
-        <div class="skel-row-line w80 skeleton">
-        </div>
-        <div class="skel-row-line w50 skeleton">
-        </div>
-        </div>
-        </div>
-        <div class="skel-row">
-        <div class="skel-avatar skeleton">
-        </div>
-        <div class="skel-row-body">
-        <div class="skel-row-line w80 skeleton">
-        </div>
-        <div class="skel-row-line w50 skeleton">
-        </div>
-        </div>
-        </div>
-        <div class="skel-row">
-        <div class="skel-avatar skeleton">
-        </div>
-        <div class="skel-row-body">
-        <div class="skel-row-line w80 skeleton">
-        </div>
-        <div class="skel-row-line w50 skeleton">
-        </div>
-        </div>
-        </div>
-        </div>
+        <div id="admin-coupons-list"><div class="skel-row"><div class="skel-avatar skeleton"></div><div class="skel-row-body"><div class="skel-row-line w80 skeleton"></div><div class="skel-row-line w50 skeleton"></div></div></div><div class="skel-row"><div class="skel-avatar skeleton"></div><div class="skel-row-body"><div class="skel-row-line w80 skeleton"></div><div class="skel-row-line w50 skeleton"></div></div></div><div class="skel-row"><div class="skel-avatar skeleton"></div><div class="skel-row-body"><div class="skel-row-line w80 skeleton"></div><div class="skel-row-line w50 skeleton"></div></div></div></div>
       </div>
       <div class="admin-card" style="margin-top:14px">
         <div class="admin-card-title">&#11088; Loyalty Points</div>
@@ -2210,71 +2059,9 @@ input:focus,textarea:focus,select:focus{border-color:#f68b1e !important;box-shad
           </div>
         </div>
         <div class="admin-card-title" style="margin-top:16px">&#128230; Low Stock Alert</div>
-        <div id="low-stock-list">
-        <div class="skel-row">
-        <div class="skel-avatar skeleton">
-        </div>
-        <div class="skel-row-body">
-        <div class="skel-row-line w80 skeleton">
-        </div>
-        <div class="skel-row-line w50 skeleton">
-        </div>
-        </div>
-        </div>
-        <div class="skel-row">
-        <div class="skel-avatar skeleton">
-        </div>
-        <div class="skel-row-body">
-        <div class="skel-row-line w80 skeleton">
-        </div>
-        <div class="skel-row-line w50 skeleton">
-        </div>
-        </div>
-        </div>
-        <div class="skel-row">
-        <div class="skel-avatar skeleton">
-        </div>
-        <div class="skel-row-body">
-        <div class="skel-row-line w80 skeleton">
-        </div>
-        <div class="skel-row-line w50 skeleton">
-        </div>
-        </div>
-        </div>
-        </div>
+        <div id="low-stock-list"><div class="skel-row"><div class="skel-avatar skeleton"></div><div class="skel-row-body"><div class="skel-row-line w80 skeleton"></div><div class="skel-row-line w50 skeleton"></div></div></div><div class="skel-row"><div class="skel-avatar skeleton"></div><div class="skel-row-body"><div class="skel-row-line w80 skeleton"></div><div class="skel-row-line w50 skeleton"></div></div></div><div class="skel-row"><div class="skel-avatar skeleton"></div><div class="skel-row-body"><div class="skel-row-line w80 skeleton"></div><div class="skel-row-line w50 skeleton"></div></div></div></div>
         <div class="admin-card-title" style="margin-top:16px">&#127942; Top Selling Products</div>
-        <div id="top-products-list">
-        <div class="skel-row">
-        <div class="skel-avatar skeleton">
-        </div>
-        <div class="skel-row-body">
-        <div class="skel-row-line w80 skeleton">
-        </div>
-        <div class="skel-row-line w50 skeleton">
-        </div>
-        </div>
-        </div>
-        <div class="skel-row">
-        <div class="skel-avatar skeleton">
-        </div>
-        <div class="skel-row-body">
-        <div class="skel-row-line w80 skeleton">
-        </div>
-        <div class="skel-row-line w50 skeleton">
-        </div>
-        </div>
-        </div>
-        <div class="skel-row">
-        <div class="skel-avatar skeleton">
-        </div>
-        <div class="skel-row-body">
-        <div class="skel-row-line w80 skeleton">
-        </div>
-        <div class="skel-row-line w50 skeleton">
-        </div>
-        </div>
-        </div>
-        </div>
+        <div id="top-products-list"><div class="skel-row"><div class="skel-avatar skeleton"></div><div class="skel-row-body"><div class="skel-row-line w80 skeleton"></div><div class="skel-row-line w50 skeleton"></div></div></div><div class="skel-row"><div class="skel-avatar skeleton"></div><div class="skel-row-body"><div class="skel-row-line w80 skeleton"></div><div class="skel-row-line w50 skeleton"></div></div></div><div class="skel-row"><div class="skel-avatar skeleton"></div><div class="skel-row-body"><div class="skel-row-line w80 skeleton"></div><div class="skel-row-line w50 skeleton"></div></div></div></div>
         <div class="admin-card-title" style="margin-top:16px">&#128197; Revenue Last 7 Days</div>
         <div id="revenue-chart" style="padding:10px 0"></div>
         <div id="revenue-goal-section" style="margin-top:16px;background:var(--gray-50);border-radius:10px;padding:14px"></div>
@@ -2391,38 +2178,7 @@ input:focus,textarea:focus,select:focus{border-color:#f68b1e !important;box-shad
           </div>
           <button class="btn-primary" onclick="addSubAdmin()" style="background:#1e3a8a;border-color:#1e3a8a;flex-shrink:0;padding:11px 18px"><i class="fas fa-user-plus"></i> Add</button>
         </div>
-        <div id="sub-admin-list">
-        <div class="skel-row">
-        <div class="skel-avatar skeleton">
-        </div>
-        <div class="skel-row-body">
-        <div class="skel-row-line w80 skeleton">
-        </div>
-        <div class="skel-row-line w50 skeleton">
-        </div>
-        </div>
-        </div>
-        <div class="skel-row">
-        <div class="skel-avatar skeleton">
-        </div>
-        <div class="skel-row-body">
-        <div class="skel-row-line w80 skeleton">
-        </div>
-        <div class="skel-row-line w50 skeleton">
-        </div>
-        </div>
-        </div>
-        <div class="skel-row">
-        <div class="skel-avatar skeleton">
-        </div>
-        <div class="skel-row-body">
-        <div class="skel-row-line w80 skeleton">
-        </div>
-        <div class="skel-row-line w50 skeleton">
-        </div>
-        </div>
-        </div>
-        </div>
+        <div id="sub-admin-list"><div class="skel-row"><div class="skel-avatar skeleton"></div><div class="skel-row-body"><div class="skel-row-line w80 skeleton"></div><div class="skel-row-line w50 skeleton"></div></div></div><div class="skel-row"><div class="skel-avatar skeleton"></div><div class="skel-row-body"><div class="skel-row-line w80 skeleton"></div><div class="skel-row-line w50 skeleton"></div></div></div><div class="skel-row"><div class="skel-avatar skeleton"></div><div class="skel-row-body"><div class="skel-row-line w80 skeleton"></div><div class="skel-row-line w50 skeleton"></div></div></div></div>
       </div>
     </div>
 
@@ -2860,7 +2616,7 @@ input:focus,textarea:focus,select:focus{border-color:#f68b1e !important;box-shad
       </div>
       <div class="contact-card">
         <i class="fas fa-envelope"></i>
-        <div><h4>Email</h4><p>Send us an email<br><a href="mailto:Zmarketmarket@gmail.com">Zmarketmarket@gmail.com</a></p></div>
+        <div><h4>Email</h4><p>Send us an email<br><a href="mailto:Zmoniemarket@gmail.com">Zmoniemarket@gmail.com</a></p></div>
       </div>
       <div class="contact-card">
         <i class="fas fa-clock"></i>
@@ -3069,7 +2825,7 @@ input:focus,textarea:focus,select:focus{border-color:#f68b1e !important;box-shad
       <ul>
         <li>You may request access to, correction of, or deletion of your personal data at any time.</li>
         <li>You may opt out of marketing communications.</li>
-        <li>Contact us at Zmarketmarket@gmail.com to exercise your rights.</li>
+        <li>Contact us at Zmoniemarket@gmail.com to exercise your rights.</li>
       </ul>
     </div>
     <div class="fp-section">
@@ -3092,7 +2848,7 @@ input:focus,textarea:focus,select:focus{border-color:#f68b1e !important;box-shad
       <h3>2. Orders & Payment</h3>
       <ul>
         <li>All prices are in Nigerian Naira (&#8358;) and include applicable taxes.</li>
-        <li>For Bank Transfer orders, payment must be made to: Opay | Zmarket Service | 6559561420. Send proof of payment via WhatsApp after transfer.</li>
+        <li>For Bank Transfer orders, payment must be made to: Opay | ZMARKET Service | 6559561420. Send proof of payment via WhatsApp after transfer.</li>
         <li>Orders not paid within 24 hours (Bank Transfer) may be cancelled automatically.</li>
         <li>We reserve the right to cancel orders due to pricing errors or stock issues.</li>
       </ul>
@@ -3136,7 +2892,7 @@ input:focus,textarea:focus,select:focus{border-color:#f68b1e !important;box-shad
     </div>
     <div class="faq-item" onclick="toggleFaq(this)">
       <div class="faq-q">What payment methods do you accept? <i class="fas fa-chevron-down"></i></div>
-      <div class="faq-a">We accept Bank Transfer and Cash on Delivery. Bank Transfer: Opay | Zmarket Service | 6559561420. For bank transfer, send your payment proof to WhatsApp after payment.</div>
+      <div class="faq-a">We accept Bank Transfer and Cash on Delivery. Bank Transfer: Opay | ZMARKET Service | 6559561420. For bank transfer, send your payment proof to WhatsApp after payment.</div>
     </div>
     <div class="faq-item" onclick="toggleFaq(this)">
       <div class="faq-q">How do I track my order? <i class="fas fa-chevron-down"></i></div>
@@ -3204,7 +2960,7 @@ input:focus,textarea:focus,select:focus{border-color:#f68b1e !important;box-shad
       <h4>Contact</h4>
       <ul class="footer-contact">
         <li><i class="fab fa-whatsapp" style="color:#25d366"></i> +234 814 982 5555</li>
-        <li><i class="fas fa-envelope" style="color:var(--orange)"></i> Zmarketmarket@gmail.com</li>
+        <li><i class="fas fa-envelope" style="color:var(--orange)"></i> Zmoniemarket@gmail.com</li>
         <li><i class="fas fa-clock" style="color:var(--orange)"></i> Mon&#8211;Sat: 8am &#8211; 8pm</li>
         <li><i class="fas fa-map-marker-alt" style="color:var(--orange)"></i> No. 1 Ibijoke Street, Oregun, Ikeja, Lagos</li>
       </ul>
@@ -3581,13 +3337,13 @@ input:focus,textarea:focus,select:focus{border-color:#f68b1e !important;box-shad
 <script type="module">
 import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js';
 import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, onAuthStateChanged, sendPasswordResetEmail, GoogleAuthProvider, signInWithPopup, updatePassword } from 'https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js';
-import { getFirestore, collection, doc, addDoc, getDoc, getDocs, setDoc, updateDoc, deleteDoc, query, where, orderBy, limit, onSnapshot, serverTimestamp } from 'https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js';
+import { getFirestore, collection, doc, addDoc, getDoc, getDocs, setDoc, updateDoc, deleteDoc, query, where, orderBy, limit, onSnapshot, serverTimestamp, enableIndexedDbPersistence } from 'https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js';
 
 const firebaseConfig = {
   apiKey: "AIzaSyAB0mf0mG-HlCmF9mAMbOQZSKC1qQXMBRw",
-  authDomain: "zmarket-dee7f.firebaseapp.com",
-  projectId: "zmarket-dee7f",
-  storageBucket: "zmarket-dee7f.firebasestorage.app",
+  authDomain: "zmonie-dee7f.firebaseapp.com",
+  projectId: "zmonie-dee7f",
+  storageBucket: "zmonie-dee7f.firebasestorage.app",
   messagingSenderId: "636908006875",
   appId: "1:636908006875:web:4de5db3e7abd98433e4bfe"
 };
@@ -3595,12 +3351,13 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getFirestore(app);
-const ADMIN_EMAIL = 'Zmarketmarket@gmail.com';
+try { enableIndexedDbPersistence(db); } catch(e) { /* unsupported in some browsers/private mode */ }
+const ADMIN_EMAIL = 'Zmoniemarket@gmail.com';
 const ADMIN_WHATSAPP = '2348149825555';
 
 // ===== WHATSAPP NOTIFICATIONS =====
 function notifyAdminWhatsApp(orderId, buyerName, buyerEmail, itemNames, subtotal, deliveryFee, payment, address, buyerPhone, couponDiscount, couponCode, loyaltyDiscount) {
-  const payLabel = payment === 'zmarket' ? 'ZMARKET Wallet \u2705' : payment === 'cod' ? 'Cash on Delivery' : payment;
+  const payLabel = payment === 'zmonie' ? 'ZMARKET Wallet \u2705' : payment === 'cod' ? 'Cash on Delivery' : payment;
   const msg = encodeURIComponent(
     '\uD83D\uDED2 *New Order \u2014 ZMARKET!*\n' +
     '\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\n' +
@@ -4522,24 +4279,29 @@ window.changePassword = async function() {
 // ===== PRODUCTS =====
 async function loadProducts() {
   try {
-    const snap = await getDocs(collection(db,'products'));
+    const fetchPromise = getDocs(collection(db,'products'));
+    const timeoutPromise = new Promise((_, reject) => setTimeout(() => reject(new Error('Request timed out - check your connection')), 10000));
+    const snap = await Promise.race([fetchPromise, timeoutPromise]);
     allProducts = snap.docs.map(d => ({id:d.id,...d.data()}));
     renderHome();
   } catch(e) {
     console.error('loadProducts error:', e);
-    ['flash-grid','featured-grid','trending-grid'].forEach(id=>{
-      const el = document.getElementById(id);
-      if(el) el.innerHTML = '<div style="grid-column:1/-1;text-align:center;padding:30px;color:#dc2626"><i class="fas fa-wifi" style="font-size:32px;display:block;margin-bottom:10px"></i><p style="font-size:13px;margin-bottom:12px">Could not load products</p><button class="btn-primary" onclick="location.reload()">Retry</button></div>';
-    });
+    showToast('Error loading products: ' + e.message, 'error');
+    renderHome(); // still render to show "no products" fallback instead of infinite skeleton
   }
 }
 
 function renderHome() {
   if(!allProducts.length) {
-    ['flash-grid','featured-grid','trending-grid'].forEach(id=>{
-      const el = document.getElementById(id);
-      if(el) el.innerHTML = '<div style="grid-column:1/-1;text-align:center;padding:30px 20px;color:var(--gray-400)"><i class="fas fa-box-open" style="font-size:40px;display:block;margin-bottom:10px"></i><p style="font-size:14px;font-weight:600">No products yet</p></div>';
-    });
+    renderSkeletons('flash-grid',4);
+    renderSkeletons('featured-grid',4);
+    renderSkeletons('trending-grid',4);
+    setTimeout(()=>{
+      ['flash-grid','featured-grid','trending-grid'].forEach(id=>{
+        const el = document.getElementById(id);
+        if(el) el.innerHTML = "<div style=\"grid-column:1/-1;text-align:center;padding:30px 20px;color:var(--gray-400)\"><i class=\"fas fa-box-open\" style=\"font-size:40px;display:block;margin-bottom:10px\"></i><p style=\"font-size:14px;font-weight:600\">No products yet &mdash; check back soon!</p></div>";
+      });
+    },4000);
     return;
   }
   const flashProducts = allProducts.filter(p=>p.isFlash);
@@ -4553,13 +4315,13 @@ function renderHome() {
 function renderSkeletons(gridId, count) {
   const grid = document.getElementById(gridId);
   if(!grid) return;
-  const logoDiv = '<div class="skel-hero-logo">Z</div>';
-  const card = '<div class="skel-card"><div class="skel-img"><div class="skel-logo-wrap">' + logoDiv + '</div></div><div class="skel-line skeleton"></div><div class="skel-line short skeleton"></div><div class="skel-line price skeleton"></div><div class="skel-line btn skeleton"></div></div>';
+  const svgLogo = '<svg class="skel-logo-svg" viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="zg" x1="0" y1="0" x2="80" y2="80" gradientUnits="userSpaceOnUse"><stop offset="0%" stop-color="#ffb347"/><stop offset="100%" stop-color="#f68b1e"/></linearGradient></defs><rect width="80" height="80" rx="20" fill="url(#zg)"/><text x="50%" y="58%" text-anchor="middle" dominant-baseline="middle" font-family="Arial Black,Arial,sans-serif" font-weight="900" font-size="44" fill="#fff" letter-spacing="-2">Z</text></svg>';
+  const card = '<div class="skel-card"><div class="skel-img"><div class="skel-logo-wrap">' + svgLogo + '</div></div><div class="skel-line skeleton"></div><div class="skel-line short skeleton"></div><div class="skel-line price skeleton"></div><div class="skel-line btn skeleton"></div></div>';
   grid.innerHTML = Array(count).fill(card).join('');
 }
 
 function skelRows(count) {
-  const avatar = '<div class="skel-hero-logo" style="width:44px;height:44px;border-radius:50%;font-size:18px">Z</div>';
+  const avatar = '<div style="width:44px;height:44px;border-radius:50%;background:linear-gradient(135deg,#ffb347,#f68b1e);display:flex;align-items:center;justify-content:center;flex-shrink:0;font-family:Arial Black,sans-serif;font-weight:900;font-size:18px;color:#fff">Z</div>';
   const row = '<div class="skel-row">' + avatar + '<div class="skel-row-body"><div class="skel-row-line w80 skeleton"></div><div class="skel-row-line w50 skeleton"></div></div></div>';
   return Array(count).fill(row).join('');
 }
@@ -5007,37 +4769,37 @@ async function loadWalletPaymentInfo() {
 }
 
 // ZMARKET wallet check and deduction
-async function checkZmarketWallet() {
+async function checkZmonieWallet() {
   if(!currentUser) return;
   const email = currentUser.email;
-  const checkingEl = document.getElementById('zmarket-wallet-checking');
-  const okEl = document.getElementById('zmarket-wallet-ok');
-  const nomatchEl = document.getElementById('zmarket-wallet-nomatch');
-  const balanceDisplay = document.getElementById('zmarket-wallet-balance-display');
-  const balanceOkMsg = document.getElementById('zmarket-balance-ok-msg');
-  const balanceLowMsg = document.getElementById('zmarket-balance-low-msg');
+  const checkingEl = document.getElementById('zmonie-wallet-checking');
+  const okEl = document.getElementById('zmonie-wallet-ok');
+  const nomatchEl = document.getElementById('zmonie-wallet-nomatch');
+  const balanceDisplay = document.getElementById('zmonie-wallet-balance-display');
+  const balanceOkMsg = document.getElementById('zmonie-balance-ok-msg');
+  const balanceLowMsg = document.getElementById('zmonie-balance-low-msg');
   // Show checking state
   if(checkingEl) checkingEl.style.display='block';
   if(okEl) okEl.style.display='none';
   if(nomatchEl) nomatchEl.style.display='none';
   try {
     // Look up the user in ZMARKET fintech users collection by matching email
-    const zmarketQuery = query(collection(db,'users'), where('email','==',email));
-    const snap = await getDocs(zmarketQuery);
+    const zmonieQuery = query(collection(db,'users'), where('email','==',email));
+    const snap = await getDocs(zmonieQuery);
     if(snap.empty) {
       // No ZMARKET user found with this email
       if(checkingEl) checkingEl.style.display='none';
       if(nomatchEl) nomatchEl.style.display='block';
-      window._zmarketWalletBalance = 0;
-      window._zmarketUserId = null;
+      window._zmonieWalletBalance = 0;
+      window._zmonieUserId = null;
       return;
     }
     const userDoc = snap.docs[0];
     const userData = userDoc.data();
     // Check wallet balance field (ZMARKET fintech stores wallet as walletBalance or balance)
     const balance = Number(userData.walletBalance || userData.balance || userData.wallet || 0);
-    window._zmarketWalletBalance = balance;
-    window._zmarketUserId = userDoc.id;
+    window._zmonieWalletBalance = balance;
+    window._zmonieUserId = userDoc.id;
     // Get current order total
     const subtotal = cart.reduce((s,x)=>s+(x.price*x.qty),0);
     const deliveryFee = window._checkoutDeliveryFee || 0;
@@ -5050,17 +4812,17 @@ async function checkZmarketWallet() {
     const sufficient = balance >= grandTotal;
     if(balanceOkMsg) balanceOkMsg.style.display = sufficient ? 'block' : 'none';
     if(balanceLowMsg) balanceLowMsg.style.display = sufficient ? 'none' : 'block';
-    window._zmarketBalanceSufficient = sufficient;
+    window._zmonieBalanceSufficient = sufficient;
   } catch(e) {
     if(checkingEl) checkingEl.style.display='none';
     if(nomatchEl) { nomatchEl.style.display='block'; nomatchEl.innerHTML='<p style="font-size:13px;color:var(--red);font-weight:700"><i class="fas fa-exclamation-circle"></i> Error checking wallet: '+e.message+'</p>'; }
   }
 }
 
-async function deductZmarketWallet(orderId, amount) {
-  if(!currentUser || !window._zmarketUserId) return;
+async function deductZmonieWallet(orderId, amount) {
+  if(!currentUser || !window._zmonieUserId) return;
   try {
-    const userRef = doc(db,'users',window._zmarketUserId);
+    const userRef = doc(db,'users',window._zmonieUserId);
     const snap = await getDoc(userRef);
     if(!snap.exists()) return;
     const currentBalance = Number(snap.data().walletBalance || snap.data().balance || snap.data().wallet || 0);
@@ -5071,7 +4833,7 @@ async function deductZmarketWallet(orderId, amount) {
     // Create a transaction record in ZMARKET fintech
     try {
       await addDoc(collection(db,'transactions'), {
-        userId: window._zmarketUserId,
+        userId: window._zmonieUserId,
         email: currentUser.email,
         type: 'debit',
         amount: amount,
@@ -6109,7 +5871,7 @@ function buildProductContext() {
 }
 
 function getSystemContext() {
-  return "You are ZMARKET Support Bot \u2014 friendly AI assistant for ZMARKET, a Nigerian online fashion store.\nStore: Nigeria | Address: No. 1 Ibijoke Street, Oregun, Ikeja, Lagos | WhatsApp: +234 814 982 5555 | Email: Zmarketmarket@gmail.com | Hours: Mon-Sat 8AM-8PM WAT\nPayment: 1) Bank Transfer (Opay \u2014 Zmarket Service | 6559561420) 2) Cash on Delivery\nDelivery: Free above \u20A6150,000. \u20A63,500 below. Lagos: 1-2 days. Abuja/PH: 2-3 days. Others: 3-5 days.\nCategories: Men's Fashion, Women's Fashion, Electronics, Baby Products, Home & Kitchen, Beauty, Sports, Phones, Toys, Groceries\nCurrent Products:\n"+(buildProductContext())+"\nInstructions: Answer only about ZMARKET. Be warm, brief (2-4 lines). Use simple English. If you cannot solve the issue, say so clearly and mention a human agent can help.";
+  return "You are ZMARKET Support Bot \u2014 friendly AI assistant for ZMARKET, a Nigerian online fashion store.\nStore: Nigeria | Address: No. 1 Ibijoke Street, Oregun, Ikeja, Lagos | WhatsApp: +234 814 982 5555 | Email: Zmoniemarket@gmail.com | Hours: Mon-Sat 8AM-8PM WAT\nPayment: 1) Bank Transfer (Opay \u2014 ZMARKET Service | 6559561420) 2) Cash on Delivery\nDelivery: Free above \u20A6150,000. \u20A63,500 below. Lagos: 1-2 days. Abuja/PH: 2-3 days. Others: 3-5 days.\nCategories: Men's Fashion, Women's Fashion, Electronics, Baby Products, Home & Kitchen, Beauty, Sports, Phones, Toys, Groceries\nCurrent Products:\n"+(buildProductContext())+"\nInstructions: Answer only about ZMARKET. Be warm, brief (2-4 lines). Use simple English. If you cannot solve the issue, say so clearly and mention a human agent can help.";
 }
 
 function smartLocalReply(text) {
@@ -6128,7 +5890,7 @@ function smartLocalReply(text) {
   if (/pay|payment|transfer|bank|opay|wallet/.test(t)) return "\uD83D\uDCB3 Payment options:\n1. Cash on Delivery (Pay on Delivery)\n2. Cash on Delivery (Pay on Delivery)\nChoose at checkout!";
   if (/track|where is|my order|status/.test(t)) return "\uD83D\uDCE6 Track order: Menu \u2192 Track Order \u2192 enter Order ID or phone. You also get WhatsApp updates automatically!";
   if (/return|refund|exchange|wrong|damaged/.test(t)) return "\uD83D\uDE1F For returns/refunds, contact us within 24hrs of delivery via WhatsApp: +234 814 982 5555";
-  if (/contact|whatsapp|call|reach/.test(t)) return "\uD83D\uDCDE Contact: WhatsApp +234 814 982 5555 | Email: Zmarketmarket@gmail.com\nMon-Sat 8AM-8PM";
+  if (/contact|whatsapp|call|reach/.test(t)) return "\uD83D\uDCDE Contact: WhatsApp +234 814 982 5555 | Email: Zmoniemarket@gmail.com\nMon-Sat 8AM-8PM";
   if (/size|sizing|fit/.test(t)) return "\uD83D\uDCCF Sizes are shown on each product page. Not sure? Message us on WhatsApp: +234 814 982 5555";
   if (/discount|sale|promo|flash/.test(t)) return "\uD83D\uDD25 Check Flash Sales on the home page for deals! New offers added regularly \uD83D\uDC40";
   if (/categor|what.*sell|collection/.test(t)) return "\uD83D\uDED2 We sell: Men's & Women's Fashion, Electronics, Phones, Baby Products, Home & Kitchen, Beauty, Sports, Groceries & Toys!";
@@ -6546,13 +6308,12 @@ async function renderSlider() {
   if(!container) return;
   container.innerHTML = banners.map(function(b){var bg = b.bg||'slide-1';var bgExtra = SLIDE_BG_EXTRA[b.bg] ? ' style="'+SLIDE_BG_EXTRA[b.bg]+'"' : '';var imgHtml = b.image ? '<img class="slide-img" src="'+b.image+'" alt="'+(b.title||'').replace(/<[^>]+>/g,'')+'" onerror="this.style.display=\'none\'">' : '';var overlayHtml = b.image ? '<div class="slide-img-overlay"></div>' : '';return '<div class="slide '+bg+'"'+bgExtra+'>'+'  '+imgHtml+'  '+overlayHtml+'  <div class="slide-content">'+'    <h2>'+(b.title||'')+'</h2>'+'    <p>'+(b.subtitle||'')+'</p>'+'    <button class="slide-btn" onclick="filterByCategory(\'>'+(b.btnAction||'all')+'\')">'+(b.btnText||'Shop Now')+'</button>'+'  </div>'+'</div>';}).join('');
   currentSlide = 0;
-  var ss=document.getElementById('slider-skeleton');if(ss)ss.style.display='none';
   initSlider();
 }
 
 window.loadAdminBanners = async function() {
   const list = document.getElementById('admin-banners-list');
-  list.innerHTML = skelRows(3);
+  list.innerHTML = '<div class="skel-row"><div class="skel-avatar skeleton"></div><div class="skel-row-body"><div class="skel-row-line w80 skeleton"></div><div class="skel-row-line w50 skeleton"></div></div></div>'.repeat(3);
   const banners = await loadBanners();
   console.log('Loaded banners:', banners.length, banners.map(b=>b.slotId));
   const bgLabels = {'slide-1':'\uD83D\uDFE0 Orange','slide-2':'\uD83C\uDF11 Dark Navy','slide-3':'\uD83D\uDD35 Blue/Purple','slide-green':'\uD83D\uDFE2 Green','slide-dark':'\u26AB Dark'};
@@ -6838,24 +6599,24 @@ async function init() {
     const refCode = urlParams.get('ref');
     if(refCode) {
       window._pendingReferralCode = refCode.trim().toUpperCase();
-      try { localStorage.setItem('zmarket-referral-code', window._pendingReferralCode); } catch(e) {}
+      try { localStorage.setItem('zmonie-referral-code', window._pendingReferralCode); } catch(e) {}
       // Redirect to register page since they came via referral link
       window._refRedirectToRegister = true;
     } else {
       try {
-        const stored = localStorage.getItem('zmarket-referral-code');
+        const stored = localStorage.getItem('zmonie-referral-code');
         if(stored) window._pendingReferralCode = stored;
       } catch(e) {}
     }
   } catch(e) {}
 
+  renderSlider(); // loads banners from Firestore (or defaults) and inits slider
   startCountdown();
   renderSkeletons('flash-grid',4);
   renderSkeletons('featured-grid',8);
   renderSkeletons('trending-grid',8);
-  await loadProducts();
-  renderSlider();
-  loadGlobalPaystackConfig();
+  loadProducts(); // non-blocking - render rest of UI immediately
+  loadGlobalPaystackConfig(); // non-blocking - check if Paystack checkout should show
   // Push a silent guard entry first \u2014 this absorbs the very first "back" press
   history.replaceState({ benimPage: '__guard__' }, '', '#home');
   history.pushState({ benimPage: 'home' }, '', '#home');
@@ -7024,7 +6785,7 @@ window.showCouponModal = function() {
 
 window.loadAdminCoupons = async function() {
   const list = document.getElementById('admin-coupons-list');
-  list.innerHTML = skelRows(3);
+  list.innerHTML = '<div class="skel-row"><div class="skel-avatar skeleton"></div><div class="skel-row-body"><div class="skel-row-line w80 skeleton"></div><div class="skel-row-line w50 skeleton"></div></div></div>'.repeat(3);
   try {
     const snap = await getDocs(collection(db,'coupons'));
     if(snap.empty) {
@@ -7416,7 +7177,7 @@ window.exportOrdersCSV = async function() {
     const blob = new Blob([csv], {type:'text/csv'});
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
-    a.href=url; a.download='zmarket-orders-'+new Date().toISOString().slice(0,10)+'.csv';
+    a.href=url; a.download='zmonie-orders-'+new Date().toISOString().slice(0,10)+'.csv';
     a.click(); URL.revokeObjectURL(url);
     showToast('Orders exported to CSV \u2705','success');
   } catch(e) { showToast('Export failed: '+e.message,'error'); }
@@ -7620,7 +7381,7 @@ const _isStandalone = window.matchMedia('(display-mode: standalone)').matches ||
 function _showPWABanner() {
   if(_isStandalone) return;
   try {
-    const d = localStorage.getItem('zmarket-pwa-dismissed');
+    const d = localStorage.getItem('zmonie-pwa-dismissed');
     if(d && !isNaN(Number(d)) && Date.now() - Number(d) < 3*24*60*60*1000) return;
   } catch(e) {}
   const banner = document.getElementById('pwa-install-banner');
@@ -7667,7 +7428,7 @@ window.dismissPWABanner = function() {
     banner.style.display = 'none';
     document.body.classList.remove('pwa-banner-visible');
   }
-  try { localStorage.setItem('zmarket-pwa-dismissed', Date.now().toString()); } catch(e) {}
+  try { localStorage.setItem('zmonie-pwa-dismissed', Date.now().toString()); } catch(e) {}
 };
 
 window.showIOSInstallGuide = function() {
@@ -7796,7 +7557,7 @@ window.downloadCSVTemplate = function() {
   var blob = new Blob([csv], {type:'text/csv'});
   var a = document.createElement('a');
   a.href = URL.createObjectURL(blob);
-  a.download = 'zmarket_products_template.csv';
+  a.download = 'zmonie_products_template.csv';
   a.click();
   showToast('Template downloaded!');
 };
