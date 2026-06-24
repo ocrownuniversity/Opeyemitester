@@ -3454,6 +3454,87 @@ input:focus,textarea:focus,select:focus{border-color:#f68b1e !important;box-shad
 </div>
 <div id="toast-container"></div>
 
+<!-- ═══ POPUP AD OVERLAY ═══ -->
+<div id="popup-ad-overlay" class="hidden">
+  <div id="popup-ad-box">
+    <button id="popup-ad-close" onclick="closePopupAd()" title="Close">&#10005;</button>
+    <img id="popup-ad-flyer-img" src="" alt="Promo" style="display:none">
+    <div id="popup-ad-body">
+      <div id="popup-ad-title"></div>
+      <div id="popup-ad-sub"></div>
+      <button id="popup-ad-cta" onclick="handlePopupAdCTA()"></button>
+      <div id="popup-ad-timer">Closes in <span id="popup-ad-countdown">10</span>s</div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ POPUP AD EDIT MODAL ═══ -->
+<div id="popup-ad-modal" class="modal-overlay">
+  <div class="modal" style="max-width:440px">
+    <div class="modal-header">
+      <span class="modal-title" id="popup-ad-modal-title">Add Popup Ad</span>
+      <button class="modal-close" onclick="closeModal('popup-ad-modal')"><i class="fas fa-times"></i></button>
+    </div>
+    <div style="padding:18px;display:flex;flex-direction:column;gap:14px">
+
+      <div>
+        <label class="form-label">Flyer Image URL <span style="color:#aaa;font-size:11px">(paste image link or leave blank for text-only)</span></label>
+        <input class="form-input" id="pa-image" placeholder="https://..." oninput="document.getElementById('pa-img-preview').src=this.value;document.getElementById('pa-img-preview-wrap').style.display=this.value?'block':'none'">
+        <div id="pa-img-preview-wrap" style="display:none;margin-top:8px">
+          <img id="pa-img-preview" src="" alt="preview" style="width:100%;max-height:160px;object-fit:cover;border-radius:8px;border:1px solid #e5e7eb">
+        </div>
+      </div>
+
+      <div>
+        <label class="form-label">Headline / Title</label>
+        <input class="form-input" id="pa-title" placeholder="e.g. ₦2,000 OFF your first order!">
+      </div>
+
+      <div>
+        <label class="form-label">Subtitle / Body Text</label>
+        <textarea class="form-input" id="pa-sub" rows="3" placeholder="e.g. Use code WELCOME at checkout. Limited time only!" style="resize:vertical"></textarea>
+      </div>
+
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+        <div>
+          <label class="form-label">CTA Button Text</label>
+          <input class="form-input" id="pa-cta-text" placeholder="Shop Now">
+        </div>
+        <div>
+          <label class="form-label">CTA Link / Category</label>
+          <input class="form-input" id="pa-cta-action" placeholder="e.g. Phones or https://...">
+        </div>
+      </div>
+
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+        <div>
+          <label class="form-label">Display Duration (seconds)</label>
+          <input class="form-input" id="pa-duration" type="number" min="3" max="60" value="10" placeholder="10">
+        </div>
+        <div>
+          <label class="form-label">Delay Before Show (seconds)</label>
+          <input class="form-input" id="pa-delay" type="number" min="0" max="30" value="2" placeholder="2">
+        </div>
+      </div>
+
+      <div style="display:flex;align-items:center;gap:10px">
+        <label style="font-size:13px;font-weight:700;color:var(--text)">Status:</label>
+        <label style="display:flex;align-items:center;gap:6px;cursor:pointer;font-size:13px">
+          <input type="radio" name="pa-status" id="pa-status-active" value="active" checked> Active (shows on site)
+        </label>
+        <label style="display:flex;align-items:center;gap:6px;cursor:pointer;font-size:13px">
+          <input type="radio" name="pa-status" id="pa-status-inactive" value="inactive"> Inactive
+        </label>
+      </div>
+
+      <input type="hidden" id="pa-doc-id">
+      <button class="btn-primary" style="width:100%;padding:14px;font-size:15px" onclick="savePopupAd()">
+        <i class="fas fa-save"></i> Save Popup Ad
+      </button>
+    </div>
+  </div>
+</div>
+
 <script type="module">
 import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js';
 import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, onAuthStateChanged, sendPasswordResetEmail, GoogleAuthProvider, signInWithPopup, updatePassword } from 'https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js';
@@ -8702,11 +8783,11 @@ window.showPopupAdModal = async function(docId) {
       }
     } catch(e){ showToast('Error loading ad: '+e.message,'error'); }
   }
-  modal.classList.remove('hidden');
+  openModal('popup-ad-modal');
 };
 
 window.closePopupAdModal = function() {
-  document.getElementById('popup-ad-modal').classList.add('hidden');
+  closeModal('popup-ad-modal');
 };
 
 // ─── ADMIN: save ───────────────────────────────────────────────────────
@@ -8758,85 +8839,5 @@ window.previewPopupAd = async function(docId) {
 
 </script>
 
-<!-- ═══ POPUP AD OVERLAY ═══ -->
-<div id="popup-ad-overlay" class="hidden">
-  <div id="popup-ad-box">
-    <button id="popup-ad-close" onclick="closePopupAd()" title="Close">&#10005;</button>
-    <img id="popup-ad-flyer-img" src="" alt="Promo" style="display:none">
-    <div id="popup-ad-body">
-      <div id="popup-ad-title"></div>
-      <div id="popup-ad-sub"></div>
-      <button id="popup-ad-cta" onclick="handlePopupAdCTA()"></button>
-      <div id="popup-ad-timer">Closes in <span id="popup-ad-countdown">10</span>s</div>
-    </div>
-  </div>
-</div>
-
-<!-- ═══ POPUP AD EDIT MODAL ═══ -->
-<div id="popup-ad-modal" class="modal-overlay hidden" onclick="if(event.target===this)closePopupAdModal()">
-  <div class="modal-box" style="max-width:440px">
-    <div class="modal-header">
-      <span id="popup-ad-modal-title">Add Popup Ad</span>
-      <button class="modal-close" onclick="closePopupAdModal()">&#10005;</button>
-    </div>
-    <div style="padding:18px;display:flex;flex-direction:column;gap:14px">
-
-      <div>
-        <label class="form-label">Flyer Image URL <span style="color:#aaa;font-size:11px">(paste image link or leave blank for text-only)</span></label>
-        <input class="form-input" id="pa-image" placeholder="https://..." oninput="document.getElementById('pa-img-preview').src=this.value;document.getElementById('pa-img-preview-wrap').style.display=this.value?'block':'none'">
-        <div id="pa-img-preview-wrap" style="display:none;margin-top:8px">
-          <img id="pa-img-preview" src="" alt="preview" style="width:100%;max-height:160px;object-fit:cover;border-radius:8px;border:1px solid #e5e7eb">
-        </div>
-      </div>
-
-      <div>
-        <label class="form-label">Headline / Title</label>
-        <input class="form-input" id="pa-title" placeholder="e.g. ₦2,000 OFF your first order!">
-      </div>
-
-      <div>
-        <label class="form-label">Subtitle / Body Text</label>
-        <textarea class="form-input" id="pa-sub" rows="3" placeholder="e.g. Use code WELCOME at checkout. Limited time only!" style="resize:vertical"></textarea>
-      </div>
-
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
-        <div>
-          <label class="form-label">CTA Button Text</label>
-          <input class="form-input" id="pa-cta-text" placeholder="Shop Now">
-        </div>
-        <div>
-          <label class="form-label">CTA Link / Category</label>
-          <input class="form-input" id="pa-cta-action" placeholder="e.g. Phones or https://...">
-        </div>
-      </div>
-
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
-        <div>
-          <label class="form-label">Display Duration (seconds)</label>
-          <input class="form-input" id="pa-duration" type="number" min="3" max="60" value="10" placeholder="10">
-        </div>
-        <div>
-          <label class="form-label">Delay Before Show (seconds)</label>
-          <input class="form-input" id="pa-delay" type="number" min="0" max="30" value="2" placeholder="2">
-        </div>
-      </div>
-
-      <div style="display:flex;align-items:center;gap:10px">
-        <label style="font-size:13px;font-weight:700;color:var(--text)">Status:</label>
-        <label style="display:flex;align-items:center;gap:6px;cursor:pointer;font-size:13px">
-          <input type="radio" name="pa-status" id="pa-status-active" value="active" checked> Active (shows on site)
-        </label>
-        <label style="display:flex;align-items:center;gap:6px;cursor:pointer;font-size:13px">
-          <input type="radio" name="pa-status" id="pa-status-inactive" value="inactive"> Inactive
-        </label>
-      </div>
-
-      <input type="hidden" id="pa-doc-id">
-      <button class="btn-primary" style="width:100%;padding:14px;font-size:15px" onclick="savePopupAd()">
-        <i class="fas fa-save"></i> Save Popup Ad
-      </button>
-    </div>
-  </div>
-</div>
 </body>
 </html>
