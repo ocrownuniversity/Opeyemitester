@@ -99,7 +99,7 @@ select.form-input{cursor:pointer;-webkit-appearance:none;background-image:url("d
 
 /* ── HOME ── */
 #home{padding-bottom:90px}
-.home-header{background:linear-gradient(145deg,#1E1B4B 0%,#3B3582 100%);padding:50px 16px 78px;position:relative;overflow:hidden}
+.home-header{background:linear-gradient(145deg,#1E1B4B 0%,#3B3582 100%);padding:50px 16px 30px;position:relative;overflow:hidden}
 .home-header::before{content:'';position:absolute;top:-40%;right:-20%;width:220px;height:220px;background:radial-gradient(circle,rgba(123,117,201,.15) 0%,transparent 70%);border-radius:50%}
 .home-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:18px;position:relative;z-index:1}
 .home-user{display:flex;align-items:center;gap:10px}
@@ -120,7 +120,7 @@ select.form-input{cursor:pointer;-webkit-appearance:none;background-image:url("d
 .balance-stat-val.green{color:#34D399}
 .balance-stat-val.red{color:#F87171}
 .eye-toggle{cursor:pointer;opacity:.6;font-size:13px}
-.home-content{padding:0 12px;margin-top:-50px;position:relative;z-index:2}
+.home-content{padding:0 12px;margin-top:0;position:relative;z-index:2}
 .quick-actions{background:white;border-radius:18px;padding:15px;box-shadow:var(--shadow);margin-bottom:12px}
 .section-title{font-size:14px;font-weight:700;color:var(--text);margin-bottom:11px;font-family:var(--font-display)}
 .actions-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
@@ -496,32 +496,34 @@ textarea.form-input{resize:none}
   <div class="home-header">
     <div class="home-top">
       <div class="home-user">
-        <div class="avatar" id="homeAvatar">JD</div>
+        <div class="avatar" id="homeAvatar" style="cursor:pointer;overflow:hidden" onclick="navigateTo('profileScreen')">JD</div>
         <div class="home-user-info"><h4 id="homeGreeting">Good morning 👋</h4><p id="homeUserName">Loading...</p></div>
       </div>
       <button class="notif-btn" onclick="navigateTo('notifications')">🔔<div class="notif-dot" id="notifDot"></div></button>
     </div>
     <div class="balance-card">
-      <div class="balance-label"><span>Total Balance</span><span class="eye-toggle" id="balEye" onclick="toggleBal()">👁</span></div>
+      <div class="balance-label"><span>WALLET BALANCE</span><div style="display:flex;align-items:center;gap:8px"><span class="eye-toggle" id="balEye" onclick="toggleBal()">👁</span><div style="background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.25);border-radius:99px;padding:2px 9px;font-size:10px;color:white;font-weight:600">₦ NGN ▾</div></div></div>
       <div class="balance-amount" id="homeBalance"><span class="sym" id="homeSym">₦</span><span id="homeBalVal">0.00</span></div>
-      <div class="balance-row">
-        <div class="balance-stat"><div class="balance-stat-label">Income</div><div class="balance-stat-val green" id="homeTotalIn">₦0.00</div></div>
-        <div class="balance-stat"><div class="balance-stat-label">Spent</div><div class="balance-stat-val red" id="homeTotalOut">₦0.00</div></div>
+      <div style="font-size:11px;color:rgba(255,255,255,.55);margin-bottom:13px">Account: <span id="homeAcctNo" style="font-weight:600">–</span></div>
+      <div style="display:flex;gap:8px">
+        <button style="flex:1;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.2);border-radius:9px;color:white;font-size:12px;font-weight:600;padding:9px 4px;cursor:pointer;font-family:var(--font)" onclick="navigateTo('fundWallet')">+ Add Money</button>
+        <button style="flex:1;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.2);border-radius:9px;color:white;font-size:12px;font-weight:600;padding:9px 4px;cursor:pointer;font-family:var(--font)" onclick="navigateTo('historyScreen')">⏱ History</button>
+        <button style="flex:1;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.2);border-radius:9px;color:white;font-size:12px;font-weight:600;padding:9px 4px;cursor:pointer;font-family:var(--font)" onclick="navigateTo('profileScreen')">👤 Profile</button>
       </div>
     </div>
   </div>
-  <div class="home-content">
+  <div class="home-content" style="margin-top:12px">
     <div class="quick-actions">
-      <div class="section-title">Quick Actions</div>
+      <div class="section-title">Services</div>
       <div class="actions-grid">
-        <div class="action-item" onclick="navigateTo('fundWallet')"><div class="action-icon ai-blue">💳</div><div class="action-label">Fund Wallet</div></div>
-        <div class="action-item" onclick="navigateTo('airtimeScreen')"><div class="action-icon ai-cyan">📱</div><div class="action-label">Buy Airtime</div></div>
-        <div class="action-item" onclick="navigateTo('dataScreen')"><div class="action-icon ai-purple">📡</div><div class="action-label">Data Bundle</div></div>
-        <div class="action-item" onclick="navigateTo('electricityScreen')"><div class="action-icon ai-orange">⚡</div><div class="action-label">Electricity</div></div>
-        <div class="action-item" onclick="navigateTo('cableTVScreen')"><div class="action-icon ai-red">📺</div><div class="action-label">Cable TV</div></div>
-        <div class="action-item" onclick="navigateTo('schoolPinScreen')"><div class="action-icon ai-teal">🎓</div><div class="action-label">School PIN</div></div>
-        <div class="action-item" onclick="navigateTo('transferScreen')"><div class="action-icon ai-yellow">💸</div><div class="action-label">Transfer</div></div>
-        <div class="action-item" onclick="navigateTo('historyScreen')"><div class="action-icon ai-pink">📋</div><div class="action-label">History</div></div>
+        <div class="action-item" onclick="navigateTo('airtimeScreen')"><div class="action-icon ai-cyan" style="border-radius:10px">📱</div><div class="action-label">Airtime</div></div>
+        <div class="action-item" onclick="navigateTo('dataScreen')"><div class="action-icon ai-blue" style="border-radius:10px;background:#E8F4FD">🌐</div><div class="action-label">Data</div></div>
+        <div class="action-item" onclick="navigateTo('cableTVScreen')"><div class="action-icon ai-red" style="border-radius:10px">📺</div><div class="action-label">Cable TV</div></div>
+        <div class="action-item" onclick="navigateTo('electricityScreen')"><div class="action-icon ai-orange" style="border-radius:10px">💡</div><div class="action-label">Electricity</div></div>
+        <div class="action-item" onclick="navigateTo('fundWallet')"><div class="action-icon ai-purple" style="border-radius:10px;background:#E0FDF4">💳</div><div class="action-label">Fund Wallet</div></div>
+        <div class="action-item" onclick="navigateTo('historyScreen')"><div class="action-icon ai-pink" style="border-radius:10px">📋</div><div class="action-label">History</div></div>
+        <div class="action-item" onclick="navigateTo('transferScreen')"><div class="action-icon ai-yellow" style="border-radius:10px">💸</div><div class="action-label">Transfer</div></div>
+        <div class="action-item" onclick="navigateTo('schoolPinScreen')"><div class="action-icon ai-teal" style="border-radius:10px">🎓</div><div class="action-label">School PIN</div></div>
       </div>
     </div>
     <div class="card">
@@ -552,10 +554,12 @@ textarea.form-input{resize:none}
         <div style="flex:1;text-align:center;font-size:9px;color:var(--text3);font-weight:500">Sun</div>
       </div>
     </div>
+    <div class="refer-strip" onclick="navigateTo('referral')">
+      <div><h4>Refer &amp; Earn 💸</h4><p>Earn ₦500 for every friend who joins KOBOrush</p></div>
+      <div class="refer-strip-arrow">›</div>
+    </div>
   </div>
 </div>
-
-<!-- ══ WALLET ══ -->
 <div class="screen" id="walletScreen">
   <div class="wallet-header">
     <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:15px;padding-top:42px">
@@ -622,7 +626,11 @@ textarea.form-input{resize:none}
 <div class="screen" id="profileScreen">
   <div class="profile-header">
     <div style="padding-top:42px">
-      <div class="avatar avatar-lg" style="margin:0 auto" id="profileAvatar">JD</div>
+      <div style="position:relative;width:68px;margin:0 auto;cursor:pointer" onclick="document.getElementById('profilePicInput').click()">
+        <div class="avatar avatar-lg" id="profileAvatar" style="overflow:hidden">JD</div>
+        <div style="position:absolute;bottom:0;right:0;width:22px;height:22px;background:var(--orange);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;border:2px solid #1E1B4B">📷</div>
+      </div>
+      <input type="file" id="profilePicInput" accept="image/*" style="display:none" onchange="handleProfilePicChange(this)">
       <div class="profile-name" id="profileName">–</div>
       <div class="profile-email" id="profileEmail">–</div>
       <div class="agent-level" id="profileLevel" style="margin:6px auto;display:inline-flex">⭐ Standard User</div>
@@ -1296,6 +1304,29 @@ window.showForgotPassword=()=>showOverlay(`<div class="sheet-title">Reset Passwo
 window.sendReset=async()=>{try{await sendPasswordResetEmail(auth,document.getElementById('resetEmail').value);showToast('success','Reset link sent!');closeOverlay()}catch(e){showToast('error',e.message)}};
 window.handleLogout=async()=>{await signOut(auth);_s.user=null;_s.userData=null;document.getElementById('bottomNav').style.display='none';showScreen('auth');showToast('info','Signed out')};
 
+window.handleProfilePicChange=async(input)=>{
+  const file=input.files[0];if(!file||!_s.user)return;
+  if(file.size>4*1024*1024)return showToast('error','Image too large. Max 4MB');
+  const reader=new FileReader();
+  reader.onload=async(e)=>{
+    const dataURL=e.target.result;
+    try{
+      showToast('info','Uploading photo...');
+      let photoURL=dataURL;
+      try{
+        const sRef=storageRef(storage,`profilePics/${_s.user.uid}`);
+        await uploadString(sRef,dataURL,'data_url');
+        photoURL=await getDownloadURL(sRef);
+      }catch(se){/* fallback to dataURL */}
+      await updateDoc(doc(db,'users',_s.user.uid),{photoURL});
+      if(_s.userData)_s.userData.photoURL=photoURL;
+      ['homeAvatar','profileAvatar'].forEach(id=>{const el=document.getElementById(id);if(el){el.innerHTML=`<img src="${photoURL}" style="width:100%;height:100%;object-fit:cover;border-radius:50%">`;el.style.fontSize='0'}});
+      showToast('success','Profile photo updated!');
+    }catch(err){showToast('error','Upload failed. Try again.')}
+  };
+  reader.readAsDataURL(file);
+};
+
 onAuthStateChanged(auth,async(user)=>{
   window._firebaseReady = true;
   window._firebaseNavigated = true;
@@ -1318,8 +1349,9 @@ function updateUI(){
   const s=csym(d.country);
   const bal=_s.balHidden?'••••••':Number(d.balance||0).toLocaleString('en-NG',{minimumFractionDigits:2});
   const ini=(d.firstName?.[0]||'')+(d.lastName?.[0]||'');
-  ['homeAvatar','profileAvatar'].forEach(id=>{const el=document.getElementById(id);if(el)el.textContent=ini||'?'});
+  ['homeAvatar','profileAvatar'].forEach(id=>{const el=document.getElementById(id);if(!el)return;if(d.photoURL){el.innerHTML=`<img src="${d.photoURL}" style="width:100%;height:100%;object-fit:cover;border-radius:50%">`;el.style.fontSize='0'}else{el.textContent=ini||'?';el.style.fontSize=''}});
   document.getElementById('homeUserName').textContent=d.firstName+' '+d.lastName;
+  const acctEl=document.getElementById('homeAcctNo');if(acctEl)acctEl.textContent=d.accountNumber||'–';
   document.getElementById('homeSym').textContent=s;
   document.getElementById('homeBalVal').textContent=bal;
   document.getElementById('homeTotalIn').textContent=fmt(d.totalFunded,s);
@@ -1346,7 +1378,7 @@ function updateUI(){
 }
 window.toggleBal=()=>{_s.balHidden=!_s.balHidden;document.getElementById('homeBalVal').textContent=_s.balHidden?'••••••':Number(_s.userData?.balance||0).toLocaleString('en-NG',{minimumFractionDigits:2});document.getElementById('balEye').textContent=_s.balHidden?'🙈':'👁'};
 async function loadHome(){if(!_s.user)return;listenUD(_s.user.uid);loadRecentTx()}
-async function loadRecentTx(){if(!_s.user)return;try{const q=query(collection(db,'transactions'),where('userId','==',_s.user.uid),orderBy('createdAt','desc'),limit(5));const s=await getDocs(q);const c=document.getElementById('recentTx');c.innerHTML=s.empty?`<div class="empty-state"><div class="empty-icon">💳</div><h4>No transactions yet</h4><p>Fund your wallet to get started</p></div>`:s.docs.map(d=>txHTML(d.data())).join('')}catch(e){console.error(e)}}
+async function loadRecentTx(){if(!_s.user)return;const c=document.getElementById('recentTx');try{const q=query(collection(db,'transactions'),where('userId','==',_s.user.uid),orderBy('createdAt','desc'),limit(5));const timeout=new Promise((_,rej)=>setTimeout(()=>rej(new Error('timeout')),8000));const s=await Promise.race([getDocs(q),timeout]);c.innerHTML=s.empty?`<div class="empty-state"><div class="empty-icon">💳</div><h4>No transactions yet</h4><p>Fund your wallet to get started</p></div>`:s.docs.map(d=>txHTML(d.data())).join('')}catch(e){c.innerHTML='<div class="empty-state"><div class="empty-icon">💳</div><h4>No transactions yet</h4><p>Fund your wallet to get started</p></div>'}}
 
 function txHTML(tx){
   const ic=['fund','referral_bonus','admin_credit','fund_approved'].includes(tx.type);
@@ -1355,7 +1387,7 @@ function txHTML(tx){
   const s=csym(_s.userData?.country||'NG');
   return`<div class="tx-item"><div class="tx-icon" style="background:${bg[tx.type]||'#F8FAFC'}">${icons[tx.type]||'💳'}</div><div class="tx-info"><div class="tx-name">${tx.description||tx.type}</div><div class="tx-meta">${tAgo(tx.createdAt)} · <span class="badge badge-${tx.status==='success'?'success':tx.status==='pending'?'pending':tx.status==='review'?'review':'failed'}">${tx.status}</span></div></div><div class="tx-amt"><div class="tx-amt-val ${ic?'cr':'dr'}">${ic?'+':'-'}${fmt(tx.amount,s)}</div></div></div>`;
 }
-async function loadWallet(){updateUI();try{const q=query(collection(db,'transactions'),where('userId','==',_s.user.uid),orderBy('createdAt','desc'),limit(10));const s=await getDocs(q);document.getElementById('walletTx').innerHTML=s.empty?`<div class="empty-state" style="padding:16px"><div class="empty-icon">📋</div><p>No transactions yet</p></div>`:s.docs.map(d=>txHTML(d.data())).join('')}catch(e){}}
+async function loadWallet(){updateUI();try{const q=query(collection(db,'transactions'),where('userId','==',_s.user.uid),orderBy('createdAt','desc'),limit(10));const timeout=new Promise((_,rej)=>setTimeout(()=>rej(new Error('timeout')),8000));const s=await Promise.race([getDocs(q),timeout]);document.getElementById('walletTx').innerHTML=s.empty?`<div class="empty-state" style="padding:16px"><div class="empty-icon">📋</div><p>No transactions yet</p></div>`:s.docs.map(d=>txHTML(d.data())).join('')}catch(e){document.getElementById('walletTx').innerHTML='<div class="empty-state" style="padding:16px"><div class="empty-icon">📋</div><p>No transactions yet</p></div>'}}
 window.loadHist=async(f='all')=>{if(!_s.user)return;document.getElementById('histList').innerHTML='<div class="loading-spinner"></div>';try{const q=query(collection(db,'transactions'),where('userId','==',_s.user.uid),orderBy('createdAt','desc'),limit(50));const s=await getDocs(q);_s.allTx=s.docs.map(d=>({id:d.id,...d.data()}));renderHist(_s.allTx,f)}catch(e){document.getElementById('histList').innerHTML='<div class="empty-state"><div class="empty-icon">📋</div><h4>No history</h4></div>'}};
 function renderHist(txs,f){const c=document.getElementById('histList');const fl=f==='all'?txs:txs.filter(t=>t.type===f);c.innerHTML=fl.length?`<div class="card" style="padding:0;overflow:hidden">${fl.map(t=>txHTML(t)).join('')}</div>`:`<div class="empty-state"><div class="empty-icon">🔍</div><h4>No ${f} transactions</h4></div>`}
 window.filterHist=(f,el)=>{document.querySelectorAll('#histFilter .chip').forEach(c=>c.classList.remove('active'));el.classList.add('active');renderHist(_s.allTx,f)};
@@ -1422,28 +1454,34 @@ window.submitFundingRequest=async()=>{
   btn.disabled=true;btn.innerHTML='<span class="btn-spinner"></span> Submitting...';
   try{
     const reqId=genId(12);
-    let proofURL=null;
-    // Upload proof to Firebase Storage
+    let proofURL='';
+    // Upload proof to Firebase Storage first
     try{
       const sRef=storageRef(storage,`fundingProofs/${_s.user.uid}/${reqId}`);
       await uploadString(sRef,_s.proofDataURL,'data_url');
       proofURL=await getDownloadURL(sRef);
     }catch(uploadErr){
-      // If storage upload fails, store the data URL directly (fallback)
-      proofURL=_s.proofDataURL;
+      console.warn('Storage upload failed, using truncated fallback',uploadErr);
+      // Store a tiny placeholder so Firestore doc stays under 1MB
+      proofURL='pending_upload';
     }
+    // IMPORTANT: never store raw base64 dataURL in Firestore (exceeds 1MB limit)
     const reqData={
-      id:reqId,userId:_s.user.uid,userEmail:_s.userData?.email,
-      userName:_s.userData?.firstName+' '+_s.userData?.lastName,
+      id:reqId,userId:_s.user.uid,userEmail:_s.userData?.email||'',
+      userName:(_s.userData?.firstName||'')+' '+(_s.userData?.lastName||''),
       senderName,amount,note:note||'',proofURL,
       status:'pending',createdAt:serverTimestamp(),reviewedAt:null,reviewedBy:null,
       userAccountNo:_s.userData?.accountNumber||'–'
     };
     await setDoc(doc(db,'fundingRequests',reqId),reqData);
-    // Add pending tx record
-    await addDoc(collection(db,'transactions'),{userId:_s.user.uid,type:'fund',status:'pending',amount,description:'Wallet Funding (Under Review)',reference:reqId,createdAt:serverTimestamp()});
+    // Single pending transaction record
+    const txId=genId(12);
+    await setDoc(doc(db,'transactions',txId),{id:txId,userId:_s.user.uid,type:'fund',status:'pending',amount,description:'Wallet Funding – Under Review',reference:reqId,createdAt:serverTimestamp()});
+    // Update pending balance
+    try{await updateDoc(doc(db,'users',_s.user.uid),{pendingBalance:increment(amount)})}catch(e){}
     await addNotif(_s.user.uid,'⏳ Funding Request Submitted',`Your payment of ₦${amount.toLocaleString()} is under review. You'll be notified once approved.`,'info');
-    // Step 3 UI
+    // ── SUCCESS: update UI ──
+    btn.disabled=false;btn.innerHTML='Submit for Verification →';
     document.getElementById('fsc2').className='fund-step-circle done';document.getElementById('fsc2').textContent='✓';
     document.getElementById('fsc3').className='fund-step-circle done';document.getElementById('fsc3').textContent='✓';
     document.getElementById('fsl2').className='fund-step-line done';
@@ -1451,7 +1489,11 @@ window.submitFundingRequest=async()=>{
     document.getElementById('fundStep3').classList.remove('hidden');
     document.getElementById('fundSubmitReceipt').innerHTML=`<div class="sum-row"><span class="sum-lbl">Amount</span><span class="sum-val" style="color:var(--primary)">₦${amount.toLocaleString()}</span></div><div class="sum-row"><span class="sum-lbl">Sender Name</span><span class="sum-val">${senderName}</span></div><div class="sum-row"><span class="sum-lbl">Reference</span><span class="sum-val">${reqId}</span></div><div class="sum-row"><span class="sum-lbl">Status</span><span class="sum-val">⏳ Pending Review</span></div>`;
     showToast('success','Funding request submitted!');
-  }catch(e){btn.disabled=false;btn.innerHTML='Submit for Verification →';showToast('error','Submission failed. Try again.');console.error(e)}
+  }catch(e){
+    btn.disabled=false;btn.innerHTML='Submit for Verification →';
+    showToast('error','Submission failed: '+(e?.message||'Try again'));
+    console.error('submitFundingRequest error:',e);
+  }
 };
 
 // ══ ADMIN FUNDING REQUESTS ══
@@ -1556,12 +1598,42 @@ window.saveCompanyAccount=async()=>{
 
 // Providers
 function populateProviders(){
-  const AT=[{n:'MTN',e:'🟡',id:'mtn'},{n:'Airtel',e:'🔴',id:'airtel'},{n:'Glo',e:'🟢',id:'glo'},{n:'9mobile',e:'🟤',id:'9mobile'},{n:'MTN GH',e:'🇬🇭',id:'mtngh'},{n:'Vodafone',e:'📶',id:'vodafone'}];
-  const DT=[{n:'MTN',e:'🟡',id:'mtn'},{n:'Airtel',e:'🔴',id:'airtel'},{n:'Glo',e:'🟢',id:'glo'},{n:'9mobile',e:'🟤',id:'9mobile'}];
-  const EL=[{n:'IKEDC',e:'⚡',id:'ikedc'},{n:'EKEDC',e:'⚡',id:'ekedc'},{n:'AEDC',e:'⚡',id:'aedc'},{n:'PHED',e:'⚡',id:'phed'},{n:'KEDCO',e:'⚡',id:'kedco'},{n:'BEDC',e:'⚡',id:'bedc'}];
-  const CB=[{n:'DSTV',e:'📺',id:'dstv'},{n:'GOtv',e:'📡',id:'gotv'},{n:'Startimes',e:'⭐',id:'startimes'}];
-  const SC=[{n:'WAEC',e:'🎓',id:'waec'},{n:'NECO',e:'📚',id:'neco'},{n:'JAMB',e:'✏️',id:'jamb'},{n:'NABTEB',e:'📝',id:'nabteb'}];
-  const rp=(id,items)=>{const el=document.getElementById(id);if(!el)return;el.innerHTML=items.map((p,i)=>`<div class="prov-opt ${i===0?'selected':''}" onclick="selProv('${id}','${p.id}',this)"><span class="prov-emoji">${p.e}</span><span class="prov-label">${p.n}</span></div>`).join('');_s.selProv[id]=items[0].id};
+  // Real VTU provider logos using brand colors and SVG text badges
+  const mkLogo=(abbr,bg,fg='#fff')=>`<div style="width:32px;height:32px;border-radius:8px;background:${bg};display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:900;color:${fg};letter-spacing:-0.5px;font-family:'Space Grotesk',sans-serif">${abbr}</div>`;
+  const AT=[
+    {n:'MTN',logo:mkLogo('MTN','#FFCC00','#000'),id:'mtn'},
+    {n:'Airtel',logo:mkLogo('AIR','#E40000'),id:'airtel'},
+    {n:'Glo',logo:mkLogo('GLO','#008000'),id:'glo'},
+    {n:'9mobile',logo:mkLogo('9MOB','#007B5E'),id:'9mobile'},
+    {n:'MTN GH',logo:mkLogo('MTN','#FFCC00','#000'),id:'mtngh'},
+    {n:'Vodafone',logo:mkLogo('VODA','#E60000'),id:'vodafone'}
+  ];
+  const DT=[
+    {n:'MTN',logo:mkLogo('MTN','#FFCC00','#000'),id:'mtn'},
+    {n:'Airtel',logo:mkLogo('AIR','#E40000'),id:'airtel'},
+    {n:'Glo',logo:mkLogo('GLO','#008000'),id:'glo'},
+    {n:'9mobile',logo:mkLogo('9MOB','#007B5E'),id:'9mobile'}
+  ];
+  const EL=[
+    {n:'IKEDC',logo:mkLogo('IKED','#1A3A6B'),id:'ikedc'},
+    {n:'EKEDC',logo:mkLogo('EKED','#0057A0'),id:'ekedc'},
+    {n:'AEDC',logo:mkLogo('AEDC','#2D7D46'),id:'aedc'},
+    {n:'PHED',logo:mkLogo('PHED','#8B1A1A'),id:'phed'},
+    {n:'KEDCO',logo:mkLogo('KEDC','#6B2D8B'),id:'kedco'},
+    {n:'BEDC',logo:mkLogo('BEDC','#1A4A7A'),id:'bedc'}
+  ];
+  const CB=[
+    {n:'DSTV',logo:mkLogo('DSTV','#0066B3'),id:'dstv'},
+    {n:'GOtv',logo:mkLogo('GOtv','#E87722'),id:'gotv'},
+    {n:'Startimes',logo:mkLogo('STAR','#C8102E'),id:'startimes'}
+  ];
+  const SC=[
+    {n:'WAEC',logo:mkLogo('WAEC','#00843D'),id:'waec'},
+    {n:'NECO',logo:mkLogo('NECO','#1B4F8A'),id:'neco'},
+    {n:'JAMB',logo:mkLogo('JAMB','#006400'),id:'jamb'},
+    {n:'NABTEB',logo:mkLogo('NABT','#8B0000'),id:'nabteb'}
+  ];
+  const rp=(id,items)=>{const el=document.getElementById(id);if(!el)return;el.innerHTML=items.map((p,i)=>`<div class="prov-opt ${i===0?'selected':''}" onclick="selProv('${id}','${p.id}',this)">${p.logo}<span class="prov-label">${p.n}</span></div>`).join('');_s.selProv[id]=items[0].id};
   rp('airtimeProv',AT);rp('dataProv',DT);rp('elecProv',EL);rp('cableProv',CB);rp('schoolProv',SC);
   const dp=document.getElementById('dataPlans');
   if(dp){const pl=[{n:'500MB',d:'1 day',p:130},{n:'1GB',d:'1 day',p:230},{n:'1GB',d:'30 days',p:480},{n:'2GB',d:'30 days',p:950},{n:'5GB',d:'30 days',p:1850},{n:'10GB',d:'30 days',p:3200}];dp.innerHTML=pl.map((p,i)=>`<div class="plan-opt ${i===0?'selected':''}" onclick="selPlan(this,'${p.n}',${p.p})"><div class="plan-name">${p.n}</div><div class="plan-desc">${p.d}</div><div class="plan-price">₦${p.p}</div></div>`).join('');_s.selPlan=_s.selPlan||{name:pl[0].n,price:pl[0].p}}
