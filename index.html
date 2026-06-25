@@ -102,7 +102,7 @@ select.form-input{cursor:pointer;-webkit-appearance:none;background-image:url("d
 
 /* ── HOME ── */
 #home{padding-bottom:90px}
-.home-header{background:linear-gradient(145deg,#1E1B4B 0%,#3B3582 100%);padding:48px 14px 18px;position:relative;overflow:hidden}
+.home-header{background:linear-gradient(145deg,#1E1B4B 0%,#3B3582 100%);padding:48px 14px 22px;position:relative;overflow:visible}
 .home-header::before{content:'';position:absolute;top:-40%;right:-20%;width:220px;height:220px;background:radial-gradient(circle,rgba(123,117,201,.15) 0%,transparent 70%);border-radius:50%}
 .home-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:18px;position:relative;z-index:1}
 .home-user{display:flex;align-items:center;gap:10px}
@@ -123,7 +123,7 @@ select.form-input{cursor:pointer;-webkit-appearance:none;background-image:url("d
 .balance-stat-val.green{color:#34D399}
 .balance-stat-val.red{color:#F87171}
 .eye-toggle{cursor:pointer;opacity:.6;font-size:13px}
-.home-content{padding:14px 12px 0;position:relative;z-index:2}
+.home-content{padding:14px 12px 0;position:relative;z-index:1}
 .quick-actions{background:white;border-radius:18px;padding:15px;box-shadow:var(--shadow);margin-bottom:12px}
 .section-title{font-size:14px;font-weight:700;color:var(--text);margin-bottom:11px;font-family:var(--font-display)}
 .actions-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
@@ -726,22 +726,52 @@ textarea.form-input{resize:none}
   </div>
 
   <div class="fund-body">
-    <!-- STEP 1: Enter Amount -->
+    <!-- STEP 1: Enter Amount + Method -->
     <div id="fundStep1">
-      <div class="fund-panel">
-        <div class="fund-panel-title"><div class="step-badge">1</div>Enter Amount to Fund</div>
-        <div class="form-group"><label class="form-label">Amount (₦)</label><input type="number" class="form-input" id="fundAmount" placeholder="Enter amount e.g. 5000"></div>
-        <div class="chip-row">
-          <div class="chip" onclick="setVal('fundAmount',500)">₦500</div>
-          <div class="chip" onclick="setVal('fundAmount',1000)">₦1,000</div>
-          <div class="chip" onclick="setVal('fundAmount',2000)">₦2,000</div>
-          <div class="chip" onclick="setVal('fundAmount',5000)">₦5,000</div>
-          <div class="chip" onclick="setVal('fundAmount',10000)">₦10,000</div>
-          <div class="chip" onclick="setVal('fundAmount',50000)">₦50,000</div>
+      <!-- Payment method tabs -->
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px">
+        <button id="tabManual" onclick="switchFundTab('manual')" style="background:var(--primary);color:white;border:none;border-radius:11px;padding:11px 6px;font-size:12px;font-weight:700;cursor:pointer;font-family:var(--font)">🏦 Manual Transfer</button>
+        <button id="tabPaystack" onclick="switchFundTab('paystack')" style="background:white;color:var(--text);border:2px solid var(--border);border-radius:11px;padding:11px 6px;font-size:12px;font-weight:700;cursor:pointer;font-family:var(--font)">💳 Pay with Card</button>
+      </div>
+
+      <!-- Manual tab content -->
+      <div id="fundTabManual">
+        <div class="fund-panel">
+          <div class="fund-panel-title"><div class="step-badge">1</div>Enter Amount to Fund</div>
+          <div class="form-group"><label class="form-label">Amount (₦)</label><input type="number" class="form-input" id="fundAmount" placeholder="Enter amount e.g. 5000"></div>
+          <div class="chip-row">
+            <div class="chip" onclick="setVal('fundAmount',500)">₦500</div>
+            <div class="chip" onclick="setVal('fundAmount',1000)">₦1,000</div>
+            <div class="chip" onclick="setVal('fundAmount',2000)">₦2,000</div>
+            <div class="chip" onclick="setVal('fundAmount',5000)">₦5,000</div>
+            <div class="chip" onclick="setVal('fundAmount',10000)">₦10,000</div>
+            <div class="chip" onclick="setVal('fundAmount',50000)">₦50,000</div>
+          </div>
+          <div class="form-group"><label class="form-label">Your Name (as it appears on transfer)</label><input type="text" class="form-input" id="fundSenderName" placeholder="e.g. John Doe"></div>
+          <div class="form-group"><label class="form-label">Note / Description (Optional)</label><input type="text" class="form-input" id="fundNote" placeholder="e.g. Wallet top-up"></div>
+          <button class="btn btn-primary" onclick="goToFundStep2()">Continue →</button>
         </div>
-        <div class="form-group"><label class="form-label">Your Name (as it appears on transfer)</label><input type="text" class="form-input" id="fundSenderName" placeholder="e.g. John Doe"></div>
-        <div class="form-group"><label class="form-label">Note / Description (Optional)</label><input type="text" class="form-input" id="fundNote" placeholder="e.g. Wallet top-up"></div>
-        <button class="btn btn-primary" onclick="goToFundStep2()">Continue →</button>
+      </div>
+
+      <!-- Paystack tab content -->
+      <div id="fundTabPaystack" style="display:none">
+        <div class="fund-panel">
+          <div class="fund-panel-title"><div class="step-badge">1</div>Pay with Paystack</div>
+          <div style="background:#E0FDF4;border-radius:10px;padding:10px 12px;margin-bottom:13px;display:flex;gap:8px">
+            <span style="font-size:16px">✅</span>
+            <p style="font-size:11px;color:#065F46;line-height:1.5">Instant credit after payment. Powered by <strong>Paystack</strong> — safe &amp; secure.</p>
+          </div>
+          <div class="form-group"><label class="form-label">Amount (₦)</label><input type="number" class="form-input" id="paystackAmount" placeholder="Enter amount e.g. 5000"></div>
+          <div class="chip-row">
+            <div class="chip" onclick="setVal('paystackAmount',500)">₦500</div>
+            <div class="chip" onclick="setVal('paystackAmount',1000)">₦1,000</div>
+            <div class="chip" onclick="setVal('paystackAmount',2000)">₦2,000</div>
+            <div class="chip" onclick="setVal('paystackAmount',5000)">₦5,000</div>
+            <div class="chip" onclick="setVal('paystackAmount',10000)">₦10,000</div>
+          </div>
+          <div id="paystackKeyStatus" style="font-size:11px;color:var(--text3);margin-bottom:10px;text-align:center">Loading payment gateway...</div>
+          <button class="btn btn-primary" id="paystackPayBtn" onclick="initPaystackPayment()" style="background:linear-gradient(135deg,#00C3FF,#0057FF)">💳 Pay Now with Paystack</button>
+        </div>
       </div>
     </div>
 
@@ -1111,7 +1141,7 @@ textarea.form-input{resize:none}
 
 <div class="screen" id="adminWallets">
   <div class="navbar light" style="padding-top:42px"><button class="nav-back" onclick="goBack()">←</button><div class="nav-title">Wallet Management</div><div style="width:37px"></div></div>
-  <div style="padding:10px 12px 20px">
+  <div style="padding:10px 12px 80px">
     <div class="card" style="margin-bottom:10px">
       <div class="section-title">Credit User Wallet</div>
       <div class="form-group"><label class="form-label">User Email</label><input type="text" class="form-input" id="adminFundUser" placeholder="user@email.com"></div>
@@ -1396,7 +1426,40 @@ function updateUI(){
 }
 window.toggleBal=()=>{_s.balHidden=!_s.balHidden;document.getElementById('homeBalVal').textContent=_s.balHidden?'••••••':Number(_s.userData?.balance||0).toLocaleString('en-NG',{minimumFractionDigits:2});document.getElementById('balEye').textContent=_s.balHidden?'🙈':'👁'};
 async function loadHome(){if(!_s.user)return;listenUD(_s.user.uid);loadRecentTx()}
-async function loadRecentTx(){if(!_s.user)return;const c=document.getElementById('recentTx');try{const q=query(collection(db,'transactions'),where('userId','==',_s.user.uid),orderBy('createdAt','desc'),limit(5));const timeout=new Promise((_,rej)=>setTimeout(()=>rej(new Error('timeout')),8000));const s=await Promise.race([getDocs(q),timeout]);c.innerHTML=s.empty?`<div class="empty-state"><div class="empty-icon">💳</div><h4>No transactions yet</h4><p>Fund your wallet to get started</p></div>`:s.docs.map(d=>txHTML(d.data())).join('')}catch(e){c.innerHTML='<div class="empty-state"><div class="empty-icon">💳</div><h4>No transactions yet</h4><p>Fund your wallet to get started</p></div>'}}
+async function loadRecentTx(){
+  if(!_s.user)return;
+  const c=document.getElementById('recentTx');
+  c.innerHTML='<div class="loading-spinner"></div>';
+  try{
+    // Try with ordering first; if index missing, fall back to simple query
+    let snap;
+    try{
+      const q=query(collection(db,'transactions'),where('userId','==',_s.user.uid),orderBy('createdAt','desc'),limit(5));
+      snap=await Promise.race([getDocs(q),new Promise((_,rej)=>setTimeout(()=>rej(new Error('t')),6000))]);
+    }catch(indexErr){
+      // Fallback: no orderBy (avoids composite index requirement)
+      const q2=query(collection(db,'transactions'),where('userId','==',_s.user.uid),limit(5));
+      snap=await getDocs(q2);
+    }
+    if(snap&&!snap.empty){
+      c.innerHTML=snap.docs.map(d=>txHTML(d.data())).join('');
+      return;
+    }
+    // Also check fundingRequests (manual funding submissions)
+    try{
+      const fq=query(collection(db,'fundingRequests'),where('userId','==',_s.user.uid),limit(3));
+      const fs=await getDocs(fq);
+      if(!fs.empty){
+        c.innerHTML=fs.docs.map(d=>{const r=d.data();return txHTML({type:'fund',status:r.status,amount:r.amount,description:'Manual Funding – '+r.status.charAt(0).toUpperCase()+r.status.slice(1),createdAt:r.createdAt})}).join('');
+        return;
+      }
+    }catch(e2){}
+    c.innerHTML='<div class="empty-state"><div class="empty-icon">💳</div><h4>No transactions yet</h4><p>Fund your wallet to get started</p></div>';
+  }catch(e){
+    c.innerHTML='<div class="empty-state"><div class="empty-icon">💳</div><h4>No transactions yet</h4><p>Fund your wallet to get started</p></div>';
+    console.error('loadRecentTx:',e);
+  }
+}
 
 function txHTML(tx){
   const ic=['fund','referral_bonus','admin_credit','fund_approved'].includes(tx.type);
@@ -1405,31 +1468,10 @@ function txHTML(tx){
   const s=csym(_s.userData?.country||'NG');
   return`<div class="tx-item"><div class="tx-icon" style="background:${bg[tx.type]||'#F8FAFC'}">${icons[tx.type]||'💳'}</div><div class="tx-info"><div class="tx-name">${tx.description||tx.type}</div><div class="tx-meta">${tAgo(tx.createdAt)} · <span class="badge badge-${tx.status==='success'?'success':tx.status==='pending'?'pending':tx.status==='review'?'review':'failed'}">${tx.status}</span></div></div><div class="tx-amt"><div class="tx-amt-val ${ic?'cr':'dr'}">${ic?'+':'-'}${fmt(tx.amount,s)}</div></div></div>`;
 }
-async function loadWallet(){updateUI();try{const q=query(collection(db,'transactions'),where('userId','==',_s.user.uid),orderBy('createdAt','desc'),limit(10));const timeout=new Promise((_,rej)=>setTimeout(()=>rej(new Error('timeout')),8000));const s=await Promise.race([getDocs(q),timeout]);document.getElementById('walletTx').innerHTML=s.empty?`<div class="empty-state" style="padding:16px"><div class="empty-icon">📋</div><p>No transactions yet</p></div>`:s.docs.map(d=>txHTML(d.data())).join('')}catch(e){document.getElementById('walletTx').innerHTML='<div class="empty-state" style="padding:16px"><div class="empty-icon">📋</div><p>No transactions yet</p></div>'}}
-window.loadHist=async(f='all')=>{if(!_s.user)return;document.getElementById('histList').innerHTML='<div class="loading-spinner"></div>';try{const q=query(collection(db,'transactions'),where('userId','==',_s.user.uid),orderBy('createdAt','desc'),limit(50));const s=await getDocs(q);_s.allTx=s.docs.map(d=>({id:d.id,...d.data()}));renderHist(_s.allTx,f)}catch(e){document.getElementById('histList').innerHTML='<div class="empty-state"><div class="empty-icon">📋</div><h4>No history</h4></div>'}};
-function renderHist(txs,f){const c=document.getElementById('histList');const fl=f==='all'?txs:txs.filter(t=>t.type===f);c.innerHTML=fl.length?`<div class="card" style="padding:0;overflow:hidden">${fl.map(t=>txHTML(t)).join('')}</div>`:`<div class="empty-state"><div class="empty-icon">🔍</div><h4>No ${f} transactions</h4></div>`}
-window.filterHist=(f,el)=>{document.querySelectorAll('#histFilter .chip').forEach(c=>c.classList.remove('active'));el.classList.add('active');renderHist(_s.allTx,f)};
-async function addNotif(uid,title,text,type='info'){await addDoc(collection(db,'notifications'),{userId:uid,title,text,type,read:false,createdAt:serverTimestamp()})}
-window.loadNotifs=async()=>{if(!_s.user)return;document.getElementById('notifList').innerHTML='<div class="loading-spinner"></div>';const q=query(collection(db,'notifications'),where('userId','==',_s.user.uid),orderBy('createdAt','desc'),limit(30));const s=await getDocs(q);const ic={success:'✅',info:'ℹ️',promo:'🎉',warning:'⚠️'};const bg={success:'#E0FDF4',info:'var(--primary-light)',promo:'#F5F3FF',warning:'#FEFCE8'};document.getElementById('notifList').innerHTML=s.empty?`<div class="empty-state"><div class="empty-icon">🔔</div><h4>No notifications</h4></div>`:s.docs.map(d=>{const n=d.data();return`<div class="notif-item ${n.read?'':'unread'}" onclick="markRead('${d.id}',this)"><div class="notif-item-icon" style="background:${bg[n.type]||'#F8FAFC'}">${ic[n.type]||'🔔'}</div><div class="notif-item-body"><div class="notif-item-title">${n.title}</div><div class="notif-item-text">${n.text}</div><div class="notif-item-time">${tAgo(n.createdAt)}</div></div></div>`}).join('')};
-window.markRead=async(id,el)=>{el.classList.remove('unread');await updateDoc(doc(db,'notifications',id),{read:true})};
-window.markAllRead=async()=>{if(!_s.user)return;const q=query(collection(db,'notifications'),where('userId','==',_s.user.uid),where('read','==',false));const s=await getDocs(q);s.forEach(d=>updateDoc(doc(db,'notifications',d.id),{read:true}));document.getElementById('notifDot').style.display='none';loadNotifs()};
+async function loadWallet(){updateUI();const el=document.getElementById('walletTx');el.innerHTML='<div class="loading-spinner"></div>';try{const q=query(collection(db,'transactions'),where('userId','==',_s.user.uid),limit(10));const s=await getDocs(q);const txs=s.docs.map(d=>d.data()).sort((a,b)=>{const ta=a.createdAt?.toMillis?a.createdAt.toMillis():0;const tb=b.createdAt?.toMillis?b.createdAt.toMillis():0;return tb-ta;});el.innerHTML=txs.length?txs.map(d=>txHTML(d)).join(''):'<div class="empty-state" style="padding:16px"><div class="empty-icon">📋</div><p>No transactions yet</p></div>';}catch(e){el.innerHTML='<div class="empty-state" style="padding:16px"><div class="empty-icon">📋</div><p>Error loading transactions</p></div>';}};
+async function checkPaystackKey(){const el=document.getElementById('paystackKeyStatus');if(!el)return;if(window._paystackKey&&window._paystackKey.startsWith('pk_')){el.innerHTML='<span style="color:var(--success-green)">✅ Paystack gateway ready</span>';return;}try{const snap=await getDoc(doc(db,'settings','apis'));const a=snap.exists()?snap.data():{};const key=a.paystackPub||a.paystackPublic||'';if(key&&key.startsWith('pk_')){window._paystackKey=key;el.innerHTML='<span style="color:var(--success-green)">✅ Paystack gateway ready</span>';}else{el.innerHTML='<span style="color:var(--danger)">⚠ Paystack key not set. Admin → API Management</span>';}}catch(e){el.innerHTML='<span style="color:var(--danger)">Gateway error</span>';}}
+window.initPaystackPayment=async()=>{const amount=parseFloat(document.getElementById('paystackAmount').value)||0;if(amount<100)return showToast('error','Minimum ₦100');if(!window._paystackKey||!window._paystackKey.startsWith('pk_')){await checkPaystackKey();}if(!window._paystackKey||!window._paystackKey.startsWith('pk_')){return showToast('error','Paystack not set up. Use Manual Transfer or contact admin.');}const email=_s.userData?.email;if(!email)return showToast('error','Please log in again');const ref='KBR'+Date.now()+genId(6);if(!window.PaystackPop){try{await new Promise((res,rej)=>{const sc=document.createElement('script');sc.src='https://js.paystack.co/v1/inline.js';sc.onload=res;sc.onerror=rej;document.head.appendChild(sc);});}catch(e){return showToast('error','Could not load Paystack. Check internet.');}}const onSuccess=async(reference)=>{showToast('info','Processing payment...');try{await updateDoc(doc(db,'users',_s.user.uid),{balance:increment(amount),totalFunded:increment(amount)});const txId=genId(12);await setDoc(doc(db,'transactions',txId),{id:txId,userId:_s.user.uid,type:'fund_approved',status:'success',amount,description:'Wallet Funded via Paystack',reference:reference,createdAt:serverTimestamp()});addNotif(_s.user.uid,'✅ Wallet Funded!','₦'+amount.toLocaleString()+' via Paystack','success').catch(()=>{});showToast('success','₦'+amount.toLocaleString()+' added to your wallet!');navigateTo('home');}catch(e){showToast('error','Payment done but credit failed. Ref: '+reference);}};try{const handler=window.PaystackPop.setup({key:window._paystackKey,email,amount:Math.round(amount*100),currency:'NGN',ref,channels:['card','bank','ussd','qr','mobile_money','bank_transfer'],callback:(resp)=>{onSuccess(resp.reference||ref);},onClose:()=>{showToast('info','Payment window closed');}});handler.openIframe();}catch(e){showToast('error','Paystack error: '+e.message);console.error(e);}};
 
-// ══ FUND WALLET – 3-STEP PROCESS ══
-window.resetFundWallet=()=>{
-  _s.fundStep=1;_s.proofFile=null;_s.proofDataURL=null;
-  document.getElementById('fundStep1').classList.remove('hidden');
-  document.getElementById('fundStep2').classList.add('hidden');
-  document.getElementById('fundStep3').classList.add('hidden');
-  document.getElementById('fsc1').className='fund-step-circle active';
-  document.getElementById('fsc2').className='fund-step-circle';
-  document.getElementById('fsc3').className='fund-step-circle';
-  document.getElementById('fsl1').className='fund-step-line';
-  document.getElementById('fsl2').className='fund-step-line';
-  document.getElementById('uploadArea').classList.remove('has-file');
-  document.getElementById('uploadPreview').style.display='none';
-  document.getElementById('uploadFileName').style.display='none';
-  document.getElementById('proofFileInput').value='';
-};
 
 window.goToFundStep2=()=>{
   const amount=parseFloat(document.getElementById('fundAmount').value);
@@ -1557,10 +1599,14 @@ function renderFundReqs(reqs,statusFilter){
         <div class="fund-req-detail"><span class="frd-label">Sender Name</span><span class="frd-val">${r.senderName||'–'}</span></div>
         <div class="fund-req-detail"><span class="frd-label">Note</span><span class="frd-val">${r.note||'–'}</span></div>
       </div>
-      ${r.proofURL&&r.proofURL.startsWith('data:image')?
-        `<img src="${r.proofURL}" class="fund-req-proof" alt="Payment proof" onclick="viewProofFull('${r.id}')">`:
-        r.proofURL?`<div class="fund-req-proof-placeholder">📎 <a href="${r.proofURL}" target="_blank" style="color:var(--primary);font-weight:600">View Payment Proof</a></div>`:
-        `<div class="fund-req-proof-placeholder">No proof uploaded</div>`}
+      ${r.proofThumb?
+        `<div style="margin:10px 0;border-radius:10px;overflow:hidden;cursor:pointer;border:2px solid var(--border)" onclick="viewProofFull('${r.id}')">
+           <img src="${r.proofThumb}" style="width:100%;max-height:180px;object-fit:cover;display:block">
+           <div style="font-size:10px;color:var(--text3);text-align:center;padding:5px;background:#F8FAFC">Tap to view full receipt</div>
+         </div>`:
+        r.proofURL&&r.proofURL!=='pending_upload'&&r.proofURL!=='pending_storage_upload'?
+        `<div class="fund-req-proof-placeholder">📎 <a href="${r.proofURL}" target="_blank" style="color:var(--primary);font-weight:600">View Payment Proof</a></div>`:
+        `<div class="fund-req-proof-placeholder" style="color:#F59E0B">⚠️ No receipt image — ask user to resubmit</div>`}
       ${r.status==='pending'?`
         <div class="fund-req-actions">
           <button class="btn btn-success btn-sm" style="flex:1" onclick="approveFundRequest('${r.id}','${r.userId}',${r.amount})">✅ Approve</button>
@@ -1570,7 +1616,7 @@ function renderFundReqs(reqs,statusFilter){
 }
 
 window.filterFundReqs=(f,el)=>{document.querySelectorAll('#fundReqFilter .chip').forEach(c=>c.classList.remove('active'));el.classList.add('active');loadFundingRequests(f)};
-window.viewProofFull=(reqId)=>{const r=_s.allFundReqs.find(r=>r.id===reqId);if(!r?.proofURL)return;showOverlay(`<div class="sheet-title">Payment Proof</div><img src="${r.proofURL}" style="width:100%;border-radius:12px;margin-bottom:14px"><div style="font-size:12px;color:var(--text3);text-align:center">Ref: ${r.id}</div>`)};
+window.viewProofFull=(reqId)=>{const r=_s.allFundReqs.find(r=>r.id===reqId);if(!r)return;const imgSrc=r.proofThumb||(r.proofURL&&r.proofURL.startsWith('http')?r.proofURL:null);if(!imgSrc)return showToast('info','No receipt image available');showOverlay(`<div class="sheet-title">Payment Proof</div><img src="${imgSrc}" style="width:100%;border-radius:12px;margin-bottom:14px;max-height:70vh;object-fit:contain"><div style="font-size:11px;color:var(--text3);text-align:center;margin-bottom:8px">Ref: ${r.id}</div>${r.proofURL&&r.proofURL.startsWith('http')?`<a href="${r.proofURL}" target="_blank" class="btn btn-outline" style="font-size:12px">Open Full Image</a>`:''}`)};
 
 window.approveFundRequest=async(reqId,userId,amount)=>{
   if(!confirm(`Approve ₦${Number(amount).toLocaleString()} funding for this user?`))return;
@@ -1743,10 +1789,10 @@ window.promoteUser=async(id)=>{const lv=['standard','bronze','silver','gold'];co
 window.loadAdminTxs=async()=>{document.getElementById('adminTxList').innerHTML='<div class="loading-spinner"></div>';const q=query(collection(db,'transactions'),orderBy('createdAt','desc'),limit(50));const s=await getDocs(q);const txs=s.docs.map(d=>({id:d.id,...d.data()}));document.getElementById('adminTxList').innerHTML=txs.length?`<div class="admin-panel" style="margin:0">${txs.map(tx=>`<div class="admin-table-row"><div class="row-main"><div class="row-title">${tx.description||tx.type}</div><div class="row-sub">${tAgo(tx.createdAt)}</div></div><div style="text-align:right"><div style="font-size:12px;font-weight:700;color:${['fund','fund_approved','admin_credit'].includes(tx.type)?'var(--success-green)':'var(--danger)'}">₦${(tx.amount||0).toLocaleString()}</div><span class="badge badge-${tx.status==='success'?'success':tx.status==='pending'?'pending':'failed'}">${tx.status}</span></div></div>`).join('')}</div>`:'<div class="empty-state"><p>No transactions</p></div>'};
 window.filterAdminTx=(f,el)=>{document.querySelectorAll('#adminTransactions .chip').forEach(c=>c.classList.remove('active'));el.classList.add('active')};
 window.loadAdminAgents=async()=>{const c=document.getElementById('adminAgentsList');const q=query(collection(db,'users'),where('role','==','agent'));const s=await getDocs(q);c.innerHTML=s.empty?'<div class="empty-state"><div class="empty-icon">🏪</div><h4>No agents yet</h4></div>':`<div class="admin-panel" style="margin:0">${s.docs.map(d=>{const u=d.data();return`<div class="user-row"><div class="avatar" style="width:30px;height:30px;font-size:11px">${(u.firstName?.[0]||'?')+(u.lastName?.[0]||'')}</div><div class="user-row-info"><div class="user-row-name">${u.firstName} ${u.lastName}</div><div class="user-row-meta">Level: ${u.agentLevel} · Comm: ₦${(u.agentCommission||0).toLocaleString()}</div></div><span class="badge badge-success">${u.agentLevel}</span></div>`}).join('')}</div>`};
-async function loadAPIConfigs(){try{const s=await getDoc(doc(db,'settings','apis'));if(s.exists()){const a=s.data();['ckUser','ckToken','ckURL','paystackPub','paystackSec','opayMerchant'].forEach(id=>{const el=document.getElementById(id);if(el&&a[id.replace('ck','ck')])el.value=a[id]||''})}}catch(e){}}
+async function loadAPIConfigs(){try{const snap=await getDoc(doc(db,'settings','apis'));if(snap.exists()){const a=snap.data();['ckUser','ckToken','ckURL'].forEach(id=>{const el=document.getElementById(id);if(el)el.value=a[id]||'';});const pub=a.paystackPub||a.paystackPublic||'';const sec=a.paystackSec||a.paystackSecret||'';const pe=document.getElementById('paystackPub');if(pe)pe.value=pub;const se=document.getElementById('paystackSec');if(se)se.value=sec;const en=document.getElementById('paystackEnabled');if(en)en.checked=a.paystackEnabled!==false;if(pub&&pub.startsWith('pk_'))window._paystackKey=pub;}}catch(e){console.error('loadAPIConfigs:',e);}}
 window.loadAPISettings=async()=>{await loadAPIConfigs();loadVTU()};
 async function loadVTU(){const el=document.getElementById('vtuList');if(!el)return;try{const s=await getDocs(collection(db,'vtuProviders'));el.innerHTML=s.empty?'<p style="font-size:11px;color:var(--text3);padding:5px 0">No additional providers added.</p>':s.docs.map(d=>{const p=d.data();return`<div class="admin-panel" style="margin:0 0 7px"><div class="admin-table-row"><div class="row-main"><div class="row-title">${p.name}</div><div class="row-sub">${p.url}</div></div><label class="toggle-switch"><input type="checkbox" ${p.enabled?'checked':''} onchange="toggleVTU('${d.id}',this.checked)"><div class="toggle-slider"></div></label></div></div>`}).join('')}catch(e){}}
-window.saveAPISettings=async()=>{const s={ckUser:document.getElementById('ckUser')?.value||'',ckToken:document.getElementById('ckToken')?.value||'',ckURL:document.getElementById('ckURL')?.value||'',ckEnabled:document.getElementById('ckEnabled')?.checked,paystackPublic:document.getElementById('paystackPub')?.value||'',paystackSecret:document.getElementById('paystackSec')?.value||'',paystackEnabled:document.getElementById('paystackEnabled')?.checked,updatedAt:serverTimestamp()};await setDoc(doc(db,'settings','apis'),s,{merge:true});showToast('success','API settings saved!')};
+window.saveAPISettings=async()=>{const pub=document.getElementById('paystackPub')?.value||'';const sec=document.getElementById('paystackSec')?.value||'';const s={ckUser:document.getElementById('ckUser')?.value||'',ckToken:document.getElementById('ckToken')?.value||'',ckURL:document.getElementById('ckURL')?.value||'',ckEnabled:document.getElementById('ckEnabled')?.checked,paystackPub:pub,paystackPublic:pub,paystackSec:sec,paystackSecret:sec,paystackEnabled:document.getElementById('paystackEnabled')?.checked,updatedAt:serverTimestamp()};await setDoc(doc(db,'settings','apis'),s,{merge:true});if(pub&&pub.startsWith('pk_'))window._paystackKey=pub;showToast('success','Settings saved! Paystack ready.');};
 window.showAddAPISheet=()=>showOverlay(`<div class="sheet-title">Add VTU Provider</div><div class="api-field"><label class="api-label">Name</label><input class="api-input" id="newPN" placeholder="Provider Name"></div><div class="api-field"><label class="api-label">API URL</label><input class="api-input" id="newPU" placeholder="https://api.provider.com/"></div><div class="api-field"><label class="api-label">API Key</label><input class="api-input" id="newPK" type="password" placeholder="API key"></div><button class="btn btn-primary" style="margin-top:12px" onclick="saveNewProvider()">Add Provider</button>`);
 window.saveNewProvider=async()=>{const n=document.getElementById('newPN').value;const u=document.getElementById('newPU').value;const k=document.getElementById('newPK').value;if(!n||!u)return showToast('error','Fill required fields');await addDoc(collection(db,'vtuProviders'),{name:n,url:u,apiKey:k,enabled:true,createdAt:serverTimestamp()});showToast('success','Provider added!');closeOverlay();loadVTU()};
 window.toggleVTU=async(id,e)=>{await updateDoc(doc(db,'vtuProviders',id),{enabled:e});showToast(e?'success':'info',`Provider ${e?'enabled':'disabled'}`)};
