@@ -1515,21 +1515,26 @@ window.submitFundingRequest=async()=>{
   const btn=document.getElementById('submitProofBtn');
   btn.disabled=true;btn.innerHTML='<span class="btn-spinner"></span> Submitting...';
 
-  // Completely skip Firebase Storage — write request directly to Firestore
-  // Store only a thumbnail (max 50KB) as base64 so Firestore 1MB limit is safe
+    // Compress receipt image: 800px wide, 0.82 quality = clear but under 300KB
   let proofThumb='';
   try{
-    // Compress image to tiny thumbnail for Firestore storage
     const img=new Image();
     await new Promise((res,rej)=>{img.onload=res;img.onerror=rej;img.src=_s.proofDataURL;});
     const cvs=document.createElement('canvas');
-    const maxDim=300;
-    const scale=Math.min(maxDim/img.width,maxDim/img.height,1);
+    const maxW=800, maxH=1000;
+    const scale=Math.min(maxW/img.width,maxH/img.height,1);
     cvs.width=Math.round(img.width*scale);
     cvs.height=Math.round(img.height*scale);
     cvs.getContext('2d').drawImage(img,0,0,cvs.width,cvs.height);
-    proofThumb=cvs.toDataURL('image/jpeg',0.5);
-  }catch(e){proofThumb='uploaded';}
+    proofThumb=cvs.toDataURL('image/jpeg',0.82);
+    // If still too large for Firestore (>900KB), reduce further
+    if(proofThumb.length>900000){
+      cvs.width=Math.round(cvs.width*0.6);
+      cvs.height=Math.round(cvs.height*0.6);
+      cvs.getContext('2d').drawImage(img,0,0,cvs.width,cvs.height);
+      proofThumb=cvs.toDataURL('image/jpeg',0.75);
+    }
+  }catch(e){proofThumb='';}
 
   try{
     const reqId=genId(12);
@@ -1803,6 +1808,68 @@ window.toggleCountry=async(code,e)=>{await setDoc(doc(db,'settings','countries')
 window.adminCreditWallet=async()=>{const ui=document.getElementById('adminFundUser').value;const am=parseFloat(document.getElementById('adminFundAmt').value);const re=document.getElementById('adminFundReason').value;if(!ui||!am)return showToast('error','Fill all fields');try{const q=query(collection(db,'users'),where('email','==',ui));const s=await getDocs(q);if(s.empty)return showToast('error','User not found');const uid=s.docs[0].id;await updateDoc(doc(db,'users',uid),{balance:increment(am)});const tid=genId(12);await setDoc(doc(db,'transactions',tid),{id:tid,userId:uid,type:'admin_credit',status:'success',amount:am,description:`Admin Credit: ${re}`,createdAt:serverTimestamp()});await addNotif(uid,'💰 Wallet Credited',`₦${am.toLocaleString()} added. Reason: ${re}`,'success');showToast('success',`₦${am.toLocaleString()} credited!`)}catch(e){showToast('error','Failed')}};
 window.adminDebitWallet=async()=>{const ui=document.getElementById('adminDebitUser').value;const am=parseFloat(document.getElementById('adminDebitAmt').value);if(!ui||!am)return showToast('error','Fill all fields');try{const q=query(collection(db,'users'),where('email','==',ui));const s=await getDocs(q);if(s.empty)return showToast('error','User not found');if(am>(s.docs[0].data().balance||0))return showToast('error','Insufficient balance');await updateDoc(doc(db,'users',s.docs[0].id),{balance:increment(-am)});showToast('success',`₦${am.toLocaleString()} debited!`)}catch(e){showToast('error','Failed')}};
 window.sendBroadcast=async()=>{const t=document.getElementById('notifTitle').value;const m=document.getElementById('notifMsg').value;const tp=document.getElementById('notifType').value;const tg=document.getElementById('notifTarget').value;if(!t||!m)return showToast('error','Fill all fields');try{let uq=collection(db,'users');if(tg==='agents')uq=query(uq,where('role','==','agent'));else if(tg!=='all')uq=query(uq,where('country','==',tg));const s=await getDocs(uq);await Promise.all(s.docs.map(d=>addNotif(d.id,t,m,tp)));showToast('success',`Sent to ${s.size} users!`);document.getElementById('notifTitle').value='';document.getElementById('notifMsg').value=''}catch(e){showToast('error','Failed')}};
+
+
+// ── addNotif: write a notification to Firestore ──
+async function addNotif(uid, title, message, type='info'){
+  try{
+    await addDoc(collection(db,'notifications'),{
+      userId:uid, title, message, type,
+      read:false, createdAt:serverTimestamp()
+    });
+  }catch(e){ console.warn('addNotif failed:',e.message); }
+}
+
+// ── switchFundTab: toggle Manual / Paystack tabs ──
+window.switchFundTab=(tab)=>{
+  const isManual = tab==='manual';
+  const manTab = document.getElementById('fundTabManual');
+  const payTab = document.getElementById('fundTabPaystack');
+  const btnMan = document.getElementById('tabManual');
+  const btnPay = document.getElementById('tabPaystack');
+  if(manTab) manTab.style.display = isManual ? 'block' : 'none';
+  if(payTab) payTab.style.display = isManual ? 'none' : 'block';
+  if(btnMan){
+    btnMan.style.background = isManual ? 'var(--primary)' : 'white';
+    btnMan.style.color      = isManual ? 'white' : 'var(--text)';
+    btnMan.style.border     = isManual ? 'none' : '2px solid var(--border)';
+  }
+  if(btnPay){
+    btnPay.style.background = isManual ? 'white' : 'var(--primary)';
+    btnPay.style.color      = isManual ? 'var(--text)' : 'white';
+    btnPay.style.border     = isManual ? '2px solid var(--border)' : 'none';
+  }
+  if(!isManual) checkPaystackKey();
+};
+
+// ── resetFundWallet: reset to step 1 on navigate ──
+window.resetFundWallet=()=>{
+  // Reset step indicators
+  ['fsc1','fsc2','fsc3'].forEach((id,i)=>{
+    const el=document.getElementById(id);
+    if(el){el.className='fund-step-circle'+(i===0?' active':'');el.textContent=String(i+1);}
+  });
+  ['fsl1','fsl2'].forEach(id=>{const el=document.getElementById(id);if(el)el.className='fund-step-line';});
+  // Show step 1, hide 2 and 3
+  const s1=document.getElementById('fundStep1');
+  const s2=document.getElementById('fundStep2');
+  const s3=document.getElementById('fundStep3');
+  if(s1)s1.classList.remove('hidden');
+  if(s2)s2.classList.add('hidden');
+  if(s3)s3.classList.add('hidden');
+  // Reset form fields
+  ['fundAmount','fundSenderName','fundNote','paystackAmount'].forEach(id=>{
+    const el=document.getElementById(id);if(el)el.value='';
+  });
+  // Reset tabs to manual
+  switchFundTab('manual');
+  // Clear proof state
+  _s.proofDataURL=null;
+  const pz=document.getElementById('proofZone');
+  if(pz)pz.innerHTML='<div style="font-size:32px">📤</div><div style="font-weight:600;font-size:13px;margin:6px 0">Tap to upload proof of payment</div><div style="font-size:11px;color:var(--text3)">JPG, PNG, PDF accepted · Max 5MB</div>';
+  const pn=document.getElementById('proofName');if(pn)pn.textContent='';
+  const sb=document.getElementById('submitProofBtn');if(sb){sb.disabled=true;sb.innerHTML='Submit for Verification →';}
+};
 
 window.showOverlay=(c)=>{document.getElementById('sheetContent').innerHTML=c;document.getElementById('overlayMain').classList.add('active')};
 window.closeOverlay=()=>document.getElementById('overlayMain').classList.remove('active');
