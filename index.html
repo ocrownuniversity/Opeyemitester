@@ -35,12 +35,13 @@ html,body{height:100%;overflow:hidden;font-family:var(--font);background:#1E1B4B
 .splash-bar{width:54px;height:3px;background:rgba(255,255,255,0.1);border-radius:99px;overflow:hidden;margin-top:18px}
 .splash-bar-fill{height:100%;width:0;background:linear-gradient(90deg,var(--primary-mid),var(--accent));border-radius:99px;animation:loadbar 2.4s ease forwards}
 @keyframes loadbar{to{width:100%}}
+@keyframes shake{0%,100%{transform:translateX(0)}20%,60%{transform:translateX(-8px)}40%,80%{transform:translateX(8px)}}
 
 /* ── AUTH ── */
 #auth{background:#fff;overflow-y:auto}
-#home,#walletScreen,#profileScreen,#admin,#fundWallet,#adminFundingRequests,#airtimeScreen,#dataScreen,#electricityScreen,#cableTVScreen,#schoolPinScreen,#transferScreen,#historyScreen,#notifications,#referral,#agentScreen,#securityScreen,#supportScreen,#editProfile,#pinScreen,#successScreen,#adminTransactions,#adminAPIs,#adminUsers,#adminWallets{background:var(--bg)}
+#home,#walletScreen,#profileScreen,#admin,#fundWallet,#adminFundingRequests,#airtimeScreen,#dataScreen,#electricityScreen,#cableTVScreen,#schoolPinScreen,#transferScreen,#historyScreen,#notifications,#referral,#agentScreen,#securityScreen,#supportScreen,#editProfile,#pinScreen,#successScreen,#adminTransactions,#adminAPIs,#adminUsers,#adminWallets,#termsScreen,#adminTerms,#adminSecurity,#kycScreen,#adminKYC{background:var(--bg)}
 /* All non-splash/auth screens get grey background */
-#home,#walletScreen,#servicesScreen,#profileScreen,#admin,#fundWallet,#adminFundingRequests,#airtimeScreen,#dataScreen,#electricityScreen,#cableTVScreen,#schoolPinScreen,#transferScreen,#historyScreen,#notifications,#referral,#agentScreen,#securityScreen,#supportScreen,#editProfile,#adminTransactions,#adminAPIs,#adminServices,#adminPricing,#adminCountries,#adminNotifications,#adminWallets,#adminAgents,#adminUsers,#pinScreen,#successScreen{background:var(--bg)}
+#home,#walletScreen,#servicesScreen,#profileScreen,#admin,#fundWallet,#adminFundingRequests,#airtimeScreen,#dataScreen,#electricityScreen,#cableTVScreen,#schoolPinScreen,#transferScreen,#historyScreen,#notifications,#referral,#agentScreen,#securityScreen,#supportScreen,#editProfile,#adminTransactions,#adminAPIs,#adminServices,#adminPricing,#adminCountries,#adminNotifications,#adminWallets,#adminAgents,#adminUsers,#pinScreen,#successScreen,#termsScreen,#adminTerms,#adminSecurity,#kycScreen,#adminKYC{background:var(--bg)}
 .auth-logo-bar{background:linear-gradient(145deg,#1E1B4B,#3B3582);padding:44px 24px 26px;display:flex;flex-direction:column;align-items:center;gap:10px}
 .auth-logo-box{width:68px;height:68px;background:white;border-radius:14px;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 16px rgba(0,0,0,0.25);padding:6px}
 .auth-logo-box img{width:100%;height:100%;object-fit:contain}
@@ -149,6 +150,40 @@ select.form-input{cursor:pointer;-webkit-appearance:none;background-image:url("d
 .badge-pending{background:#FEF3C7;color:#92400E}
 .badge-failed{background:#FEE2E2;color:#991B1B}
 .badge-review{background:#DBEAFE;color:#1E40AF}
+/* ── KYC VERIFICATION ── */
+.kyc-tier-badge{display:inline-flex;align-items:center;gap:5px;padding:4px 10px;border-radius:99px;font-size:11px;font-weight:700;border:none}
+.kyc-bronze{background:#FEF0E6;color:#C2510F}
+.kyc-silver{background:#F1F5F9;color:#475569;border:1px solid #CBD5E1}
+.kyc-gold{background:#FEF9C3;color:#854D0E}
+.kyc-pending{background:#FEF3C7;color:#92400E}
+.kyc-rejected{background:#FEE2E2;color:#991B1B}
+.kyc-unverified{background:#F1F5F9;color:#64748B}
+.kyc-card{background:white;border-radius:16px;padding:16px;box-shadow:var(--shadow);margin-bottom:12px}
+.kyc-card-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px}
+.kyc-doc-upload{border:2px dashed var(--border);border-radius:12px;padding:18px;text-align:center;cursor:pointer;transition:all .2s;margin-bottom:12px}
+.kyc-doc-upload:active{background:var(--bg)}
+.kyc-doc-upload-icon{font-size:28px;margin-bottom:6px}
+.kyc-doc-upload-title{font-size:13px;font-weight:600;color:var(--text);margin-bottom:3px}
+.kyc-doc-upload-sub{font-size:11px;color:var(--text3)}
+.limit-bar{height:6px;background:var(--border);border-radius:99px;overflow:hidden;margin-top:5px}
+.limit-bar-fill{height:100%;border-radius:99px;background:linear-gradient(90deg,var(--primary),var(--accent));transition:width .5s ease}
+/* Admin KYC */
+.kyc-req-card{background:white;border-radius:14px;padding:14px;margin-bottom:10px;box-shadow:var(--shadow)}
+.kyc-req-header{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:8px}
+.kyc-req-user{font-size:13px;font-weight:700;color:var(--text)}
+.kyc-req-time{font-size:10px;color:var(--text3);margin-top:2px}
+.kyc-req-docs{display:flex;gap:8px;margin-bottom:10px;overflow-x:auto}
+.kyc-req-doc{width:80px;height:60px;border-radius:8px;object-fit:cover;border:1px solid var(--border);cursor:pointer;flex-shrink:0}
+.kyc-req-detail{font-size:12px;color:var(--text2);margin-bottom:4px}
+.kyc-req-actions{display:flex;gap:8px;margin-top:10px}
+.tier-badge{display:inline-flex;align-items:center;gap:4px;padding:3px 8px;border-radius:99px;font-size:10px;font-weight:700}
+.tier-bronze{background:#FEF0E6;color:#C2510F}
+.tier-silver{background:#F1F5F9;color:#475569}
+.tier-gold{background:#FEF9C3;color:#854D0E}
+.upgrade-prompt{background:linear-gradient(135deg,var(--primary),var(--primary-mid));border-radius:14px;padding:14px;margin:0 12px 12px;color:white;cursor:pointer}
+.upgrade-prompt h4{font-size:13px;font-weight:700;margin-bottom:3px}
+.upgrade-prompt p{font-size:11px;opacity:.8}
+
 
 /* ── BOTTOM NAV ── */
 .bottom-nav{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:430px;background:white;border-top:1px solid var(--border);display:flex;padding:8px 0 20px;z-index:200;box-shadow:0 -4px 20px rgba(0,0,0,.06)}
@@ -276,6 +311,24 @@ select.form-input{cursor:pointer;-webkit-appearance:none;background-image:url("d
 .menu-item-sub{font-size:11px;color:var(--text3);margin-top:1px}
 .menu-item-arrow{color:var(--text3);font-size:13px}
 .version-tag{text-align:center;font-size:11px;color:var(--text3);padding:9px;margin-bottom:90px}
+
+/* ── ADMIN PIN GATE ── */
+#adminPINGate{background:linear-gradient(155deg,#1E1B4B 0%,#2C2665 60%,#1E1B4B 100%);align-items:center;justify-content:center}
+.pin-gate-wrap{width:100%;max-width:320px;padding:32px 24px;text-align:center}
+.pin-gate-icon{width:72px;height:72px;background:rgba(255,255,255,.1);border-radius:20px;display:flex;align-items:center;justify-content:center;font-size:32px;margin:0 auto 18px}
+.pin-gate-title{font-family:var(--font-display);font-size:20px;font-weight:700;color:white;margin-bottom:6px}
+.pin-gate-sub{font-size:12px;color:rgba(255,255,255,.5);margin-bottom:24px;line-height:1.5}
+.pin-gate-error{font-size:12px;color:#F87171;margin-top:10px;min-height:18px}
+.pin-gate-hint{font-size:11px;color:rgba(255,255,255,.35);margin-top:14px;cursor:pointer}
+
+/* ── TERMS & CONDITIONS ── */
+#termsScreen{background:var(--bg)}
+#adminTerms{background:var(--bg)}
+.terms-editor-wrap{padding:12px}
+.terms-editor{width:100%;min-height:320px;padding:14px;border:1.5px solid var(--border);border-radius:12px;font-family:var(--font);font-size:13px;color:var(--text);line-height:1.7;resize:vertical;background:white;outline:none;transition:border-color .2s}
+.terms-editor:focus{border-color:var(--primary);box-shadow:0 0 0 3px rgba(59,53,130,.08)}
+.terms-content{padding:16px 14px;font-size:13px;color:var(--text2);line-height:1.8;white-space:pre-wrap;word-break:break-word}
+.terms-last-updated{font-size:11px;color:var(--text3);padding:0 14px 10px;font-style:italic}
 
 /* ── ADMIN ── */
 #admin{padding-bottom:20px}
@@ -487,7 +540,7 @@ textarea.form-input{resize:none}
       <div style="background:#F5F5F5;padding:10px 0 10px 14px;margin:4px -14px 13px;font-size:12px;font-weight:700;color:var(--text);border-top:1px solid var(--border);border-bottom:1px solid var(--border)">Set Password</div>
       <div class="form-group"><label class="form-label">Password</label><div class="input-icon-wrap"><input type="password" class="form-input" id="regPassword" placeholder="Minimum 8 characters"><button class="toggle-pw" onclick="togglePw('regPassword',this)">👁</button></div></div>
       <div class="form-group"><label class="form-label">Confirm Password</label><input type="password" class="form-input" id="regConfirm" placeholder="Repeat password"></div>
-      <div class="check-row"><input type="checkbox" id="termsCheck"><label for="termsCheck">I agree to the <a>Privacy Policy</a> and <a>Terms of Service</a></label></div>
+      <div class="check-row"><input type="checkbox" id="termsCheck"><label for="termsCheck">I agree to the <a style="cursor:pointer" onclick="navigateTo('termsScreen')">Privacy Policy</a> and <a style="cursor:pointer" onclick="navigateTo('termsScreen')">Terms of Service</a></label></div>
       <button class="btn-register" id="registerBtn" onclick="handleRegister()">Create Account</button>
       <div class="login-footer" style="margin-top:12px">Already have an account? <span onclick="switchAuthTab('login')">Sign In</span></div>
     </div>
@@ -540,6 +593,7 @@ textarea.form-input{resize:none}
         <div class="action-item" onclick="navigateTo('historyScreen')"><div class="action-icon ai-pink">📋</div><div class="action-label">History</div></div>
         <div class="action-item" onclick="navigateTo('transferScreen')"><div class="action-icon ai-yellow">💸</div><div class="action-label">Transfer</div></div>
         <div class="action-item" onclick="navigateTo('schoolPinScreen')"><div class="action-icon ai-purple">🎓</div><div class="action-label">School PIN</div></div>
+        <div class="action-item" onclick="navigateTo('kycScreen')"><div class="action-icon" style="background:#E0F2FE">🪪</div><div class="action-label">KYC</div></div>
       </div>
     </div>
     <!-- Recent Transactions -->
@@ -626,6 +680,7 @@ textarea.form-input{resize:none}
     <div class="svc-card" onclick="navigateTo('cableTVScreen')"><div class="svc-icon" style="background:#FEF2F2">📺</div><div class="svc-name">Cable TV</div><div class="svc-desc">DSTV, GOtv, Startimes</div></div>
     <div class="svc-card" onclick="navigateTo('schoolPinScreen')"><div class="svc-icon" style="background:#E0FDF4">🎓</div><div class="svc-name">School PIN</div><div class="svc-desc">WAEC, NECO, JAMB</div></div>
     <div class="svc-card" onclick="navigateTo('transferScreen')"><div class="svc-icon" style="background:#FEFCE8">💸</div><div class="svc-name">Send Money</div><div class="svc-desc">Bank & wallet transfer</div></div>
+    <div class="svc-card" onclick="navigateTo('kycScreen')"><div class="svc-icon" style="background:#E0F2FE">🪪</div><div class="svc-name">KYC Verification</div><div class="svc-desc">Unlock higher limits</div></div>
   </div>
   <!-- Refer & Earn placed under services as requested -->
   <div class="refer-strip" onclick="navigateTo('referral')">
@@ -668,7 +723,8 @@ textarea.form-input{resize:none}
       <div class="menu-item" onclick="navigateTo('notifications')"><div class="menu-item-icon" style="background:#FEFCE8">🔔</div><div class="menu-item-text"><div class="menu-item-title">Notifications</div></div><div class="menu-item-arrow">›</div></div>
       <div class="menu-item" onclick="navigateTo('supportScreen')"><div class="menu-item-icon" style="background:#E0FDF4">💬</div><div class="menu-item-text"><div class="menu-item-title">Help & Support</div></div><div class="menu-item-arrow">›</div></div>
     </div>
-    <div class="menu-list"><div class="menu-item" onclick="handleLogout()"><div class="menu-item-icon" style="background:#FEF2F2">🚪</div><div class="menu-item-text"><div class="menu-item-title" style="color:var(--danger)">Sign Out</div></div><div class="menu-item-arrow">›</div></div></div>
+    <div class="menu-list"><div class="menu-item" onclick="navigateTo('kycScreen')"><div class="menu-item-icon" style="background:#E0F2FE">🪪</div><div class="menu-item-text"><div class="menu-item-title">KYC Verification</div><div class="menu-item-sub" id="profileKYCStatus">Tap to verify your identity</div></div><div class="menu-item-arrow">›</div></div></div>
+<div class="menu-list"><div class="menu-item" onclick="handleLogout()"><div class="menu-item-icon" style="background:#FEF2F2">🚪</div><div class="menu-item-text"><div class="menu-item-title" style="color:var(--danger)">Sign Out</div></div><div class="menu-item-arrow">›</div></div></div>
     <div class="version-tag">KOBOrush v2.1.0 · RC: 979668 · Made with ❤️ in Africa</div>
   </div>
 </div>
@@ -704,6 +760,9 @@ textarea.form-input{resize:none}
     <div class="admin-nav-card" onclick="navigateTo('adminAPIs')"><div class="anc-icon">🔌</div><div class="anc-label">APIs</div></div>
     <div class="admin-nav-card" onclick="navigateTo('adminPricing')"><div class="anc-icon">💲</div><div class="anc-label">Pricing</div></div>
     <div class="admin-nav-card" onclick="navigateTo('adminNotifications')"><div class="anc-icon">📢</div><div class="anc-label">Notify</div></div>
+    <div class="admin-nav-card" onclick="navigateTo('adminTerms')"><div class="anc-icon">📄</div><div class="anc-label">Terms</div></div>
+    <div class="admin-nav-card" onclick="navigateTo('adminSecurity')"><div class="anc-icon">🔐</div><div class="anc-label">Security</div></div>
+    <div class="admin-nav-card" onclick="navigateTo('adminKYC')"><div class="anc-icon">🪪</div><div class="anc-label">KYC</div><div class="anc-badge" id="kycPendingBadge" style="display:none">0</div></div>
   </div>
   <div class="admin-panel"><div class="admin-panel-header"><h4>Recent Users</h4><span style="font-size:11px;color:var(--primary);font-weight:700;cursor:pointer" onclick="navigateTo('adminUsers')">See all</span></div><div id="adminUsersList"><div class="loading-spinner"></div></div></div>
   <div class="admin-panel"><div class="admin-panel-header"><h4>API Status</h4><span style="font-size:11px;color:var(--primary);font-weight:700;cursor:pointer" onclick="navigateTo('adminAPIs')">Manage</span></div><div id="adminAPIStatus"></div></div>
@@ -1039,11 +1098,242 @@ textarea.form-input{resize:none}
   <div style="padding:12px">
     <div class="card" style="margin-bottom:12px">
       <div class="section-title">Contact Us</div>
-      <div class="menu-item" style="padding:0 0 9px;border:none" onclick="window.location='mailto:support@koborush.com'"><div class="menu-item-icon" style="background:var(--primary-light)">✉</div><div class="menu-item-text"><div class="menu-item-title">Email Support</div><div class="menu-item-sub">support@koborush.com</div></div></div>
-      <div class="menu-item" style="padding:0;border:none" onclick="showToast('info','Opening WhatsApp...')"><div class="menu-item-icon" style="background:#E0FDF4">💬</div><div class="menu-item-text"><div class="menu-item-title">WhatsApp Chat</div><div class="menu-item-sub">8am – 10pm daily</div></div></div>
+      <div class="menu-item" style="padding:0 0 9px;border:none" onclick="window.location='mailto:info@koborush.ng'"><div class="menu-item-icon" style="background:var(--primary-light)">✉</div><div class="menu-item-text"><div class="menu-item-title">Email Support</div><div class="menu-item-sub">info@koborush.ng</div></div></div>
+      <div class="menu-item" style="padding:0 0 9px;border:none" onclick="window.location='tel:07080951392'"><div class="menu-item-icon" style="background:#E0FDF4">📞</div><div class="menu-item-text"><div class="menu-item-title">Phone Support</div><div class="menu-item-sub">07080951392</div></div></div>
+      <div class="menu-item" style="padding:0;border:none" onclick="window.open('https://wa.me/2347080951392','_blank')"><div class="menu-item-icon" style="background:#E0FDF4">💬</div><div class="menu-item-text"><div class="menu-item-title">WhatsApp Chat</div><div class="menu-item-sub">8am – 10pm daily</div></div></div>
+    </div>
+    <div class="card">
+      <div class="section-title">Legal</div>
+      <div class="menu-item" style="padding:0;border:none" onclick="navigateTo('termsScreen')"><div class="menu-item-icon" style="background:#FEFCE8">📄</div><div class="menu-item-text"><div class="menu-item-title">Terms & Conditions</div><div class="menu-item-sub">Read our terms of service</div></div><div class="menu-item-arrow">›</div></div>
     </div>
   </div>
 </div>
+
+<!-- ══ ADMIN PIN GATE ══ -->
+<div class="screen" id="adminPINGate">
+  <div class="pin-gate-wrap">
+    <div class="pin-gate-icon">🔐</div>
+    <div class="pin-gate-title">Admin Verification</div>
+    <div class="pin-gate-sub">Enter your 4-digit security PIN to access the admin panel.</div>
+    <div class="pin-container">
+      <input class="pin-digit" type="password" maxlength="1" id="apg1" oninput="moveAdminPIN(this,null,'apg2')" style="background:rgba(255,255,255,.1);border-color:rgba(255,255,255,.2);color:white">
+      <input class="pin-digit" type="password" maxlength="1" id="apg2" oninput="moveAdminPIN(this,'apg1','apg3')" style="background:rgba(255,255,255,.1);border-color:rgba(255,255,255,.2);color:white">
+      <input class="pin-digit" type="password" maxlength="1" id="apg3" oninput="moveAdminPIN(this,'apg2','apg4')" style="background:rgba(255,255,255,.1);border-color:rgba(255,255,255,.2);color:white">
+      <input class="pin-digit" type="password" maxlength="1" id="apg4" oninput="moveAdminPIN(this,'apg3',null)" onkeyup="checkAdminPINDone()" style="background:rgba(255,255,255,.1);border-color:rgba(255,255,255,.2);color:white">
+    </div>
+    <div class="pin-gate-error" id="adminPINError"></div>
+    <button class="btn btn-primary" onclick="verifyAdminPIN()" style="margin-top:8px;background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.25)">Verify PIN →</button>
+    <div class="pin-gate-hint" onclick="handleLogout()">Not you? Sign out</div>
+  </div>
+</div>
+
+<!-- ══ TERMS & CONDITIONS – USER VIEW ══ -->
+<div class="screen" id="termsScreen">
+  <div class="navbar light" style="padding-top:42px"><button class="nav-back" onclick="goBack()">←</button><div class="nav-title">Terms & Conditions</div><div style="width:37px"></div></div>
+  <div style="padding:12px 0 20px">
+    <div class="terms-last-updated" id="termsLastUpdated"></div>
+    <div class="terms-content" id="termsContent">
+      <div class="loading-spinner" style="margin:30px auto"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ ADMIN TERMS EDITOR ══ -->
+<div class="screen" id="adminTerms">
+  <div class="navbar light" style="padding-top:42px"><button class="nav-back" onclick="goBack()">←</button><div class="nav-title">Terms & Conditions</div><div style="width:37px"></div></div>
+  <div class="terms-editor-wrap">
+    <div style="background:#EEF2FF;border-radius:10px;padding:10px 12px;margin-bottom:14px;font-size:11px;color:#3730A3;line-height:1.5">
+      ✏️ Write or update your Terms & Conditions below. Changes are instantly visible to all users.
+    </div>
+    <textarea class="terms-editor" id="adminTermsEditor" placeholder="Write your Terms & Conditions here...&#10;&#10;1. Introduction&#10;Welcome to KOBOrush..."></textarea>
+    <div style="display:flex;gap:8px;margin-top:12px">
+      <button class="btn btn-primary" onclick="saveTerms()" style="flex:1">💾 Save & Publish</button>
+      <button class="btn btn-outline" onclick="previewTerms()" style="flex:1">👁 Preview</button>
+    </div>
+    <div id="termsSaveStatus" style="font-size:11px;color:var(--text3);text-align:center;margin-top:8px;min-height:16px"></div>
+  </div>
+</div>
+
+<!-- ══ ADMIN SECURITY – PIN MANAGEMENT ══ -->
+<div class="screen" id="adminSecurity">
+  <div class="navbar light" style="padding-top:42px"><button class="nav-back" onclick="goBack()">←</button><div class="nav-title">Admin Security</div><div style="width:37px"></div></div>
+  <div style="padding:12px">
+    <div class="card" style="margin-bottom:12px">
+      <div class="section-title">Change Admin PIN</div>
+      <p style="font-size:12px;color:var(--text2);margin-bottom:14px;line-height:1.5">This 4-digit PIN is required every time you log in to the admin panel as an extra security layer.</p>
+      <div class="form-group">
+        <label class="form-label">Current PIN</label>
+        <div class="input-icon-wrap">
+          <input type="password" class="form-input" id="currentAdminPIN" placeholder="Enter current PIN" maxlength="4" inputmode="numeric">
+          <button class="toggle-pw" onclick="togglePw('currentAdminPIN',this)">👁</button>
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="form-label">New PIN</label>
+        <div class="input-icon-wrap">
+          <input type="password" class="form-input" id="newAdminPIN" placeholder="Enter new 4-digit PIN" maxlength="4" inputmode="numeric">
+          <button class="toggle-pw" onclick="togglePw('newAdminPIN',this)">👁</button>
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Confirm New PIN</label>
+        <div class="input-icon-wrap">
+          <input type="password" class="form-input" id="confirmAdminPIN" placeholder="Repeat new PIN" maxlength="4" inputmode="numeric">
+          <button class="toggle-pw" onclick="togglePw('confirmAdminPIN',this)">👁</button>
+        </div>
+      </div>
+      <button class="btn btn-primary" onclick="changeAdminPIN()">🔐 Update Security PIN</button>
+    </div>
+    <div class="card" style="background:#FEF2F2">
+      <div class="section-title" style="color:var(--danger)">Security Note</div>
+      <p style="font-size:12px;color:var(--text2);line-height:1.5">Keep your admin PIN private. It is stored securely and cannot be recovered if forgotten — you would need to reset it via the database. Default PIN is <strong>1990</strong>.</p>
+    </div>
+  </div>
+</div>
+
+
+<!-- ══ KYC VERIFICATION ══ -->
+<div class="screen" id="kycScreen" style="background:var(--bg)">
+  <div class="navbar light" style="padding-top:42px">
+    <button class="nav-back" onclick="goBack()">←</button>
+    <div class="nav-title">KYC Verification</div>
+    <div style="width:37px"></div>
+  </div>
+  <div style="padding:12px 12px 100px">
+    <!-- Current Status Card -->
+    <div class="kyc-card">
+      <div class="kyc-card-header">
+        <div>
+          <div class="section-title" style="margin:0">Account Status</div>
+          <div id="kycTierDesc" style="font-size:11px;color:var(--text3);margin-top:2px">Complete verification to unlock higher limits</div>
+        </div>
+        <span id="kycStatusBadge" class="kyc-tier-badge kyc-unverified">🔓 Unverified</span>
+      </div>
+      <!-- Tier Display -->
+      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:12px">
+        <div id="kycTierBronze" class="plan-opt" style="text-align:center;padding:10px 6px">
+          <div style="font-size:18px;margin-bottom:3px">🥉</div>
+          <div style="font-size:11px;font-weight:700;color:var(--text)">Bronze</div>
+          <div style="font-size:10px;color:var(--text3)">₦50k/day</div>
+        </div>
+        <div id="kycTierSilver" class="plan-opt" style="text-align:center;padding:10px 6px">
+          <div style="font-size:18px;margin-bottom:3px">🥈</div>
+          <div style="font-size:11px;font-weight:700;color:var(--text)">Silver</div>
+          <div style="font-size:10px;color:var(--text3)">₦200k/day</div>
+        </div>
+        <div id="kycTierGold" class="plan-opt" style="text-align:center;padding:10px 6px">
+          <div style="font-size:18px;margin-bottom:3px">🥇</div>
+          <div style="font-size:11px;font-weight:700;color:var(--text)">Gold</div>
+          <div style="font-size:10px;color:var(--text3)">₦1M/day</div>
+        </div>
+      </div>
+      <!-- Daily Limit Progress -->
+      <div style="background:var(--bg);border-radius:10px;padding:10px">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px">
+          <span style="font-size:11px;color:var(--text2);font-weight:600">Today's Usage</span>
+          <span id="kycLimitText" style="font-size:11px;font-weight:700;color:var(--primary)">₦0 / ₦50,000</span>
+        </div>
+        <div class="limit-bar"><div class="limit-bar-fill" id="kycLimitBar" style="width:0%"></div></div>
+      </div>
+    </div>
+
+    <!-- Submission Form (hidden if already approved) -->
+    <div id="kycFormSection">
+      <div class="kyc-card">
+        <div class="section-title">Step 1: Identity Details</div>
+        <div class="form-group">
+          <label class="form-label">Verification Type</label>
+          <select class="form-input" id="kycDocType">
+            <option value="bvn">BVN (Bank Verification Number)</option>
+            <option value="nin">NIN (National Identity Number)</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label" id="kycDocLabel">BVN Number</label>
+          <input type="number" class="form-input" id="kycDocNumber" placeholder="Enter 11-digit BVN" maxlength="11">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Full Legal Name (as on ID)</label>
+          <input type="text" class="form-input" id="kycLegalName" placeholder="e.g. John Adewale Doe">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Date of Birth</label>
+          <input type="date" class="form-input" id="kycDob">
+        </div>
+      </div>
+
+      <div class="kyc-card">
+        <div class="section-title">Step 2: Upload Documents</div>
+        <p style="font-size:12px;color:var(--text2);margin-bottom:12px;line-height:1.5">Upload clear photos of your government-issued ID and a selfie holding it.</p>
+        
+        <div class="kyc-doc-upload" id="kycDocFront" onclick="document.getElementById('kycDocFrontInput').click()">
+          <div class="kyc-doc-upload-icon">🪪</div>
+          <div class="kyc-doc-upload-title">Front of ID Card</div>
+          <div class="kyc-doc-upload-sub">National ID, Passport, or Driver's Licence</div>
+          <img id="kycDocFrontPreview" style="display:none;width:100%;max-height:120px;object-fit:cover;border-radius:8px;margin-top:8px">
+        </div>
+        <input type="file" id="kycDocFrontInput" accept="image/*" style="display:none" onchange="handleKYCDoc(this,'front')">
+
+        <div class="kyc-doc-upload" id="kycDocBack" onclick="document.getElementById('kycDocBackInput').click()">
+          <div class="kyc-doc-upload-icon">📄</div>
+          <div class="kyc-doc-upload-title">Back of ID Card</div>
+          <div class="kyc-doc-upload-sub">Back side of the same ID</div>
+          <img id="kycDocBackPreview" style="display:none;width:100%;max-height:120px;object-fit:cover;border-radius:8px;margin-top:8px">
+        </div>
+        <input type="file" id="kycDocBackInput" accept="image/*" style="display:none" onchange="handleKYCDoc(this,'back')">
+
+        <div class="kyc-doc-upload" id="kycDocSelfie" onclick="document.getElementById('kycDocSelfieInput').click()">
+          <div class="kyc-doc-upload-icon">🤳</div>
+          <div class="kyc-doc-upload-title">Selfie with ID</div>
+          <div class="kyc-doc-upload-sub">Hold your ID next to your face</div>
+          <img id="kycDocSelfiePreview" style="display:none;width:100%;max-height:120px;object-fit:cover;border-radius:8px;margin-top:8px">
+        </div>
+        <input type="file" id="kycDocSelfieInput" accept="image/*" style="display:none" onchange="handleKYCDoc(this,'selfie')">
+      </div>
+
+      <div class="kyc-card" style="background:#EEF2FF">
+        <div style="font-size:12px;color:#3730A3;line-height:1.6">
+          🔒 <strong>Your data is secure.</strong> Documents are reviewed by our compliance team and are never shared with third parties. By submitting, you confirm that all information is accurate.
+        </div>
+      </div>
+
+      <button class="btn btn-primary" id="kycSubmitBtn" onclick="submitKYC()">Submit for Verification</button>
+    </div>
+
+    <!-- Pending/Rejected Status Message -->
+    <div id="kycStatusSection" style="display:none">
+      <div class="kyc-card" id="kycStatusCard">
+        <div style="text-align:center;padding:10px 0">
+          <div id="kycStatusIcon" style="font-size:48px;margin-bottom:10px">⏳</div>
+          <h3 id="kycStatusTitle" style="font-size:17px;font-weight:700;color:var(--text);margin-bottom:6px">Under Review</h3>
+          <p id="kycStatusMsg" style="font-size:12px;color:var(--text2);line-height:1.5">Your documents are being reviewed. This usually takes 1-24 hours.</p>
+          <div id="kycResubmitBtn" style="display:none;margin-top:14px">
+            <button class="btn btn-outline" onclick="resetKYCForm()">Resubmit Documents</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ ADMIN KYC MANAGEMENT ══ -->
+<div class="screen" id="adminKYC" style="background:var(--bg)">
+  <div class="navbar light" style="padding-top:42px">
+    <button class="nav-back" onclick="goBack()">←</button>
+    <div class="nav-title">KYC Management</div>
+    <div style="width:37px"></div>
+  </div>
+  <div style="padding:10px 12px 0">
+    <div class="chip-row" id="kycFilter">
+      <div class="chip active" onclick="filterKYC('pending',this)">⏳ Pending</div>
+      <div class="chip" onclick="filterKYC('approved',this)">✅ Approved</div>
+      <div class="chip" onclick="filterKYC('rejected',this)">❌ Rejected</div>
+      <div class="chip" onclick="filterKYC('all',this)">All</div>
+    </div>
+  </div>
+  <div id="kycReqList" style="padding:0 12px 20px"><div class="loading-spinner"></div></div>
+</div>
+
 
 <!-- EDIT PROFILE -->
 <div class="screen svc-form" id="editProfile">
@@ -1266,7 +1556,7 @@ const db=getFirestore(app);
 const storage=fbStorage(app);
 const ADMIN='oladejiridwanopeyemi@gmail.com';
 
-window._s={user:null,userData:null,isAdmin:false,balHidden:false,navHist:[],pendingData:null,selProv:{},selPlan:null,allTx:[],allUsers:[],allFundReqs:[],proofFile:null,proofDataURL:null,fundStep:1};
+window._s={user:null,userData:null,isAdmin:false,balHidden:false,navHist:[],pendingData:null,selProv:{},selPlan:null,allTx:[],allUsers:[],allFundReqs:[],proofFile:null,proofDataURL:null,fundStep:1,adminPINVerified:false};
 
 // UTILS
 window.showToast=(t,m)=>{const c=document.getElementById('toastContainer');const el=document.createElement('div');el.className=`toast ${t}`;el.innerHTML=`<span>${t==='success'?'✅':t==='error'?'❌':'ℹ️'}</span><span>${m}</span>`;c.appendChild(el);setTimeout(()=>el.remove(),3500)};
@@ -1297,6 +1587,11 @@ window.navigateTo=(id)=>{
   if(id==='adminFundingRequests')loadFundingRequests('pending');
   if(id==='fundWallet')resetFundWallet();
   if(id==='adminAPIs')setTimeout(attachAutoSave,200);
+  if(id==='termsScreen')loadTermsForUser();
+  if(id==='kycScreen')loadKYCScreen();
+  if(id==='adminKYC')loadAdminKYC();
+  if(id==='adminTerms')loadAdminTermsEditor();
+  if(id==='adminSecurity'){}
   updateNav(id);
 };
 window.goBack=()=>{const cur=document.querySelector('.screen.active');if(cur)cur.classList.remove('active');const prev=_s.navHist.pop()||'home';const el=document.getElementById(prev);if(el)el.classList.add('active');updateNav(prev)};
@@ -1406,7 +1701,10 @@ onAuthStateChanged(auth,async(user)=>{
     document.getElementById('bottomNav').style.display='flex';
     if(_s.isAdmin){
       document.getElementById('bottomNav').style.display='none';
-      showScreen('admin');loadAdminDash();listenPendingFundRequests();
+      // Show PIN gate before admin dashboard
+      _s.adminPINVerified=false;
+      showScreen('adminPINGate');
+      setTimeout(()=>document.getElementById('apg1')?.focus(),400);
     }else{
       document.getElementById('bottomNav').style.display='flex';
       showScreen('home');loadHome();
@@ -1858,6 +2156,11 @@ window.proceedToPIN=(svc)=>{
   else if(svc==='schoolpin'){const qty=document.getElementById('schoolPinQty').value;const ph=document.getElementById('schoolPhone').value;const ex=_s.selProv['schoolProv']||'waec';const pr={waec:3750,neco:2100,jamb:4200,nabteb:2500}[ex]||2000;const tot=pr*parseInt(qty);_s.pendingData={type:'schoolpin',exam:ex,quantity:parseInt(qty),phone:ph,amount:tot,description:`${ex.toUpperCase()} PIN x${qty}`};sum=`<div class="sum-row"><span class="sum-lbl">Exam</span><span class="sum-val">${ex.toUpperCase()}</span></div><div class="sum-row"><span class="sum-lbl">Qty</span><span class="sum-val">${qty}</span></div><div class="sum-row"><span class="sum-lbl">Total</span><span class="sum-val" style="color:var(--primary)">₦${tot.toLocaleString()}</span></div>`}
   else if(svc==='transfer'){const am=document.getElementById('transferAmt').value;const rc=document.getElementById('transferRecipient').value||document.getElementById('transferAcctNo')?.value;if(!am||!rc)return showToast('error','Fill all fields');const tot=parseFloat(am)+25;_s.pendingData={type:'transfer',amount:tot,recipient:rc,description:`Transfer to ${rc}`};sum=`<div class="sum-row"><span class="sum-lbl">To</span><span class="sum-val">${rc}</span></div><div class="sum-row"><span class="sum-lbl">Amount</span><span class="sum-val">₦${parseFloat(am).toLocaleString()}</span></div><div class="sum-row"><span class="sum-lbl">Fee</span><span class="sum-val">₦25</span></div><div class="sum-row"><span class="sum-lbl">Total</span><span class="sum-val" style="color:var(--primary)">₦${tot.toLocaleString()}</span></div>`}
   if(_s.userData&&_s.pendingData?.amount>_s.userData.balance)return showToast('error','Insufficient balance');
+  // Check KYC daily limit
+  if(_s.pendingData){
+    const kycOk=await checkTransactionLimit(_s.pendingData.amount);
+    if(!kycOk)return;
+  }
   document.getElementById('pinSummary').innerHTML=`<div class="sum-card" style="margin:0">${sum}</div>`;
   ['pin1','pin2','pin3','pin4'].forEach(id=>{const el=document.getElementById(id);if(el)el.value=''});
   navigateTo('pinScreen');setTimeout(()=>document.getElementById('pin1')?.focus(),300);
@@ -1894,6 +2197,118 @@ window.showWithdrawSheet=()=>showOverlay(`<div class="sheet-title">Withdraw Fund
 window.submitWithdrawal=async()=>{const am=parseFloat(document.getElementById('wdAmt').value);const bk=document.getElementById('wdBank').value;const ac=document.getElementById('wdAcct').value;const nm=document.getElementById('wdName').value;if(!am||am<500||!ac||!nm)return showToast('error','Fill all fields');if(am>_s.userData?.balance)return showToast('error','Insufficient balance');try{await addDoc(collection(db,'withdrawalRequests'),{userId:_s.user.uid,email:_s.userData?.email,amount:am,bank:bk,accountNumber:ac,accountName:nm,status:'pending',createdAt:serverTimestamp()});await updateDoc(doc(db,'users',_s.user.uid),{balance:increment(-am),pendingBalance:increment(am)});await addNotif(_s.user.uid,'💸 Withdrawal Requested',`₦${am.toLocaleString()} pending admin approval.`,'info');showToast('success','Request submitted!');closeOverlay()}catch(e){showToast('error','Failed')}};
 
 // ADMIN
+// ══ ADMIN PIN GATE ══
+const DEFAULT_ADMIN_PIN = '1990';
+async function getAdminPIN(){
+  try{
+    const snap=await getDoc(doc(db,'settings','adminPIN'));
+    if(snap.exists()&&snap.data().pin)return snap.data().pin;
+  }catch(e){}
+  return DEFAULT_ADMIN_PIN;
+}
+window.moveAdminPIN=(el,prevId,nextId)=>{
+  if(el.value&&nextId)document.getElementById(nextId).focus();
+  if(!el.value&&prevId)document.getElementById(prevId).focus();
+  document.getElementById('adminPINError').textContent='';
+};
+window.checkAdminPINDone=()=>{
+  const pin=['apg1','apg2','apg3','apg4'].map(id=>document.getElementById(id).value).join('');
+  if(pin.length===4)verifyAdminPIN();
+};
+window.verifyAdminPIN=async()=>{
+  const pin=['apg1','apg2','apg3','apg4'].map(id=>document.getElementById(id).value).join('');
+  if(pin.length<4){document.getElementById('adminPINError').textContent='Enter all 4 digits';return;}
+  const correct=await getAdminPIN();
+  if(pin===correct){
+    _s.adminPINVerified=true;
+    ['apg1','apg2','apg3','apg4'].forEach(id=>document.getElementById(id).value='');
+    showScreen('admin');loadAdminDash();listenPendingFundRequests();listenPendingKYC();
+  }else{
+    document.getElementById('adminPINError').textContent='Incorrect PIN. Try again.';
+    ['apg1','apg2','apg3','apg4'].forEach(id=>document.getElementById(id).value='');
+    document.getElementById('apg1').focus();
+    // shake effect
+    const wrap=document.querySelector('.pin-gate-wrap .pin-container');
+    if(wrap){wrap.style.animation='none';setTimeout(()=>{wrap.style.animation='shake .4s ease';},10);}
+  }
+};
+window.changeAdminPIN=async()=>{
+  const cur=document.getElementById('currentAdminPIN').value.trim();
+  const nw=document.getElementById('newAdminPIN').value.trim();
+  const cf=document.getElementById('confirmAdminPIN').value.trim();
+  if(!cur||!nw||!cf)return showToast('error','Fill all fields');
+  if(!/^\d{4}$/.test(nw))return showToast('error','PIN must be exactly 4 digits');
+  if(nw!==cf)return showToast('error','New PINs do not match');
+  const correct=await getAdminPIN();
+  if(cur!==correct)return showToast('error','Current PIN is incorrect');
+  try{
+    await setDoc(doc(db,'settings','adminPIN'),{pin:nw,updatedAt:serverTimestamp()});
+    showToast('success','Security PIN updated successfully!');
+    document.getElementById('currentAdminPIN').value='';
+    document.getElementById('newAdminPIN').value='';
+    document.getElementById('confirmAdminPIN').value='';
+  }catch(e){showToast('error','Failed to update PIN');}
+};
+
+// ══ TERMS & CONDITIONS ══
+async function loadTermsForUser(){
+  const content=document.getElementById('termsContent');
+  const lastUpd=document.getElementById('termsLastUpdated');
+  if(!content)return;
+  content.innerHTML='<div class="loading-spinner" style="margin:30px auto"></div>';
+  try{
+    const snap=await getDoc(doc(db,'settings','terms'));
+    if(snap.exists()&&snap.data().content){
+      content.textContent=snap.data().content;
+      if(snap.data().updatedAt?.toDate){
+        const d=snap.data().updatedAt.toDate();
+        lastUpd.textContent='Last updated: '+d.toLocaleDateString('en-NG',{day:'numeric',month:'long',year:'numeric'});
+      }
+    }else{
+      content.innerHTML='<div class="empty-state"><div class="empty-icon">📄</div><h4>Terms not yet published</h4><p>Please check back later.</p></div>';
+    }
+  }catch(e){
+    content.innerHTML='<div class="empty-state"><div class="empty-icon">📄</div><h4>Unable to load</h4><p>Please try again.</p></div>';
+  }
+}
+async function loadAdminTermsEditor(){
+  const editor=document.getElementById('adminTermsEditor');
+  const status=document.getElementById('termsSaveStatus');
+  if(!editor)return;
+  editor.value='';status.textContent='Loading…';
+  try{
+    const snap=await getDoc(doc(db,'settings','terms'));
+    if(snap.exists()&&snap.data().content){
+      editor.value=snap.data().content;
+      if(snap.data().updatedAt?.toDate){
+        const d=snap.data().updatedAt.toDate();
+        status.textContent='Last saved: '+d.toLocaleDateString('en-NG',{day:'numeric',month:'long',year:'numeric'});
+      }else{status.textContent='';}
+    }else{status.textContent='No terms saved yet.';}
+  }catch(e){status.textContent='Could not load.';}
+}
+window.saveTerms=async()=>{
+  const editor=document.getElementById('adminTermsEditor');
+  const status=document.getElementById('termsSaveStatus');
+  const text=editor.value.trim();
+  if(!text)return showToast('error','Terms content cannot be empty');
+  status.textContent='Saving…';
+  try{
+    await setDoc(doc(db,'settings','terms'),{content:text,updatedAt:serverTimestamp()});
+    showToast('success','Terms published successfully!');
+    status.textContent='Saved just now ✓';
+  }catch(e){showToast('error','Failed to save');status.textContent='Error saving.';}
+};
+window.previewTerms=()=>{
+  const text=document.getElementById('adminTermsEditor').value.trim();
+  if(!text)return showToast('info','Nothing to preview yet');
+  const content=document.getElementById('termsContent');
+  const lastUpd=document.getElementById('termsLastUpdated');
+  if(content){content.textContent=text;}
+  if(lastUpd){lastUpd.textContent='Preview (not yet saved)';}
+  navigateTo('termsScreen');
+};
+
 async function loadAdminDash(){
   if(!_s.isAdmin)return;
   try{
@@ -1929,6 +2344,383 @@ window.loadAdminSvcs=()=>{document.getElementById('adminSvcsContent').innerHTML=
 window.loadCountries=()=>{const c=document.getElementById('adminCountriesList');const countries=[{name:'Nigeria',flag:'🇳🇬',code:'NG',ccy:'NGN',on:true},{name:'Ghana',flag:'🇬🇭',code:'GH',ccy:'GHS',on:true},{name:'Benin',flag:'🇧🇯',code:'BJ',ccy:'XOF',on:true},{name:'Kenya',flag:'🇰🇪',code:'KE',ccy:'KES',on:false},{name:'Senegal',flag:'🇸🇳',code:'SN',ccy:'XOF',on:false},{name:'Ivory Coast',flag:'🇨🇮',code:'CI',ccy:'XOF',on:false},{name:'Cameroon',flag:'🇨🇲',code:'CM',ccy:'XAF',on:false},{name:'Togo',flag:'🇹🇬',code:'TG',ccy:'XOF',on:false},{name:'Burkina Faso',flag:'🇧🇫',code:'BF',ccy:'XOF',on:false},{name:'Niger',flag:'🇳🇪',code:'NE',ccy:'XOF',on:false},{name:'Mali',flag:'🇲🇱',code:'ML',ccy:'XOF',on:false},{name:'South Africa',flag:'🇿🇦',code:'ZA',ccy:'ZAR',on:false},{name:'Tanzania',flag:'🇹🇿',code:'TZ',ccy:'TZS',on:false},{name:'Uganda',flag:'🇺🇬',code:'UG',ccy:'UGX',on:false},{name:'Rwanda',flag:'🇷🇼',code:'RW',ccy:'RWF',on:false},{name:'Ethiopia',flag:'🇪🇹',code:'ET',ccy:'ETB',on:false}];c.innerHTML=`<div class="admin-panel" style="margin:0">${countries.map(ct=>`<div class="admin-table-row"><div style="font-size:26px;flex-shrink:0">${ct.flag}</div><div class="row-main"><div class="row-title">${ct.name}</div><div class="row-sub">${ct.ccy}</div></div><label class="toggle-switch"><input type="checkbox" ${ct.on?'checked':''} onchange="toggleCountry('${ct.code}',this.checked)"><div class="toggle-slider"></div></label></div>`).join('')}</div>`};
 window.toggleCountry=async(code,e)=>{await setDoc(doc(db,'settings','countries'),{[code]:e},{merge:true});showToast(e?'success':'info',`${code} ${e?'enabled':'disabled'}`)};
 window.adminCreditWallet=async()=>{const ui=document.getElementById('adminFundUser').value;const am=parseFloat(document.getElementById('adminFundAmt').value);const re=document.getElementById('adminFundReason').value;if(!ui||!am)return showToast('error','Fill all fields');try{const q=query(collection(db,'users'),where('email','==',ui));const s=await getDocs(q);if(s.empty)return showToast('error','User not found');const uid=s.docs[0].id;await updateDoc(doc(db,'users',uid),{balance:increment(am)});const tid=genId(12);await setDoc(doc(db,'transactions',tid),{id:tid,userId:uid,type:'admin_credit',status:'success',amount:am,description:`Admin Credit: ${re}`,createdAt:serverTimestamp()});await addNotif(uid,'💰 Wallet Credited',`₦${am.toLocaleString()} added. Reason: ${re}`,'success');showToast('success',`₦${am.toLocaleString()} credited!`)}catch(e){showToast('error','Failed')}};
+
+// ════════════════════════════════
+// KYC VERIFICATION SYSTEM
+// ════════════════════════════════
+const KYC_TIERS = {
+  unverified: { label: 'Unverified', dailyLimit: 0, icon: '🔓', badgeClass: 'kyc-unverified' },
+  bronze: { label: 'Bronze', dailyLimit: 50000, icon: '🥉', badgeClass: 'kyc-bronze' },
+  silver: { label: 'Silver', dailyLimit: 200000, icon: '🥈', badgeClass: 'kyc-silver' },
+  gold: { label: 'Gold', dailyLimit: 1000000, icon: '🥇', badgeClass: 'kyc-gold' }
+};
+
+// KYC doc storage
+window._kycDocs = { front: null, back: null, selfie: null };
+
+// Load KYC screen data
+window.loadKYCScreen = async () => {
+  if (!_s.user || !_s.userData) return;
+  const d = _s.userData;
+  const kycStatus = d.kycStatus || 'unverified';
+  const kycTier = d.kycTier || 'unverified';
+
+  // Update status badge
+  const badge = document.getElementById('kycStatusBadge');
+  const tierData = KYC_TIERS[kycTier] || KYC_TIERS.unverified;
+  if (badge) {
+    badge.textContent = tierData.icon + ' ' + tierData.label;
+    badge.className = 'kyc-tier-badge ' + tierData.badgeClass;
+  }
+
+  // Highlight active tier
+  ['bronze','silver','gold'].forEach(t => {
+    const el = document.getElementById('kycTier'+t.charAt(0).toUpperCase()+t.slice(1));
+    if (el) el.classList.toggle('selected', kycTier === t);
+  });
+
+  // Update daily limit
+  await updateKYCLimitDisplay();
+
+  // Show/hide form vs status section
+  const formSection = document.getElementById('kycFormSection');
+  const statusSection = document.getElementById('kycStatusSection');
+
+  if (kycStatus === 'pending') {
+    if (formSection) formSection.style.display = 'none';
+    if (statusSection) statusSection.style.display = 'block';
+    document.getElementById('kycStatusIcon').textContent = '⏳';
+    document.getElementById('kycStatusTitle').textContent = 'Under Review';
+    document.getElementById('kycStatusMsg').textContent = 'Your KYC documents are being reviewed. This usually takes 1-24 hours during business hours.';
+    document.getElementById('kycStatusBadge').textContent = '⏳ Pending';
+    document.getElementById('kycStatusBadge').className = 'kyc-tier-badge kyc-pending';
+    document.getElementById('kycResubmitBtn').style.display = 'none';
+  } else if (kycStatus === 'approved') {
+    if (formSection) formSection.style.display = 'none';
+    if (statusSection) statusSection.style.display = 'block';
+    document.getElementById('kycStatusIcon').textContent = '✅';
+    document.getElementById('kycStatusTitle').textContent = 'Verified – ' + (tierData.label);
+    document.getElementById('kycStatusMsg').textContent = 'Your identity has been verified. Your daily transaction limit is ₦' + tierData.dailyLimit.toLocaleString() + '.';
+    document.getElementById('kycResubmitBtn').style.display = 'none';
+  } else if (kycStatus === 'rejected') {
+    if (formSection) formSection.style.display = 'none';
+    if (statusSection) statusSection.style.display = 'block';
+    document.getElementById('kycStatusIcon').textContent = '❌';
+    document.getElementById('kycStatusTitle').textContent = 'Verification Rejected';
+    const reason = d.kycRejectionReason || 'Documents were unclear or invalid.';
+    document.getElementById('kycStatusMsg').textContent = 'Reason: ' + reason + '. Please resubmit with clearer documents.';
+    document.getElementById('kycStatusBadge').textContent = '❌ Rejected';
+    document.getElementById('kycStatusBadge').className = 'kyc-tier-badge kyc-rejected';
+    document.getElementById('kycResubmitBtn').style.display = 'block';
+  } else {
+    // Unverified — show form
+    if (formSection) formSection.style.display = 'block';
+    if (statusSection) statusSection.style.display = 'none';
+  }
+
+  // Update profile menu KYC status text
+  const profileKYC = document.getElementById('profileKYCStatus');
+  if (profileKYC) {
+    const statusMap = { unverified:'Tap to verify your identity', pending:'⏳ Under review', approved:'✅ Verified – '+tierData.label, rejected:'❌ Rejected – resubmit' };
+    profileKYC.textContent = statusMap[kycStatus] || 'Tap to verify';
+  }
+
+  // Prefill doc type toggle
+  document.getElementById('kycDocType')?.addEventListener('change', (e) => {
+    const lbl = document.getElementById('kycDocLabel');
+    if (lbl) lbl.textContent = e.target.value === 'nin' ? 'NIN Number' : 'BVN Number';
+  });
+};
+
+async function updateKYCLimitDisplay() {
+  const d = _s.userData;
+  const kycTier = d?.kycTier || 'unverified';
+  const tierData = KYC_TIERS[kycTier] || KYC_TIERS.unverified;
+  const limit = tierData.dailyLimit;
+
+  // Calculate today's spending
+  const todaySpent = await getTodaySpending();
+
+  const limitText = document.getElementById('kycLimitText');
+  const limitBar = document.getElementById('kycLimitBar');
+  const tierDesc = document.getElementById('kycTierDesc');
+
+  if (limitText) limitText.textContent = '₦' + todaySpent.toLocaleString() + ' / ₦' + (limit > 0 ? limit.toLocaleString() : '0');
+  if (limitBar && limit > 0) limitBar.style.width = Math.min((todaySpent / limit) * 100, 100) + '%';
+  if (tierDesc) {
+    if (kycTier === 'unverified') tierDesc.textContent = 'Submit KYC to start transacting';
+    else if (kycTier === 'gold') tierDesc.textContent = 'Maximum tier – ₦1,000,000/day limit';
+    else tierDesc.textContent = 'Upgrade KYC tier to unlock higher limits';
+  }
+}
+
+async function getTodaySpending() {
+  if (!_s.user) return 0;
+  try {
+    const todayStart = new Date(); todayStart.setHours(0,0,0,0);
+    const q = query(collection(db,'transactions'), where('userId','==',_s.user.uid), where('status','==','success'));
+    const snap = await getDocs(q);
+    let total = 0;
+    snap.forEach(d => {
+      const tx = d.data();
+      const txDate = tx.createdAt?.toDate ? tx.createdAt.toDate() : new Date(tx.createdAt);
+      if (txDate >= todayStart && !['fund','fund_approved','referral_bonus','admin_credit'].includes(tx.type)) {
+        total += tx.amount || 0;
+      }
+    });
+    return total;
+  } catch(e) { return 0; }
+}
+
+window.handleKYCDoc = (input, docType) => {
+  const file = input.files[0];
+  if (!file) return;
+  if (file.size > 5 * 1024 * 1024) return showToast('error', 'File too large. Max 5MB');
+  const reader = new FileReader();
+  reader.onload = (e) => {
+    window._kycDocs[docType] = e.target.result;
+    const preview = document.getElementById('kycDoc' + docType.charAt(0).toUpperCase() + docType.slice(1) + 'Preview');
+    if (preview) { preview.src = e.target.result; preview.style.display = 'block'; }
+    const uploadEl = document.getElementById('kycDoc' + docType.charAt(0).toUpperCase() + docType.slice(1));
+    if (uploadEl) uploadEl.style.borderColor = 'var(--success-green)';
+    showToast('success', docType.charAt(0).toUpperCase() + docType.slice(1) + ' uploaded!');
+  };
+  reader.readAsDataURL(file);
+};
+
+window.submitKYC = async () => {
+  if (!_s.user) return;
+  const docType = document.getElementById('kycDocType').value;
+  const docNumber = document.getElementById('kycDocNumber').value.trim();
+  const legalName = document.getElementById('kycLegalName').value.trim();
+  const dob = document.getElementById('kycDob').value;
+
+  if (!docNumber || docNumber.length < 10) return showToast('error', 'Enter a valid ' + docType.toUpperCase() + ' number');
+  if (!legalName) return showToast('error', 'Enter your legal name');
+  if (!dob) return showToast('error', 'Enter your date of birth');
+  if (!window._kycDocs.front) return showToast('error', 'Upload front of ID card');
+  if (!window._kycDocs.back) return showToast('error', 'Upload back of ID card');
+  if (!window._kycDocs.selfie) return showToast('error', 'Upload selfie with ID');
+
+  const btn = document.getElementById('kycSubmitBtn');
+  btn.disabled = true; btn.innerHTML = '<span class="btn-spinner"></span> Submitting…';
+
+  try {
+    // Compress images
+    const compressImg = async (dataURL) => {
+      const img = new Image();
+      await new Promise((res,rej) => { img.onload=res; img.onerror=rej; img.src=dataURL; });
+      const cvs = document.createElement('canvas');
+      const maxW = 400;
+      const scale = Math.min(maxW/img.width, 1);
+      cvs.width = Math.round(img.width*scale);
+      cvs.height = Math.round(img.height*scale);
+      cvs.getContext('2d').drawImage(img, 0, 0, cvs.width, cvs.height);
+      let result = cvs.toDataURL('image/jpeg', 0.65);
+      if (result.length > 350000) result = cvs.toDataURL('image/jpeg', 0.4);
+      return result;
+    };
+    const [frontThumb, backThumb, selfieThumb] = await Promise.all([
+      compressImg(window._kycDocs.front),
+      compressImg(window._kycDocs.back),
+      compressImg(window._kycDocs.selfie)
+    ]);
+
+    const kycId = genId(12);
+    await setDoc(doc(db, 'kycSubmissions', kycId), {
+      id: kycId,
+      userId: _s.user.uid,
+      userEmail: _s.userData?.email || '',
+      userName: (_s.userData?.firstName||'') + ' ' + (_s.userData?.lastName||''),
+      docType, docNumber, legalName, dob,
+      frontThumb, backThumb, selfieThumb,
+      status: 'pending',
+      createdAt: serverTimestamp(),
+      reviewedAt: null, reviewedBy: null, rejectionReason: ''
+    });
+
+    // Update user KYC status
+    await updateDoc(doc(db, 'users', _s.user.uid), {
+      kycStatus: 'pending',
+      kycSubmissionId: kycId
+    });
+
+    _s.userData.kycStatus = 'pending';
+    await addNotif(_s.user.uid, '⏳ KYC Submitted', 'Your identity documents are under review. We'll notify you within 24 hours.', 'info');
+    showToast('success', 'KYC submitted successfully!');
+    loadKYCScreen();
+  } catch(e) {
+    showToast('error', 'Submission failed: ' + e.message);
+  } finally {
+    btn.disabled = false; btn.innerHTML = 'Submit for Verification';
+  }
+};
+
+window.resetKYCForm = () => {
+  window._kycDocs = { front: null, back: null, selfie: null };
+  document.getElementById('kycFormSection').style.display = 'block';
+  document.getElementById('kycStatusSection').style.display = 'none';
+  ['Front','Back','Selfie'].forEach(t => {
+    const p = document.getElementById('kycDoc'+t+'Preview');
+    if(p) p.style.display = 'none';
+    const u = document.getElementById('kycDoc'+t.toLowerCase());
+    if(u) u.style.borderColor = '';
+  });
+};
+
+// ── TRANSACTION LIMIT ENFORCEMENT ──
+async function checkTransactionLimit(amount) {
+  const d = _s.userData;
+  const kycTier = d?.kycTier || 'unverified';
+  const kycStatus = d?.kycStatus || 'unverified';
+  const tierData = KYC_TIERS[kycTier] || KYC_TIERS.unverified;
+
+  if (kycStatus !== 'approved' || kycTier === 'unverified') {
+    showOverlay(`
+      <div class="sheet-title">🔒 KYC Required</div>
+      <div style="text-align:center;padding:10px 0 16px">
+        <div style="font-size:48px;margin-bottom:10px">🪪</div>
+        <p style="font-size:13px;color:var(--text2);line-height:1.5;margin-bottom:16px">
+          You need to complete KYC verification before making transactions. It takes just a few minutes.
+        </p>
+        <button class="btn btn-primary" onclick="closeOverlay();navigateTo('kycScreen')">Complete KYC Now</button>
+      </div>`);
+    return false;
+  }
+
+  const todaySpent = await getTodaySpending();
+  const dailyLimit = tierData.dailyLimit;
+
+  if (todaySpent + amount > dailyLimit) {
+    const remaining = Math.max(0, dailyLimit - todaySpent);
+    const nextTier = { bronze: 'Silver', silver: 'Gold' }[kycTier] || null;
+    showOverlay(`
+      <div class="sheet-title">⚠️ Daily Limit Reached</div>
+      <div style="padding:10px 0 16px">
+        <p style="font-size:13px;color:var(--text2);line-height:1.5;margin-bottom:12px">
+          Your ${tierData.label} tier daily limit is <strong>₦${dailyLimit.toLocaleString()}</strong>.<br>
+          You've used <strong>₦${todaySpent.toLocaleString()}</strong> today.<br>
+          Remaining: <strong>₦${remaining.toLocaleString()}</strong>.
+        </p>
+        ${nextTier ? `
+        <div style="background:linear-gradient(135deg,var(--primary),var(--primary-mid));border-radius:12px;padding:12px;color:white;margin-bottom:14px;cursor:pointer" onclick="closeOverlay();navigateTo('kycScreen')">
+          <div style="font-size:13px;font-weight:700;margin-bottom:2px">🚀 Upgrade to ${nextTier}</div>
+          <div style="font-size:11px;opacity:.8">Complete additional KYC to unlock a higher limit</div>
+        </div>` : ''}
+        <button class="btn btn-outline" onclick="closeOverlay()">OK, Got It</button>
+      </div>`);
+    return false;
+  }
+  return true;
+}
+
+// ── ADMIN KYC MANAGEMENT ──
+window.loadAdminKYC = async (statusFilter = 'pending') => {
+  const c = document.getElementById('kycReqList');
+  if (!c) return;
+  c.innerHTML = '<div class="loading-spinner"></div>';
+  try {
+    let q;
+    if (statusFilter === 'all') q = query(collection(db,'kycSubmissions'), limit(100));
+    else q = query(collection(db,'kycSubmissions'), where('status','==',statusFilter), limit(100));
+    const snap = await getDocs(q);
+    const reqs = snap.docs.map(d=>({id:d.id,...d.data()})).sort((a,b)=>{
+      const ta = a.createdAt?.toMillis?a.createdAt.toMillis():0;
+      const tb = b.createdAt?.toMillis?b.createdAt.toMillis():0;
+      return tb-ta;
+    });
+    if (!reqs.length) {
+      c.innerHTML = '<div class="empty-state" style="padding:30px 20px;text-align:center"><div style="font-size:36px;margin-bottom:10px">🪪</div><h4>No '+statusFilter+' KYC requests</h4></div>';
+      return;
+    }
+    c.innerHTML = reqs.map(r => `
+      <div class="kyc-req-card">
+        <div class="kyc-req-header">
+          <div>
+            <div class="kyc-req-user">${r.userName || r.userEmail}</div>
+            <div class="kyc-req-time">${tAgo(r.createdAt)} · ${r.docType?.toUpperCase()}: ${r.docNumber}</div>
+          </div>
+          <span class="badge badge-${r.status==='approved'?'success':r.status==='rejected'?'failed':'pending'}">${r.status}</span>
+        </div>
+        <div class="kyc-req-detail"><strong>Legal Name:</strong> ${r.legalName}</div>
+        <div class="kyc-req-detail"><strong>DOB:</strong> ${r.dob}</div>
+        <div class="kyc-req-detail"><strong>Email:</strong> ${r.userEmail}</div>
+        <div style="display:flex;gap:8px;margin:10px 0;overflow-x:auto">
+          ${r.frontThumb ? `<img src="${r.frontThumb}" class="kyc-req-doc" onclick="viewKYCDoc('${r.id}','front')" title="Front of ID">` : ''}
+          ${r.backThumb ? `<img src="${r.backThumb}" class="kyc-req-doc" onclick="viewKYCDoc('${r.id}','back')" title="Back of ID">` : ''}
+          ${r.selfieThumb ? `<img src="${r.selfieThumb}" class="kyc-req-doc" onclick="viewKYCDoc('${r.id}','selfie')" title="Selfie">` : ''}
+        </div>
+        ${r.status === 'pending' ? `
+        <div style="margin-bottom:10px">
+          <label style="font-size:12px;font-weight:600;color:var(--text);display:block;margin-bottom:6px">Upgrade to Tier:</label>
+          <select class="form-input" id="kycTierSelect_${r.id}" style="margin-bottom:8px">
+            <option value="bronze">🥉 Bronze (₦50,000/day)</option>
+            <option value="silver">🥈 Silver (₦200,000/day)</option>
+            <option value="gold">🥇 Gold (₦1,000,000/day)</option>
+          </select>
+        </div>
+        <div class="kyc-req-actions">
+          <button class="btn btn-success btn-sm" style="flex:1" onclick="approveKYC('${r.id}','${r.userId}')">✅ Approve</button>
+          <button class="btn btn-danger btn-sm" style="flex:1" onclick="rejectKYC('${r.id}','${r.userId}')">❌ Reject</button>
+        </div>` : `<div style="font-size:11px;color:var(--text3);text-align:center;padding-top:4px">Reviewed ${tAgo(r.reviewedAt)}</div>`}
+      </div>`).join('');
+  } catch(e) {
+    c.innerHTML = '<div style="padding:20px;text-align:center;color:var(--danger)">Error: '+e.message+'</div>';
+  }
+};
+
+window.filterKYC = (f, el) => {
+  document.querySelectorAll('#kycFilter .chip').forEach(c=>c.classList.remove('active'));
+  el.classList.add('active');
+  loadAdminKYC(f);
+};
+
+window.viewKYCDoc = (reqId, docType) => {
+  // Find the card and get the image src
+  const img = document.querySelector(`[onclick="viewKYCDoc('${reqId}','${docType}')"]`);
+  if (!img) return;
+  showOverlay(`<div class="sheet-title">${docType==='front'?'Front of ID':docType==='back'?'Back of ID':'Selfie with ID'}</div>
+    <img src="${img.src}" style="width:100%;border-radius:12px;margin-bottom:12px;max-height:70vh;object-fit:contain"><button class="btn btn-outline" onclick="closeOverlay()">Close</button>`);
+};
+
+window.approveKYC = async (kycId, userId) => {
+  const tierSelect = document.getElementById('kycTierSelect_' + kycId);
+  const tier = tierSelect ? tierSelect.value : 'bronze';
+  if (!confirm('Approve KYC and set ' + tier + ' tier?')) return;
+  try {
+    await updateDoc(doc(db,'kycSubmissions',kycId), { status:'approved', reviewedAt:serverTimestamp(), reviewedBy:_s.user.uid, approvedTier:tier });
+    await updateDoc(doc(db,'users',userId), { kycStatus:'approved', kycTier:tier, kycVerified:true });
+    const tierLabel = KYC_TIERS[tier]?.label || tier;
+    await addNotif(userId, '✅ KYC Approved!', 'Your identity has been verified. You are now a ' + tierLabel + ' user with ₦' + (KYC_TIERS[tier]?.dailyLimit||0).toLocaleString() + ' daily limit.', 'success');
+    showToast('success', 'KYC approved – ' + tierLabel + ' tier assigned!');
+    loadAdminKYC('pending');
+  } catch(e) { showToast('error', 'Approval failed: ' + e.message); }
+};
+
+window.rejectKYC = async (kycId, userId) => {
+  const reason = prompt('Reason for rejection:') || 'Documents were unclear or invalid';
+  try {
+    await updateDoc(doc(db,'kycSubmissions',kycId), { status:'rejected', reviewedAt:serverTimestamp(), reviewedBy:_s.user.uid, rejectionReason:reason });
+    await updateDoc(doc(db,'users',userId), { kycStatus:'rejected', kycRejectionReason:reason });
+    await addNotif(userId, '❌ KYC Rejected', 'Reason: ' + reason + '. Please resubmit with clearer documents.', 'warning');
+    showToast('info', 'KYC rejected');
+    loadAdminKYC('pending');
+  } catch(e) { showToast('error', 'Failed: ' + e.message); }
+};
+
+// Listen for pending KYC submissions (admin badge)
+function listenPendingKYC() {
+  try {
+    const q = query(collection(db,'kycSubmissions'), where('status','==','pending'));
+    onSnapshot(q, (s) => {
+      const count = s.size;
+      const badge = document.getElementById('kycPendingBadge');
+      if (badge) { badge.textContent = count; badge.style.display = count > 0 ? 'flex' : 'none'; }
+    });
+  } catch(e) {}
+}
+
+
 window.adminDebitWallet=async()=>{const ui=document.getElementById('adminDebitUser').value;const am=parseFloat(document.getElementById('adminDebitAmt').value);if(!ui||!am)return showToast('error','Fill all fields');try{const q=query(collection(db,'users'),where('email','==',ui));const s=await getDocs(q);if(s.empty)return showToast('error','User not found');if(am>(s.docs[0].data().balance||0))return showToast('error','Insufficient balance');await updateDoc(doc(db,'users',s.docs[0].id),{balance:increment(-am)});showToast('success',`₦${am.toLocaleString()} debited!`)}catch(e){showToast('error','Failed')}};
 window.sendBroadcast=async()=>{const t=document.getElementById('notifTitle').value;const m=document.getElementById('notifMsg').value;const tp=document.getElementById('notifType').value;const tg=document.getElementById('notifTarget').value;if(!t||!m)return showToast('error','Fill all fields');try{let uq=collection(db,'users');if(tg==='agents')uq=query(uq,where('role','==','agent'));else if(tg!=='all')uq=query(uq,where('country','==',tg));const s=await getDocs(uq);await Promise.all(s.docs.map(d=>addNotif(d.id,t,m,tp)));showToast('success',`Sent to ${s.size} users!`);document.getElementById('notifTitle').value='';document.getElementById('notifMsg').value=''}catch(e){showToast('error','Failed')}};
 
