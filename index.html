@@ -39,9 +39,9 @@ html,body{height:100%;overflow:hidden;font-family:var(--font);background:#1E1B4B
 
 /* ── AUTH ── */
 #auth{background:#fff;overflow-y:auto}
-#home,#walletScreen,#profileScreen,#admin,#fundWallet,#adminFundingRequests,#airtimeScreen,#dataScreen,#electricityScreen,#cableTVScreen,#schoolPinScreen,#transferScreen,#historyScreen,#notifications,#referral,#agentScreen,#securityScreen,#supportScreen,#editProfile,#pinScreen,#successScreen,#adminTransactions,#adminAPIs,#adminUsers,#adminWallets,#termsScreen,#adminTerms,#adminSecurity,#kycScreen,#adminKYC{background:var(--bg)}
+#home,#walletScreen,#profileScreen,#admin,#fundWallet,#adminFundingRequests,#airtimeScreen,#dataScreen,#electricityScreen,#cableTVScreen,#schoolPinScreen,#transferScreen,#historyScreen,#notifications,#referral,#agentScreen,#securityScreen,#supportScreen,#editProfile,#pinScreen,#successScreen,#adminTransactions,#adminAPIs,#adminUsers,#adminWallets,#termsScreen,#adminTerms,#adminSecurity,#kycScreen,#adminKYC,#promoScreen,#adminPromos,#adminSupport,#supportChatScreen,#adminChatReply{background:var(--bg)}
 /* All non-splash/auth screens get grey background */
-#home,#walletScreen,#servicesScreen,#profileScreen,#admin,#fundWallet,#adminFundingRequests,#airtimeScreen,#dataScreen,#electricityScreen,#cableTVScreen,#schoolPinScreen,#transferScreen,#historyScreen,#notifications,#referral,#agentScreen,#securityScreen,#supportScreen,#editProfile,#adminTransactions,#adminAPIs,#adminServices,#adminPricing,#adminCountries,#adminNotifications,#adminWallets,#adminAgents,#adminUsers,#pinScreen,#successScreen,#termsScreen,#adminTerms,#adminSecurity,#kycScreen,#adminKYC{background:var(--bg)}
+#home,#walletScreen,#servicesScreen,#profileScreen,#admin,#fundWallet,#adminFundingRequests,#airtimeScreen,#dataScreen,#electricityScreen,#cableTVScreen,#schoolPinScreen,#transferScreen,#historyScreen,#notifications,#referral,#agentScreen,#securityScreen,#supportScreen,#editProfile,#adminTransactions,#adminAPIs,#adminServices,#adminPricing,#adminCountries,#adminNotifications,#adminWallets,#adminAgents,#adminUsers,#pinScreen,#successScreen,#termsScreen,#adminTerms,#adminSecurity,#kycScreen,#adminKYC,#promoScreen,#adminPromos,#adminSupport,#supportChatScreen,#adminChatReply{background:var(--bg)}
 .auth-logo-bar{background:linear-gradient(145deg,#1E1B4B,#3B3582);padding:44px 24px 26px;display:flex;flex-direction:column;align-items:center;gap:10px}
 .auth-logo-box{width:68px;height:68px;background:white;border-radius:14px;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 16px rgba(0,0,0,0.25);padding:6px}
 .auth-logo-box img{width:100%;height:100%;object-fit:contain}
@@ -151,6 +151,49 @@ select.form-input{cursor:pointer;-webkit-appearance:none;background-image:url("d
 .badge-failed{background:#FEE2E2;color:#991B1B}
 .badge-review{background:#DBEAFE;color:#1E40AF}
 /* ── KYC VERIFICATION ── */
+
+/* ── REFERRAL DASHBOARD ── */
+.ref-link-box{background:white;border:2px dashed var(--primary);border-radius:14px;padding:14px;margin-bottom:12px;text-align:center}
+.ref-link-url{font-size:11px;color:var(--primary);font-weight:600;word-break:break-all;margin-bottom:10px;line-height:1.4}
+.ref-friends-list{background:white;border-radius:14px;box-shadow:var(--shadow);overflow:hidden;margin-bottom:12px}
+.ref-friend-row{display:flex;align-items:center;gap:10px;padding:11px 14px;border-bottom:1px solid var(--border)}
+.ref-friend-row:last-child{border-bottom:none}
+.ref-friend-avatar{width:36px;height:36px;border-radius:50%;background:var(--primary-light);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:13px;color:var(--primary);flex-shrink:0}
+.ref-friend-name{font-size:13px;font-weight:600;color:var(--text)}
+.ref-friend-date{font-size:10px;color:var(--text3)}
+.ref-earn-badge{background:#DCFCE7;color:#166534;font-size:10px;font-weight:700;padding:2px 7px;border-radius:99px;margin-left:auto}
+/* ── PROMO CODE ── */
+.promo-card{background:linear-gradient(135deg,#1E1B4B,#4338CA);border-radius:16px;padding:16px;margin-bottom:12px;color:white;position:relative;overflow:hidden}
+.promo-card::before{content:'';position:absolute;right:-20px;top:-20px;width:100px;height:100px;border-radius:50%;background:rgba(255,255,255,.06)}
+.promo-code-tag{display:inline-flex;align-items:center;gap:6px;background:rgba(255,255,255,.15);border:1px dashed rgba(255,255,255,.4);padding:6px 14px;border-radius:8px;font-size:15px;font-weight:700;letter-spacing:2px;font-family:monospace;cursor:pointer;margin:8px 0}
+.promo-admin-card{background:white;border-radius:14px;padding:14px;margin-bottom:10px;box-shadow:var(--shadow)}
+.promo-badge-active{background:#DCFCE7;color:#166534;font-size:10px;font-weight:700;padding:3px 8px;border-radius:99px}
+.promo-badge-disabled{background:#FEE2E2;color:#991B1B;font-size:10px;font-weight:700;padding:3px 8px;border-radius:99px}
+/* ── SUPPORT CHAT ── */
+.chat-screen{display:flex;flex-direction:column;height:100vh;max-height:100vh;background:var(--bg)}
+.chat-header{background:white;padding:42px 14px 12px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:10px;flex-shrink:0}
+.chat-avatar{width:38px;height:38px;border-radius:50%;background:var(--primary);display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0}
+.chat-messages{flex:1;overflow-y:auto;padding:14px 12px;display:flex;flex-direction:column;gap:8px;padding-bottom:80px}
+.chat-bubble{max-width:80%;padding:10px 13px;border-radius:16px;font-size:13px;line-height:1.45;word-break:break-word}
+.chat-bubble.user{background:var(--primary);color:white;border-bottom-right-radius:4px;align-self:flex-end}
+.chat-bubble.admin{background:white;color:var(--text);border-bottom-left-radius:4px;align-self:flex-start;box-shadow:var(--shadow)}
+.chat-bubble-time{font-size:10px;opacity:.6;margin-top:4px;display:block}
+.chat-input-bar{position:fixed;bottom:0;left:0;right:0;background:white;border-top:1px solid var(--border);padding:10px 12px;display:flex;gap:8px;align-items:flex-end;z-index:100}
+.chat-input{flex:1;border:1.5px solid var(--border);border-radius:22px;padding:9px 14px;font-size:13px;outline:none;resize:none;max-height:90px;font-family:var(--font-body);line-height:1.4;background:var(--bg)}
+.chat-input:focus{border-color:var(--primary)}
+.chat-send-btn{width:40px;height:40px;border-radius:50%;background:var(--primary);border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;color:white;font-size:18px;flex-shrink:0}
+.chat-date-divider{text-align:center;font-size:10px;color:var(--text3);margin:6px 0;font-weight:600}
+.support-user-card{background:white;border-radius:14px;padding:14px;margin-bottom:10px;box-shadow:var(--shadow);cursor:pointer;display:flex;align-items:center;gap:12px}
+.support-user-preview{flex:1;min-width:0}
+.support-user-name{font-size:13px;font-weight:700;color:var(--text);margin-bottom:2px}
+.support-last-msg{font-size:11px;color:var(--text3);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.support-unread{background:var(--primary);color:white;font-size:10px;font-weight:700;width:18px;height:18px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.chat-typing{display:flex;gap:4px;padding:10px 14px;background:white;border-radius:16px;border-bottom-left-radius:4px;align-self:flex-start;box-shadow:var(--shadow)}
+.chat-typing span{width:6px;height:6px;background:var(--text3);border-radius:50%;animation:typing .9s infinite}
+.chat-typing span:nth-child(2){animation-delay:.2s}
+.chat-typing span:nth-child(3){animation-delay:.4s}
+@keyframes typing{0%,60%,100%{transform:translateY(0)}30%{transform:translateY(-5px)}}
+
 .kyc-tier-badge{display:inline-flex;align-items:center;gap:5px;padding:4px 10px;border-radius:99px;font-size:11px;font-weight:700;border:none}
 .kyc-bronze{background:#FEF0E6;color:#C2510F}
 .kyc-silver{background:#F1F5F9;color:#475569;border:1px solid #CBD5E1}
@@ -594,6 +637,8 @@ textarea.form-input{resize:none}
         <div class="action-item" onclick="navigateTo('transferScreen')"><div class="action-icon ai-yellow">💸</div><div class="action-label">Transfer</div></div>
         <div class="action-item" onclick="navigateTo('schoolPinScreen')"><div class="action-icon ai-purple">🎓</div><div class="action-label">School PIN</div></div>
         <div class="action-item" onclick="navigateTo('kycScreen')"><div class="action-icon" style="background:#E0F2FE">🪪</div><div class="action-label">KYC</div></div>
+        <div class="action-item" onclick="navigateTo('supportChatScreen')"><div class="action-icon" style="background:#F0FDF4">🎧</div><div class="action-label">Support</div></div>
+        <div class="action-item" onclick="navigateTo('referral')"><div class="action-icon" style="background:#FDF4FF">🎁</div><div class="action-label">Refer</div></div>
       </div>
     </div>
     <!-- Recent Transactions -->
@@ -681,6 +726,8 @@ textarea.form-input{resize:none}
     <div class="svc-card" onclick="navigateTo('schoolPinScreen')"><div class="svc-icon" style="background:#E0FDF4">🎓</div><div class="svc-name">School PIN</div><div class="svc-desc">WAEC, NECO, JAMB</div></div>
     <div class="svc-card" onclick="navigateTo('transferScreen')"><div class="svc-icon" style="background:#FEFCE8">💸</div><div class="svc-name">Send Money</div><div class="svc-desc">Bank & wallet transfer</div></div>
     <div class="svc-card" onclick="navigateTo('kycScreen')"><div class="svc-icon" style="background:#E0F2FE">🪪</div><div class="svc-name">KYC Verification</div><div class="svc-desc">Unlock higher limits</div></div>
+    <div class="svc-card" onclick="navigateTo('supportChatScreen')"><div class="svc-icon" style="background:#F0FDF4">🎧</div><div class="svc-name">Live Support</div><div class="svc-desc">Chat with our team</div></div>
+    <div class="svc-card" onclick="navigateTo('referral')"><div class="svc-icon" style="background:#FDF4FF">🎁</div><div class="svc-name">Refer & Earn</div><div class="svc-desc">₦500 per referral</div></div>
   </div>
   <!-- Refer & Earn placed under services as requested -->
   <div class="refer-strip" onclick="navigateTo('referral')">
@@ -723,7 +770,8 @@ textarea.form-input{resize:none}
       <div class="menu-item" onclick="navigateTo('notifications')"><div class="menu-item-icon" style="background:#FEFCE8">🔔</div><div class="menu-item-text"><div class="menu-item-title">Notifications</div></div><div class="menu-item-arrow">›</div></div>
       <div class="menu-item" onclick="navigateTo('supportScreen')"><div class="menu-item-icon" style="background:#E0FDF4">💬</div><div class="menu-item-text"><div class="menu-item-title">Help & Support</div></div><div class="menu-item-arrow">›</div></div>
     </div>
-    <div class="menu-list"><div class="menu-item" onclick="navigateTo('kycScreen')"><div class="menu-item-icon" style="background:#E0F2FE">🪪</div><div class="menu-item-text"><div class="menu-item-title">KYC Verification</div><div class="menu-item-sub" id="profileKYCStatus">Tap to verify your identity</div></div><div class="menu-item-arrow">›</div></div></div>
+    <div class="menu-list"><div class="menu-item" onclick="navigateTo('promoScreen')"><div class="menu-item-icon" style="background:#FFFBEB">🏷️</div><div class="menu-item-text"><div class="menu-item-title">Promo Codes</div><div class="menu-item-sub">Apply discount codes</div></div><div class="menu-item-arrow">›</div></div></div>
+<div class="menu-list"><div class="menu-item" onclick="navigateTo('kycScreen')"><div class="menu-item-icon" style="background:#E0F2FE">🪪</div><div class="menu-item-text"><div class="menu-item-title">KYC Verification</div><div class="menu-item-sub" id="profileKYCStatus">Tap to verify your identity</div></div><div class="menu-item-arrow">›</div></div></div>
 <div class="menu-list"><div class="menu-item" onclick="handleLogout()"><div class="menu-item-icon" style="background:#FEF2F2">🚪</div><div class="menu-item-text"><div class="menu-item-title" style="color:var(--danger)">Sign Out</div></div><div class="menu-item-arrow">›</div></div></div>
     <div class="version-tag">KOBOrush v2.1.0 · RC: 979668 · Made with ❤️ in Africa</div>
   </div>
@@ -763,6 +811,8 @@ textarea.form-input{resize:none}
     <div class="admin-nav-card" onclick="navigateTo('adminTerms')"><div class="anc-icon">📄</div><div class="anc-label">Terms</div></div>
     <div class="admin-nav-card" onclick="navigateTo('adminSecurity')"><div class="anc-icon">🔐</div><div class="anc-label">Security</div></div>
     <div class="admin-nav-card" onclick="navigateTo('adminKYC')"><div class="anc-icon">🪪</div><div class="anc-label">KYC</div><div class="anc-badge" id="kycPendingBadge" style="display:none">0</div></div>
+    <div class="admin-nav-card" onclick="navigateTo('adminPromos')"><div class="anc-icon">🏷️</div><div class="anc-label">Promos</div></div>
+    <div class="admin-nav-card" onclick="navigateTo('adminSupport')"><div class="anc-icon">💬</div><div class="anc-label">Support</div><div class="anc-badge" id="supportUnreadBadge" style="display:none">0</div></div>
   </div>
   <div class="admin-panel"><div class="admin-panel-header"><h4>Recent Users</h4><span style="font-size:11px;color:var(--primary);font-weight:700;cursor:pointer" onclick="navigateTo('adminUsers')">See all</span></div><div id="adminUsersList"><div class="loading-spinner"></div></div></div>
   <div class="admin-panel"><div class="admin-panel-header"><h4>API Status</h4><span style="font-size:11px;color:var(--primary);font-weight:700;cursor:pointer" onclick="navigateTo('adminAPIs')">Manage</span></div><div id="adminAPIStatus"></div></div>
@@ -1037,29 +1087,133 @@ textarea.form-input{resize:none}
 </div>
 
 <!-- REFERRAL -->
+
+<!-- ══ REFERRAL DASHBOARD ══ -->
 <div class="screen" id="referral">
   <div style="background:linear-gradient(145deg,#1E1B4B,#3B3582);padding:48px 16px 22px">
-    <div style="display:flex;align-items:center;gap:9px;margin-bottom:16px"><button class="nav-back white" onclick="goBack()">←</button><div style="font-family:var(--font-display);font-size:16px;font-weight:700;color:white">Refer & Earn</div></div>
-    <div class="ref-code-card"><div style="font-size:11px;opacity:.7;margin-bottom:5px">Your Referral Code</div><div class="ref-code" id="refCode">KBR00000</div><div style="font-size:11px;opacity:.7;margin-top:5px">Earn ₦500 per successful referral</div></div>
+    <div style="display:flex;align-items:center;gap:9px;margin-bottom:16px">
+      <button class="nav-back white" onclick="goBack()">←</button>
+      <div style="font-family:var(--font-display);font-size:16px;font-weight:700;color:white">Refer & Earn</div>
+    </div>
+    <div class="ref-code-card">
+      <div style="font-size:11px;opacity:.7;margin-bottom:5px">Your Referral Code</div>
+      <div class="ref-code" id="refCode">KBR00000</div>
+      <div style="font-size:11px;opacity:.7;margin-top:5px">Earn ₦500 per successful referral</div>
+    </div>
   </div>
-  <div style="padding:12px">
-    <div class="ref-stats" style="margin-bottom:15px">
+  <div style="padding:12px 12px 100px">
+    <!-- Stats -->
+    <div class="ref-stats" style="margin-bottom:14px">
       <div class="ref-stat"><div class="ref-stat-val" id="refTotal">0</div><div class="ref-stat-label">Referred</div></div>
       <div class="ref-stat"><div class="ref-stat-val" id="refActive">0</div><div class="ref-stat-label">Active</div></div>
       <div class="ref-stat"><div class="ref-stat-val" id="refEarned">₦0</div><div class="ref-stat-label">Earned</div></div>
     </div>
-    <button class="btn btn-primary" onclick="shareReferral()" style="margin-bottom:8px">📤 Share Referral Link</button>
-    <button class="btn btn-outline" onclick="copyRefCode()">📋 Copy Code</button>
-    <div class="card" style="margin-top:15px">
+    <!-- Link Box -->
+    <div class="ref-link-box">
+      <div class="ref-link-url" id="refLinkDisplay">https://koborush.com/?ref=KBR00000</div>
+      <div style="display:flex;gap:8px;justify-content:center">
+        <button class="btn btn-primary btn-sm" onclick="copyRefLink()">📋 Copy Link</button>
+        <button class="btn btn-outline btn-sm" onclick="shareReferral()">📤 Share</button>
+      </div>
+    </div>
+    <!-- Friends List -->
+    <div class="section-title" style="margin-bottom:8px">Your Referrals</div>
+    <div id="refFriendsList"><div class="loading-spinner"></div></div>
+    <!-- How it Works -->
+    <div class="card" style="margin-top:14px">
       <div class="section-title">How it Works</div>
       <div style="display:flex;flex-direction:column;gap:10px">
-        <div style="display:flex;gap:10px;align-items:flex-start"><div style="width:27px;height:27px;background:var(--primary-light);border-radius:8px;display:flex;align-items:center;justify-content:center;font-weight:700;color:var(--primary);flex-shrink:0;font-size:11px">1</div><div><div style="font-size:12px;font-weight:600;color:var(--text)">Share your code</div><div style="font-size:11px;color:var(--text3);margin-top:1px">Send it via WhatsApp or SMS</div></div></div>
-        <div style="display:flex;gap:10px;align-items:flex-start"><div style="width:27px;height:27px;background:var(--primary-light);border-radius:8px;display:flex;align-items:center;justify-content:center;font-weight:700;color:var(--primary);flex-shrink:0;font-size:11px">2</div><div><div style="font-size:12px;font-weight:600;color:var(--text)">Friend signs up</div><div style="font-size:11px;color:var(--text3);margin-top:1px">They use your referral code</div></div></div>
-        <div style="display:flex;gap:10px;align-items:flex-start"><div style="width:27px;height:27px;background:var(--primary-light);border-radius:8px;display:flex;align-items:center;justify-content:center;font-weight:700;color:var(--primary);flex-shrink:0;font-size:11px">3</div><div><div style="font-size:12px;font-weight:600;color:var(--text)">Both earn rewards</div><div style="font-size:11px;color:var(--text3);margin-top:1px">₦500 for you, ₦200 for them</div></div></div>
+        <div style="display:flex;gap:10px;align-items:flex-start"><div style="width:27px;height:27px;background:var(--primary-light);border-radius:8px;display:flex;align-items:center;justify-content:center;font-weight:700;color:var(--primary);flex-shrink:0;font-size:11px">1</div><div><div style="font-size:12px;font-weight:600;color:var(--text)">Share your link</div><div style="font-size:11px;color:var(--text3);margin-top:1px">Send via WhatsApp, SMS, or any platform</div></div></div>
+        <div style="display:flex;gap:10px;align-items:flex-start"><div style="width:27px;height:27px;background:var(--primary-light);border-radius:8px;display:flex;align-items:center;justify-content:center;font-weight:700;color:var(--primary);flex-shrink:0;font-size:11px">2</div><div><div style="font-size:12px;font-weight:600;color:var(--text)">Friend signs up</div><div style="font-size:11px;color:var(--text3);margin-top:1px">They register using your referral link or code</div></div></div>
+        <div style="display:flex;gap:10px;align-items:flex-start"><div style="width:27px;height:27px;background:var(--primary-light);border-radius:8px;display:flex;align-items:center;justify-content:center;font-weight:700;color:var(--primary);flex-shrink:0;font-size:11px">3</div><div><div style="font-size:12px;font-weight:600;color:var(--text)">Both earn rewards</div><div style="font-size:11px;color:var(--text3);margin-top:1px">₦500 for you, ₦200 bonus for your friend</div></div></div>
       </div>
     </div>
   </div>
 </div>
+
+<!-- ══ PROMO CODE USER PAGE ══ -->
+<div class="screen" id="promoScreen" style="background:var(--bg)">
+  <div class="navbar light" style="padding-top:42px">
+    <button class="nav-back" onclick="goBack()">←</button>
+    <div class="nav-title">Promo Codes</div>
+    <div style="width:37px"></div>
+  </div>
+  <div style="padding:12px 12px 100px">
+    <div class="promo-card">
+      <div style="font-size:12px;opacity:.8;margin-bottom:4px">🎉 Got a promo code?</div>
+      <div style="font-size:17px;font-weight:700;margin-bottom:10px">Apply & Save on Transactions</div>
+      <div style="display:flex;gap:8px;align-items:center">
+        <input type="text" id="promoCodeInput" placeholder="Enter code e.g. SAVE500" class="form-input" style="flex:1;text-transform:uppercase;letter-spacing:1px;font-weight:600">
+        <button class="btn btn-primary btn-sm" style="background:white;color:var(--primary);flex-shrink:0" onclick="applyPromoCode()">Apply</button>
+      </div>
+      <div id="promoResult" style="margin-top:10px;font-size:12px;min-height:18px"></div>
+    </div>
+    <div class="section-title" style="margin-bottom:8px">Active Promotions</div>
+    <div id="activePromosList"><div class="loading-spinner"></div></div>
+    <div class="section-title" style="margin:14px 0 8px">My Used Codes</div>
+    <div id="usedPromosList"><div style="font-size:12px;color:var(--text3);text-align:center;padding:16px">No used codes yet</div></div>
+  </div>
+</div>
+
+<!-- ══ SUPPORT CHAT (USER) ══ -->
+<div class="screen chat-screen" id="supportChatScreen">
+  <div class="chat-header">
+    <button style="background:none;border:none;font-size:20px;cursor:pointer;padding:0;margin-right:2px" onclick="goBack()">←</button>
+    <div class="chat-avatar">🎧</div>
+    <div>
+      <div style="font-size:14px;font-weight:700;color:var(--text)">KOBOrush Support</div>
+      <div style="font-size:11px;color:var(--success-green);font-weight:600" id="supportStatusDot">● Online · Typically replies in minutes</div>
+    </div>
+  </div>
+  <div class="chat-messages" id="chatMessages">
+    <div class="chat-date-divider">Today</div>
+    <div class="chat-bubble admin">👋 Hi! Welcome to KOBOrush Support. How can we help you today?<span class="chat-bubble-time">Support Team</span></div>
+  </div>
+  <div class="chat-input-bar">
+    <textarea class="chat-input" id="chatInput" placeholder="Type a message..." rows="1" onkeydown="chatInputKeydown(event)"></textarea>
+    <button class="chat-send-btn" onclick="sendChatMessage()">➤</button>
+  </div>
+</div>
+
+<!-- ══ ADMIN PROMO CODES ══ -->
+<div class="screen" id="adminPromos" style="background:var(--bg)">
+  <div class="navbar light" style="padding-top:42px">
+    <button class="nav-back" onclick="goBack()">←</button>
+    <div class="nav-title">Promo Codes</div>
+    <button class="btn btn-primary btn-sm" style="font-size:11px;padding:6px 12px" onclick="showCreatePromo()">+ New</button>
+  </div>
+  <div style="padding:10px 12px 80px">
+    <div id="adminPromoList"><div class="loading-spinner"></div></div>
+  </div>
+</div>
+
+<!-- ══ ADMIN SUPPORT CHATS ══ -->
+<div class="screen" id="adminSupport" style="background:var(--bg)">
+  <div class="navbar light" style="padding-top:42px">
+    <button class="nav-back" onclick="goBack()">←</button>
+    <div class="nav-title">Support Chats</div>
+    <div style="width:37px"></div>
+  </div>
+  <div id="adminChatList" style="padding:10px 12px 20px"><div class="loading-spinner"></div></div>
+</div>
+
+<!-- ══ ADMIN CHAT REPLY SCREEN ══ -->
+<div class="screen chat-screen" id="adminChatReply">
+  <div class="chat-header">
+    <button style="background:none;border:none;font-size:20px;cursor:pointer;padding:0;margin-right:2px" onclick="goBack()">←</button>
+    <div class="chat-avatar" id="adminReplyAvatar">👤</div>
+    <div>
+      <div style="font-size:14px;font-weight:700;color:var(--text)" id="adminReplyName">User</div>
+      <div style="font-size:11px;color:var(--text3)" id="adminReplyEmail"></div>
+    </div>
+  </div>
+  <div class="chat-messages" id="adminChatMessages"></div>
+  <div class="chat-input-bar">
+    <textarea class="chat-input" id="adminChatInput" placeholder="Reply as Support..." rows="1" onkeydown="adminChatKeydown(event)"></textarea>
+    <button class="chat-send-btn" onclick="sendAdminReply()">➤</button>
+  </div>
+</div>
+
 
 <!-- AGENT -->
 <div class="screen" id="agentScreen">
@@ -1590,6 +1744,11 @@ window.navigateTo=(id)=>{
   if(id==='termsScreen')loadTermsForUser();
   if(id==='kycScreen')loadKYCScreen();
   if(id==='adminKYC')loadAdminKYC();
+  if(id==='referral')loadReferralDashboard();
+  if(id==='promoScreen')loadPromoScreen();
+  if(id==='adminPromos')loadAdminPromos();
+  if(id==='adminSupport')loadAdminSupportList();
+  if(id==='supportChatScreen')initSupportChat();
   if(id==='adminTerms')loadAdminTermsEditor();
   if(id==='adminSecurity'){}
   updateNav(id);
@@ -2222,7 +2381,7 @@ window.verifyAdminPIN=async()=>{
   if(pin===correct){
     _s.adminPINVerified=true;
     ['apg1','apg2','apg3','apg4'].forEach(id=>document.getElementById(id).value='');
-    showScreen('admin');loadAdminDash();listenPendingFundRequests();listenPendingKYC();
+    showScreen('admin');loadAdminDash();listenPendingFundRequests();listenPendingKYC();listenSupportUnread();
   }else{
     document.getElementById('adminPINError').textContent='Incorrect PIN. Try again.';
     ['apg1','apg2','apg3','apg4'].forEach(id=>document.getElementById(id).value='');
@@ -2721,6 +2880,517 @@ function listenPendingKYC() {
       const count = s.size;
       const badge = document.getElementById('kycPendingBadge');
       if (badge) { badge.textContent = count; badge.style.display = count > 0 ? 'flex' : 'none'; }
+    });
+  } catch(e) {}
+}
+
+
+
+// ════════════════════════════════
+// REFERRAL DASHBOARD SYSTEM
+// ════════════════════════════════
+window.loadReferralDashboard = async () => {
+  if (!_s.user || !_s.userData) return;
+  const code = _s.userData.referralCode || 'KBR' + _s.user.uid.slice(0,5).toUpperCase();
+  const link = 'https://koborush.com/?ref=' + code;
+  const el = document.getElementById('refCode'); if(el) el.textContent = code;
+  const ld = document.getElementById('refLinkDisplay'); if(ld) ld.textContent = link;
+  window._refLink = link; window._refCode = code;
+
+  // Load referrals from Firestore
+  const listEl = document.getElementById('refFriendsList');
+  if (listEl) listEl.innerHTML = '<div class="loading-spinner"></div>';
+  try {
+    const q = query(collection(db,'referrals'), where('referrerId','==',_s.user.uid));
+    const snap = await getDocs(q);
+    const refs = snap.docs.map(d => d.data());
+    const totalEarned = refs.reduce((s,r) => s + (r.bonusPaid||0), 0);
+
+    // Update stats
+    const t = document.getElementById('refTotal'); if(t) t.textContent = refs.length;
+    const a = document.getElementById('refActive'); if(a) a.textContent = refs.filter(r=>r.active).length;
+    const e = document.getElementById('refEarned'); if(e) e.textContent = '₦' + totalEarned.toLocaleString();
+
+    // Render friends
+    if (!listEl) return;
+    if (!refs.length) {
+      listEl.innerHTML = '<div style="background:white;border-radius:14px;padding:20px;text-align:center;box-shadow:var(--shadow)">'
+        + '<div style="font-size:32px;margin-bottom:8px">👥</div>'
+        + '<div style="font-size:13px;font-weight:600;color:var(--text)">No referrals yet</div>'
+        + '<div style="font-size:11px;color:var(--text3);margin-top:3px">Share your link to start earning</div></div>';
+      return;
+    }
+    listEl.innerHTML = '<div class="ref-friends-list">'
+      + refs.map(r => {
+        const initials = (r.refereeName||'U').charAt(0).toUpperCase();
+        return '<div class="ref-friend-row">'
+          + '<div class="ref-friend-avatar">' + initials + '</div>'
+          + '<div style="flex:1;min-width:0"><div class="ref-friend-name">' + (r.refereeName||'Friend') + '</div>'
+          + '<div class="ref-friend-date">' + tAgo(r.joinedAt) + '</div></div>'
+          + '<span class="ref-earn-badge">+₦' + (r.bonusPaid||500).toLocaleString() + '</span></div>';
+      }).join('') + '</div>';
+  } catch(e) {
+    if(listEl) listEl.innerHTML = '<div style="text-align:center;padding:20px;color:var(--danger);font-size:12px">Error loading referrals</div>';
+  }
+};
+
+window.copyRefLink = () => {
+  const link = window._refLink || 'https://koborush.com/?ref=KBR00000';
+  navigator.clipboard?.writeText(link);
+  showToast('success', 'Referral link copied!');
+};
+
+window.shareReferral = () => {
+  const code = window._refCode || (_s.userData?.referralCode || 'KBR00000');
+  const link = 'https://koborush.com/?ref=' + code;
+  const text = 'Join KOBOrush! Use my code ' + code + ' for a ₦200 bonus. ' + link;
+  if (navigator.share) navigator.share({title:'Join KOBOrush', text, url: link});
+  else { navigator.clipboard?.writeText(text); showToast('success', 'Link copied!'); }
+};
+
+window.copyRefCode = () => {
+  const code = document.getElementById('refCode')?.textContent || '';
+  navigator.clipboard?.writeText(code);
+  showToast('success', 'Code copied!');
+};
+
+// Award referral bonus (called on registration if referral code used)
+window.processReferralBonus = async (newUserId, newUserName, referralCode) => {
+  if (!referralCode) return;
+  try {
+    const q = query(collection(db,'users'), where('referralCode','==',referralCode));
+    const snap = await getDocs(q);
+    if (snap.empty) return;
+    const referrerDoc = snap.docs[0];
+    const referrerId = referrerDoc.id;
+    if (referrerId === newUserId) return;
+
+    const refId = genId(10);
+    await setDoc(doc(db,'referrals',refId), {
+      id: refId, referrerId, referralCode,
+      refereeId: newUserId, refereeName: newUserName,
+      bonusPaid: 500, active: true,
+      joinedAt: serverTimestamp()
+    });
+    // Credit referrer
+    const referrerData = referrerDoc.data();
+    await updateDoc(doc(db,'users',referrerId), { balance: (referrerData.balance||0) + 500 });
+    await addNotif(referrerId, '🎉 Referral Bonus!', newUserName + ' joined using your code. ₦500 has been added to your wallet!', 'success');
+    // Credit new user
+    await updateDoc(doc(db,'users',newUserId), { balance: (await getDoc(doc(db,'users',newUserId))).data()?.balance||0 + 200 });
+    await addNotif(newUserId, '🎁 Welcome Bonus!', 'You got ₦200 for joining via referral!', 'success');
+  } catch(e) { console.warn('Referral bonus error:', e); }
+};
+
+// ════════════════════════════════
+// PROMO CODES SYSTEM
+// ════════════════════════════════
+window._activePromo = null;
+
+window.loadPromoScreen = async () => {
+  // Load active/public promos
+  const el = document.getElementById('activePromosList');
+  if (el) el.innerHTML = '<div class="loading-spinner"></div>';
+  try {
+    const q = query(collection(db,'promoCodes'), where('active','==',true), where('public','==',true));
+    const snap = await getDocs(q);
+    const promos = snap.docs.map(d => ({id:d.id,...d.data()}));
+    if (!el) return;
+    if (!promos.length) {
+      el.innerHTML = '<div style="background:white;border-radius:14px;padding:16px;text-align:center;box-shadow:var(--shadow);font-size:12px;color:var(--text3)">No active promotions right now. Check back soon!</div>';
+      return;
+    }
+    el.innerHTML = promos.map(p => {
+      const exp = p.expiresAt?.toDate ? p.expiresAt.toDate().toLocaleDateString() : 'No expiry';
+      return '<div class="promo-card" style="cursor:pointer" onclick="prefillPromo(\'' + p.code + '\')">'
+        + '<div style="font-size:11px;opacity:.8;margin-bottom:4px">' + (p.description||'Limited time offer') + '</div>'
+        + '<div class="promo-code-tag">🏷️ ' + p.code + '</div>'
+        + '<div style="display:flex;justify-content:space-between;align-items:center;margin-top:6px">'
+        + '<span style="font-size:12px;opacity:.8">' + (p.discountType==='percent' ? p.discountValue+'% off' : '₦'+p.discountValue+' off') + '</span>'
+        + '<span style="font-size:10px;opacity:.6">Expires: ' + exp + '</span></div></div>';
+    }).join('');
+  } catch(e) {
+    if(el) el.innerHTML = '<div style="font-size:12px;color:var(--danger);text-align:center;padding:14px">Error loading promotions</div>';
+  }
+  // Load used codes by this user
+  if (!_s.user) return;
+  const usedEl = document.getElementById('usedPromosList');
+  try {
+    const q2 = query(collection(db,'promoUsage'), where('userId','==',_s.user.uid));
+    const snap2 = await getDocs(q2);
+    const used = snap2.docs.map(d => d.data());
+    if (!usedEl) return;
+    if (!used.length) { usedEl.innerHTML = '<div style="font-size:12px;color:var(--text3);text-align:center;padding:14px">No used codes yet</div>'; return; }
+    usedEl.innerHTML = '<div class="ref-friends-list">'
+      + used.map(u => '<div class="ref-friend-row">'
+        + '<div class="ref-friend-avatar" style="background:#FFFBEB;color:#92400E;font-size:14px">🏷️</div>'
+        + '<div style="flex:1"><div class="ref-friend-name">' + u.code + '</div>'
+        + '<div class="ref-friend-date">' + tAgo(u.usedAt) + '</div></div>'
+        + '<span class="ref-earn-badge">-' + (u.discountType==='percent'?u.discountValue+'%':'₦'+u.discountValue) + '</span></div>'
+      ).join('') + '</div>';
+  } catch(e) {}
+};
+
+window.prefillPromo = (code) => {
+  const inp = document.getElementById('promoCodeInput');
+  if (inp) { inp.value = code; inp.focus(); }
+  showToast('info', 'Code filled in. Tap Apply!');
+};
+
+window.applyPromoCode = async () => {
+  const code = (document.getElementById('promoCodeInput')?.value||'').trim().toUpperCase();
+  const resEl = document.getElementById('promoResult');
+  if (!code) { if(resEl) resEl.innerHTML = '<span style="color:#EF4444">Please enter a promo code</span>'; return; }
+  if(resEl) resEl.innerHTML = '<span style="opacity:.6">Checking code...</span>';
+  try {
+    const snap = await getDocs(query(collection(db,'promoCodes'), where('code','==',code)));
+    if (snap.empty) { if(resEl) resEl.innerHTML = '<span style="color:#EF4444">❌ Invalid promo code</span>'; return; }
+    const promo = {id:snap.docs[0].id, ...snap.docs[0].data()};
+    if (!promo.active) { if(resEl) resEl.innerHTML = '<span style="color:#EF4444">❌ This promo has expired</span>'; return; }
+    // Check usage limit
+    if (promo.usageLimit && (promo.usageCount||0) >= promo.usageLimit) {
+      if(resEl) resEl.innerHTML = '<span style="color:#EF4444">❌ This promo has reached its usage limit</span>'; return;
+    }
+    // Check if user already used it
+    if (_s.user) {
+      const used = await getDocs(query(collection(db,'promoUsage'), where('userId','==',_s.user.uid), where('code','==',code)));
+      if (!used.empty && !promo.multiUse) { if(resEl) resEl.innerHTML = '<span style="color:#EF4444">❌ You have already used this code</span>'; return; }
+    }
+    // Valid!
+    window._activePromo = promo;
+    const discount = promo.discountType==='percent' ? promo.discountValue+'% off' : '₦'+promo.discountValue+' off';
+    if(resEl) resEl.innerHTML = '<span style="color:#22C55E;font-weight:700">✅ Code applied! You get ' + discount + ' on your next transaction.</span>';
+    showToast('success', 'Promo code applied: ' + discount + '!');
+  } catch(e) { if(resEl) resEl.innerHTML = '<span style="color:#EF4444">Error checking code</span>'; }
+};
+
+window.recordPromoUsage = async (promoId, code, discountType, discountValue) => {
+  if (!_s.user || !promoId) return;
+  try {
+    await setDoc(doc(db,'promoUsage', genId(10)), {
+      userId: _s.user.uid, promoId, code,
+      discountType, discountValue, usedAt: serverTimestamp()
+    });
+    await updateDoc(doc(db,'promoCodes',promoId), { usageCount: ((await getDoc(doc(db,'promoCodes',promoId))).data()?.usageCount||0) + 1 });
+  } catch(e) {}
+};
+
+// ── ADMIN PROMO MANAGEMENT ──
+window.loadAdminPromos = async () => {
+  const c = document.getElementById('adminPromoList');
+  if (!c) return;
+  c.innerHTML = '<div class="loading-spinner"></div>';
+  try {
+    const snap = await getDocs(collection(db,'promoCodes'));
+    const promos = snap.docs.map(d=>({id:d.id,...d.data()}));
+    if (!promos.length) {
+      c.innerHTML = '<div style="text-align:center;padding:30px 20px"><div style="font-size:36px;margin-bottom:10px">🏷️</div><h4>No promo codes yet</h4><p style="font-size:12px;color:var(--text2);margin-top:4px">Create your first promo code</p></div>';
+      return;
+    }
+    c.innerHTML = promos.map(p => {
+      const exp = p.expiresAt?.toDate ? p.expiresAt.toDate().toLocaleDateString() : 'No expiry';
+      return '<div class="promo-admin-card">'
+        + '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">'
+        + '<span style="font-size:14px;font-weight:700;font-family:monospace;letter-spacing:1px;color:var(--primary)">' + p.code + '</span>'
+        + '<span class="' + (p.active ? 'promo-badge-active' : 'promo-badge-disabled') + '">' + (p.active ? 'Active' : 'Disabled') + '</span></div>'
+        + '<div style="font-size:12px;color:var(--text2);margin-bottom:4px">' + (p.description||'') + '</div>'
+        + '<div style="display:flex;gap:12px;font-size:11px;color:var(--text3);margin-bottom:10px">'
+        + '<span>💰 ' + (p.discountType==='percent'?p.discountValue+'%':'₦'+p.discountValue) + ' off</span>'
+        + '<span>📊 Used: ' + (p.usageCount||0) + (p.usageLimit?'/'+p.usageLimit:'') + '</span>'
+        + '<span>📅 ' + exp + '</span></div>'
+        + '<div style="display:flex;gap:6px">'
+        + '<button class="btn btn-outline btn-sm" style="flex:1;font-size:11px" onclick="editPromo(\'' + p.id + '\')">✏️ Edit</button>'
+        + '<button class="btn btn-sm" style="flex:1;font-size:11px;background:' + (p.active?'#FEE2E2':'#DCFCE7') + ';color:' + (p.active?'#991B1B':'#166534') + ';border:none" onclick="togglePromo(\'' + p.id + '\',' + p.active + ')">' + (p.active?'🚫 Disable':'✅ Enable') + '</button>'
+        + '<button class="btn btn-sm" style="font-size:11px;background:#FEE2E2;color:#991B1B;border:none" onclick="deletePromo(\'' + p.id + '\')">🗑</button>'
+        + '</div></div>';
+    }).join('');
+  } catch(e) { c.innerHTML = '<div style="padding:20px;text-align:center;color:var(--danger);font-size:12px">Error: ' + e.message + '</div>'; }
+};
+
+window.showCreatePromo = () => {
+  showOverlay(
+    '<div class="sheet-title">Create Promo Code</div>'
+    + '<div class="form-group"><label class="form-label">Code (e.g. SAVE500)</label>'
+    + '<input type="text" class="form-input" id="newPromoCode" placeholder="SAVE500" style="text-transform:uppercase;font-weight:700;letter-spacing:1px"></div>'
+    + '<div class="form-group"><label class="form-label">Description</label>'
+    + '<input type="text" class="form-input" id="newPromoDesc" placeholder="e.g. Get 10% off your next bill"></div>'
+    + '<div class="form-group"><label class="form-label">Discount Type</label>'
+    + '<select class="form-input" id="newPromoType"><option value="flat">Flat (₦)</option><option value="percent">Percentage (%)</option></select></div>'
+    + '<div class="form-group"><label class="form-label">Discount Value</label>'
+    + '<input type="number" class="form-input" id="newPromoValue" placeholder="e.g. 500 or 10"></div>'
+    + '<div class="form-group"><label class="form-label">Usage Limit (0 = unlimited)</label>'
+    + '<input type="number" class="form-input" id="newPromoLimit" placeholder="0" value="0"></div>'
+    + '<div class="form-group"><label class="form-label">Expiry Date</label>'
+    + '<input type="date" class="form-input" id="newPromoExpiry"></div>'
+    + '<div style="display:flex;gap:6px;margin-bottom:4px">'
+    + '<label style="display:flex;align-items:center;gap:6px;font-size:12px"><input type="checkbox" id="newPromoPublic" checked> Show publicly</label>'
+    + '<label style="display:flex;align-items:center;gap:6px;font-size:12px;margin-left:10px"><input type="checkbox" id="newPromoMulti"> Allow multiple uses per user</label></div>'
+    + '<button class="btn btn-primary" onclick="saveNewPromo()" style="margin-top:10px">Create Promo Code</button>'
+  );
+};
+
+window.saveNewPromo = async () => {
+  const code = (document.getElementById('newPromoCode')?.value||'').trim().toUpperCase();
+  const desc = document.getElementById('newPromoDesc')?.value||'';
+  const type = document.getElementById('newPromoType')?.value||'flat';
+  const val = parseFloat(document.getElementById('newPromoValue')?.value||'0');
+  const limit = parseInt(document.getElementById('newPromoLimit')?.value||'0');
+  const expiry = document.getElementById('newPromoExpiry')?.value;
+  const isPublic = document.getElementById('newPromoPublic')?.checked;
+  const multiUse = document.getElementById('newPromoMulti')?.checked;
+
+  if (!code || !val) return showToast('error', 'Code and discount value are required');
+  try {
+    const promoData = {
+      code, description: desc, discountType: type, discountValue: val,
+      usageLimit: limit||0, usageCount: 0, active: true,
+      public: isPublic, multiUse: multiUse||false,
+      createdAt: serverTimestamp()
+    };
+    if (expiry) promoData.expiresAt = new Date(expiry);
+    await setDoc(doc(db,'promoCodes',genId(8)), promoData);
+    closeOverlay();
+    showToast('success', 'Promo code created!');
+    loadAdminPromos();
+  } catch(e) { showToast('error', 'Failed: ' + e.message); }
+};
+
+window.editPromo = async (promoId) => {
+  const snap = await getDoc(doc(db,'promoCodes',promoId));
+  if (!snap.exists()) return;
+  const p = snap.data();
+  const expStr = p.expiresAt?.toDate ? p.expiresAt.toDate().toISOString().split('T')[0] : '';
+  showOverlay(
+    '<div class="sheet-title">Edit Promo: ' + p.code + '</div>'
+    + '<div class="form-group"><label class="form-label">Description</label>'
+    + '<input type="text" class="form-input" id="editPromoDesc" value="' + (p.description||'') + '"></div>'
+    + '<div class="form-group"><label class="form-label">Discount Type</label>'
+    + '<select class="form-input" id="editPromoType"><option value="flat"' + (p.discountType==='flat'?' selected':'') + '>Flat (₦)</option>'
+    + '<option value="percent"' + (p.discountType==='percent'?' selected':'') + '>Percentage (%)</option></select></div>'
+    + '<div class="form-group"><label class="form-label">Discount Value</label>'
+    + '<input type="number" class="form-input" id="editPromoValue" value="' + (p.discountValue||0) + '"></div>'
+    + '<div class="form-group"><label class="form-label">Usage Limit</label>'
+    + '<input type="number" class="form-input" id="editPromoLimit" value="' + (p.usageLimit||0) + '"></div>'
+    + '<div class="form-group"><label class="form-label">Expiry Date</label>'
+    + '<input type="date" class="form-input" id="editPromoExpiry" value="' + expStr + '"></div>'
+    + '<button class="btn btn-primary" onclick="saveEditPromo(\'' + promoId + '\')" style="margin-top:6px">Save Changes</button>'
+  );
+};
+
+window.saveEditPromo = async (promoId) => {
+  const desc = document.getElementById('editPromoDesc')?.value||'';
+  const type = document.getElementById('editPromoType')?.value||'flat';
+  const val = parseFloat(document.getElementById('editPromoValue')?.value||'0');
+  const limit = parseInt(document.getElementById('editPromoLimit')?.value||'0');
+  const expiry = document.getElementById('editPromoExpiry')?.value;
+  const upd = { description: desc, discountType: type, discountValue: val, usageLimit: limit };
+  if (expiry) upd.expiresAt = new Date(expiry);
+  await updateDoc(doc(db,'promoCodes',promoId), upd);
+  closeOverlay(); showToast('success', 'Promo updated!'); loadAdminPromos();
+};
+
+window.togglePromo = async (promoId, currentState) => {
+  await updateDoc(doc(db,'promoCodes',promoId), { active: !currentState });
+  showToast('success', !currentState ? 'Promo enabled' : 'Promo disabled');
+  loadAdminPromos();
+};
+
+window.deletePromo = async (promoId) => {
+  if (!confirm('Delete this promo code? This cannot be undone.')) return;
+  await deleteDoc(doc(db,'promoCodes',promoId));
+  showToast('info', 'Promo deleted'); loadAdminPromos();
+};
+
+// ════════════════════════════════
+// SUPPORT CHAT SYSTEM
+// ════════════════════════════════
+window._chatListener = null;
+window._currentChatUserId = null;
+
+window.initSupportChat = async () => {
+  if (!_s.user) return;
+  const chatId = _s.user.uid; // one chat thread per user
+  const msgEl = document.getElementById('chatMessages');
+  if (!msgEl) return;
+
+  // Unsubscribe previous listener
+  if (window._chatListener) { window._chatListener(); window._chatListener = null; }
+
+  // Create chat thread doc if not exists
+  const chatRef = doc(db,'supportChats',chatId);
+  const chatSnap = await getDoc(chatRef);
+  if (!chatSnap.exists()) {
+    await setDoc(chatRef, {
+      userId: _s.user.uid,
+      userName: (_s.userData?.firstName||'') + ' ' + (_s.userData?.lastName||''),
+      userEmail: _s.userData?.email||'',
+      lastMessage: '', lastAt: serverTimestamp(), unreadAdmin: 0, unreadUser: 0
+    });
+  }
+
+  // Mark user messages as read
+  await updateDoc(chatRef, { unreadUser: 0 });
+
+  // Listen for messages
+  const msgsRef = collection(db,'supportChats',chatId,'messages');
+  window._chatListener = onSnapshot(query(msgsRef, orderBy ? query(msgsRef) : msgsRef), (snap) => {
+    const msgs = snap.docs.map(d=>d.data()).sort((a,b)=>{
+      const ta = a.sentAt?.toMillis?a.sentAt.toMillis():0;
+      const tb = b.sentAt?.toMillis?b.sentAt.toMillis():0;
+      return ta - tb;
+    });
+    renderChatMessages(msgs, msgEl, 'user');
+  });
+};
+
+function renderChatMessages(msgs, container, viewAs) {
+  if (!container) return;
+  container.innerHTML = '<div class="chat-date-divider">Support Chat</div>'
+    + '<div class="chat-bubble admin">👋 Hi! Welcome to KOBOrush Support. How can we help you today?<span class="chat-bubble-time">Support Team</span></div>'
+    + msgs.map(m => {
+      const isUser = m.sender === 'user';
+      const bubbleClass = (viewAs === 'admin') ? (isUser ? 'user' : 'admin') : (isUser ? 'user' : 'admin');
+      const time = m.sentAt?.toDate ? m.sentAt.toDate().toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'}) : '';
+      return '<div class="chat-bubble ' + bubbleClass + '">'
+        + escapeHtml(m.text)
+        + '<span class="chat-bubble-time">' + (isUser ? '' : '🎧 Support · ') + time + '</span></div>';
+    }).join('');
+  setTimeout(() => container.scrollTop = container.scrollHeight, 100);
+}
+
+function escapeHtml(t) { return (t||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+
+window.sendChatMessage = async () => {
+  if (!_s.user) return;
+  const inp = document.getElementById('chatInput');
+  const text = inp?.value?.trim();
+  if (!text) return;
+  inp.value = '';
+  inp.style.height = '';
+
+  const chatId = _s.user.uid;
+  const msgId = genId(10);
+  try {
+    await setDoc(doc(db,'supportChats',chatId,'messages',msgId), {
+      id: msgId, text, sender: 'user',
+      sentAt: serverTimestamp()
+    });
+    await updateDoc(doc(db,'supportChats',chatId), {
+      lastMessage: text, lastAt: serverTimestamp(), unreadAdmin: increment(1)
+    });
+  } catch(e) { showToast('error', 'Failed to send message'); }
+};
+
+window.chatInputKeydown = (e) => {
+  if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendChatMessage(); }
+  // Auto-resize
+  setTimeout(() => {
+    const inp = document.getElementById('chatInput');
+    if (inp) { inp.style.height = 'auto'; inp.style.height = Math.min(inp.scrollHeight, 90) + 'px'; }
+  }, 0);
+};
+
+// ── ADMIN SUPPORT CHAT LIST ──
+window.loadAdminSupportList = async () => {
+  const c = document.getElementById('adminChatList');
+  if (!c) return;
+  c.innerHTML = '<div class="loading-spinner"></div>';
+  try {
+    const snap = await getDocs(collection(db,'supportChats'));
+    const chats = snap.docs.map(d=>({id:d.id,...d.data()})).sort((a,b)=>{
+      const ta = a.lastAt?.toMillis?a.lastAt.toMillis():0;
+      const tb = b.lastAt?.toMillis?b.lastAt.toMillis():0;
+      return tb - ta;
+    });
+    if (!chats.length) {
+      c.innerHTML = '<div style="text-align:center;padding:40px 20px"><div style="font-size:36px;margin-bottom:10px">💬</div><h4>No support chats yet</h4></div>';
+      return;
+    }
+    c.innerHTML = chats.map(ch => {
+      const initials = (ch.userName||'U').charAt(0).toUpperCase();
+      const unread = ch.unreadAdmin||0;
+      return '<div class="support-user-card" onclick="openAdminChat(\'' + ch.userId + '\',\'' + escapeHtml(ch.userName||'User') + '\',\'' + escapeHtml(ch.userEmail||'') + '\')">'
+        + '<div class="ref-friend-avatar" style="width:42px;height:42px;font-size:15px;flex-shrink:0">' + initials + '</div>'
+        + '<div class="support-user-preview">'
+        + '<div class="support-user-name">' + escapeHtml(ch.userName||'User') + '</div>'
+        + '<div class="support-last-msg">' + escapeHtml(ch.lastMessage||'No messages yet') + '</div></div>'
+        + (unread > 0 ? '<div class="support-unread">' + unread + '</div>' : '<div style="font-size:10px;color:var(--text3)">' + tAgo(ch.lastAt) + '</div>')
+        + '</div>';
+    }).join('');
+
+    // Update badge
+    const totalUnread = chats.reduce((s,c)=>s+(c.unreadAdmin||0),0);
+    const badge = document.getElementById('supportUnreadBadge');
+    if (badge) { badge.textContent = totalUnread; badge.style.display = totalUnread > 0 ? 'flex' : 'none'; }
+  } catch(e) {
+    c.innerHTML = '<div style="padding:20px;text-align:center;color:var(--danger);font-size:12px">Error: ' + e.message + '</div>';
+  }
+};
+
+window.openAdminChat = async (userId, userName, userEmail) => {
+  window._currentChatUserId = userId;
+  document.getElementById('adminReplyName').textContent = userName;
+  document.getElementById('adminReplyEmail').textContent = userEmail;
+  document.getElementById('adminReplyAvatar').textContent = (userName||'U').charAt(0).toUpperCase();
+
+  // Unsubscribe previous
+  if (window._chatListener) { window._chatListener(); window._chatListener = null; }
+
+  // Mark admin unread as 0
+  try { await updateDoc(doc(db,'supportChats',userId), { unreadAdmin: 0 }); } catch(e) {}
+
+  navigateTo('adminChatReply');
+  const msgEl = document.getElementById('adminChatMessages');
+  if (!msgEl) return;
+  msgEl.innerHTML = '<div class="loading-spinner"></div>';
+
+  const msgsRef = collection(db,'supportChats',userId,'messages');
+  window._chatListener = onSnapshot(msgsRef, (snap) => {
+    const msgs = snap.docs.map(d=>d.data()).sort((a,b)=>{
+      const ta = a.sentAt?.toMillis?a.sentAt.toMillis():0;
+      const tb = b.sentAt?.toMillis?b.sentAt.toMillis():0;
+      return ta-tb;
+    });
+    renderChatMessages(msgs, msgEl, 'admin');
+  });
+};
+
+window.sendAdminReply = async () => {
+  const uid = window._currentChatUserId;
+  if (!uid) return;
+  const inp = document.getElementById('adminChatInput');
+  const text = inp?.value?.trim();
+  if (!text) return;
+  inp.value = ''; inp.style.height = '';
+
+  const msgId = genId(10);
+  try {
+    await setDoc(doc(db,'supportChats',uid,'messages',msgId), {
+      id: msgId, text, sender: 'admin',
+      sentAt: serverTimestamp()
+    });
+    await updateDoc(doc(db,'supportChats',uid), {
+      lastMessage: text, lastAt: serverTimestamp(), unreadUser: increment(1)
+    });
+    await addNotif(uid, '💬 Support Reply', text.length > 60 ? text.substring(0,57)+'...' : text, 'info');
+  } catch(e) { showToast('error', 'Failed to send reply'); }
+};
+
+window.adminChatKeydown = (e) => {
+  if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendAdminReply(); }
+  setTimeout(() => {
+    const inp = document.getElementById('adminChatInput');
+    if (inp) { inp.style.height = 'auto'; inp.style.height = Math.min(inp.scrollHeight, 90) + 'px'; }
+  }, 0);
+};
+
+// Listen for unread support messages (admin badge)
+function listenSupportUnread() {
+  try {
+    onSnapshot(collection(db,'supportChats'), (snap) => {
+      const total = snap.docs.reduce((s,d)=>s+(d.data().unreadAdmin||0),0);
+      const badge = document.getElementById('supportUnreadBadge');
+      if (badge) { badge.textContent = total; badge.style.display = total > 0 ? 'flex' : 'none'; }
     });
   } catch(e) {}
 }
