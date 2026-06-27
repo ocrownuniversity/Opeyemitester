@@ -2147,7 +2147,7 @@ window.selProv=(grid,id,el)=>{document.querySelectorAll(`#${grid} .prov-opt`).fo
 window.selPlan=(el,name,price)=>{el.closest('.data-plans').querySelectorAll('.plan-opt').forEach(p=>p.classList.remove('selected'));el.classList.add('selected');_s.selPlan={name,price}};
 
 // PIN & TRANSACTIONS
-window.proceedToPIN=(svc)=>{
+window.proceedToPIN=async(svc)=>{
   let sum='';
   if(svc==='airtime'){const ph=document.getElementById('airtimePhone').value;const am=document.getElementById('airtimeAmt').value;if(!ph||!am)return showToast('error','Fill all fields');_s.pendingData={type:'airtime',phone:ph,amount:parseFloat(am),provider:_s.selProv['airtimeProv']||'mtn',description:`Airtime – ${ph}`};sum=`<div class="sum-row"><span class="sum-lbl">Phone</span><span class="sum-val">${ph}</span></div><div class="sum-row"><span class="sum-lbl">Network</span><span class="sum-val">${(_s.selProv['airtimeProv']||'MTN').toUpperCase()}</span></div><div class="sum-row"><span class="sum-lbl">Amount</span><span class="sum-val" style="color:var(--primary)">₦${parseFloat(am).toLocaleString()}</span></div>`}
   else if(svc==='data'){const ph=document.getElementById('dataPhone').value;if(!ph||!_s.selPlan)return showToast('error','Fill all fields');_s.pendingData={type:'data',phone:ph,amount:_s.selPlan.price,provider:_s.selProv['dataProv']||'mtn',description:`${_s.selPlan.name} Data – ${ph}`};sum=`<div class="sum-row"><span class="sum-lbl">Plan</span><span class="sum-val">${_s.selPlan.name}</span></div><div class="sum-row"><span class="sum-lbl">Phone</span><span class="sum-val">${ph}</span></div><div class="sum-row"><span class="sum-lbl">Amount</span><span class="sum-val" style="color:var(--primary)">₦${_s.selPlan.price.toLocaleString()}</span></div>`}
@@ -2546,7 +2546,7 @@ window.submitKYC = async () => {
     });
 
     _s.userData.kycStatus = 'pending';
-    await addNotif(_s.user.uid, '⏳ KYC Submitted', 'Your identity documents are under review. We'll notify you within 24 hours.', 'info');
+    await addNotif(_s.user.uid, '⏳ KYC Submitted', 'Your identity documents are under review. We will notify you within 24 hours.', 'info');
     showToast('success', 'KYC submitted successfully!');
     loadKYCScreen();
   } catch(e) {
@@ -2594,21 +2594,22 @@ async function checkTransactionLimit(amount) {
   if (todaySpent + amount > dailyLimit) {
     const remaining = Math.max(0, dailyLimit - todaySpent);
     const nextTier = { bronze: 'Silver', silver: 'Gold' }[kycTier] || null;
-    showOverlay(`
-      <div class="sheet-title">⚠️ Daily Limit Reached</div>
-      <div style="padding:10px 0 16px">
-        <p style="font-size:13px;color:var(--text2);line-height:1.5;margin-bottom:12px">
-          Your ${tierData.label} tier daily limit is <strong>₦${dailyLimit.toLocaleString()}</strong>.<br>
-          You've used <strong>₦${todaySpent.toLocaleString()}</strong> today.<br>
-          Remaining: <strong>₦${remaining.toLocaleString()}</strong>.
-        </p>
-        ${nextTier ? `
-        <div style="background:linear-gradient(135deg,var(--primary),var(--primary-mid));border-radius:12px;padding:12px;color:white;margin-bottom:14px;cursor:pointer" onclick="closeOverlay();navigateTo('kycScreen')">
-          <div style="font-size:13px;font-weight:700;margin-bottom:2px">🚀 Upgrade to ${nextTier}</div>
-          <div style="font-size:11px;opacity:.8">Complete additional KYC to unlock a higher limit</div>
-        </div>` : ''}
-        <button class="btn btn-outline" onclick="closeOverlay()">OK, Got It</button>
-      </div>`);
+    const upgradeHtml = nextTier
+      ? '<div style="background:linear-gradient(135deg,var(--primary),var(--primary-mid));border-radius:12px;padding:12px;color:white;margin-bottom:14px;cursor:pointer" onclick="closeOverlay();navigateTo(\'kycScreen\')">'
+        + '<div style="font-size:13px;font-weight:700;margin-bottom:2px">🚀 Upgrade to ' + nextTier + '</div>'
+        + '<div style="font-size:11px;opacity:.8">Complete additional KYC to unlock a higher limit</div></div>'
+      : '';
+    showOverlay(
+      '<div class="sheet-title">⚠️ Daily Limit Reached</div>'
+      + '<div style="padding:10px 0 16px">'
+      + '<p style="font-size:13px;color:var(--text2);line-height:1.5;margin-bottom:12px">'
+      + 'Your ' + tierData.label + ' tier daily limit is <strong>₦' + dailyLimit.toLocaleString() + '</strong>.<br>'
+      + 'You\'ve used <strong>₦' + todaySpent.toLocaleString() + '</strong> today.<br>'
+      + 'Remaining: <strong>₦' + remaining.toLocaleString() + '</strong>.</p>'
+      + upgradeHtml
+      + '<button class="btn btn-outline" onclick="closeOverlay()">OK, Got It</button>'
+      + '</div>'
+    );
     return false;
   }
   return true;
@@ -2646,23 +2647,23 @@ window.loadAdminKYC = async (statusFilter = 'pending') => {
         <div class="kyc-req-detail"><strong>DOB:</strong> ${r.dob}</div>
         <div class="kyc-req-detail"><strong>Email:</strong> ${r.userEmail}</div>
         <div style="display:flex;gap:8px;margin:10px 0;overflow-x:auto">
-          ${r.frontThumb ? `<img src="${r.frontThumb}" class="kyc-req-doc" onclick="viewKYCDoc('${r.id}','front')" title="Front of ID">` : ''}
-          ${r.backThumb ? `<img src="${r.backThumb}" class="kyc-req-doc" onclick="viewKYCDoc('${r.id}','back')" title="Back of ID">` : ''}
-          ${r.selfieThumb ? `<img src="${r.selfieThumb}" class="kyc-req-doc" onclick="viewKYCDoc('${r.id}','selfie')" title="Selfie">` : ''}
+          ${r.frontThumb ? '<img src="'+r.frontThumb+'" class="kyc-req-doc" onclick="viewKYCDoc(\''+r.id+'\',\'front\')" title="Front of ID">' : ''}
+          ${r.backThumb ? '<img src="'+r.backThumb+'" class="kyc-req-doc" onclick="viewKYCDoc(\''+r.id+'\',\'back\')" title="Back of ID">' : ''}
+          ${r.selfieThumb ? '<img src="'+r.selfieThumb+'" class="kyc-req-doc" onclick="viewKYCDoc(\''+r.id+'\',\'selfie\')" title="Selfie">' : ''}
         </div>
-        ${r.status === 'pending' ? `
-        <div style="margin-bottom:10px">
-          <label style="font-size:12px;font-weight:600;color:var(--text);display:block;margin-bottom:6px">Upgrade to Tier:</label>
-          <select class="form-input" id="kycTierSelect_${r.id}" style="margin-bottom:8px">
-            <option value="bronze">🥉 Bronze (₦50,000/day)</option>
-            <option value="silver">🥈 Silver (₦200,000/day)</option>
-            <option value="gold">🥇 Gold (₦1,000,000/day)</option>
-          </select>
-        </div>
-        <div class="kyc-req-actions">
-          <button class="btn btn-success btn-sm" style="flex:1" onclick="approveKYC('${r.id}','${r.userId}')">✅ Approve</button>
-          <button class="btn btn-danger btn-sm" style="flex:1" onclick="rejectKYC('${r.id}','${r.userId}')">❌ Reject</button>
-        </div>` : `<div style="font-size:11px;color:var(--text3);text-align:center;padding-top:4px">Reviewed ${tAgo(r.reviewedAt)}</div>`}
+        ${r.status === 'pending' ? (
+        '<div style="margin-bottom:10px">' +
+          '<label style="font-size:12px;font-weight:600;color:var(--text);display:block;margin-bottom:6px">Upgrade to Tier:</label>' +
+          '<select class="form-input" id="kycTierSelect_'+r.id+'" style="margin-bottom:8px">' +
+            '<option value="bronze">🥉 Bronze (₦50,000/day)</option>' +
+            '<option value="silver">🥈 Silver (₦200,000/day)</option>' +
+            '<option value="gold">🥇 Gold (₦1,000,000/day)</option>' +
+          '</select></div>' +
+        '<div class="kyc-req-actions">' +
+          '<button class="btn btn-success btn-sm" style="flex:1" onclick="approveKYC(\''+r.id+'\',\''+r.userId+'\')">✅ Approve</button>' +
+          '<button class="btn btn-danger btn-sm" style="flex:1" onclick="rejectKYC(\''+r.id+'\',\''+r.userId+'\')">❌ Reject</button>' +
+        '</div>')
+        : '<div style="font-size:11px;color:var(--text3);text-align:center;padding-top:4px">Reviewed '+tAgo(r.reviewedAt)+'</div>'}
       </div>`).join('');
   } catch(e) {
     c.innerHTML = '<div style="padding:20px;text-align:center;color:var(--danger)">Error: '+e.message+'</div>';
@@ -2676,11 +2677,15 @@ window.filterKYC = (f, el) => {
 };
 
 window.viewKYCDoc = (reqId, docType) => {
-  // Find the card and get the image src
-  const img = document.querySelector(`[onclick="viewKYCDoc('${reqId}','${docType}')"]`);
-  if (!img) return;
-  showOverlay(`<div class="sheet-title">${docType==='front'?'Front of ID':docType==='back'?'Back of ID':'Selfie with ID'}</div>
-    <img src="${img.src}" style="width:100%;border-radius:12px;margin-bottom:12px;max-height:70vh;object-fit:contain"><button class="btn btn-outline" onclick="closeOverlay()">Close</button>`);
+  const titleMap = {front:'Front of ID', back:'Back of ID', selfie:'Selfie with ID'};
+  const allImgs = document.querySelectorAll('.kyc-req-doc');
+  let imgSrc = null;
+  allImgs.forEach(el => {
+    const oc = el.getAttribute('onclick') || '';
+    if (oc.includes(reqId) && oc.includes(docType)) imgSrc = el.src;
+  });
+  if (!imgSrc) return;
+  showOverlay('<div class="sheet-title">'+(titleMap[docType]||docType)+'</div><img src="'+imgSrc+'" style="width:100%;border-radius:12px;margin-bottom:12px;max-height:70vh;object-fit:contain"><button class="btn btn-outline" onclick="closeOverlay()">Close</button>');
 };
 
 window.approveKYC = async (kycId, userId) => {
