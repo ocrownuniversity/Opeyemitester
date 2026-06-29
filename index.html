@@ -1981,7 +1981,7 @@ textarea.form-input{resize:none}
 
 <!-- SUCCESS -->
 <div class="screen success-screen" id="successScreen">
-  <div class="success-icon">✅</div>
+  <div class="success-icon" id="successIcon">✅</div>
   <h2 id="successTitle">Transaction Successful!</h2>
   <p id="successMsg">Your transaction has been processed.</p>
   <div class="receipt-card" id="successReceiptWrap" style="padding:0;overflow:hidden">
@@ -2045,61 +2045,11 @@ window._splashTimer = setTimeout(function() {
   document.addEventListener('DOMContentLoaded', function() { window._domReady = true; });
 </script>
 
-<!-- Firebase Compat (works in all browsers, no ES module needed) -->
-<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-storage-compat.js"></script>
-<script>
-// ── Firebase compat shims: maps modular-style API calls to compat SDK ──
-function _initFirebaseCompat(FC){
-  firebase.initializeApp(FC);
-}
-// Auth shims
-function createUserWithEmailAndPassword(a,e,p){return firebase.auth().createUserWithEmailAndPassword(e,p);}
-function signInWithEmailAndPassword(a,e,p){return firebase.auth().signInWithEmailAndPassword(e,p);}
-function signOut(a){return firebase.auth().signOut();}
-function onAuthStateChanged(a,cb){return firebase.auth().onAuthStateChanged(cb);}
-function sendPasswordResetEmail(a,e){return firebase.auth().sendPasswordResetEmail(e);}
-function signInWithPopup(a,provider){return firebase.auth().signInWithPopup(provider);}
-function updateProfile(user,data){return user.updateProfile(data);}
-function setPersistence(a,p){return firebase.auth().setPersistence(p);}
-var browserSessionPersistence=(function(){try{return firebase.auth.Auth.Persistence.SESSION;}catch(e){return 'SESSION';}})();
-var GoogleAuthProvider=firebase.auth?firebase.auth.GoogleAuthProvider:function(){};
-// Firestore shims
-function doc(db){
-  var segs=[].slice.call(arguments,1);
-  return firebase.firestore().doc(segs.join('/'));
-}
-function collection(db,col){
-  if(typeof col==='undefined'){col=db;}
-  return firebase.firestore().collection(col);
-}
-function setDoc(ref,data,opts){return opts?ref.set(data,opts):ref.set(data);}
-function getDoc(ref){return ref.get().then(function(s){return{exists:function(){return s.exists;},data:function(){return s.data();},id:s.id,ref:s.ref};});}
-function updateDoc(ref,data){return ref.update(data);}
-function addDoc(colRef,data){return colRef.add(data);}
-function deleteDoc(ref){return ref.delete();}
-function getDocs(q){return q.get().then(function(snap){return{empty:snap.empty,size:snap.size,docs:snap.docs.map(function(d){return{id:d.id,ref:d.ref,data:function(){return d.data();},exists:d.exists};})};});}
-function onSnapshot(ref,cb){return ref.onSnapshot(cb);}
-function query(colRef){var q=colRef;for(var i=1;i<arguments.length;i++){var con=arguments[i];if(!con)continue;if(con.__type==='where')q=q.where(con.field,con.op,con.val);else if(con.__type==='orderBy')q=q.orderBy(con.field,con.dir);else if(con.__type==='limit')q=q.limit(con.n);}return q;}
-function where(field,op,val){return{__type:'where',field:field,op:op,val:val};}
-function orderBy(field,dir){return{__type:'orderBy',field:field,dir:dir||'asc'};}
-function limit(n){return{__type:'limit',n:n};}
-function serverTimestamp(){return firebase.firestore.FieldValue.serverTimestamp();}
-function increment(n){return firebase.firestore.FieldValue.increment(n);}
-function runTransaction(db,fn){return firebase.firestore().runTransaction(fn);}
-// Storage shims
-function fbStorage(app){return firebase.storage();}
-function storageRef(storage,path){return firebase.storage().ref(path);}
-function uploadString(ref,data,fmt,meta){return ref.putString(data,fmt,meta);}
-function getDownloadURL(ref){return ref.getDownloadURL();}
-</script>
-<script>
-
+<script type="module">
 // Catch any module-level errors
 window.addEventListener('error', function(e) {
   console.error('App error:', e);
+  // If splash is still showing, go to auth
   var splash = document.getElementById('splash');
   if (splash && splash.classList.contains('active')) {
     splash.classList.remove('active');
@@ -2107,13 +2057,16 @@ window.addEventListener('error', function(e) {
     if(auth) auth.classList.add('active');
   }
 });
+import{initializeApp}from'https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js';
+import{getAuth,createUserWithEmailAndPassword,signInWithEmailAndPassword,signOut,onAuthStateChanged,sendPasswordResetEmail,GoogleAuthProvider,signInWithPopup,updateProfile,browserSessionPersistence,setPersistence}from'https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js';
+import{getFirestore,doc,setDoc,getDoc,updateDoc,collection,addDoc,query,where,orderBy,limit,getDocs,onSnapshot,serverTimestamp,increment,runTransaction,deleteDoc}from'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
+import{getStorage as fbStorage,ref as storageRef,uploadString,getDownloadURL}from'https://www.gstatic.com/firebasejs/10.12.0/firebase-storage.js';
+
 const FC={apiKey:"AIzaSyCPyNhUxVqf4nl2FwgoKT26kedQr8L0E_g",authDomain:"fintech-d16e9.firebaseapp.com",projectId:"fintech-d16e9",storageBucket:"fintech-d16e9.firebasestorage.app",messagingSenderId:"500436305722",appId:"1:500436305722:web:e1e5ec4f7b6bd3c70ef203"};
-_initFirebaseCompat(FC);
-var auth=firebase.auth();
-var db=firebase.firestore();
-var storage=firebase.storage();
+const app=initializeApp(FC);
+const auth=getAuth(app);
 // ── SESSION SECURITY: force session-only persistence (no auto login after browser close) ──
-try{firebase.auth().setPersistence(firebase.auth.Auth.Persistence.SESSION);}catch(e){}
+setPersistence(auth,browserSessionPersistence).catch(()=>{});
 
 // ── INACTIVITY LOGOUT: auto sign out after 5 minutes of inactivity ──
 let _inactivityTimer=null;
@@ -2141,6 +2094,8 @@ window.addEventListener('beforeunload',()=>{
   if(_s.user){try{signOut(auth);}catch(e){}}
 });
 
+const db=getFirestore(app);
+const storage=fbStorage(app);
 const ADMIN='oladejiridwanopeyemi@gmail.com';
 
 window._s={user:null,userData:null,isAdmin:false,balHidden:false,navHist:[],pendingData:null,selProv:{},selPlan:null,allTx:[],allUsers:[],allFundReqs:[],proofFile:null,proofDataURL:null,fundStep:1,adminPINVerified:false};
@@ -3227,11 +3182,37 @@ window.loadCKDataPlans = async (network) => {
     const netCode = _ckNet[network] || '01';
     await _loadCKCreds();
     const data = await _ckFetch('APIDataBundlePlansV1.asp', { MobileNetwork: netCode });
-    // Response: { MOBILE_NETWORK:[{ NETWORK_ID, NETWORK_NAME, PRODUCT:[{ PRODUCT_ID, PRODUCT_CODE, PRODUCT_NAME, PRODUCT_AMOUNT }] }] }
-    let networkArr = data?.MOBILE_NETWORK || data?.DATA_NETWORK || [];
-    if(!Array.isArray(networkArr)) networkArr = Object.values(networkArr||{});
+    // CK response shapes vary:
+    // Shape A: { MOBILE_NETWORK: [ { PRODUCT: [...] } ] }
+    // Shape B: [ { PRODUCT_ID, PRODUCT_NAME, PRODUCT_AMOUNT, ... } ]   (flat array)
+    // Shape C: { data: [...] }
+    // Shape D: { STATUS, MOBILE_NETWORK: { "01": { PRODUCT: [...] } } }  (object not array)
     let plans = [];
-    networkArr.forEach(n => { const prods = n.PRODUCT||n.Products||[]; (Array.isArray(prods)?prods:Object.values(prods)).forEach(p => { plans.push(p); }); });
+    const raw = data;
+
+    if(Array.isArray(raw)){
+      // Shape B — flat array of plans
+      plans = raw;
+    } else if(Array.isArray(raw?.MOBILE_NETWORK)){
+      // Shape A — array of network objects each with PRODUCT array
+      raw.MOBILE_NETWORK.forEach(n => { (n.PRODUCT||[]).forEach(p => plans.push(p)); });
+    } else if(raw?.MOBILE_NETWORK && typeof raw.MOBILE_NETWORK === 'object'){
+      // Shape D — MOBILE_NETWORK is a keyed object
+      Object.values(raw.MOBILE_NETWORK).forEach(n => {
+        if(Array.isArray(n)) n.forEach(p => plans.push(p));
+        else if(n?.PRODUCT) (n.PRODUCT||[]).forEach(p => plans.push(p));
+      });
+    } else if(Array.isArray(raw?.data)){
+      plans = raw.data;
+    } else {
+      // Last resort: search all array values in the response
+      Object.values(raw||{}).forEach(v => {
+        if(Array.isArray(v)) v.forEach(item => {
+          if(item?.PRODUCT_ID||item?.PRODUCT_NAME) plans.push(item);
+          else if(Array.isArray(item?.PRODUCT)) item.PRODUCT.forEach(p => plans.push(p));
+        });
+      });
+    }
     if(!plans.length) throw new Error('No plans returned');
     dp.innerHTML = plans.map((p,i)=>`<div class="plan-opt ${i===0?'selected':''}" onclick="selCKPlan(this,'${p.PRODUCT_CODE||p.PRODUCT_ID}','${p.PRODUCT_NAME}',${p.PRODUCT_AMOUNT})" data-code="${p.PRODUCT_CODE||p.PRODUCT_ID}" data-id="${p.PRODUCT_ID||''}"><div class="plan-name" style="font-size:11px;line-height:1.3">${p.PRODUCT_NAME}</div><div class="plan-price">₦${Number(p.PRODUCT_AMOUNT).toLocaleString()}</div></div>`).join('');
     _s.selPlan = { name: plans[0].PRODUCT_NAME, price: Number(plans[0].PRODUCT_AMOUNT), code: plans[0].PRODUCT_CODE||plans[0].PRODUCT_ID, id: plans[0].PRODUCT_ID||'' };
@@ -3258,10 +3239,26 @@ window.loadCKCablePackages = async (cableProvider) => {
   try{
     await _loadCKCreds();
     const data = await _ckFetch('APICableTVPackagesV2.asp', {});
-    // Response has TV_ID array → each with PRODUCT array
-    const tvArr = data?.TV_ID || [];
-    const prov = tvArr.find(t => (t.TV_NAME||'').toLowerCase().includes(cableProvider.toLowerCase())) || tvArr[0];
-    const plans = prov?.PRODUCT || [];
+    // CK response shapes for cable:
+    // Shape A: { TV_ID: [ { TV_NAME, PRODUCT: [...] } ] }
+    // Shape B: flat array of packages
+    // Shape C: { TV_ID: { "DSTV": { PRODUCT: [...] } } }
+    let plans = [];
+    const raw = data;
+    let tvArr = [];
+
+    if(Array.isArray(raw?.TV_ID)){
+      tvArr = raw.TV_ID;
+    } else if(raw?.TV_ID && typeof raw.TV_ID === 'object'){
+      tvArr = Object.entries(raw.TV_ID).map(([k,v])=>({TV_NAME:k,...(typeof v==='object'?v:{})}));
+    } else if(Array.isArray(raw)){
+      plans = raw;
+    }
+
+    if(tvArr.length && !plans.length){
+      const prov = tvArr.find(t=>(t.TV_NAME||'').toLowerCase().includes(cableProvider.toLowerCase())) || tvArr[0];
+      plans = prov?.PRODUCT || [];
+    }
     if(!plans.length) throw new Error('No packages');
     cp.innerHTML = plans.map((p,i)=>`<div class="plan-opt ${i===0?'selected':''}" onclick="selCKCable(this,'${p.PRODUCT_CODE||p.PRODUCT_ID}','${escHTML(p.PRODUCT_NAME)}',${p.PRODUCT_AMOUNT})"><div class="plan-name" style="font-size:10px;line-height:1.3">${p.PRODUCT_NAME}</div><div class="plan-price">₦${Number(p.PRODUCT_AMOUNT).toLocaleString()}</div></div>`).join('');
     _s.selPlan = { name: plans[0].PRODUCT_NAME, price: Number(plans[0].PRODUCT_AMOUNT), code: plans[0].PRODUCT_CODE||plans[0].PRODUCT_ID };
@@ -3301,20 +3298,31 @@ async function _executeCKTransaction(txType, params, tid){
   const ep = endpoints[txType];
   if(!ep) throw new Error('Unknown VTU type: ' + txType);
   const result = await _ckFetch(ep, { ...params, RequestID: tid });
-  // ClubKonnect typically returns STATUS field: '200' = success
-  const status = String(result?.STATUS||result?.status||result?.Status||'');
-  const msg = result?.MESSAGE || result?.message || result?.RESPONSE || result?.response || '';
-  const statusCode = String(result?.statuscode||result?.STATUSCODE||result?.StatusCode||'');
-  // statuscode 100 = ORDER_RECEIVED = success for async transactions; 200 = immediate success
-  const isSuccess = status==='200'||status==='success'||statusCode==='100'||statusCode==='200'||
-    (msg&&msg.toLowerCase().includes('successful'))||
-    (result?.status&&String(result.status).toUpperCase()==='ORDER_RECEIVED');
+  // ClubKonnect success codes:
+  // statuscode "100" + status "ORDER_RECEIVED"  = ✅ transaction queued/processing (treat as success)
+  // statuscode "200" = ✅ explicit success
+  // statuscode "000" = ✅ some endpoints use this
+  // Anything else = ❌ failure
+  const statusCode = String(result?.statuscode || result?.STATUSCODE || result?.StatusCode || '');
+  const statusStr  = String(result?.status || result?.STATUS || result?.Status || '').toUpperCase();
+  const msgStr     = String(result?.message || result?.MESSAGE || result?.response || result?.RESPONSE || '');
+
+  const isSuccess =
+    statusCode === '200' ||
+    statusCode === '100' ||
+    statusCode === '000' ||
+    statusStr === 'ORDER_RECEIVED' ||
+    statusStr === 'SUCCESS' ||
+    statusStr === 'SUCCESSFUL' ||
+    statusStr === 'DELIVERED' ||
+    statusStr === 'COMPLETED' ||
+    msgStr.toLowerCase().includes('successful') ||
+    msgStr.toLowerCase().includes('order received');
+
   if(isSuccess){
-    return { success: true, message: msg||'Success', data: result };
+    return { success: true, message: msgStr || statusStr, data: result };
   }
-  // Return clean human-readable error, not raw JSON
-  const errMsg = msg || result?.RESPONSE || 'Provider error. Please try again.';
-  return { success: false, message: typeof errMsg==='string'?errMsg:JSON.stringify(errMsg), data: result };
+  return { success: false, message: msgStr || statusStr || `CK error (code ${statusCode})`, data: result };
 }
 
 async function confirmTx(pin){
@@ -3425,12 +3433,18 @@ async function confirmTx(pin){
           if(ckResult && !ckResult.success){
             // CK returned error — refund wallet
             txStatus = 'failed';
-            txNote = ckResult.message || 'Provider error';
+            const rawNote = ckResult.message || '';
+            txNote = (rawNote.startsWith('{') || rawNote.length > 150)
+              ? 'Transaction declined by provider.'
+              : rawNote || 'Transaction declined by provider.';
             await updateDoc(doc(db,'users',_s.user.uid),{balance:increment(d.amount),totalSpent:increment(-d.amount)});
           }
         }catch(ckErr){
           txStatus = 'failed';
-          txNote = ckErr.message || 'ClubKonnect error';
+          const errMsg = ckErr.message || '';
+          txNote = (errMsg.startsWith('{') || errMsg.length > 150)
+            ? 'Could not connect to VTU provider. Please try again.'
+            : errMsg || 'VTU provider error.';
           // Refund wallet
           await updateDoc(doc(db,'users',_s.user.uid),{balance:increment(d.amount),totalSpent:increment(-d.amount)});
         }
@@ -3445,27 +3459,38 @@ async function confirmTx(pin){
       });
 
       if(txStatus === 'failed'){
-        let cleanNote = txNote||'Transaction failed';
-        try{ const p2=JSON.parse(cleanNote); cleanNote=p2.MESSAGE||p2.message||p2.RESPONSE||p2.response||cleanNote; }catch(e2){}
-        if(typeof cleanNote==='string'&&cleanNote.trim().startsWith('{')) cleanNote='Transaction could not be processed. Please try again.';
-        showToast('error', cleanNote+' — Wallet refunded.');
-        navigateTo('successScreen');
-        const _fi=document.querySelector('#successScreen .success-icon');
-        if(_fi){_fi.textContent='❌';_fi.style.background='#FEE2E2';}
-        document.getElementById('successTitle').textContent='Transaction Failed';
-        document.getElementById('successMsg').textContent='Your wallet has been refunded.';
-        document.getElementById('successReceipt').innerHTML='<div style="text-align:center;padding:16px;font-size:13px;color:var(--danger)"><b>Reason:</b> '+cleanNote+'<br><br>Your wallet has been refunded.</div>';
+        // Extract a clean human-readable message from CK response
+        const ckData = ckResult?.data || {};
+        const cleanMsg = ckResult?.message && !ckResult.message.startsWith('{')
+          ? ckResult.message
+          : (ckData.message || ckData.MESSAGE || ckData.response || ckData.RESPONSE || 'Transaction could not be completed. Please try again.');
+        const displayMsg = String(cleanMsg).length > 120 ? 'Transaction declined by provider. Your wallet has been refunded.' : cleanMsg;
+
+        const iconEl = document.getElementById('successIcon');
+        if(iconEl){ iconEl.textContent='❌'; iconEl.style.background='#FEE2E2'; }
+        showToast('error', displayMsg);
+        document.getElementById('successTitle').textContent = 'Transaction Failed';
+        document.getElementById('successTitle').style.color = 'var(--danger)';
+        document.getElementById('successMsg').textContent = '';
+        document.getElementById('successReceipt').innerHTML = `
+          <div style="text-align:center;padding:20px 16px">
+            <div style="font-size:14px;font-weight:600;color:var(--danger);margin-bottom:8px">${displayMsg}</div>
+            <div style="font-size:12px;color:var(--text3);margin-top:10px;padding:10px;background:var(--bg);border-radius:8px">
+              Your wallet has been refunded.<br>Ref: ${tid}
+            </div>
+          </div>`;
         return;
       }
-      const _si=document.querySelector('#successScreen .success-icon');
-      if(_si){_si.textContent='✅';_si.style.background='#D1FAE5';}
 
       // 4. Agent commission
       if(ud.agentLevel&&ud.agentLevel!=='standard'){const r={airtime:0.015,data:0.02,electricity:0.005,cabletv:0.01,schoolpin:0.02};const comm=(r[d.type]||0.01)*d.amount;if(comm>0)await updateDoc(doc(db,'users',_s.user.uid),{agentCommission:increment(comm)})}
 
       await addNotif(_s.user.uid,'✅ Transaction Successful',`${d.description} completed successfully.`,'success');
       navigateTo('successScreen');
+      const iconEl = document.getElementById('successIcon');
+      if(iconEl){ iconEl.textContent='✅'; iconEl.style.background='#D1FAE5'; }
       document.getElementById('successTitle').textContent='Transaction Successful!';
+      document.getElementById('successTitle').style.color='';
       document.getElementById('successMsg').textContent=d.description+' processed.';
       const _rs=csym(_s.userData?.country);
       const extraRows = ckResult?.data?.TOKEN ? [{l:'Token/PIN', v: ckResult.data.TOKEN||ckResult.data.token||''}] : [];
@@ -4646,7 +4671,10 @@ window.loadAPISettings = async () => {
     if(enEl&&lblEl){ lblEl.textContent=enEl.checked?'● Enabled':'○ Disabled'; lblEl.style.color=enEl.checked?'var(--success-green)':'var(--danger)'; }
   }catch(e){ renderEndpoints({}); }
   loadVTU();
-};(n,e)=>{await setDoc(doc(db,'settings','services'),{[n.toLowerCase().replace(/ /g,'_')]:e},{merge:true});showToast(e?'success':'info',`${n} ${e?'enabled':'disabled'}`)};
+};
+
+window.loadAdminSvcs=()=>{document.getElementById('adminSvcsContent').innerHTML=`<div class="admin-panel" style="margin:0">${['Airtime','Data Bundle','Electricity','Cable TV','School PIN','Bank Transfer'].map(s=>`<div class="admin-table-row"><div class="row-main"><div class="row-title">${s}</div></div><label class="toggle-switch"><input type="checkbox" checked onchange="toggleSvc('${s}',this.checked)"><div class="toggle-slider"></div></label></div>`).join('')}</div>`};
+window.toggleSvc=async(n,e)=>{await setDoc(doc(db,'settings','services'),{[n.toLowerCase().replace(/ /g,'_')]:e},{merge:true});showToast(e?'success':'info',`${n} ${e?'enabled':'disabled'}`)};
 window.loadAdminUsers=async()=>{if(!_s.isAdmin)return;document.getElementById('adminUsersFull').innerHTML='<div class="loading-spinner"></div>';const s=await getDocs(collection(db,'users'));_s.allUsers=s.docs.map(d=>({id:d.id,...d.data()}));renderAdminUsers(_s.allUsers)};
 function renderAdminUsers(users){document.getElementById('adminUsersFull').innerHTML=`<div class="admin-panel" style="margin:0">${users.map(u=>`<div class="user-row"><div class="avatar" style="width:30px;height:30px;font-size:11px">${(u.firstName?.[0]||'?')+(u.lastName?.[0]||'')}</div><div class="user-row-info"><div class="user-row-name">${u.firstName||''} ${u.lastName||''}</div><div class="user-row-meta">${u.email} · ${u.country||'NG'} · ₦${(u.balance||0).toLocaleString()}</div></div><div class="user-row-actions"><button class="action-btn action-btn-p" onclick="viewUser('${u.id}')">View</button><button class="action-btn action-btn-d" onclick="toggleUser('${u.id}',${u.isActive})">${u.isActive?'Ban':'Unban'}</button></div></div>`).join('')}</div>`}
 window.searchUsers=(q)=>renderAdminUsers(_s.allUsers.filter(u=>u.email?.includes(q)||u.firstName?.toLowerCase().includes(q.toLowerCase())||u.phone?.includes(q)));
