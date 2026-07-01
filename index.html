@@ -266,9 +266,119 @@ localStorage.removeItem('zmonie_banner_dismissed');
 <input class="inp" id="eb-address" placeholder="Full home address with street and city"/></div><div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px"><div><label style="font-size:12px;font-weight:600;color:var(--g600);margin-bottom:5px;display:block">State *</label><input class="inp" id="eb-state" placeholder="e.g. Lagos"/></div><div><label style="font-size:12px;font-weight:600;color:var(--g600);margin-bottom:5px;display:block">LGA *</label><input class="inp" id="eb-lga" placeholder="e.g. Ikeja"/></div></div><div style="margin-bottom:14px"><label style="font-size:12px;font-weight:600;color:var(--g600);margin-bottom:5px;display:block">Office / Work Address *</label><input class="inp" id="eb-workaddr" placeholder="Office or business address"/></div><!-- SECTION 3: Product Details --><div style="font-size:13px;font-weight:800;color:var(--black);margin-bottom:12px;padding:10px 14px;background:linear-gradient(135deg,#fffbeb,#fef3c7);border-radius:10px;border-left:4px solid #f59e0b">&#128717; Product Details</div><div style="margin-bottom:10px"><label style="font-size:12px;font-weight:600;color:var(--g600);margin-bottom:5px;display:block">Product Name *</label><input class="inp" id="eb-product-name" placeholder="e.g. Samsung Galaxy A35, HP Laptop 15"/></div><div style="margin-bottom:10px"><label style="font-size:12px;font-weight:600;color:var(--g600);margin-bottom:5px;display:block">Pick Up Location *</label><select class="inp" id="eb-merchant"><option value="">Select pick up location</option><option value="No1 ibijoke street kudirat abiola way oregun ikeja lagos">No1 Ibijoke Street, Kudirat Abiola Way, Oregun, Ikeja, Lagos</option><option value="No1 odewale street Alausa ikeja lagos state">No1 Odewale Street, Alausa, Ikeja, Lagos State</option><option value="No5 odewale street Alausa ikeja lagos state">No5 Odewale Street, Alausa, Ikeja, Lagos State</option></select></div><div style="margin-bottom:14px"><label style="font-size:12px;font-weight:600;color:var(--g600);margin-bottom:5px;display:block">Additional Note <span style="font-weight:400;color:var(--g400)">(optional)</span></label><textarea class="inp" id="eb-note" placeholder="Colour, size, specifications..."></textarea></div><div style="margin-bottom:14px"><label style="font-size:12px;font-weight:600;color:var(--g600);margin-bottom:5px;display:block">Product Photo * <span style="font-weight:400;color:var(--g400)">(upload from phone gallery &mdash; picture of the product)</span></label><div style="border:2px dashed #fcd34d;border-radius:11px;padding:14px;text-align:center;cursor:pointer;background:#fffbeb" id="eb-product-pic-drop" onclick="document.getElementById('eb-product-pic').click()"><div id="eb-product-pic-preview"><div style="font-size:28px;margin-bottom:6px">&#128717;</div><div style="font-size:12px;color:var(--g400)">Tap to upload product picture</div><div style="font-size:11px;color:var(--g300);margin-top:3px">JPG, PNG &bull; Max 3MB</div></div></div><input type="file" id="eb-product-pic" accept="image/*" style="display:none" onchange="previewImg('eb-product-pic','eb-product-pic-preview','eb-product-pic-drop')"/></div><!-- SECTION 4: Your Documents --><div style="font-size:13px;font-weight:800;color:var(--black);margin-bottom:12px;padding:10px 14px;background:linear-gradient(135deg,#eff6ff,#dbeafe);border-radius:10px;border-left:4px solid #2563eb">&#128248; Your Documents (Mandatory)</div><div style="margin-bottom:12px"><label style="font-size:12px;font-weight:600;color:var(--g600);margin-bottom:5px;display:block">Your Passport Photograph * <span style="font-weight:400;color:var(--g400)">(take selfie with front camera)</span></label><div style="border:2px dashed #d1d5db;border-radius:11px;padding:14px;text-align:center;cursor:pointer" id="eb-passport-drop" onclick="document.getElementById('eb-passport').click()"><div id="eb-passport-preview"><div style="font-size:28px;margin-bottom:6px">&#129331;</div><div style="font-size:12px;color:var(--g400)">Tap to upload your passport photo</div><div style="font-size:11px;color:var(--g300);margin-top:3px">JPG, PNG &bull; Max 3MB</div></div></div><input type="file" id="eb-passport" accept="image/*" capture="user" style="display:none" onchange="previewImg('eb-passport','eb-passport-preview','eb-passport-drop')"/></div><div style="margin-bottom:14px"><label style="font-size:12px;font-weight:600;color:var(--g600);margin-bottom:5px;display:block">Your Means of Identification *</label><select class="inp" id="eb-idtype" style="margin-bottom:8px"><option value="">Select ID type</option><option>National ID Card (NIN)</option><option>Voter's Card</option><option>International Passport</option><option>Driver's License</option></select><div style="border:2px dashed #d1d5db;border-radius:11px;padding:14px;text-align:center;cursor:pointer" id="eb-idimg-drop" onclick="document.getElementById('eb-idimg').click()"><div id="eb-idimg-preview"><div style="font-size:28px;margin-bottom:6px">&#129706;</div><div style="font-size:12px;color:var(--g400)">Tap to upload your ID document</div><div style="font-size:11px;color:var(--g300);margin-top:3px">JPG, PNG &bull; Max 3MB</div></div></div><input type="file" id="eb-idimg" accept="image/*,.pdf" style="display:none" onchange="previewImg('eb-idimg','eb-idimg-preview','eb-idimg-drop')"/></div><!-- SECTION 5: Guarantor --><div style="background:#faf5ff;border:1.5px solid #c4b5fd;border-radius:12px;padding:14px;margin-bottom:12px"><div style="font-size:13px;font-weight:700;color:#5b21b6;margin-bottom:12px">&#128100; Guarantor (Required)</div><div style="margin-bottom:9px"><label style="font-size:12px;font-weight:600;color:var(--g600);margin-bottom:4px;display:block">Full Name *</label><input class="inp" id="eb-g1name" placeholder="Full legal name"/></div><div style="margin-bottom:9px"><label style="font-size:12px;font-weight:600;color:var(--g600);margin-bottom:4px;display:block">Phone Number *</label><input class="inp" type="tel" id="eb-g1phone" placeholder="080XXXXXXXX"/></div><div style="margin-bottom:9px"><label style="font-size:12px;font-weight:600;color:var(--g600);margin-bottom:4px;display:block">Relationship *</label><select class="inp" id="eb-g1rel"><option value="">Select</option><option>Family Member</option><option>Friend</option><option>Colleague</option><option>Employer</option><option>Business Partner</option><option>Other</option></select></div><div style="margin-bottom:9px"><label style="font-size:12px;font-weight:600;color:var(--g600);margin-bottom:4px;display:block">Home Address *</label><input class="inp" id="eb-g1addr" placeholder="Guarantor home address"/></div><div style="margin-bottom:9px"><label style="font-size:12px;font-weight:600;color:var(--g600);margin-bottom:4px;display:block">Office Address *</label><input class="inp" id="eb-g1officeaddr" placeholder="Guarantor office/work address"/></div><div style="margin-bottom:9px">
 <label style="font-size:12px;font-weight:600;color:var(--g600);margin-bottom:4px;display:block">Occupation *</label><input class="inp" id="eb-g1occupation" placeholder="e.g. Teacher, Engineer, Trader"/></div><div style="margin-bottom:9px"><label style="font-size:12px;font-weight:600;color:var(--g600);margin-bottom:5px;display:block">Guarantor Passport Photo * <span style="font-weight:400;color:var(--g400)">(upload from phone gallery)</span></label><div style="border:2px dashed #c4b5fd;border-radius:11px;padding:12px;text-align:center;cursor:pointer;background:#faf5ff" id="eb-g1photo-drop" onclick="document.getElementById('eb-g1photo').click()"><div id="eb-g1photo-preview"><div style="font-size:24px;margin-bottom:4px">&#129331;</div><div style="font-size:12px;color:var(--g400)">Upload guarantor passport photo from gallery</div></div></div><input type="file" id="eb-g1photo" accept="image/*" style="display:none" onchange="previewImg('eb-g1photo','eb-g1photo-preview','eb-g1photo-drop')"/></div></div><!-- Documentation Fee Notice --><div style="background:#fef3c7;border:1.5px solid #fcd34d;border-radius:12px;padding:14px;margin-bottom:16px"><div style="display:flex;align-items:center;gap:10px;margin-bottom:8px"><div style="width:36px;height:36px;background:#f59e0b;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0">&#128179;</div><div><div style="font-weight:800;font-size:14px;color:#78350f">Documentation Fee: NGN 1,500</div><div style="font-size:11px;color:#92400e;margin-top:2px">Deducted from your wallet on submission</div></div></div><p style="font-size:12px;color:#92400e;line-height:1.7">This non-refundable fee covers verification and documentation processing. Ensure your wallet has at least NGN 1,500 before submitting.</p><div style="margin-top:10px;background:#fff;border-radius:9px;padding:10px;display:flex;justify-content:space-between;align-items:center"><div style="font-size:12px;color:var(--g600)">Your wallet balance</div><div style="font-size:14px;font-weight:800;color:#15803d" id="eb-wallet-bal-show">-</div></div></div><!-- Agreement --><div style="margin-bottom:16px;display:flex;align-items:flex-start;gap:10px;padding:12px;background:#f8fafc;border-radius:11px"><input type="checkbox" id="eb-agree" style="margin-top:3px;accent-color:var(--green);width:18px;height:18px;flex-shrink:0"/><label for="eb-agree" style="font-size:12px;color:var(--g600);line-height:1.7;cursor:pointer">I confirm all information is accurate. I agree to EasyBuy terms including daily wallet deductions and guarantor obligations. I authorise Zmonie to deduct the documentation fee of <strong>NGN 1,500</strong> from my wallet immediately on submission.</label></div><button onclick="submitEasyBuyApp()" class="btn-g" style="width:100%;padding:14px;border-radius:12px;font-size:15px;font-weight:700">Submit EasyBuy Application</button><p style="font-size:11px;color:var(--g400);text-align:center;margin-top:10px">Application reviewed within 24-48 hours. You will be notified once approved.</p></div></div><!-- ======== EASYBUY PLAN DETAIL MODAL ======== --><div class="modal" id="m-easybuy-detail"><div class="mbox" id="eb-detail-body"></div></div><!-- ADMIN PAGE --><div id="pg-admin" class="page"><!-- Sidebar --><div class="aside" id="adminSidebar"><div style="padding:16px 14px 14px;border-bottom:1px solid rgba(255,255,255,.08);margin-bottom:6px;display:flex;align-items:center;justify-content:space-between"><div style="display:flex;align-items:center;gap:9px"><div style="width:32px;height:32px;background:linear-gradient(135deg,#16a34a,#22c55e);border-radius:9px;display:flex;align-items:center;justify-content:center;flex-shrink:0"><span style="font-weight:900;font-size:14px;color:#fff">Z</span></div><div><div style="font-weight:800;color:#fff;font-size:14px;letter-spacing:-.02em">ZMONIE</div><div style="font-size:10px;color:rgba(255,255,255,.3);font-weight:500">Admin Panel</div></div></div><!-- Close button &mdash; mobile only --><button onclick="closeAdminMenu()" style="background:rgba(255,255,255,.08);border:none;color:rgba(255,255,255,.5);width:28px;height:28px;border-radius:7px;cursor:pointer;font-size:16px;display:flex;align-items:center;justify-content:center;flex-shrink:0">&#10005;</button></div><nav style="padding:0 8px"><div style="font-size:10px;font-weight:700;color:rgba(255,255,255,.25);padding:8px 6px 4px;text-transform:uppercase;letter-spacing:.8px">Main</div><div class="anav on" onclick="aTab('overview')">&#128202; Overview</div><div class="anav" onclick="aTab('users')">&#128101; Users</div><div class="anav" onclick="aTab('txs')">&#128179; Transactions</div><div class="anav" onclick="aTab('funding')">&#128176; Funding Requests</div><div class="anav" onclick="aTab('fund-accounts')">&#127974; Funding Accounts</div><div class="anav" onclick="aTab('withdrawals')">&#128184; Withdrawals</div><div class="anav" onclick="aTab('pins')">&#128274; PIN Requests</div><div class="anav" onclick="aTab('pw-reset')">&#128273; Password Resets</div><div class="anav" onclick="aTab('promos')">&#127919; Promo Slides</div><div class="anav" onclick="aTab('broadcast')">&#128226; Broadcast</div><div class="anav" onclick="aTab('wallet')">&#128091; Wallet Ops</div><div style="font-size:10px;font-weight:700;color:rgba(96,165,250,.35);padding:10px 6px 4px;text-transform:uppercase;letter-spacing:.8px">Data &amp; API</div><div class="anav" onclick="aTab('data-plans')">&#128225; Data Plan Mgmt</div><div class="anav" onclick="aTab('api-mgmt')">&#128272; API Management</div><div class="anav fin-tab" onclick="aTab('vtpass')">&#9881; VTPass Settings</div><div style="font-size:10px;font-weight:700;color:rgba(167,139,250,.35);padding:10px 6px 4px;text-transform:uppercase;letter-spacing:.8px">Finance</div><div class="anav fin-tab" onclick="aTab('fin-loans')">&#127974; Loan Requests</div><div class="anav fin-tab" onclick="aTab('fin-investments')">&#128200; Investments</div><div class="anav fin-tab" onclick="aTab('fin-analytics')">&#128202; Fin Analytics</div><div style="font-size:10px;font-weight:700;color:rgba(74,222,128,.3);padding:10px 6px 4px;text-transform:uppercase;letter-spacing:.8px">Payments &amp; Rewards</div><div class="anav" onclick="aTab('easybuy')">&#128717; EasyBuy</div><div class="anav" onclick="aTab('airtime-cash')">&#128176; Airtime to Cash</div><div class="anav" onclick="aTab('kyc')">&#128273; KYC Requests</div><div class="anav" onclick="aTab('disputes')">&#128681; Disputes</div><div class="anav" onclick="aTab('support-tickets')">&#128172; Support Tickets</div><div class="anav" onclick="aTab('paystack')">&#128179; Paystack Settings</div><div class="anav" onclick="aTab('rewards-settings')">&#127873; Rewards Settings</div><div class="anav" onclick="aTab('rewards-history')">&#128202; Rewards History</div><div style="font-size:10px;font-weight:700;color:rgba(147,197,253,.3);padding:10px 6px 4px;text-transform:uppercase;letter-spacing:.8px">Administration</div><div class="anav" onclick="aTab('sub-admins')" style="color:rgba(147,197,253,.8)">&#128101; Sub-Admins</div><div style="font-size:10px;font-weight:700;color:rgba(52,211,153,.3);padding:10px 6px 4px;text-transform:uppercase;letter-spacing:.8px">Savings</div><div class="anav" onclick="aTab('savings')">&#128184; Savings Module</div><div style="font-size:10px;font-weight:700;color:rgba(147,197,253,.3);padding:10px 6px 4px;text-transform:uppercase;letter-spacing:.8px">Security</div>
 <div class="anav" id="super-admin-pin-nav" onclick="changeAdminPin()" style="color:rgba(147,197,253,.8);background:rgba(37,99,235,.1)">&#128274; Change Admin PIN</div></nav><div style="margin-top:auto;padding:12px 10px 20px"><div style="background:rgba(37,99,235,.18);border:1.5px solid rgba(37,99,235,.4);border-radius:10px;padding:12px;margin-bottom:8px"><div style="font-size:11px;font-weight:800;color:#93c5fd;text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px">&#128274; Admin Security PIN</div><button onclick="changeAdminPin()" style="width:100%;padding:10px;border-radius:8px;background:rgba(37,99,235,.3);border:1px solid rgba(37,99,235,.5);color:#bfdbfe;font-size:12px;font-weight:700;cursor:pointer;font-family:'Inter',sans-serif">&#128274; Change Security PIN</button></div><button onclick="doLogout()" style="width:100%;padding:10px;border-radius:9px;background:rgba(220,38,38,.12);border:1px solid rgba(220,38,38,.2);color:#f87171;font-size:12px;font-weight:600;cursor:pointer;font-family:'Inter',sans-serif">&#128682; Sign Out</button></div></div><!-- Overlay (mobile backdrop) --><div class="overlay" id="adminOverlay" onclick="closeAdminMenu()"></div><!-- Main content area --><div class="amain"><!-- Top bar --><div style="display:flex;align-items:center;gap:10px;margin-bottom:14px;position:sticky;top:0;background:var(--bg);z-index:10;padding:4px 0 10px;border-bottom:1px solid var(--g100)"><button class="hamb" onclick="openAdminMenu()" title="Menu" aria-label="Open menu"><svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg></button><h1 style="font-size:18px;font-weight:800;letter-spacing:-.02em;flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis" id="a-title">Overview</h1><button onclick="doLogout()" style="padding:7px 13px;background:#fef2f2;border:1px solid #fecaca;color:#dc2626;border-radius:8px;font-size:12px;font-weight:600;cursor:pointer;font-family:'Inter',sans-serif;flex-shrink:0">Logout</button></div><!-- Scrollable quick-tab bar --><div class="admin-tabbar" id="admin-tabbar"><button onclick="aTab('overview')" data-tab="overview" style="padding:7px 14px;border-radius:50px;border:none;background:var(--green);color:#fff;font-size:12px;font-weight:700;cursor:pointer;white-space:nowrap;font-family:'Inter',sans-serif">&#128202; Overview</button><button onclick="aTab('users')" data-tab="users" style="padding:7px 14px;border-radius:50px;border:1.5px solid var(--g200);background:#fff;font-size:12px;font-weight:600;cursor:pointer;white-space:nowrap;font-family:'Inter',sans-serif">&#128101; Users</button><button onclick="aTab('txs')" data-tab="txs" style="padding:7px 14px;border-radius:50px;border:1.5px solid var(--g200);background:#fff;font-size:12px;font-weight:600;cursor:pointer;white-space:nowrap;font-family:'Inter',sans-serif">&#128179; Transactions</button><button onclick="aTab('funding')" data-tab="funding" style="padding:7px 14px;border-radius:50px;border:1.5px solid var(--g200);background:#fff;font-size:12px;font-weight:600;cursor:pointer;white-space:nowrap;font-family:'Inter',sans-serif">&#128176; Funding</button><button onclick="aTab('fund-accounts')" data-tab="fund-accounts" style="padding:7px 14px;border-radius:50px;border:1.5px solid #86efac;background:#f0fdf4;font-size:12px;font-weight:600;cursor:pointer;white-space:nowrap;font-family:'Inter',sans-serif;color:#15803d">&#127974; Accounts</button><button onclick="aTab('withdrawals')" data-tab="withdrawals" style="padding:7px 14px;border-radius:50px;border:1.5px solid #fce7f3;background:#fdf2f8;font-size:12px;font-weight:600;cursor:pointer;white-space:nowrap;font-family:'Inter',sans-serif;color:#9d174d">&#128184; Withdrawals</button><button onclick="aTab('pins')" data-tab="pins" style="padding:7px 14px;border-radius:50px;border:1.5px solid var(--g200);background:#fff;font-size:12px;font-weight:600;cursor:pointer;white-space:nowrap;font-family:'Inter',sans-serif">&#128274; PINs</button><button onclick="aTab('pw-reset')" data-tab="pw-reset" style="padding:7px 14px;border-radius:50px;border:1.5px solid #fca5a5;background:#fef2f2;font-size:12px;font-weight:600;cursor:pointer;white-space:nowrap;font-family:'Inter',sans-serif;color:#dc2626">&#128273; PW Resets</button><button onclick="aTab('data-plans')" data-tab="data-plans" style="padding:7px 14px;border-radius:50px;border:1.5px solid #bfdbfe;background:#eff6ff;font-size:12px;font-weight:600;cursor:pointer;white-space:nowrap;font-family:'Inter',sans-serif;color:#1d4ed8">&#128225; Data Plans</button><button onclick="aTab('api-mgmt')" data-tab="api-mgmt" style="padding:7px 14px;border-radius:50px;border:1.5px solid #c4b5fd;background:#f5f3ff;font-size:12px;font-weight:600;cursor:pointer;white-space:nowrap;font-family:'Inter',sans-serif;color:#7c3aed">&#128272; API Mgmt</button><button onclick="aTab('promos')" data-tab="promos" style="padding:7px 14px;border-radius:50px;border:1.5px solid var(--g200);background:#fff;font-size:12px;font-weight:600;cursor:pointer;white-space:nowrap;font-family:'Inter',sans-serif">&#127919; Promos</button><button onclick="aTab('broadcast')" data-tab="broadcast" style="padding:7px 14px;border-radius:50px;border:1.5px solid var(--g200);background:#fff;font-size:12px;font-weight:600;cursor:pointer;white-space:nowrap;font-family:'Inter',sans-serif">&#128226; Broadcast</button><button onclick="aTab('wallet')" data-tab="wallet" style="padding:7px 14px;border-radius:50px;border:1.5px solid var(--g200);background:#fff;font-size:12px;font-weight:600;cursor:pointer;white-space:nowrap;font-family:'Inter',sans-serif">&#128091; Wallet</button><button onclick="aTab('fin-loans')" data-tab="fin-loans" style="padding:7px 14px;border-radius:50px;border:1.5px solid #c4b5fd;background:#faf5ff;font-size:12px;font-weight:600;cursor:pointer;white-space:nowrap;font-family:'Inter',sans-serif;color:#6d28d9">&#127974; Loans</button><button onclick="aTab('fin-investments')" data-tab="fin-investments" style="padding:7px 14px;border-radius:50px;border:1.5px solid #c4b5fd;background:#faf5ff;font-size:12px;font-weight:600;cursor:pointer;white-space:nowrap;font-family:'Inter',sans-serif;color:#6d28d9">&#128200; Investments</button><button onclick="aTab('fin-analytics')" data-tab="fin-analytics" style="padding:7px 14px;border-radius:50px;border:1.5px solid #c4b5fd;background:#faf5ff;font-size:12px;font-weight:600;cursor:pointer;white-space:nowrap;font-family:'Inter',sans-serif;color:#6d28d9">&#128202; Fin Stats</button><button onclick="aTab('revenue')" data-tab="revenue" style="padding:7px 14px;border-radius:50px;border:1.5px solid #fcd34d;background:#fffbeb;font-size:12px;font-weight:700;cursor:pointer;white-space:nowrap;font-family:'Inter',sans-serif;color:#92400e">&#128176; Revenue</button><button onclick="aTab('airtime-cash')" data-tab="airtime-cash" style="padding:7px 14px;border-radius:50px;border:1.5px solid #fcd34d;background:#fffbeb;font-size:12px;font-weight:700;cursor:pointer;white-space:nowrap;font-family:'Inter',sans-serif;color:#92400e">&#128176; Airtime Cash</button><button onclick="aTab('kyc')" data-tab="kyc" style="padding:7px 14px;border-radius:50px;border:1.5px solid #c4b5fd;background:#faf5ff;font-size:12px;font-weight:700;cursor:pointer;white-space:nowrap;font-family:'Inter',sans-serif;color:#7c3aed">&#128273; KYC</button><button onclick="aTab('disputes')" data-tab="disputes" style="padding:7px 14px;border-radius:50px;border:1.5px solid #fecaca;background:#fef2f2;font-size:12px;font-weight:700;cursor:pointer;white-space:nowrap;font-family:'Inter',sans-serif;color:#dc2626">&#128681; Disputes</button><button onclick="aTab('support-tickets')" data-tab="support-tickets" style="padding:7px 14px;border-radius:50px;border:1.5px solid #fed7aa;background:#fff7ed;font-size:12px;font-weight:700;cursor:pointer;white-space:nowrap;font-family:'Inter',sans-serif;color:#c2410c">&#128172; Support</button><button onclick="aTab('vtpass')" data-tab="vtpass" style="padding:7px 14px;border-radius:50px;border:1.5px solid #c4b5fd;background:#faf5ff;font-size:12px;font-weight:600;cursor:pointer;white-space:nowrap;font-family:'Inter',sans-serif;color:#6d28d9">&#9881; VTPass</button>
-<button onclick="aTab('easybuy')" data-tab="easybuy" style="padding:7px 14px;border-radius:50px;border:1.5px solid #fcd34d;background:#fffbeb;font-size:12px;font-weight:600;cursor:pointer;white-space:nowrap;font-family:'Inter',sans-serif;color:#92400e">&#128717; EasyBuy</button><button onclick="aTab('paystack')" data-tab="paystack" style="padding:7px 14px;border-radius:50px;border:1.5px solid #60a5fa;background:#eff6ff;font-size:12px;font-weight:600;cursor:pointer;white-space:nowrap;font-family:'Inter',sans-serif;color:#1d4ed8">&#128179; Paystack</button><button onclick="aTab('rewards-settings')" data-tab="rewards-settings" style="padding:7px 14px;border-radius:50px;border:1.5px solid #86efac;background:#f0fdf4;font-size:12px;font-weight:600;cursor:pointer;white-space:nowrap;font-family:'Inter',sans-serif;color:#15803d">&#127873; Rewards</button><button onclick="aTab('savings')" data-tab="savings" style="padding:7px 14px;border-radius:50px;border:1.5px solid #6ee7b7;background:#ecfdf5;font-size:12px;font-weight:700;cursor:pointer;white-space:nowrap;font-family:'Inter',sans-serif;color:#059669">&#128184; Savings</button><button id="super-admin-pin-tab" onclick="changeAdminPin()" style="padding:7px 14px;border-radius:50px;border:1.5px solid #93c5fd;background:#eff6ff;font-size:12px;font-weight:700;cursor:pointer;white-space:nowrap;font-family:'Inter',sans-serif;color:#1d4ed8">&#128274; Security PIN</button></div><div id="a-content"></div></div></div><!-- MODALS --><div class="modal" id="m-fund"><div class="mbox"><div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px"><h3 style="font-size:17px;font-weight:700">Fund Wallet</h3><button onclick="closeM('m-fund')" style="background:var(--g100);border:none;width:30px;height:30px;border-radius:50%;cursor:pointer;color:var(--g600)">&#10005;</button></div><!-- Paystack section &mdash; shown/hidden by loadFundAccountsForUser() --><div id="ps-fund-section" style="display:none;margin-bottom:18px"><div style="display:flex;align-items:center;gap:8px;margin-bottom:10px"><div style="height:1px;flex:1;background:#e2e8f0"></div><span style="font-size:11px;font-weight:700;color:#6366f1;white-space:nowrap">&#9889; PAY INSTANTLY</span><div style="height:1px;flex:1;background:#e2e8f0"></div></div><div style="margin-bottom:10px"><label style="font-size:12px;font-weight:600;color:var(--g600);margin-bottom:6px;display:block">Amount to Fund (NGN)</label><input class="inp" type="number" id="ps-fund-amt" placeholder="Enter amount e.g. 5000" min="100" style="font-size:16px;font-weight:700"/></div><button onclick="initPaystackPayment(parseFloat(document.getElementById('ps-fund-amt').value))" style="width:100%;padding:14px;background:linear-gradient(135deg,#6366f1,#4f46e5);color:#fff;border:none;border-radius:12px;font-size:14px;font-weight:700;cursor:pointer;font-family:Inter,sans-serif;display:flex;align-items:center;justify-content:center;gap:10px;margin-bottom:6px"><svg width="20" height="14" viewBox="0 0 20 14" fill="none"><rect width="20" height="14" rx="3" fill="white" fill-opacity=".25"/><rect y="4" width="20" height="3" fill="white" fill-opacity=".5"/></svg> Pay with Card / Bank Transfer</button><div style="font-size:11px;color:var(--g400);text-align:center;margin-bottom:4px">Powered by Paystack &middot; Instant wallet credit &middot; Secured</div><div style="display:flex;align-items:center;gap:8px;margin:14px 0 4px"><div style="height:1px;flex:1;background:#e2e8f0"></div><span style="font-size:11px;font-weight:600;color:var(--g400)">OR USE BANK TRANSFER</span><div style="height:1px;flex:1;background:#e2e8f0"></div></div></div><p style="color:var(--g600);font-size:13px;margin-bottom:14px;line-height:1.6" id="fund-manual-label">Transfer to any account below then send proof via WhatsApp. Admin credits your wallet within 30 minutes.</p><div id="fund-accounts-list"><div style="text-align:center;padding:20px;color:var(--g400)"><div style="font-size:24px">&#9203;</div><p style="font-size:12px">Loading accounts...</p></div></div><a href="https://wa.me/2348068886569?text=Hello%20ZMONIE%2C%20I%20have%20made%20a%20payment%20and%20I%27m%20sending%20my%20proof." target="_blank" class="btn-g" style="display:flex;align-items:center;justify-content:center;gap:8px;padding:13px;border-radius:12px;font-size:14px;font-weight:600;text-decoration:none;color:#fff"><svg width="17" height="17" fill="currentColor" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg> Send Proof via WhatsApp</a></div></div><!-- Modal: Add/Edit Funding Account (Admin) --><div class="modal" id="m-fund-acct"><div class="mbox"><div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px"><h3 style="font-size:17px;font-weight:700" id="fa-modal-title">Add Funding Account</h3><button onclick="closeM('m-fund-acct')" style="background:var(--g100);border:none;width:30px;height:30px;border-radius:50%;cursor:pointer;color:var(--g600)">&#10005;</button></div><input type="hidden" id="fa-edit-id"/><div style="margin-bottom:11px"><label style="font-size:12px;font-weight:600;color:var(--g600);margin-bottom:5px;display:block">Bank Name</label><input class="inp" id="fa-bank" placeholder="e.g. Moniepoint, Zenith Bank"/></div><div style="margin-bottom:11px"><label style="font-size:12px;font-weight:600;color:var(--g600);margin-bottom:5px;display:block">Account Name</label><input class="inp" id="fa-acct-name" placeholder="e.g. OgaBuy Online Shopping"/></div><div style="margin-bottom:16px"><label style="font-size:12px;font-weight:600;color:var(--g600);margin-bottom:5px;display:block">Account Number</label><input class="inp" id="fa-acct-num" placeholder="10-digit account number" maxlength="10"/></div><button onclick="saveFundAcct()" class="btn-g" style="width:100%;padding:13px;border-radius:11px;font-size:15px">Save Account</button></div></div><div class="modal" id="m-pin"><div class="mbox"><div style="text-align:center;margin-bottom:20px"><div style="width:50px;height:50px;background:var(--green-xl);border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 11px">
+<button onclick="aTab('easybuy')" data-tab="easybuy" style="padding:7px 14px;border-radius:50px;border:1.5px solid #fcd34d;background:#fffbeb;font-size:12px;font-weight:600;cursor:pointer;white-space:nowrap;font-family:'Inter',sans-serif;color:#92400e">&#128717; EasyBuy</button><button onclick="aTab('paystack')" data-tab="paystack" style="padding:7px 14px;border-radius:50px;border:1.5px solid #60a5fa;background:#eff6ff;font-size:12px;font-weight:600;cursor:pointer;white-space:nowrap;font-family:'Inter',sans-serif;color:#1d4ed8">&#128179; Paystack</button><button onclick="aTab('rewards-settings')" data-tab="rewards-settings" style="padding:7px 14px;border-radius:50px;border:1.5px solid #86efac;background:#f0fdf4;font-size:12px;font-weight:600;cursor:pointer;white-space:nowrap;font-family:'Inter',sans-serif;color:#15803d">&#127873; Rewards</button><button onclick="aTab('savings')" data-tab="savings" style="padding:7px 14px;border-radius:50px;border:1.5px solid #6ee7b7;background:#ecfdf5;font-size:12px;font-weight:700;cursor:pointer;white-space:nowrap;font-family:'Inter',sans-serif;color:#059669">&#128184; Savings</button><button id="super-admin-pin-tab" onclick="changeAdminPin()" style="padding:7px 14px;border-radius:50px;border:1.5px solid #93c5fd;background:#eff6ff;font-size:12px;font-weight:700;cursor:pointer;white-space:nowrap;font-family:'Inter',sans-serif;color:#1d4ed8">&#128274; Security PIN</button></div><div id="a-content"></div></div></div><!-- MODALS --><div class="modal" id="m-fund"><div class="mbox" style="max-height:92vh;overflow-y:auto"><div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;position:sticky;top:0;background:#fff;padding-bottom:10px;border-bottom:1px solid #f1f5f9;z-index:1"><div><h3 style="font-size:17px;font-weight:700">&#128176; Fund Wallet</h3><p style="font-size:11px;color:var(--g400);margin-top:2px">Choose how to add money</p></div><button onclick="closeM('m-fund')" style="background:var(--g100);border:none;width:30px;height:30px;border-radius:50%;cursor:pointer;color:var(--g600);flex-shrink:0">&#10005;</button></div>
+
+<!-- ===== PAYSTACK SECTION ===== -->
+<div id="ps-fund-section" style="display:none;margin-bottom:16px"><div style="background:linear-gradient(135deg,#4f46e5,#6366f1);border-radius:14px;padding:16px;margin-bottom:12px"><div style="display:flex;align-items:center;gap:8px;margin-bottom:12px"><span style="font-size:11px;font-weight:800;color:rgba(255,255,255,.7);text-transform:uppercase;letter-spacing:.5px">&#9889; Pay Instantly</span></div><label style="font-size:11px;font-weight:600;color:rgba(255,255,255,.7);margin-bottom:6px;display:block">Amount to Fund (NGN)</label><input class="inp" type="number" id="ps-fund-amt" placeholder="e.g. 5000" min="100" style="font-size:22px;font-weight:800;background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.25);color:#fff;margin-bottom:12px" oninput="updatePsPreview(this.value)"/><div id="ps-fund-preview" style="font-size:11px;color:rgba(255,255,255,.55);margin-bottom:12px;min-height:14px"></div><button onclick="doPaystackFund()" id="ps-pay-btn" style="width:100%;padding:14px;background:#fff;color:#4f46e5;border:none;border-radius:12px;font-size:14px;font-weight:800;cursor:pointer;font-family:Inter,sans-serif;display:flex;align-items:center;justify-content:center;gap:10px"><svg width="20" height="14" viewBox="0 0 20 14" fill="none"><rect width="20" height="14" rx="3" fill="#4f46e5" fill-opacity=".15"/><rect y="4" width="20" height="3" fill="#4f46e5" fill-opacity=".4"/></svg>Pay with Card / Bank Transfer</button><div style="font-size:10px;color:rgba(255,255,255,.4);text-align:center;margin-top:8px">Powered by Paystack &middot; Instant credit &middot; Secured &#128274;</div></div></div>
+
+<!-- ===== DIVIDER ===== -->
+<div style="display:flex;align-items:center;gap:8px;margin-bottom:14px"><div style="height:1px;flex:1;background:#e2e8f0"></div><span style="font-size:11px;font-weight:700;color:var(--g400);white-space:nowrap">OR BANK TRANSFER</span><div style="height:1px;flex:1;background:#e2e8f0"></div></div>
+
+<!-- ===== BANK ACCOUNTS ===== -->
+<p style="color:var(--g500);font-size:12px;margin-bottom:10px;line-height:1.6" id="fund-manual-label">Transfer to any account below, then fill the form to notify admin. Your wallet is credited within 30 minutes after verification.</p>
+<div id="fund-accounts-list"><div style="text-align:center;padding:20px;color:var(--g400)"><div style="font-size:24px">&#9203;</div><p style="font-size:12px">Loading accounts...</p></div></div>
+
+<!-- ===== RECEIPT UPLOAD FORM ===== -->
+<div style="background:#f0fdf4;border:1.5px solid #86efac;border-radius:14px;padding:16px;margin-top:14px">
+  <div style="font-weight:700;font-size:14px;color:#15803d;margin-bottom:4px">&#128203; Submit Payment Proof</div>
+  <p style="font-size:12px;color:#166534;margin-bottom:12px;line-height:1.6">After transferring, fill the details below so admin can quickly verify and credit your wallet.</p>
+  <div style="margin-bottom:10px"><label style="font-size:12px;font-weight:600;color:var(--g600);margin-bottom:5px;display:block">Amount Transferred (NGN) *</label><input class="inp" type="number" id="mf-amount" placeholder="e.g. 5000" min="100"/></div>
+  <div style="margin-bottom:10px"><label style="font-size:12px;font-weight:600;color:var(--g600);margin-bottom:5px;display:block">Bank Paid Into *</label><select class="inp" id="mf-bank-sel"><option value="">-- Select bank account --</option></select></div>
+  <div style="margin-bottom:10px"><label style="font-size:12px;font-weight:600;color:var(--g600);margin-bottom:5px;display:block">Your Sender Name / Account</label><input class="inp" id="mf-sender" placeholder="Name on your bank account"/></div>
+  <div style="margin-bottom:12px"><label style="font-size:12px;font-weight:600;color:var(--g600);margin-bottom:5px;display:block">Upload Payment Receipt / Screenshot *</label><div style="border:2px dashed #86efac;border-radius:11px;padding:16px;text-align:center;cursor:pointer;background:#fff;transition:all .2s" id="mf-receipt-drop" onclick="document.getElementById('mf-receipt-file').click()"><div id="mf-receipt-preview"><div style="font-size:28px;margin-bottom:6px">&#128247;</div><div style="font-size:12px;color:var(--g500)">Tap to upload receipt / screenshot</div><div style="font-size:10px;color:var(--g400);margin-top:3px">JPG, PNG or PDF &middot; Max 5MB</div></div></div><input type="file" id="mf-receipt-file" accept="image/*,application/pdf" style="display:none" onchange="previewFundReceipt(event)"/></div>
+  <div style="margin-bottom:12px"><label style="font-size:12px;font-weight:600;color:var(--g600);margin-bottom:5px;display:block">Additional Note (optional)</label><textarea class="inp" id="mf-note" placeholder="Any extra info for admin..." rows="2" style="resize:none"></textarea></div>
+  <button onclick="submitManualFundProof()" id="mf-submit-btn" class="btn-g" style="width:100%;padding:13px;border-radius:11px;font-size:14px;font-weight:700">&#128203; Submit Payment Proof</button>
+  <div style="margin-top:10px;text-align:center"><span style="font-size:11px;color:var(--g400)">Or send proof directly via WhatsApp:</span></div>
+  <a href="https://wa.me/2348068886569?text=Hello%20ZMONIE%2C%20I%20have%20made%20a%20bank%20transfer%20and%20I%27m%20sending%20my%20payment%20proof%20for%20wallet%20funding." target="_blank" style="display:flex;align-items:center;justify-content:center;gap:8px;padding:11px;border-radius:11px;font-size:13px;font-weight:600;text-decoration:none;color:#15803d;background:#dcfce7;border:1px solid #86efac;margin-top:8px"><svg width="15" height="15" fill="currentColor" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg> Send Proof via WhatsApp</a>
+</div>
+</div></div><!-- Modal: Add/Edit Funding Account (Admin) --><div class="modal" id="m-fund-acct"><div class="mbox"><div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px"><h3 style="font-size:17px;font-weight:700" id="fa-modal-title">Add Funding Account</h3><button onclick="closeM('m-fund-acct')" style="background:var(--g100);border:none;width:30px;height:30px;border-radius:50%;cursor:pointer;color:var(--g600)">&#10005;</button></div><input type="hidden" id="fa-edit-id"/><div style="margin-bottom:11px"><label style="font-size:12px;font-weight:600;color:var(--g600);margin-bottom:5px;display:block">Bank Name</label><input class="inp" id="fa-bank" placeholder="e.g. Moniepoint, Zenith Bank"/></div><div style="margin-bottom:11px"><label style="font-size:12px;font-weight:600;color:var(--g600);margin-bottom:5px;display:block">Account Name</label><input class="inp" id="fa-acct-name" placeholder="e.g. OgaBuy Online Shopping"/></div><div style="margin-bottom:16px"><label style="font-size:12px;font-weight:600;color:var(--g600);margin-bottom:5px;display:block">Account Number</label><input class="inp" id="fa-acct-num" placeholder="10-digit account number" maxlength="10"/></div><button onclick="saveFundAcct()" class="btn-g" style="width:100%;padding:13px;border-radius:11px;font-size:15px">Save Account</button></div></div><div class="modal" id="m-pin"><div class="mbox"><div style="text-align:center;margin-bottom:20px"><div style="width:50px;height:50px;background:var(--green-xl);border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 11px">
 <svg width="22" height="22" fill="none" stroke="var(--green-d)" stroke-width="2" viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg></div><h3 style="font-size:17px;font-weight:700;margin-bottom:4px">Transaction PIN</h3><p style="color:var(--g400);font-size:13px">Enter your 4-digit PIN to continue</p></div><div style="display:flex;gap:12px;justify-content:center;margin-bottom:20px"><input class="pbox" type="password" maxlength="1" id="vp1" oninput="pn('vp1','vp2')"/><input class="pbox" type="password" maxlength="1" id="vp2" oninput="pn('vp2','vp3')"/><input class="pbox" type="password" maxlength="1" id="vp3" oninput="pn('vp3','vp4')"/><input class="pbox" type="password" maxlength="1" id="vp4" oninput="if(this.value.length===1)verPin()"/></div><!-- Rewards balance option (shown only when user has enough rewards) --><div id="pin-rw-note" style="display:none;background:#f0fdf4;border:1px solid #86efac;border-radius:11px;padding:12px;margin-bottom:14px;align-items:center;gap:10px"><div style="flex:1"><div style="font-size:12px;font-weight:700;color:var(--green-d)">&#127894; Use Rewards Balance</div><div style="font-size:11px;color:var(--green);margin-top:2px">Balance: <strong id="pin-rw-bal">NGN 0.00</strong></div></div><label style="display:flex;align-items:center;gap:6px;cursor:pointer"><input type="checkbox" id="use-rewards-chk" style="accent-color:var(--green);width:16px;height:16px"/><span style="font-size:12px;font-weight:600;color:var(--green-d)">Pay with rewards</span></label></div><button onclick="verPin()" class="btn-g" style="width:100%;padding:13px;border-radius:11px;font-size:15px;margin-bottom:9px">Confirm</button><button onclick="closeM('m-pin')" style="width:100%;padding:12px;border-radius:11px;background:var(--g100);border:none;font-size:14px;font-weight:600;cursor:pointer;font-family:'Inter',sans-serif;color:var(--g600)">Cancel</button></div></div><div class="modal" id="m-svc"><div class="mbox"><div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px"><h3 style="font-size:17px;font-weight:700" id="svc-ttl">Service</h3><button onclick="closeM('m-svc')" style="background:var(--g100);border:none;width:30px;height:30px;border-radius:50%;cursor:pointer;color:var(--g600)">&#10005;</button></div><div id="svc-body"></div></div></div><div class="modal" id="m-chgpin"><div class="mbox"><div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px"><h3 style="font-size:17px;font-weight:700">Change PIN</h3><button onclick="closeM('m-chgpin')" style="background:var(--g100);border:none;width:30px;height:30px;border-radius:50%;cursor:pointer;color:var(--g600)">&#10005;</button></div><div style="margin-bottom:14px"><label style="font-size:12px;font-weight:600;color:var(--g600);margin-bottom:7px;display:block">Current PIN</label><div style="display:flex;gap:10px;justify-content:center"><input class="pbox" type="password" maxlength="1" id="cp1" oninput="pn('cp1','cp2')"/><input class="pbox" type="password" maxlength="1" id="cp2" oninput="pn('cp2','cp3')"/><input class="pbox" type="password" maxlength="1" id="cp3" oninput="pn('cp3','cp4')"/><input class="pbox" type="password" maxlength="1" id="cp4"/></div></div><div style="margin-bottom:20px"><label style="font-size:12px;font-weight:600;color:var(--g600);margin-bottom:7px;display:block">New PIN</label><div style="display:flex;gap:10px;justify-content:center"><input class="pbox" type="password" maxlength="1" id="np1" oninput="pn('np1','np2')"/><input class="pbox" type="password" maxlength="1" id="np2" oninput="pn('np2','np3')"/><input class="pbox" type="password" maxlength="1" id="np3" oninput="pn('np3','np4')"/><input class="pbox" type="password" maxlength="1" id="np4"/></div></div><button onclick="doChgPin()" class="btn-g" style="width:100%;padding:13px;border-radius:11px;font-size:15px">Update PIN</button></div></div><div class="modal" id="m-forgotpin"><div class="mbox"><div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px"><h3 style="font-size:17px;font-weight:700">Forgot PIN</h3><button onclick="closeM('m-forgotpin')" style="background:var(--g100);border:none;width:30px;height:30px;border-radius:50%;cursor:pointer;color:var(--g600)">&#10005;</button></div><div class="warn-box"><p style="font-size:13px;line-height:1.7;color:var(--g700)">A PIN reset request will be sent to admin. Once approved you will see a prompt to set a new PIN immediately from your Profile page.</p></div><button onclick="reqPinReset()" class="btn-g" style="width:100%;padding:13px;border-radius:11px;font-size:15px;margin-bottom:9px">Send Reset Request</button><button onclick="closeM('m-forgotpin')" style="width:100%;padding:12px;border-radius:11px;background:var(--g100);border:none;font-size:14px;font-weight:600;cursor:pointer;font-family:'Inter',sans-serif;color:var(--g600)">Cancel</button></div></div><div class="modal" id="m-setnewpin"><div class="mbox"><div style="text-align:center;margin-bottom:20px"><div style="width:50px;height:50px;background:var(--green-xl);border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 11px"><svg width="22" height="22" fill="none" stroke="var(--green-d)" stroke-width="2" viewBox="0 0 24 24"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg></div><h3 style="font-size:17px;font-weight:700;margin-bottom:4px">PIN Reset Approved</h3><p style="color:var(--g600);font-size:13px">Admin approved your request. Set your new 4-digit PIN now.</p></div><div style="margin-bottom:20px"><label style="font-size:12px;font-weight:600;color:var(--g600);margin-bottom:7px;display:block">New PIN</label><div style="display:flex;gap:10px;justify-content:center"><input class="pbox" type="password" maxlength="1" id="snp1" oninput="pn('snp1','snp2')"/><input class="pbox" type="password" maxlength="1" id="snp2" oninput="pn('snp2','snp3')"/><input class="pbox" type="password" maxlength="1" id="snp3" oninput="pn('snp3','snp4')"/><input class="pbox" type="password" maxlength="1" id="snp4"/></div></div><button onclick="saveNewPin()" class="btn-g" style="width:100%;padding:13px;border-radius:11px;font-size:15px">Save New PIN</button></div></div><!-- ADMIN: USER DETAILS MODAL --><div class="modal" id="m-user-details"><div class="mbox" style="max-height:90vh;overflow-y:auto"><div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;position:sticky;top:0;background:#fff;z-index:10;padding-bottom:10px;border-bottom:1px solid #f1f5f9"><h3 style="font-size:17px;font-weight:700">&#128100; User Details</h3><button onclick="closeUserDetails()" style="background:var(--g100);border:none;width:30px;height:30px;border-radius:50%;cursor:pointer;color:var(--g600)">&#10005;</button></div><div id="user-details-content"></div></div></div><!-- TRANSFER MODAL -->
-<div class="modal" id="m-transfer"><div class="mbox" style="max-height:90vh;overflow-y:auto"><div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px"><h3 style="font-size:17px;font-weight:700">&#128275; Transfer Money</h3><button onclick="closeM('m-transfer')" style="background:var(--g100);border:none;width:30px;height:30px;border-radius:50%;cursor:pointer;color:var(--g600)">&#10005;</button></div><div style="background:var(--green-xl);border-radius:12px;padding:12px;margin-bottom:16px;display:flex;justify-content:space-between;align-items:center"><div><div style="font-size:10px;color:var(--g500);font-weight:600">YOUR ACCOUNT NUMBER</div><div style="font-size:18px;font-weight:900;color:var(--green-d);letter-spacing:.05em" id="tr-my-acc">-</div><div style="font-size:11px;color:var(--g500);margin-top:2px" id="tr-my-name">-</div></div><button onclick="copyAccNum()" style="padding:6px 12px;background:var(--green);color:#fff;border:none;border-radius:8px;font-size:11px;font-weight:700;cursor:pointer;font-family:Inter,sans-serif">Copy</button></div><div id="tr-step-1"><div style="margin-bottom:13px"><label style="font-size:12px;font-weight:600;color:var(--g600);margin-bottom:6px;display:block">Recipient Account Number</label><input class="inp" id="tr-acc-inp" placeholder="Enter 11-digit account number" type="tel" maxlength="11" oninput="autoLookupTransferUser(this.value)" style="font-size:18px;font-weight:700;letter-spacing:.05em"/></div><div id="tr-user-found" style="display:none;background:#f0fdf4;border:1px solid #86efac;border-radius:11px;padding:12px;margin-bottom:13px"><div style="font-size:12px;color:var(--g500)">Sending to:</div><div style="font-size:15px;font-weight:800;color:var(--green-d);margin-top:2px" id="tr-found-name">-</div></div><div id="tr-user-notfound" style="display:none;background:#fef2f2;border:1px solid #fecaca;border-radius:11px;padding:10px;margin-bottom:13px;font-size:12px;color:#dc2626">Account not found. Check the number and try again.</div><div style="margin-bottom:13px"><label style="font-size:12px;font-weight:600;color:var(--g600);margin-bottom:6px;display:block">Amount (NGN)</label><input class="inp" id="tr-amount" placeholder="Enter amount" type="number" min="100" style="font-size:18px;font-weight:700"/></div><div style="margin-bottom:16px"><label style="font-size:12px;font-weight:600;color:var(--g600);margin-bottom:6px;display:block">Note (optional)</label><input class="inp" id="tr-note" placeholder="e.g. For lunch, Rent payment..."/></div><button onclick="initiateTransfer()" class="btn-g" style="width:100%;padding:13px;border-radius:11px;font-size:15px">Continue</button></div><div id="tr-step-2" style="display:none"><div style="background:#f8fafc;border-radius:12px;padding:14px;margin-bottom:16px"><div style="font-size:12px;color:var(--g500);margin-bottom:8px">Transfer Summary</div><div style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid #f1f5f9"><span style="font-size:13px;color:var(--g500)">To</span><span style="font-size:13px;font-weight:700" id="tr-sum-name">-</span></div><div style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid #f1f5f9"><span style="font-size:13px;color:var(--g500)">Account</span><span style="font-size:13px;font-weight:700" id="tr-sum-acc">-</span></div><div style="display:flex;justify-content:space-between;padding:8px 0"><span style="font-size:13px;color:var(--g500)">Amount</span><span style="font-size:16px;font-weight:900;color:var(--green-d)" id="tr-sum-amt">NGN 0</span></div></div><div style="margin-bottom:16px"><label style="font-size:12px;font-weight:600;color:var(--g600);margin-bottom:7px;display:block">Enter your PIN to confirm</label><div style="display:flex;gap:12px;justify-content:center"><input class="pbox" type="password" maxlength="1" id="trp1" oninput="pn('trp1','trp2')"/><input class="pbox" type="password" maxlength="1" id="trp2" oninput="pn('trp2','trp3')"/><input class="pbox" type="password" maxlength="1" id="trp3" oninput="pn('trp3','trp4')"/><input class="pbox" type="password" maxlength="1" id="trp4" oninput="if(this.value.length===1)confirmTransfer()"/></div></div><button onclick="confirmTransfer()" class="btn-g" style="width:100%;padding:13px;border-radius:11px;font-size:15px;margin-bottom:9px">Send Money</button><button onclick="document.getElementById('tr-step-1').style.display='block';document.getElementById('tr-step-2').style.display='none'" style="width:100%;padding:12px;border-radius:11px;background:var(--g100);border:none;font-size:14px;font-weight:600;cursor:pointer;font-family:Inter,sans-serif;color:var(--g600)">Back</button></div></div></div>
+<div class="modal" id="m-transfer"><div class="mbox" style="max-height:90vh;overflow-y:auto"><div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px"><h3 style="font-size:17px;font-weight:700">&#128275; Transfer Money</h3><button onclick="closeM('m-transfer')" style="background:var(--g100);border:none;width:30px;height:30px;border-radius:50%;cursor:pointer;color:var(--g600)">&#10005;</button></div>
+<!-- Transfer Type Tabs -->
+<div style="display:flex;gap:8px;margin-bottom:16px;background:#f8fafc;border-radius:12px;padding:4px">
+<button id="tr-tab-zmonie" onclick="switchTransferTab('zmonie')" style="flex:1;padding:9px;border-radius:9px;border:none;background:var(--green);color:#fff;font-size:12px;font-weight:700;cursor:pointer;font-family:Inter,sans-serif;transition:all .2s">&#128275; Zmonie User</button>
+<button id="tr-tab-bank" onclick="switchTransferTab('bank')" style="flex:1;padding:9px;border-radius:9px;border:none;background:transparent;color:var(--g500);font-size:12px;font-weight:600;cursor:pointer;font-family:Inter,sans-serif;transition:all .2s">&#127974; Other Bank</button>
+</div>
+
+<!-- ===== ZMONIE USER TAB ===== -->
+<div id="tr-zmonie-panel">
+<div style="background:var(--green-xl);border-radius:12px;padding:12px;margin-bottom:16px;display:flex;justify-content:space-between;align-items:center"><div><div style="font-size:10px;color:var(--g500);font-weight:600">YOUR ACCOUNT NUMBER</div><div style="font-size:18px;font-weight:900;color:var(--green-d);letter-spacing:.05em" id="tr-my-acc">-</div><div style="font-size:11px;color:var(--g500);margin-top:2px" id="tr-my-name">-</div></div><button onclick="copyAccNum()" style="padding:6px 12px;background:var(--green);color:#fff;border:none;border-radius:8px;font-size:11px;font-weight:700;cursor:pointer;font-family:Inter,sans-serif">Copy</button></div>
+<div id="tr-step-1"><div style="margin-bottom:13px"><label style="font-size:12px;font-weight:600;color:var(--g600);margin-bottom:6px;display:block">Recipient Account Number</label><input class="inp" id="tr-acc-inp" placeholder="Enter 11-digit account number" type="tel" maxlength="11" oninput="autoLookupTransferUser(this.value)" style="font-size:18px;font-weight:700;letter-spacing:.05em"/></div><div id="tr-user-found" style="display:none;background:#f0fdf4;border:1px solid #86efac;border-radius:11px;padding:12px;margin-bottom:13px"><div style="font-size:12px;color:var(--g500)">Sending to:</div><div style="font-size:15px;font-weight:800;color:var(--green-d);margin-top:2px" id="tr-found-name">-</div></div><div id="tr-user-notfound" style="display:none;background:#fef2f2;border:1px solid #fecaca;border-radius:11px;padding:10px;margin-bottom:13px;font-size:12px;color:#dc2626">Account not found. Check the number and try again.</div><div style="margin-bottom:13px"><label style="font-size:12px;font-weight:600;color:var(--g600);margin-bottom:6px;display:block">Amount (NGN)</label><input class="inp" id="tr-amount" placeholder="Enter amount" type="number" min="100" style="font-size:18px;font-weight:700"/></div><div style="margin-bottom:16px"><label style="font-size:12px;font-weight:600;color:var(--g600);margin-bottom:6px;display:block">Note (optional)</label><input class="inp" id="tr-note" placeholder="e.g. For lunch, Rent payment..."/></div><button onclick="initiateTransfer()" class="btn-g" style="width:100%;padding:13px;border-radius:11px;font-size:15px">Continue</button></div>
+<div id="tr-step-2" style="display:none"><div style="background:#f8fafc;border-radius:12px;padding:14px;margin-bottom:16px"><div style="font-size:12px;color:var(--g500);margin-bottom:8px">Transfer Summary</div><div style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid #f1f5f9"><span style="font-size:13px;color:var(--g500)">To</span><span style="font-size:13px;font-weight:700" id="tr-sum-name">-</span></div><div style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid #f1f5f9"><span style="font-size:13px;color:var(--g500)">Account</span><span style="font-size:13px;font-weight:700" id="tr-sum-acc">-</span></div><div style="display:flex;justify-content:space-between;padding:8px 0"><span style="font-size:13px;color:var(--g500)">Amount</span><span style="font-size:16px;font-weight:900;color:var(--green-d)" id="tr-sum-amt">NGN 0</span></div></div><div style="margin-bottom:16px"><label style="font-size:12px;font-weight:600;color:var(--g600);margin-bottom:7px;display:block">Enter your PIN to confirm</label><div style="display:flex;gap:12px;justify-content:center"><input class="pbox" type="password" maxlength="1" id="trp1" oninput="pn('trp1','trp2')"/><input class="pbox" type="password" maxlength="1" id="trp2" oninput="pn('trp2','trp3')"/><input class="pbox" type="password" maxlength="1" id="trp3" oninput="pn('trp3','trp4')"/><input class="pbox" type="password" maxlength="1" id="trp4" oninput="if(this.value.length===1)confirmTransfer()"/></div></div><button onclick="confirmTransfer()" class="btn-g" style="width:100%;padding:13px;border-radius:11px;font-size:15px;margin-bottom:9px">Send Money</button><button onclick="document.getElementById('tr-step-1').style.display='block';document.getElementById('tr-step-2').style.display='none'" style="width:100%;padding:12px;border-radius:11px;background:var(--g100);border:none;font-size:14px;font-weight:600;cursor:pointer;font-family:Inter,sans-serif;color:var(--g600)">Back</button></div>
+</div>
+
+<!-- ===== OTHER BANK TAB ===== -->
+<div id="tr-bank-panel" style="display:none">
+<!-- Step 1: Bank + Account -->
+<div id="tr-bank-step-1">
+<div style="background:#eff6ff;border:1px solid #bfdbfe;border-radius:12px;padding:11px 14px;margin-bottom:16px;display:flex;align-items:center;gap:10px">
+<div style="font-size:20px">&#127974;</div>
+<div style="font-size:12px;color:#1e40af;line-height:1.6">Send money to <strong>any Nigerian bank account</strong> via Paystack. A transfer fee applies.</div>
+</div>
+<div style="margin-bottom:13px">
+<label style="font-size:12px;font-weight:600;color:var(--g600);margin-bottom:6px;display:block">Select Bank</label>
+<select class="inp" id="ob-bank-sel" onchange="onBankOrAccChange()" style="font-size:14px">
+<option value="">-- Loading banks... --</option>
+</select>
+</div>
+<div style="margin-bottom:13px">
+<label style="font-size:12px;font-weight:600;color:var(--g600);margin-bottom:6px;display:block">Account Number <span style="font-weight:400;color:var(--g400)">(10 digits)</span></label>
+<input class="inp" id="ob-acc-num" placeholder="0000000000" type="tel" maxlength="10" oninput="onBankOrAccChange()" style="font-size:20px;font-weight:700;letter-spacing:.08em"/>
+</div>
+<!-- Account name result -->
+<div id="ob-name-loading" style="display:none;background:#f0fdf4;border:1px solid #86efac;border-radius:11px;padding:12px;margin-bottom:13px;text-align:center">
+<div style="font-size:12px;color:var(--g500)">&#8987; Verifying account...</div>
+</div>
+<div id="ob-name-found" style="display:none;background:#f0fdf4;border:1px solid #86efac;border-radius:11px;padding:12px;margin-bottom:13px">
+<div style="font-size:11px;color:var(--g500)">Account Name:</div>
+<div style="font-size:16px;font-weight:800;color:var(--green-d);margin-top:3px" id="ob-acc-name">-</div>
+<div style="font-size:10px;color:var(--g400);margin-top:3px">&#9989; Verified by Paystack</div>
+</div>
+<div id="ob-name-error" style="display:none;background:#fef2f2;border:1px solid #fecaca;border-radius:11px;padding:10px;margin-bottom:13px;font-size:12px;color:#dc2626" id="ob-name-error-msg">Could not verify account. Check the number and bank.</div>
+<div style="margin-bottom:13px">
+<label style="font-size:12px;font-weight:600;color:var(--g600);margin-bottom:6px;display:block">Amount (NGN)</label>
+<input class="inp" id="ob-amount" placeholder="Enter amount" type="number" min="100" style="font-size:18px;font-weight:700" oninput="updateBankTransferFee()"/>
+</div>
+<div id="ob-fee-box" style="display:none;background:#fff7ed;border:1px solid #fed7aa;border-radius:11px;padding:11px 14px;margin-bottom:13px">
+<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px">
+<span style="font-size:12px;color:var(--g500)">Transfer Amount</span>
+<span style="font-size:13px;font-weight:700" id="ob-fee-amount">NGN 0</span>
+</div>
+<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px">
+<span style="font-size:12px;color:var(--g500)">Transfer Fee</span>
+<span style="font-size:13px;font-weight:700;color:#c2410c" id="ob-fee-charge">NGN 0</span>
+</div>
+<div style="display:flex;justify-content:space-between;align-items:center;border-top:1px solid #fed7aa;padding-top:8px;margin-top:4px">
+<span style="font-size:12px;font-weight:700;color:var(--g700)">Total Deducted</span>
+<span style="font-size:14px;font-weight:900;color:#c2410c" id="ob-fee-total">NGN 0</span>
+</div>
+</div>
+<div style="margin-bottom:16px">
+<label style="font-size:12px;font-weight:600;color:var(--g600);margin-bottom:6px;display:block">Narration (optional)</label>
+<input class="inp" id="ob-narration" placeholder="e.g. Payment for goods"/>
+</div>
+<button onclick="initiateBankTransfer()" class="btn-g" style="width:100%;padding:13px;border-radius:11px;font-size:15px">Continue</button>
+</div>
+
+<!-- Step 2: Summary + PIN -->
+<div id="tr-bank-step-2" style="display:none">
+<div style="background:#f8fafc;border-radius:12px;padding:14px;margin-bottom:16px">
+<div style="font-size:12px;color:var(--g500);margin-bottom:10px;font-weight:600">&#127974; BANK TRANSFER SUMMARY</div>
+<div style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid #f1f5f9"><span style="font-size:12px;color:var(--g500)">To</span><span style="font-size:13px;font-weight:700" id="ob-sum-name">-</span></div>
+<div style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid #f1f5f9"><span style="font-size:12px;color:var(--g500)">Bank</span><span style="font-size:13px;font-weight:700" id="ob-sum-bank">-</span></div>
+<div style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid #f1f5f9"><span style="font-size:12px;color:var(--g500)">Account No.</span><span style="font-size:13px;font-weight:700" id="ob-sum-acc">-</span></div>
+<div style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid #f1f5f9"><span style="font-size:12px;color:var(--g500)">Amount</span><span style="font-size:14px;font-weight:800;color:var(--green-d)" id="ob-sum-amt">NGN 0</span></div>
+<div style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid #f1f5f9"><span style="font-size:12px;color:var(--g500)">Fee</span><span style="font-size:13px;font-weight:700;color:#c2410c" id="ob-sum-fee">NGN 0</span></div>
+<div style="display:flex;justify-content:space-between;padding:10px 0 2px"><span style="font-size:13px;font-weight:700;color:var(--g700)">Total</span><span style="font-size:16px;font-weight:900;color:#dc2626" id="ob-sum-total">NGN 0</span></div>
+</div>
+<div style="background:#fef3c7;border-radius:10px;padding:10px 14px;margin-bottom:16px;font-size:12px;color:#92400e">&#9888;&#65039; Bank transfers are processed by Paystack and may take up to 24 hours to reflect.</div>
+<div style="margin-bottom:16px"><label style="font-size:12px;font-weight:600;color:var(--g600);margin-bottom:7px;display:block">Enter your PIN to confirm</label><div style="display:flex;gap:12px;justify-content:center"><input class="pbox" type="password" maxlength="1" id="obp1" oninput="pn('obp1','obp2')"/><input class="pbox" type="password" maxlength="1" id="obp2" oninput="pn('obp2','obp3')"/><input class="pbox" type="password" maxlength="1" id="obp3" oninput="pn('obp3','obp4')"/><input class="pbox" type="password" maxlength="1" id="obp4" oninput="if(this.value.length===1)confirmBankTransfer()"/></div></div>
+<button onclick="confirmBankTransfer()" class="btn-g" style="width:100%;padding:13px;border-radius:11px;font-size:15px;margin-bottom:9px">&#9989; Confirm &amp; Send</button>
+<button onclick="document.getElementById('tr-bank-step-1').style.display='block';document.getElementById('tr-bank-step-2').style.display='none'" style="width:100%;padding:12px;border-radius:11px;background:var(--g100);border:none;font-size:14px;font-weight:600;cursor:pointer;font-family:Inter,sans-serif;color:var(--g600)">Back</button>
+</div>
+</div>
+
+</div></div>
 <!-- AIRTIME TO CASH MODAL -->
 <div class="modal" id="m-airtime-cash"><div class="mbox"><div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:4px"><h3 style="font-size:17px;font-weight:700">&#128176; Airtime to Cash</h3><button onclick="closeM('m-airtime-cash')" style="background:var(--g100);border:none;width:30px;height:30px;border-radius:50%;cursor:pointer;color:var(--g600)">&#10005;</button></div><p style="font-size:12px;color:var(--g400);margin-bottom:16px">Convert unused airtime to wallet cash. Rate: 70 kobo per NGN 1 airtime.</p><div style="margin-bottom:13px"><label style="font-size:12px;font-weight:600;color:var(--g600);margin-bottom:6px;display:block">Network</label><div style="display:grid;grid-template-columns:repeat(4,1fr);gap:6px"><button onclick="selAirtimeCashNet(this,'MTN')" style="padding:9px 2px;border:1.5px solid var(--g200);border-radius:9px;background:#fff;font-size:10px;font-weight:700;cursor:pointer;font-family:Inter,sans-serif">MTN</button><button onclick="selAirtimeCashNet(this,'Airtel')" style="padding:9px 2px;border:1.5px solid var(--g200);border-radius:9px;background:#fff;font-size:10px;font-weight:700;cursor:pointer;font-family:Inter,sans-serif">Airtel</button><button onclick="selAirtimeCashNet(this,'Glo')" style="padding:9px 2px;border:1.5px solid var(--g200);border-radius:9px;background:#fff;font-size:10px;font-weight:700;cursor:pointer;font-family:Inter,sans-serif">Glo</button><button onclick="selAirtimeCashNet(this,'9mobile')" style="padding:9px 2px;border:1.5px solid var(--g200);border-radius:9px;background:#fff;font-size:10px;font-weight:700;cursor:pointer;font-family:Inter,sans-serif">9mobile</button></div></div><div style="margin-bottom:13px"><label style="font-size:12px;font-weight:600;color:var(--g600);margin-bottom:6px;display:block">Airtime Amount (NGN)</label><input class="inp" id="ac-amount" placeholder="Minimum NGN 100" type="number" min="100" oninput="calcAirtimeCash()" style="font-size:18px;font-weight:700"/></div><div style="background:var(--green-xl);border-radius:12px;padding:14px;margin-bottom:16px"><div style="display:flex;justify-content:space-between;margin-bottom:4px"><span style="font-size:12px;color:var(--g500)">Airtime Value</span><span style="font-size:13px;font-weight:700" id="ac-airtime-val">NGN 0.00</span></div><div style="display:flex;justify-content:space-between;margin-bottom:4px"><span style="font-size:12px;color:var(--g500)">Rate</span><span style="font-size:12px;color:var(--g500)">70%</span></div><div style="display:flex;justify-content:space-between;border-top:1px dashed #86efac;padding-top:8px;margin-top:4px"><span style="font-size:13px;font-weight:700;color:var(--green-d)">You Receive</span><span style="font-size:18px;font-weight:900;color:var(--green-d)" id="ac-cash-val">NGN 0.00</span></div></div><div style="background:#fef3c7;border-radius:11px;padding:11px;margin-bottom:16px;font-size:12px;color:#92400e;line-height:1.7">Send your airtime to <strong>08068886569</strong> then submit this form. Admin will verify and credit your wallet within 10 minutes.</div><div style="margin-bottom:16px"><label style="font-size:12px;font-weight:600;color:var(--g600);margin-bottom:6px;display:block">Your Phone Number (the number sending airtime)</label><input class="inp" id="ac-phone" placeholder="08XXXXXXXXX" type="tel"/></div><button onclick="submitAirtimeCash()" class="btn-g" style="width:100%;padding:13px;border-radius:11px;font-size:15px">Submit Conversion Request</button></div></div>
 <!-- CURRENCY CONVERTER MODAL -->
@@ -286,8 +396,18 @@ console.error('[ZMONIE] Firebase SDK not loaded &mdash; check internet connectio
 throw new Error('Firebase SDK not loaded');
 }
 firebase.initializeApp(fbCfg);
-const auth=firebase.auth(),db=firebase.firestore(),gp=new firebase.auth.GoogleAuthProvider();
-let CU=null,UD=null,bHid=false,pSvc=null,allTx=[],si=0,sTimer=null;
+let auth, db, gp;
+try{
+auth=firebase.auth();db=firebase.firestore();
+try{ gp=new firebase.auth.GoogleAuthProvider(); }catch(gErr){ console.warn('GoogleAuthProvider unavailable:',gErr.message); gp=null; }
+}catch(initErr){
+console.error('[ZMONIE] Firebase init failed:',initErr.message);
+document.addEventListener('DOMContentLoaded',function(){
+var b=document.body;
+if(b)b.insertAdjacentHTML('afterbegin','<div style="position:fixed;top:0;left:0;right:0;background:#dc2626;color:#fff;padding:10px 16px;font-family:sans-serif;font-size:13px;text-align:center;z-index:99999">&#9888; Connection error. Please refresh the page or check your internet connection.</div>');
+});
+}
+let CU=null,UD=null,bHid=false,pSvc=null,allTx=[],si=0,sTimer=null,_pinApprovalUnsub=null;
 const SUPER_ADMIN_EMAIL='oladejiridwanopeyemi@gmail.com';
 const isAdmin=e=>(e||'').toLowerCase()===SUPER_ADMIN_EMAIL;
 function hp(p){let h=0;for(let c of p)h=(h<<5)-h+c.charCodeAt(0)|0;return h.toString(36);}
@@ -885,7 +1005,10 @@ const rfEl=document.getElementById('d-refearnings');if(rfEl&&UD)rfEl.innerHTML=f
 }
 async function loadDash(){
 if(!CU)return;
+loadNBadge();loadDashTx();loadSlider();startRealtimeSync();
+try{
 const s=await db.collection('users').doc(CU.uid).get();UD=s.data();
+if(!UD){UD={};}
 if(!UD.name||UD.name==='null'||UD.name==='User'||UD.name.trim()===''){
 if(CU.displayName){
 UD.name=CU.displayName;
@@ -933,9 +1056,9 @@ const _dcsel=document.getElementById('dash-currency-sel');
 if(_dcsel&&UD?.preferredCurrency) _dcsel.value=UD.preferredCurrency;
 const _pNgn=document.getElementById('pr-ngn-bal');
 if(_pNgn) _pNgn.textContent='NGN '+fmt(UD?.balance||0);
-loadNBadge();loadDashTx();loadSlider();startRealtimeSync();
 // Only run investment payouts for this user (loans handled globally by admin/global runner)
 setTimeout(()=>{runMonthlyInvestmentPayouts();},2000);
+}catch(e){console.warn('loadDash error:',e.message);}
 }
 function togBal(){bHid=!bHid;document.getElementById('d-bal').innerHTML=bHid?fmtCsym()+'****':fmtC(UD?.balance||0);}
 async function loadDashTx(){
@@ -958,11 +1081,22 @@ const txJson=JSON.stringify(tx).replace(/'/g,"\'");
 return`<div class="txr" onclick="openTxReceipt('${btoa(unescape(encodeURIComponent(JSON.stringify(tx))))}')"><div style="width:36px;height:36px;background:${cr?'var(--green-xl)':'var(--g100)'};border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0">${ic[tx.type]||'&#128179;'}</div><div style="flex:1;min-width:0;margin-left:10px"><div style="font-weight:600;font-size:13px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${tx.description||tx.type}</div><div style="font-size:11px;color:var(--g400);margin-top:2px">${fdate(tx.createdAt)}</div></div><div style="text-align:right;flex-shrink:0;margin-left:8px"><div style="font-weight:700;font-size:13px;color:${cr?'var(--ok)':'var(--err)'}">${cr?'+':'-'}NGN ${fmt(tx.amount)}</div><div class="chip ${tx.status==='success'?'c-ok':'c-warn'}" style="margin-top:2px">${tx.status||'pending'}</div><div style="font-size:10px;color:var(--g400);margin-top:1px">&#128196; receipt</div></div></div>`;
 }
 function loadSlider(){
-db.collection('promos').where('active','==',true).onSnapshot(snap=>{
-let slides=snap.empty?defSlides():snap.docs.map(d=>({id:d.id,...d.data()}));
-if(!snap.empty)slides=slides.sort((a,b)=>(a.order||0)-(b.order||0));
-renderSlider(slides);
-},(err)=>{renderSlider(defSlides());});
+renderSlider(defSlides());
+try{
+db.collection('promos').where('active','==',true).onSnapshot(function(snap){
+if(!snap||snap.empty){renderSlider(defSlides());return;}
+var slides=snap.docs.map(function(d){return Object.assign({id:d.id},d.data());});
+slides.sort(function(a,b){return (a.order||0)-(b.order||0);});
+if(slides.length)renderSlider(slides);
+else renderSlider(defSlides());
+},function(err){
+console.warn('Promo load error:',err.message);
+renderSlider(defSlides());
+});
+}catch(e){
+console.warn('loadSlider error:',e.message);
+renderSlider(defSlides());
+}
 }
 function defSlides(){return[
 {title:'Buy Data at Best Rates',desc:'Discounted data on all networks',icon:'&#127760;',bg:'linear-gradient(135deg,#15803d,#16a34a)',cta:'Buy Now'},
@@ -1011,8 +1145,8 @@ const qk=(amts)=>`<div style="display:flex;gap:6px;margin-top:8px">${amts.map(a=
 if(t==='airtime')return`${nbtns}<div style="margin-bottom:13px"><label style="font-size:12px;font-weight:600;color:var(--g600);margin-bottom:6px;display:block">Phone Number</label><input class="inp" id="s-phone" type="tel" placeholder="080XXXXXXXX"/></div><div style="margin-bottom:20px"><label style="font-size:12px;font-weight:600;color:var(--g600);margin-bottom:6px;display:block">Amount</label><input class="inp" id="s-amt" type="number" placeholder="100"/>${qk([100,200,500,1000])}</div><button onclick="procSvc('airtime')" class="btn-g" style="width:100%;padding:13px;border-radius:11px;font-size:15px">Buy Airtime</button>`;
 if(t==='data')return`${nbtns}<div style="margin-bottom:13px"><label style="font-size:12px;font-weight:600;color:var(--g600);margin-bottom:6px;display:block">Phone Number</label><input class="inp" id="s-phone" type="tel" placeholder="080XXXXXXXX" oninput="fetchDataPlans()"/></div><div style="margin-bottom:4px"><label style="font-size:12px;font-weight:600;color:var(--g600);margin-bottom:6px;display:block">Data Plan</label><select class="inp" id="s-amt" onchange="updateDataAmt(this)"><option value="">-- Select network first --</option></select></div><div id="data-loading" style="display:none;font-size:12px;color:var(--g500);padding:6px 2px;margin-bottom:8px">Fetching plans...</div><div id="data-info" style="display:none;background:var(--green-xl);border:1px solid #bbf7d0;border-radius:9px;padding:10px 12px;margin-bottom:14px;font-size:12px;color:var(--green-d)"></div><button onclick="procSvc('data')" class="btn-g" style="width:100%;padding:13px;border-radius:11px;font-size:15px;margin-top:6px">Buy Data</button>`;
 if(t==='cable')return`<div style="display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-bottom:13px">${['DSTV','GOtv','StarTimes','Showmax'].map(p=>`<button onclick="selCable(this)" style="padding:9px 1px;border:1.5px solid var(--g200);border-radius:9px;background:#fff;font-size:10px;font-weight:700;cursor:pointer;font-family:'Inter',sans-serif">${p}</button>`).join('')}</div>`+`<div style="margin-bottom:13px"><label style="font-size:12px;font-weight:600;color:var(--g600);margin-bottom:6px;display:block">Smart Card Number</label><input class="inp" id="s-phone" placeholder="e.g. 1212121212"/></div><div style="margin-bottom:4px"><label style="font-size:12px;font-weight:600;color:var(--g600);margin-bottom:6px;display:block">Package</label><select class="inp" id="s-amt" onchange="updateDataAmt(this)"><option value="">&mdash; Select provider first &mdash;</option></select></div><div id="data-loading" style="display:none;font-size:12px;color:var(--g500);padding:6px 2px;margin-bottom:8px">Loading packages...</div><div id="data-info" style="display:none;background:var(--green-xl);border:1px solid #bbf7d0;border-radius:9px;padding:10px 12px;margin-bottom:14px;font-size:12px;color:var(--green-d)"></div><button onclick="procSvc('cable')" class="btn-g" style="width:100%;padding:13px;border-radius:11px;font-size:15px;margin-top:6px">Pay Subscription</button>`;
-if(t==='electricity')return`<div style="margin-bottom:13px"><label style="font-size:12px;font-weight:600;color:var(--g600);margin-bottom:6px;display:block">Distribution Company</label><select class="inp" id="s-phone"><option value="EKEDC">EKEDC - Eko Electric</option><option value="IKEDC">IKEDC - Ikeja Electric</option><option value="AEDC">AEDC - Abuja Electric</option><option value="IBEDC">IBEDC - Ibadan Electric</option><option value="PHEDC">PHEDC - Port Harcourt Electric</option><option value="EEDC">EEDC - Enugu Electric</option><option value="KEDC">KEDC - Kano Electric</option><option value="JEDC">JEDC - Jos Electric</option></select></div>
-<div style="margin-bottom:13px"><label style="font-size:12px;font-weight:600;color:var(--g600);margin-bottom:6px;display:block">Meter Type</label><select class="inp" id="s-meter-type"><option value="prepaid">Prepaid</option><option value="postpaid">Postpaid</option></select></div><div style="margin-bottom:13px"><label style="font-size:12px;font-weight:600;color:var(--g600);margin-bottom:6px;display:block">Meter Number</label><input class="inp" id="s-meter" placeholder="Meter number"/></div><div style="margin-bottom:20px"><label style="font-size:12px;font-weight:600;color:var(--g600);margin-bottom:6px;display:block">Amount</label><input class="inp" id="s-amt" type="number" placeholder="1000"/>${qk([1000,2000,5000,10000])}</div><button onclick="procSvc('electricity')" class="btn-g" style="width:100%;padding:13px;border-radius:11px;font-size:15px">Pay Electricity</button>`;
+if(t==='electricity')return`<div style="margin-bottom:13px"><label style="font-size:12px;font-weight:600;color:var(--g600);margin-bottom:6px;display:block">Distribution Company</label><select class="inp" id="s-phone" onchange="onElecDiscoChange()"><option value="01">Eko Electric - EKEDC (PHCN)</option><option value="02">Ikeja Electric - IKEDC (PHCN)</option><option value="03">Abuja Electric - AEDC</option><option value="04">Kano Electric - KEDC</option><option value="05">Portharcourt Electric - PHEDC</option><option value="06">Jos Electric - JEDC</option><option value="07">Ibadan Electric - IBEDC</option><option value="08">Kaduna Electric - KAEDC</option><option value="09">Enugu Electric - EEDC</option><option value="10">Benin Electric - BEDC</option><option value="11">Yola Electric - YEDC</option><option value="12">ABA Electric - APLE</option></select></div>
+<div style="margin-bottom:13px"><label style="font-size:12px;font-weight:600;color:var(--g600);margin-bottom:6px;display:block">Meter Type</label><select class="inp" id="s-meter-type"><option value="01">Prepaid</option><option value="02">Postpaid</option></select></div><div style="margin-bottom:8px"><label style="font-size:12px;font-weight:600;color:var(--g600);margin-bottom:6px;display:block">Meter Number</label><div style="display:flex;gap:8px"><input class="inp" id="s-meter" placeholder="Enter meter number" style="flex:1" oninput="clearElecVerify()"/><button onclick="verifyElecMeter()" id="elec-verify-btn" style="padding:10px 14px;background:var(--green-d);color:#fff;border:none;border-radius:10px;font-size:12px;font-weight:700;cursor:pointer;white-space:nowrap;font-family:Inter,sans-serif">Verify</button></div></div><div id="elec-verify-result" style="display:none;margin-bottom:12px;padding:10px 13px;border-radius:10px;background:#d1fae5;border:1px solid #86efac;font-size:13px;font-weight:600;color:#065f46"></div><div style="margin-bottom:20px"><label style="font-size:12px;font-weight:600;color:var(--g600);margin-bottom:6px;display:block">Amount (NGN) — Min: 1,000</label><input class="inp" id="s-amt" type="number" placeholder="e.g. 2000" min="1000" max="200000"/>${qk([1000,2000,5000,10000])}</div><button onclick="procSvc('electricity')" class="btn-g" style="width:100%;padding:13px;border-radius:11px;font-size:15px">&#128161; Pay Electricity Bill</button>`;
 if(t==='loan')return`<div class="info-box"><p style="font-size:13px;color:var(--green-d);line-height:1.6">Quick loans reviewed within 24 hours. Amount credited to wallet on approval.</p></div><div style="margin-bottom:13px"><label style="font-size:12px;font-weight:600;color:var(--g600);margin-bottom:6px;display:block">Loan Amount</label><select class="inp" id="s-amt"><option value="5000">NGN 5,000</option><option value="10000">NGN 10,000</option><option value="20000">NGN 20,000</option><option value="50000">NGN 50,000</option><option value="100000">NGN 100,000</option><option value="200000">NGN 200,000</option><option value="500000">NGN 500,000</option></select></div><div style="margin-bottom:13px"><label style="font-size:12px;font-weight:600;color:var(--g600);margin-bottom:6px;display:block">Purpose</label><input class="inp" id="s-phone" placeholder="Brief purpose of loan"/></div><div style="margin-bottom:20px"><label style="font-size:12px;font-weight:600;color:var(--g600);margin-bottom:6px;display:block">Repayment Period</label><select class="inp" id="s-meter"><option>7 days</option><option>14 days</option><option>30 days</option></select></div><button onclick="procLoan()" class="btn-g" style="width:100%;padding:13px;border-radius:11px;font-size:15px">Apply for Loan</button>`;
 if(t==='result')return`<div class="info-box"><p style="font-size:13px;color:var(--green-d);line-height:1.6">Check WAEC or JAMB results. PIN delivered instantly.</p></div><div style="margin-bottom:13px"><label style="font-size:12px;font-weight:600;color:var(--g600);margin-bottom:6px;display:block">Exam Type</label><select class="inp" id="s-phone" onchange="onExamTypeChange()"><option value="WAEC">WAEC - West African Examinations Council</option><option value="JAMB">JAMB - Joint Admissions and Matriculation Board</option></select></div><div id="jamb-extra-fields" style="display:none"><div style="margin-bottom:13px"><label style="font-size:12px;font-weight:600;color:var(--g600);margin-bottom:6px;display:block">JAMB Service Type</label><select class="inp" id="s-meter" onchange="fetchJAMBPlans()"><option value="UTME">UTME</option><option value="DE">Direct Entry (DE)</option><option value="RESULT">Result Checker</option></select></div><div style="margin-bottom:13px"><label style="font-size:12px;font-weight:600;color:var(--g600);margin-bottom:6px;display:block">JAMB Profile ID <span style="font-size:10px;color:var(--g400)">(optional)</span></label><input class="inp" id="s-profileid" placeholder="Only needed for some JAMB services"/></div></div><div id="data-loading" style="display:none;text-align:center;padding:10px;color:var(--g400);font-size:12px"></div><div style="margin-bottom:20px"><label style="font-size:12px;font-weight:600;color:var(--g600);margin-bottom:6px;display:block">Result Checker PIN</label><select class="inp" id="s-amt"><option value="">Loading price...</option></select><div id="data-info" style="display:none;margin-top:8px;padding:10px;border-radius:8px;background:var(--green-xl);font-size:12px"></div></div><button onclick="procSvc('result')" class="btn-g" style="width:100%;padding:13px;border-radius:11px;font-size:15px">Buy Result Checker</button>`;
 }
@@ -1066,11 +1200,19 @@ extra={smartcard,serviceId:validProviders.includes(provider)?provider:'dstv',var
 }else if(type==='electricity'){
 const meter=document.getElementById('s-meter')?.value?.trim();
 if(!meter){toast('Enter your meter number');return;}
-const disco=document.getElementById('s-phone')?.value||'';
+if(meter.length<6){toast('Meter number seems too short. Please check.');return;}
+const disco=document.getElementById('s-phone')?.value||'01';
 if(!disco){toast('Select your electricity company');return;}
-const meterType=document.getElementById('s-meter-type')?.value||'prepaid';
-const custPhone=CU?.phoneNumber||UD?.phone||'08000000000';
-extra={meter,serviceId:disco,meterType,planName:disco+' NGN '+fmt(amt),custPhone};
+// Warn if meter not verified, but allow user to proceed
+if(!_elecVerified){
+  const goAhead=confirm('Meter not verified. Are you sure the meter number is correct?\n\nTap OK to proceed anyway, or Cancel to verify first.');
+  if(!goAhead)return;
+}
+const meterType=document.getElementById('s-meter-type')?.value||'01';
+const custPhone=UD?.phone||CU?.phoneNumber||'08011111111';
+const discoNames={'01':'Eko Electric (EKEDC)','02':'Ikeja Electric (IKEDC)','03':'Abuja Electric (AEDC)','04':'Kano Electric (KEDC)','05':'PH Electric (PHEDC)','06':'Jos Electric (JEDC)','07':'Ibadan Electric (IBEDC)','08':'Kaduna Electric (KAEDC)','09':'Enugu Electric (EEDC)','10':'Benin Electric (BEDC)','11':'Yola Electric (YEDC)','12':'ABA Electric (APLE)'};
+const discoLabel=discoNames[disco]||('DISCO '+disco);
+extra={meter,serviceId:disco,meterType,planName:discoLabel+' - NGN '+fmt(amt),custPhone,customerName:_elecCustomerName||''};
 }else if(type==='result'){
 const examType=document.getElementById('s-phone')?.value||'WAEC';
 const custPhone=CU?.phoneNumber||UD?.phone||'08000000000';
@@ -1260,6 +1402,7 @@ cable           : 'APICableTVV1.asp',
 cableVerify     : 'APIVerifyCableTVV1.asp',
 electricity     : 'APIElectricityV1.asp',
 electricityVerify: 'APIVerifyElectricityV1.asp',
+electricityType : 'APIElectricityTypeV2.asp',
 balance         : 'APIWalletBalance.asp',
 dataPlans       : 'APIDataBundlePlansV1.asp',
 cablePlans      : 'APICableTVPackagesV2.asp',
@@ -1350,7 +1493,7 @@ const st   = String(res.status||res.Status||res.statuscode||res.StatusCode||res.
 const sc   = String(res.statuscode||res.StatusCode||'').toLowerCase();
 const msg  = String(res.message||res.Message||res.description||'').toLowerCase();
 const NBS_SUCCESS_CODES   = ['100','200','00','0'];
-const NBS_SUCCESS_STATUSES= ['order_received','order_queued','successful','success','completed','delivered'];
+const NBS_SUCCESS_STATUSES= ['order_received','order_queued','order_completed','successful','success','completed','delivered','transaction successful'];
 const NBS_FAIL_STATUSES   = ['invalid','missing','error','failed','unauthorized','insufficient','unknown'];
 const codeOk   = NBS_SUCCESS_CODES.some(c => sc===c);
 const statusOk = NBS_SUCCESS_STATUSES.some(s => st.includes(s));
@@ -1882,14 +2025,29 @@ if(profileId) params.ProfileID = profileId;
 return apiFetch('jamb', params, { type:'result', amount, userId:CU?.uid||'' });
 }
 async function apiElectricity(meter, disco, meterType, amount, phone, reqId){
+// Nellobyte/ClubKonnect API: ElectricCompany=01-12, MeterType=01(prepaid)/02(postpaid)
+const mType = String(meterType);
+// Normalise legacy text values
+const mTypeCode = (mType==='prepaid'||mType==='1'||mType==='01') ? '01' : (mType==='postpaid'||mType==='2'||mType==='02') ? '02' : mType;
 return apiFetch('electricity',{
-ElectricCompany: disco,
-MeterType      : meterType,
-MeterNo        : meter,
+ElectricCompany: String(disco),
+MeterType      : mTypeCode,
+MeterNo        : String(meter).trim(),
 Amount         : amount,
-PhoneNo        : phone,
-RequestID      : reqId
+PhoneNo        : phone||UD?.phone||'08011111111',
+RequestID      : reqId,
+CallBackURL    : API_CFG.callbackUrl||''
 },{ type:'electricity', amount, userId:CU?.uid||'' });
+}
+
+async function apiVerifyElecMeter(meter, disco, meterType){
+const mType = String(meterType);
+const mTypeCode = (mType==='prepaid'||mType==='01') ? '01' : (mType==='postpaid'||mType==='02') ? '02' : mType;
+return apiFetch('electricityVerify',{
+ElectricCompany: String(disco),
+MeterNo        : String(meter).trim(),
+MeterType      : mTypeCode
+},{});
 }
 async function checkTxStatus(requestId){
 return apiFetch('status',{ RequestID:requestId },{ type:'status_check' });
@@ -2100,7 +2258,6 @@ if(!ex.empty){toast('You already have a pending PIN reset request.');closeM('m-f
 await db.collection('pinRequests').add({userId:CU.uid,email:CU.email,name:UD?.name,phone:UD?.phone||'',status:'pending',createdAt:firebase.firestore.FieldValue.serverTimestamp()});
 closeM('m-forgotpin');toast('Reset request sent! Admin will review within 24 hours.');
 }
-let _pinApprovalUnsub=null;
 function startPinApprovalListener(uid){
 if(_pinApprovalUnsub)_pinApprovalUnsub();
 _pinApprovalUnsub=db.collection('pinRequests').where('userId','==',uid).where('status','==','approved').onSnapshot(async snap=>{
@@ -2231,6 +2388,7 @@ return false;
 });
 if(alreadyRan){console.log('Deductions already ran today');return;}
 }catch(e){console.warn('Lock error:',e.message);return;}
+try{
 const activeLoans = await db.collection('loans').where('status','==','active').get();
 if(activeLoans.empty) return;
 let processed = 0;
@@ -2302,6 +2460,10 @@ read: false, createdAt: firebase.firestore.FieldValue.serverTimestamp()
 }
 }
 if(processed > 0) toast('Daily deductions: '+processed+' payment(s) processed for all users.');
+}catch(e){
+console.warn('Loan deduction run failed, releasing lock for retry:',e.message);
+try{ await db.collection('systemLocks').doc('dailyLoanDeduction').delete(); }catch(e2){}
+}
 }
 async function reverseTransaction(txId,userId,amount,userName,txType){
 // For credits (money given to user) &rarr; reverse = DEDUCT
@@ -2482,7 +2644,7 @@ _th+='</div>';
 _th+='</div>';
 el.innerHTML=_th;
 }
-if(tab==='funding')el.innerHTML=`<div class="card" style="overflow:hidden"><div style="padding:13px 16px;border-bottom:1px solid #f8fafc;font-weight:700;font-size:14px">Funding Requests</div>${AD.funds.filter(f=>f.status==='pending').length?AD.funds.filter(f=>f.status==='pending').map(f=>`<div class="txr" style="flex-wrap:wrap;gap:8px"><div style="flex:1;min-width:0"><div style="font-weight:600;font-size:13px">${f.email||f.userId}</div><div style="font-size:11px;color:var(--g400)">NGN ${fmt(f.amount)} - ${fdate(f.createdAt)}</div></div><div style="display:flex;gap:6px"><button onclick="appFund('${f.id}','${f.userId}',${f.amount})" style="padding:6px 11px;background:#dcfce7;border:1px solid #86efac;color:#15803d;border-radius:8px;font-size:12px;font-weight:700;cursor:pointer;font-family:'Inter',sans-serif">Approve</button><button onclick="rejFund('${f.id}')" style="padding:6px 11px;background:#fee2e2;border:1px solid #fca5a5;color:#dc2626;border-radius:8px;font-size:12px;font-weight:700;cursor:pointer;font-family:'Inter',sans-serif">Reject</button></div></div>`).join(''):'<div style="padding:28px;text-align:center;color:var(--g400);font-size:13px">No pending funding requests</div>'}</div>`;
+if(tab==='funding')el.innerHTML=`<div class="card" style="overflow:hidden"><div style="padding:13px 16px;border-bottom:1px solid #f8fafc;font-weight:700;font-size:14px">Funding Requests</div>${AD.funds.filter(f=>f.status==='pending').length?AD.funds.filter(f=>f.status==='pending').map(f=>`<div style="padding:13px 16px;border-bottom:1px solid #f8fafc"><div style="display:flex;align-items:flex-start;justify-content:space-between;gap:8px;margin-bottom:8px"><div style="flex:1;min-width:0;display:flex;gap:10px;align-items:flex-start">${f.receiptBase64?`<img src="${f.receiptBase64}" onclick="openFundVerifyModal('${f.id}')" style="width:46px;height:46px;border-radius:8px;object-fit:cover;border:1px solid #e2e8f0;flex-shrink:0;cursor:pointer" onerror="this.style.display='none'"/>`:''}<div style="flex:1;min-width:0"><div style="font-weight:700;font-size:13px">${f.userName||f.email||f.userId}</div><div style="font-size:12px;font-weight:800;color:#15803d;margin-top:2px">NGN ${fmt(f.amount)}</div><div style="font-size:11px;color:var(--g400);margin-top:2px">${f.bankAccount||''} &bull; ${f.senderName||''}</div><div style="font-size:11px;color:var(--g400)">${fdate(f.createdAt)}</div></div></div><span style="font-size:10px;font-weight:700;padding:3px 9px;border-radius:50px;background:#fef3c7;color:#92400e;white-space:nowrap">${(f.status||'pending').toUpperCase()}</span></div><button onclick="openFundVerifyModal('${f.id}')" style="width:100%;padding:9px;background:#eff6ff;border:1px solid #93c5fd;color:#1d4ed8;border-radius:8px;font-size:12px;font-weight:700;cursor:pointer;font-family:'Inter',sans-serif">&#128269; Review &amp; Verify Receipt</button></div>`).join(''):'<div style="padding:28px;text-align:center;color:var(--g400);font-size:13px">No pending funding requests</div>'}</div>`;
 if(tab==='withdrawals')loadAdminWithdrawals(el);
 if(tab==='pins')el.innerHTML=`<div class="card" style="overflow:hidden"><div style="padding:13px 16px;border-bottom:1px solid #f8fafc;font-weight:700;font-size:14px">PIN Reset Requests</div><div style="padding:10px 16px;background:var(--green-xl);border-bottom:1px solid #bbf7d0"><p style="font-size:12px;color:var(--green-d)">Approving clears the user's PIN. They will be prompted to set a new PIN from their Profile page immediately.</p></div>${AD.pins.length?AD.pins.map(r=>`<div class="txr" style="flex-wrap:wrap;gap:8px"><div style="flex:1;min-width:0"><div style="font-weight:600;font-size:13px">${r.name||'User'}</div><div style="font-size:11px;color:var(--g400)">${r.email} - ${r.phone||'No phone'} - ${fdate(r.createdAt)}</div></div><div style="display:flex;gap:6px"><button onclick="appPin('${r.id}','${r.userId}')" style="padding:6px 11px;background:#dcfce7;border:1px solid #86efac;color:#15803d;border-radius:8px;font-size:12px;font-weight:700;cursor:pointer;font-family:'Inter',sans-serif">Approve</button><button onclick="rejPin('${r.id}','${r.userId}')" style="padding:6px 11px;background:#fee2e2;border:1px solid #fca5a5;color:#dc2626;border-radius:8px;font-size:12px;font-weight:700;cursor:pointer;font-family:'Inter',sans-serif">Reject</button></div></div>`).join(''):'<div style="padding:28px;text-align:center;color:var(--g400);font-size:13px">No pending PIN requests</div>'}</div>`;
 if(tab==='promos')loadAdminPromos(el);
@@ -2761,6 +2923,7 @@ document.getElementById('tr-user-found').style.display='block';
 }
 function openTransfer(){
 if(!CU){goPg('pg-login');return;}
+// Reset Zmonie tab
 document.getElementById('tr-step-1').style.display='block';
 document.getElementById('tr-step-2').style.display='none';
 document.getElementById('tr-acc-inp').value='';
@@ -2769,6 +2932,16 @@ document.getElementById('tr-note').value='';
 document.getElementById('tr-user-found').style.display='none';
 const _nf=document.getElementById('tr-user-notfound');if(_nf)_nf.style.display='none';
 _transferTarget=null;
+// Reset Other Bank tab
+document.getElementById('tr-bank-step-1').style.display='block';
+document.getElementById('tr-bank-step-2').style.display='none';
+const obAcc=document.getElementById('ob-acc-num');if(obAcc)obAcc.value='';
+const obAmt=document.getElementById('ob-amount');if(obAmt)obAmt.value='';
+const obNarr=document.getElementById('ob-narration');if(obNarr)obNarr.value='';
+['ob-name-found','ob-name-error','ob-name-loading','ob-fee-box'].forEach(id=>{const e=document.getElementById(id);if(e)e.style.display='none';});
+_obResolvedName='';_obBankCode='';_obBankName='';
+// Default to Zmonie tab
+switchTransferTab('zmonie');
 const myAcc=UD?.phone||'';
 document.getElementById('tr-my-acc').textContent=myAcc||'-';
 document.getElementById('tr-my-name').textContent=UD?.name||'';
@@ -2812,6 +2985,164 @@ batch.set(db.collection('transactions').doc(),{userId:_transferTarget.uid,type:'
 await batch.commit();
 closeM('m-transfer');_transferTarget=null;await loadUser();
 toast('NGN '+fmt(amt)+' sent successfully!');
+}catch(e){toast('Transfer failed: '+friendlyError(e));}
+}
+
+// ============================================================
+// OTHER BANK TRANSFER (Paystack)
+// ============================================================
+var _obBankList=[];var _obResolvedName='';var _obBankCode='';var _obBankName='';var _obAccLookupTimer=null;var _obTransferFee=0;
+function switchTransferTab(tab){
+var zm=document.getElementById('tr-zmonie-panel');
+var bk=document.getElementById('tr-bank-panel');
+var tbZ=document.getElementById('tr-tab-zmonie');
+var tbB=document.getElementById('tr-tab-bank');
+if(tab==='zmonie'){
+zm.style.display='block';bk.style.display='none';
+tbZ.style.background='var(--green)';tbZ.style.color='#fff';
+tbB.style.background='transparent';tbB.style.color='var(--g500)';
+}else{
+zm.style.display='none';bk.style.display='block';
+tbB.style.background='var(--green)';tbB.style.color='#fff';
+tbZ.style.background='transparent';tbZ.style.color='var(--g500)';
+if(!_obBankList.length)loadPaystackBanksList();
+}
+}
+async function loadPaystackBanksList(){
+var sel=document.getElementById('ob-bank-sel');
+if(!sel)return;
+sel.innerHTML='<option value="">-- Loading banks... --</option>';
+try{
+if(!_psConfig)await loadPaystackConfig();
+var sk=_psConfig?.secretKey||'';
+if(!sk){sel.innerHTML='<option value="">-- Bank transfer not configured --</option>';return;}
+var r=await fetch('https://api.paystack.co/bank?currency=NGN&perPage=100',{headers:{Authorization:'Bearer '+sk}});
+var d=await r.json();
+if(!d.status||!d.data){sel.innerHTML='<option value="">-- Could not load banks --</option>';return;}
+_obBankList=d.data;
+sel.innerHTML='<option value="">-- Select Bank --</option>'+d.data.map(b=>'<option value="'+b.code+'">'+b.name+'</option>').join('');
+}catch(e){sel.innerHTML='<option value="">-- Error loading banks --</option>';console.warn('Bank list error:',e);}
+}
+function onBankOrAccChange(){
+var sel=document.getElementById('ob-bank-sel');
+var acc=(document.getElementById('ob-acc-num').value||'').replace(/\D/g,'');
+_obBankCode=sel?.value||'';
+_obBankName=sel?.options[sel.selectedIndex]?.text||'';
+_obResolvedName='';
+document.getElementById('ob-name-found').style.display='none';
+document.getElementById('ob-name-error').style.display='none';
+document.getElementById('ob-name-loading').style.display='none';
+clearTimeout(_obAccLookupTimer);
+if(_obBankCode&&acc.length===10){
+document.getElementById('ob-name-loading').style.display='block';
+_obAccLookupTimer=setTimeout(()=>resolvePaystackAccount(acc,_obBankCode),600);
+}
+}
+async function resolvePaystackAccount(accNum,bankCode){
+try{
+if(!_psConfig)await loadPaystackConfig();
+var sk=_psConfig?.secretKey||'';
+if(!sk){toast('Bank transfer not configured. Contact admin.');document.getElementById('ob-name-loading').style.display='none';return;}
+var r=await fetch('https://api.paystack.co/bank/resolve?account_number='+accNum+'&bank_code='+bankCode,{headers:{Authorization:'Bearer '+sk}});
+var d=await r.json();
+document.getElementById('ob-name-loading').style.display='none';
+if(d.status&&d.data?.account_name){
+_obResolvedName=d.data.account_name;
+document.getElementById('ob-acc-name').textContent=_obResolvedName;
+document.getElementById('ob-name-found').style.display='block';
+document.getElementById('ob-name-error').style.display='none';
+updateBankTransferFee();
+}else{
+_obResolvedName='';
+document.getElementById('ob-name-found').style.display='none';
+document.getElementById('ob-name-error').style.display='block';
+document.getElementById('ob-name-error').textContent=d.message||'Could not verify account. Check the number and bank.';
+}
+}catch(e){
+document.getElementById('ob-name-loading').style.display='none';
+document.getElementById('ob-name-error').style.display='block';
+document.getElementById('ob-name-error').textContent='Network error. Check connection and try again.';
+}
+}
+async function getBankTransferFee(){
+try{
+if(!_psConfig)await loadPaystackConfig();
+return parseFloat(_psConfig?.bankTransferFee||50);
+}catch(e){return 50;}
+}
+async function updateBankTransferFee(){
+var amt=parseFloat(document.getElementById('ob-amount')?.value||0);
+if(!amt||amt<1){document.getElementById('ob-fee-box').style.display='none';return;}
+var fee=await getBankTransferFee();
+_obTransferFee=fee;
+document.getElementById('ob-fee-box').style.display='block';
+document.getElementById('ob-fee-amount').textContent='NGN '+fmt(amt);
+document.getElementById('ob-fee-charge').textContent='NGN '+fmt(fee);
+document.getElementById('ob-fee-total').textContent='NGN '+fmt(amt+fee);
+}
+async function initiateBankTransfer(){
+if(!_psConfig)await loadPaystackConfig();
+var btEnabled=_psConfig?.bankTransferEnabled===true;
+if(!btEnabled){toast('Bank transfers are currently not available. Contact admin.');return;}
+var acc=(document.getElementById('ob-acc-num').value||'').trim();
+if(!_obBankCode){toast('Please select a bank');return;}
+if(acc.length!==10){toast('Account number must be exactly 10 digits');return;}
+if(!_obResolvedName){toast('Please wait for account verification to complete');return;}
+var amt=parseFloat(document.getElementById('ob-amount').value||0);
+if(!amt||amt<100){toast('Minimum transfer is NGN 100');return;}
+var fee=await getBankTransferFee();
+_obTransferFee=fee;
+var total=amt+fee;
+if(total>(UD?.balance||0)){toast('Insufficient balance. You need NGN '+fmt(total)+' (including NGN '+fmt(fee)+' fee)');return;}
+document.getElementById('ob-sum-name').textContent=_obResolvedName;
+document.getElementById('ob-sum-bank').textContent=_obBankName;
+document.getElementById('ob-sum-acc').textContent=acc;
+document.getElementById('ob-sum-amt').textContent='NGN '+fmt(amt);
+document.getElementById('ob-sum-fee').textContent='NGN '+fmt(fee);
+document.getElementById('ob-sum-total').textContent='NGN '+fmt(total);
+['obp1','obp2','obp3','obp4'].forEach(id=>{const el=document.getElementById(id);if(el)el.value='';});
+document.getElementById('tr-bank-step-1').style.display='none';
+document.getElementById('tr-bank-step-2').style.display='block';
+}
+async function confirmBankTransfer(){
+var pin=['obp1','obp2','obp3','obp4'].map(id=>document.getElementById(id)?.value||'').join('');
+if(pin.length<4)return;
+var savedPin=UD?.pin||'';
+if(!savedPin){toast('Set a transaction PIN in Profile first.');return;}
+if(hp(pin)!==savedPin){toast('Incorrect PIN.');['obp1','obp2','obp3','obp4'].forEach(id=>{const el=document.getElementById(id);if(el)el.value='';});document.getElementById('obp1')?.focus();return;}
+var acc=(document.getElementById('ob-acc-num').value||'').trim();
+var amt=parseFloat(document.getElementById('ob-amount').value||0);
+var narr=(document.getElementById('ob-narration').value||'').trim()||'Bank Transfer';
+var total=amt+_obTransferFee;
+try{
+var sSnap=await db.collection('users').doc(CU.uid).get();
+if((sSnap.data()?.balance||0)<total){toast('Insufficient balance');return;}
+// 1) Deduct balance immediately
+await db.collection('users').doc(CU.uid).update({balance:firebase.firestore.FieldValue.increment(-total)});
+// 2) Create Paystack transfer recipient
+var sk=_psConfig?.secretKey||'';
+var rRes=await fetch('https://api.paystack.co/transferrecipient',{method:'POST',headers:{'Authorization':'Bearer '+sk,'Content-Type':'application/json'},body:JSON.stringify({type:'nuban',name:_obResolvedName,account_number:acc,bank_code:_obBankCode,currency:'NGN'})});
+var rData=await rRes.json();
+if(!rData.status){
+// Refund and abort
+await db.collection('users').doc(CU.uid).update({balance:firebase.firestore.FieldValue.increment(total)});
+toast('Transfer setup failed: '+(rData.message||'Unknown error'));return;
+}
+var recipientCode=rData.data.recipient_code;
+// 3) Initiate transfer
+var tRes=await fetch('https://api.paystack.co/transfer',{method:'POST',headers:{'Authorization':'Bearer '+sk,'Content-Type':'application/json'},body:JSON.stringify({source:'balance',amount:amt*100,recipient:recipientCode,reason:narr,currency:'NGN'})});
+var tData=await tRes.json();
+var txStatus=tData.status?'pending':'failed';
+var txRef='OBTR'+Date.now();
+// 4) Record transaction
+await db.collection('transactions').doc().set({userId:CU.uid,type:'bank_transfer',amount:amt,fee:_obTransferFee,total,description:'Bank Transfer to '+_obResolvedName+' | '+_obBankName+' | '+acc,narration:narr,toBankName:_obBankName,toBankCode:_obBankCode,toAccNumber:acc,toAccName:_obResolvedName,paystackRef:tData.data?.reference||txRef,paystackTransferCode:tData.data?.transfer_code||'',status:txStatus,createdAt:firebase.firestore.FieldValue.serverTimestamp()});
+closeM('m-transfer');
+await loadUser();
+if(txStatus==='pending'){
+toast('&#127974; Transfer of NGN '+fmt(amt)+' initiated! Processing within 24hrs.');
+}else{
+toast('Transfer submitted (ref: '+txRef+')');
+}
 }catch(e){toast('Transfer failed: '+friendlyError(e));}
 }
 // ============================================================
@@ -3734,29 +4065,35 @@ try{
 await loadPaystackConfig();
 const psSection=document.getElementById('ps-fund-section');
 if(psSection) psSection.style.display=(_psConfig&&_psConfig.enabled)?'block':'none';
-const manLabel=document.getElementById('fund-manual-label');
-if(manLabel&&_psConfig&&_psConfig.enabled){
-manLabel.textContent='Prefer bank transfer? Send payment to any account below then send proof via WhatsApp.';
-}
 }catch(e){}
 try{
 const s=await db.collection('fundingAccounts').where('active','==',true).get();
 const accts=s.docs.map(d=>({id:d.id,...d.data()}));
 if(!accts.length){
-el.innerHTML='<div style="text-align:center;padding:16px;color:var(--g500);font-size:13px">No funding accounts available. Contact admin.</div>';
+el.innerHTML='<div style="text-align:center;padding:16px;color:var(--g500);font-size:13px">No bank accounts configured yet. Please contact admin or use Paystack above.</div>';
+// Also update bank select
+const bsel=document.getElementById('mf-bank-sel');
+if(bsel)bsel.innerHTML='<option value="">No accounts available</option>';
 return;
 }
 const colors=['var(--green)','#2563eb','#7c3aed','#d97706','#dc2626','#0891b2'];
-el.innerHTML=accts.map((a,i)=>`<div class="card" style="padding:14px;margin-bottom:10px;border-left:3px solid ${colors[i%colors.length]}">
-<div style="font-size:10px;font-weight:700;color:var(--g400);text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px">${a.bankName}</div>
-<div style="font-weight:600;font-size:14px;margin-bottom:8px">${a.accountName}</div>
+el.innerHTML=accts.map((a,i)=>`<div class="card" style="padding:14px;margin-bottom:8px;border-left:3px solid ${colors[i%colors.length]}">
+<div style="font-size:10px;font-weight:700;color:var(--g400);text-transform:uppercase;letter-spacing:.5px;margin-bottom:3px">${a.bankName||a.bank||''}</div>
+<div style="font-weight:700;font-size:14px;margin-bottom:6px">${a.accountName||a.name||''}</div>
 <div style="display:flex;align-items:center;justify-content:space-between">
-<div style="font-size:22px;font-weight:800;color:var(--green-d);letter-spacing:.04em">${a.accountNumber}</div>
-<button onclick="cpn('${a.accountNumber}')" class="btn-g" style="padding:7px 14px;border-radius:9px;font-size:12px">Copy</button>
+<div style="font-size:22px;font-weight:800;color:var(--green-d);letter-spacing:.04em">${a.accountNumber||a.number||''}</div>
+<button onclick="cpn('${a.accountNumber||a.number||''}')" class="btn-g" style="padding:7px 14px;border-radius:9px;font-size:12px">Copy</button>
 </div>
 </div>`).join('');
+// Populate bank select for proof form
+const bsel=document.getElementById('mf-bank-sel');
+if(bsel){
+bsel.innerHTML='<option value="">-- Select bank account --</option>'+
+accts.map(a=>`<option value="${a.bankName||a.bank} - ${a.accountName||a.name}">${a.bankName||a.bank||''} • ${a.accountName||a.name||''} (${a.accountNumber||a.number||''})</option>`).join('');
+}
 }catch(e){
-el.innerHTML='<div style="color:#dc2626;font-size:13px;padding:12px">Error loading accounts</div>';
+el.innerHTML='<div style="color:#dc2626;font-size:13px;padding:12px">&#9888; Could not load accounts. Check connection and try again.</div>';
+console.error('loadFundAccountsForUser:',e);
 }
 }
 async function loadAdminDataPlans(el){
@@ -4022,9 +4359,49 @@ var _u1=(AD.users.find(function(u){return u.id===uid;})||{});await db.collection
 await addNotif(uid,op==='credit'?'Wallet Credited':'Wallet Debited','NGN '+fmt(amt)+' '+(op==='credit'?'added to':'removed from')+' your wallet. Note: '+(note||'Admin operation'));
 toast('Wallet '+op+'ed successfully!');loadAdmin();
 }
+function openFundVerifyModal(fid){
+const f=(AD.funds||[]).find(x=>x.id===fid);
+const body=document.getElementById('fv-body');
+if(!f||!body){toast('Request not found');return;}
+const dt=f.createdAt?.toDate?f.createdAt.toDate():new Date();
+body.innerHTML=`
+<div style="background:#f8fafc;border-radius:13px;padding:14px;margin-bottom:14px">
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;font-size:12px">
+    <div><div style="color:var(--g400);font-size:10px;text-transform:uppercase">Customer</div><div style="font-weight:700;margin-top:2px">${f.userName||f.email||f.userId}</div></div>
+    <div><div style="color:var(--g400);font-size:10px;text-transform:uppercase">Amount Claimed</div><div style="font-weight:800;color:#15803d;font-size:15px;margin-top:2px">NGN ${fmt(f.amount)}</div></div>
+    <div><div style="color:var(--g400);font-size:10px;text-transform:uppercase">Bank / Account Paid Into</div><div style="font-weight:600;margin-top:2px">${f.bankAccount||'&mdash;'}</div></div>
+    <div><div style="color:var(--g400);font-size:10px;text-transform:uppercase">Sender Name</div><div style="font-weight:600;margin-top:2px">${f.senderName||'&mdash;'}</div></div>
+    <div><div style="color:var(--g400);font-size:10px;text-transform:uppercase">Submitted</div><div style="font-weight:600;margin-top:2px">${dt.toLocaleString('en-NG')}</div></div>
+    <div><div style="color:var(--g400);font-size:10px;text-transform:uppercase">Reference</div><div style="font-weight:600;margin-top:2px;word-break:break-all">${f.ref||fid}</div></div>
+  </div>
+  ${f.note?`<div style="margin-top:10px;padding-top:10px;border-top:1px solid #e2e8f0;font-size:12px"><span style="color:var(--g400)">Note from user: </span><span style="color:#7c3aed;font-weight:600">${f.note}</span></div>`:''}
+</div>
+<div style="margin-bottom:16px">
+  <div style="font-size:11px;font-weight:700;color:var(--g500);text-transform:uppercase;margin-bottom:8px">Uploaded Receipt / Teller</div>
+  ${f.receiptBase64?`<img src="${f.receiptBase64}" style="width:100%;max-height:420px;border-radius:12px;object-fit:contain;border:1.5px solid #e2e8f0;background:#000" onerror="this.style.display='none';this.insertAdjacentHTML('afterend','&#9888; Could not load receipt image')"/>`:`<div style="padding:30px;text-align:center;color:#dc2626;background:#fef2f2;border-radius:12px;font-size:13px">&#9888; No receipt was uploaded with this request</div>`}
+</div>
+<div style="background:#fffbeb;border:1px solid #fde68a;border-radius:11px;padding:12px;margin-bottom:16px;font-size:12px;color:#92400e">
+  &#9888; Confirm the amount, sender name, and account on the receipt match the details above, and that this exact transaction has landed in your bank/Opay account before approving.
+</div>
+<div style="display:flex;gap:8px">
+  <button onclick="confirmAppFund('${f.id}','${f.userId}',${f.amount})" style="flex:1;padding:13px;background:linear-gradient(135deg,#059669,#047857);color:#fff;border:none;border-radius:11px;font-size:14px;font-weight:700;cursor:pointer;font-family:'Inter',sans-serif">&#9989; Confirm &amp; Credit Wallet</button>
+  <button onclick="confirmRejFund('${f.id}')" style="flex:1;padding:13px;background:#fee2e2;border:1px solid #fca5a5;color:#dc2626;border-radius:11px;font-size:14px;font-weight:700;cursor:pointer;font-family:'Inter',sans-serif">&#10005; Reject</button>
+</div>`;
+openM('m-fund-verify');
+}
+function confirmAppFund(fid,uid,amt){
+if(!confirm('Confirm you have verified the receipt and NGN '+fmt(amt)+' truly landed in your account? This will credit the user\'s wallet immediately.'))return;
+closeM('m-fund-verify');
+appFund(fid,uid,amt);
+}
+function confirmRejFund(fid){
+if(!confirm('Reject this funding request? The user will be notified that their payment could not be verified.'))return;
+closeM('m-fund-verify');
+rejFund(fid);
+}
 async function appFund(fid,uid,amt){
 await db.collection('users').doc(uid).update({balance:firebase.firestore.FieldValue.increment(amt)});
-await db.collection('fundings').doc(fid).update({status:'approved'});
+await db.collection('fundings').doc(fid).update({status:'approved',approvedAt:firebase.firestore.FieldValue.serverTimestamp()});
 var _u2=(AD.users.find(function(u){return u.id===uid;})||{});await db.collection('transactions').add({userId:uid,userName:_u2.name||_u2.email||uid,type:'credit',amount:amt,description:'Wallet Funding',status:'success',createdAt:firebase.firestore.FieldValue.serverTimestamp()});
 await addNotif(uid,'Wallet Funded','NGN '+fmt(amt)+' has been credited to your wallet.');
 try{
@@ -6277,7 +6654,7 @@ const {type,amt,extra,ref,descs}=txData;
 const desc=(extra&&extra.planName)?extra.planName:(descs&&descs[type])||type;
 const now=new Date();
 const el=document.getElementById('receipt-content');if(!el)return;
-el.innerHTML=`<div id="receipt-printable" style="background:#fff;padding:24px;font-family:'Inter',sans-serif"><div style="display:flex;align-items:center;gap:9px;margin-bottom:16px"><div style="width:38px;height:38px;background:linear-gradient(135deg,#15803d,#22c55e);border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:19px;font-weight:900;color:#fff;flex-shrink:0">Z</div><div><div style="font-size:14px;font-weight:900;color:#15803d;letter-spacing:-.02em">ZMONIE</div><div style="font-size:10px;color:var(--g400)">Fintech &amp; Investment Platform</div></div></div><div style="text-align:center;margin-bottom:20px;padding-bottom:16px;border-bottom:2px dashed #e2e8f0"><div style="width:56px;height:56px;background:linear-gradient(135deg,#16a34a,#15803d);border-radius:16px;display:flex;align-items:center;justify-content:center;margin:0 auto 10px;font-size:26px">&#9989;</div><div style="font-size:18px;font-weight:900">Transaction Successful</div><div style="font-size:12px;color:var(--g400);margin-top:4px">${now.toLocaleDateString('en-NG',{weekday:'long',year:'numeric',month:'long',day:'numeric'})}</div></div><div style="margin-bottom:16px"><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px"><span style="font-size:12px;color:var(--g500)">Amount Paid</span><span style="font-size:20px;font-weight:900;color:var(--err)">NGN ${fmt(amt)}</span></div>${[['Service',desc],['Reference',ref||'&mdash;'],['Status','&#9989; Successful'],['Time',now.toLocaleTimeString('en-NG')],['Account',UD?.name||'&mdash;'],['Phone/ID',(extra?.phone||extra?.smartcard||extra?.meter||'')]].filter(r=>r[1]&&r[1]!=='&mdash;').map(([k,v])=>`<div style="display:flex;justify-content:space-between;padding:9px 0;border-bottom:1px solid #f1f5f9"><span style="font-size:12px;color:var(--g500)">${k}</span><span style="font-size:12px;font-weight:600;max-width:60%;text-align:right">${v}</span></div>`).join('')}</div><div style="background:#f0fdf4;border-radius:12px;padding:12px;text-align:center"><div style="font-size:11px;color:var(--green-d);font-weight:600">Powered by ZMONIE</div><div style="font-size:10px;color:var(--g400);margin-top:2px">zmonieservice@gmail.com &middot; 08068886569</div></div></div>`;
+el.innerHTML=`<div id="receipt-printable" style="background:#fff;padding:24px;font-family:'Inter',sans-serif"><div style="display:flex;align-items:center;gap:9px;margin-bottom:16px"><div style="width:38px;height:38px;background:linear-gradient(135deg,#15803d,#22c55e);border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:19px;font-weight:900;color:#fff;flex-shrink:0">Z</div><div><div style="font-size:14px;font-weight:900;color:#15803d;letter-spacing:-.02em">ZMONIE</div><div style="font-size:10px;color:var(--g400)">Fintech &amp; Investment Platform</div></div></div><div style="text-align:center;margin-bottom:20px;padding-bottom:16px;border-bottom:2px dashed #e2e8f0"><div style="width:56px;height:56px;background:linear-gradient(135deg,#16a34a,#15803d);border-radius:16px;display:flex;align-items:center;justify-content:center;margin:0 auto 10px;font-size:26px">&#9989;</div><div style="font-size:18px;font-weight:900">Transaction Successful</div><div style="font-size:12px;color:var(--g400);margin-top:4px">${now.toLocaleDateString('en-NG',{weekday:'long',year:'numeric',month:'long',day:'numeric'})}</div></div><div style="margin-bottom:16px"><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px"><span style="font-size:12px;color:var(--g500)">Amount Paid</span><span style="font-size:20px;font-weight:900;color:var(--err)">NGN ${fmt(amt)}</span></div>${[['Service',desc],['Reference',ref||'&mdash;'],['Status','&#9989; Successful'],['Time',now.toLocaleTimeString('en-NG')],['Account',UD?.name||'&mdash;'],['Meter No',(extra?.meter||'')],['Customer',(extra?.customerName||_elecCustomerName||'')],['Phone',(extra?.phone||extra?.custPhone||'')],['Smartcard',(extra?.smartcard||'')],['Token',(txData?.vtpResult?.metertoken||txData?.vtpResult?.MeterToken||txData?.vtpResult?.token||txData?.vtpResult?.Token||txData?.vtpResult?.ordertoken||'')]].filter(r=>r[1]&&r[1]!=='&mdash;').map(([k,v])=>`<div style="display:flex;justify-content:space-between;padding:9px 0;border-bottom:1px solid #f1f5f9"><span style="font-size:12px;color:var(--g500)">${k}</span><span style="font-size:12px;font-weight:600;max-width:60%;text-align:right">${v}</span></div>`).join('')}</div><div style="background:#f0fdf4;border-radius:12px;padding:12px;text-align:center"><div style="font-size:11px;color:var(--green-d);font-weight:600">Powered by ZMONIE</div><div style="font-size:10px;color:var(--g400);margin-top:2px">zmonieservice@gmail.com &middot; 08068886569</div></div></div>`;
 openM('m-receipt');
 pregenerateReceiptBlob();
 }
@@ -6366,6 +6743,8 @@ const mode=cfg.mode||'test';
 const pubKey=cfg.publicKey||'';
 const secKey=cfg.secretKey||'';
 const whSec=cfg.webhookSecret||'';
+const btEnabled=cfg.bankTransferEnabled===true;
+const btFee=cfg.bankTransferFee!==undefined?cfg.bankTransferFee:50;
 el.innerHTML=
 '<div style="max-width:560px">'+
 '<div style="background:'+(enabled?'#dcfce7':'#fef9c3')+';border:1.5px solid '+(enabled?'#86efac':'#fde047')+';border-radius:14px;padding:16px 18px;margin-bottom:18px;display:flex;align-items:center;gap:14px">'+
@@ -6394,6 +6773,26 @@ el.innerHTML=
 '<input class="inp" id="ps-webhook" placeholder="whsec_xxxxxxxx" value="'+whSec+'"/></div>'+
 '<button onclick="savePaystackSettings()" class="btn-g" style="width:100%;padding:13px;border-radius:11px;font-size:15px">&#128190; Save &mdash; Takes Effect Instantly</button>'+
 '<div id="ps-save-msg" style="display:none;margin-top:10px;padding:10px;background:#dcfce7;border-radius:10px;text-align:center;font-size:13px;font-weight:600;color:#15803d">&#9989; Settings saved and live!</div>'+
+'</div>'+
+'<div class="card" style="padding:22px;margin-bottom:16px;border:2px solid '+(btEnabled?'#86efac':'#e2e8f0')+'">'+
+'<div style="font-size:15px;font-weight:800;margin-bottom:4px">&#127974; Bank Transfer Settings</div>'+
+'<div style="font-size:12px;color:var(--g400);margin-bottom:16px">Controls the &ldquo;Other Bank&rdquo; tab in the Transfer modal. Uses your Paystack secret key to resolve account names and send transfers.</div>'+
+'<div style="display:flex;align-items:center;justify-content:space-between;padding:12px 14px;background:#f8fafc;border-radius:11px;margin-bottom:16px">'+
+'<div><div style="font-weight:700;font-size:14px">Enable Bank Transfer</div>'+
+'<div style="font-size:12px;color:var(--g400);margin-top:2px">Allow users to send to other bank accounts via Paystack</div></div>'+
+'<div class="tsw '+(btEnabled?'on':'')+'" id="ps-bt-toggle" onclick="this.classList.toggle(\'on\')"></div></div>'+
+'<div style="margin-bottom:16px"><label style="font-size:12px;font-weight:600;color:var(--g600);margin-bottom:5px;display:block">Transfer Fee per Transaction (NGN)</label>'+
+'<input class="inp" id="ps-bt-fee" type="number" min="0" placeholder="e.g. 50" value="'+btFee+'" style="font-size:16px;font-weight:700"/>'+
+'<div style="font-size:11px;color:var(--g400);margin-top:4px">This flat fee is charged on top of the transfer amount and stays in your Zmonie wallet/revenue. Paystack charges separately from their end.</div></div>'+
+'<div style="background:#fff7ed;border:1px solid #fed7aa;border-radius:10px;padding:12px;margin-bottom:16px">'+
+'<div style="font-size:12px;font-weight:700;color:#92400e;margin-bottom:6px">&#128161; Important Notes</div>'+
+'<div style="font-size:12px;color:#92400e;line-height:1.8">'+
+'&#8226; Your Paystack account must have <strong>Transfer</strong> enabled (go to Paystack Dashboard &rarr; Settings &rarr; Enable Transfers)<br/>'+
+'&#8226; Paystack must have sufficient balance to fund outbound transfers<br/>'+
+'&#8226; Use <strong>Live Mode keys</strong> for real money transfers<br/>'+
+'&#8226; Account name lookup works in both test and live mode'+
+'</div></div>'+
+'<button onclick="savePaystackSettings()" class="btn-g" style="width:100%;padding:13px;border-radius:11px;font-size:15px">&#128190; Save Bank Transfer Settings</button>'+
 '</div>'+
 '<div class="card" style="padding:20px;margin-bottom:16px">'+
 '<div style="font-size:14px;font-weight:800;margin-bottom:12px">&#128214; How to Get Your Paystack Keys</div>'+
@@ -6431,14 +6830,18 @@ var secretKey=(document.getElementById('ps-sec-key').value||'').trim();
 var webhookSecret=(document.getElementById('ps-webhook').value||'').trim();
 var testBtn=document.getElementById('ps-mode-test');
 var mode=(testBtn&&testBtn.dataset.selected==='1')?'test':'live';
+var bankTransferEnabled=document.getElementById('ps-bt-toggle')?.classList.contains('on')||false;
+var bankTransferFee=parseFloat(document.getElementById('ps-bt-fee')?.value||50);
 if(enabled&&!publicKey){toast('Enter your Paystack Public Key before enabling');return;}
 if(enabled&&!secretKey){toast('Enter your Paystack Secret Key before enabling');return;}
 if(enabled&&publicKey&&!publicKey.startsWith('pk_')){toast('Public key should start with pk_test_ or pk_live_');return;}
+if(bankTransferEnabled&&!secretKey){toast('Enter your Paystack Secret Key to enable bank transfers');return;}
 try{
 await db.collection('settings').doc('paystack').set(
-{enabled,publicKey,secretKey,webhookSecret,mode,updatedAt:firebase.firestore.FieldValue.serverTimestamp()},
+{enabled,publicKey,secretKey,webhookSecret,mode,bankTransferEnabled,bankTransferFee,updatedAt:firebase.firestore.FieldValue.serverTimestamp()},
 {merge:true}
 );
+_psConfig=null; // reset cache so next transfer picks up new settings
 var msg=document.getElementById('ps-save-msg');
 if(msg){msg.style.display='block';setTimeout(function(){msg.style.display='none';},4000);}
 toast(enabled?'&#9989; Paystack enabled! Pay button is now live for all users.':'&#128190; Settings saved. Paystack is disabled.');
@@ -6451,65 +6854,280 @@ var snap=await db.collection('settings').doc('paystack').get();
 _psConfig=snap.exists?snap.data():null;
 }catch(e){_psConfig=null;}
 }
+function updatePsPreview(val){
+const amt=parseFloat(val)||0;
+const el=document.getElementById('ps-fund-preview');
+if(!el)return;
+if(amt>=100){el.textContent='You will be credited: NGN '+fmt(amt)+' instantly after payment';}
+else if(amt>0){el.textContent='Minimum amount is NGN 100';}
+else{el.textContent='';}
+}
+function _resetPsBtn(){
+var btn=document.getElementById('ps-pay-btn');
+if(btn){btn.disabled=false;btn.innerHTML='<svg width="20" height="14" viewBox="0 0 20 14" fill="none"><rect width="20" height="14" rx="3" fill="#4f46e5" fill-opacity=".15"/><rect y="4" width="20" height="3" fill="#4f46e5" fill-opacity=".4"/></svg>Pay with Card / Bank Transfer';}
+}
+async function doPaystackFund(){
+var amtEl=document.getElementById('ps-fund-amt');
+var amount=parseFloat(amtEl&&amtEl.value)||0;
+if(!amount||amount<100){toast('Enter amount — minimum NGN 100');if(amtEl)amtEl.focus();return;}
+var btn=document.getElementById('ps-pay-btn');
+if(btn){btn.disabled=true;btn.textContent='Loading Paystack...';}
+try{await initPaystackPayment(amount);}
+catch(e){toast('Error: '+e.message);}
+finally{_resetPsBtn();}
+}
 async function initPaystackPayment(amount){
 if(!amount||isNaN(amount)||amount<100){toast('Enter amount (minimum NGN 100)');return;}
-// Always fetch fresh config in case _psConfig is null or stale
+var cfgSnap,cfg;
 try{
-var cfgSnap=await db.collection('settings').doc('paystack').get();
-if(!cfgSnap.exists||!cfgSnap.data().enabled||!cfgSnap.data().publicKey){
-toast('Paystack card payment is not enabled. Please use bank transfer below.');return;
-}
-_psConfig=cfgSnap.data();
-}catch(e){toast('Could not load payment settings. Please use bank transfer.');return;}
+cfgSnap=await db.collection('settings').doc('paystack').get();
+cfg=cfgSnap.exists?cfgSnap.data():{};
+}catch(e){toast('Could not load payment config. Please use bank transfer below.');_resetPsBtn();return;}
+if(!cfg.enabled){toast('Card payment is currently disabled. Please use the bank transfer option below.');_resetPsBtn();return;}
+if(!cfg.publicKey){toast('Paystack key not set. Contact admin or use bank transfer below.');_resetPsBtn();return;}
+_psConfig=cfg;
 if(!window.PaystackPop){
 try{
 await new Promise(function(res,rej){
 var s=document.createElement('script');s.src='https://js.paystack.co/v1/inline.js';
-s.onload=res;s.onerror=function(){rej(new Error('Failed to load Paystack'));};document.head.appendChild(s);
+s.onload=res;s.onerror=function(){rej(new Error('Failed to load Paystack script. Check internet connection.'));};
+document.head.appendChild(s);
 });
-}catch(e){toast('Could not load Paystack. Check your internet connection.');return;}
+}catch(e){toast(e.message);_resetPsBtn();return;}
 }
 var ref='ZM_'+Date.now()+'_'+Math.random().toString(36).slice(2,8).toUpperCase();
 var handler=window.PaystackPop.setup({
 key:_psConfig.publicKey,
-email:CU.email||UD.email||'user@zmonie.com',
+email:CU.email||(UD&&UD.email)||'user@zmonie.com',
 amount:Math.round(amount*100),
-currency:'NGN',ref,
-metadata:{userId:CU.uid,name:UD&&UD.name||'',phone:UD&&UD.phone||''},
-callback:async function(response){
-try{
-await db.collection('users').doc(CU.uid).update({
+currency:'NGN',
+ref:ref,
+metadata:{userId:CU.uid,name:(UD&&UD.name)||'',phone:(UD&&UD.phone)||''},
+callback:function(response){
+(function(){
+var pRef=response.reference||ref;
+db.collection('users').doc(CU.uid).update({
 balance:firebase.firestore.FieldValue.increment(amount),hasFundedFirst:true
-});
-await db.collection('transactions').add({
-userId:CU.uid,type:'credit',amount,
-description:'Wallet Funded via Paystack (Ref: '+ref+')',
-status:'success',paystackRef:response.reference,
+}).then(function(){
+return db.collection('transactions').add({
+userId:CU.uid,type:'credit',amount:amount,
+description:'Wallet Funded via Paystack (Ref: '+pRef+')',
+status:'success',paystackRef:pRef,
 createdAt:firebase.firestore.FieldValue.serverTimestamp()
 });
+}).then(function(){
 if(UD&&!UD.hasFundedFirst&&UD.referredBy){
-var rSnap=await db.collection('settings').doc('rewards').get();
+return db.collection('settings').doc('rewards').get().then(function(rSnap){
 var rCfg=rSnap.exists?rSnap.data():{};
 if(rCfg.referralEnabled!==false){
 var rAmt=rCfg.referralAmt||100;
-await db.collection('users').doc(UD.referredBy).update({
+return db.collection('users').doc(UD.referredBy).update({
 balance:firebase.firestore.FieldValue.increment(rAmt),
 referralEarned:firebase.firestore.FieldValue.increment(rAmt)
 });
 }
+});
 }
-UD=(await db.collection('users').doc(CU.uid).get()).data();
+}).then(function(){
+return db.collection('users').doc(CU.uid).get();
+}).then(function(snap){
+UD=snap.data();
 var balEl=document.getElementById('d-bal');
 if(balEl)balEl.innerHTML=bHid?fmtCsym()+'****':fmtC(UD.balance||0);
 closeM('m-fund');
+_resetPsBtn();
 toast('&#127881; NGN '+fmt(amount)+' added to your wallet!');
-await addFinanceNotif(CU.uid,'&#128179; Wallet Funded via Paystack','NGN '+fmt(amount)+' credited to your wallet. Ref: '+ref);
-}catch(e){toast('Payment received but credit failed. Contact support with ref: '+ref);}
+addFinanceNotif(CU.uid,'&#128179; Wallet Funded via Paystack','NGN '+fmt(amount)+' credited to your wallet. Ref: '+pRef);
+}).catch(function(e){
+toast('Payment received but wallet credit failed. Contact support with ref: '+pRef);
+_resetPsBtn();
+});
+})();
 },
-onClose:function(){toast('Payment window closed.');}
+onClose:function(){toast('Payment window closed.');_resetPsBtn();}
 });
 handler.openIframe();
 }
+// ---- Manual Funding Receipt Upload ----
+var _mfReceiptFile=null;
+function previewFundReceipt(e){
+const file=e.target.files[0];
+if(!file)return;
+if(file.size>5*1024*1024){toast('File too large. Max 5MB');return;}
+_mfReceiptFile=file;
+const prev=document.getElementById('mf-receipt-preview');
+const drop=document.getElementById('mf-receipt-drop');
+if(file.type.startsWith('image/')){
+const reader=new FileReader();
+reader.onload=function(ev){
+if(prev)prev.innerHTML='<img src="'+ev.target.result+'" style="max-width:100%;max-height:180px;border-radius:8px;object-fit:contain"/><div style="font-size:11px;color:var(--ok);margin-top:6px;font-weight:600">&#9989; '+file.name+' ready</div>';
+if(drop){drop.style.borderColor='var(--green)';drop.style.background='#f0fdf4';}
+};
+reader.readAsDataURL(file);
+}else{
+if(prev)prev.innerHTML='<div style="font-size:24px;margin-bottom:4px">&#128196;</div><div style="font-size:12px;font-weight:600;color:var(--ok)">&#9989; '+file.name+'</div><div style="font-size:10px;color:var(--g400)">PDF ready to submit</div>';
+if(drop){drop.style.borderColor='var(--green)';drop.style.background='#f0fdf4';}
+}
+}
+
+async function submitManualFundProof(){
+if(!CU||!UD){toast('Please log in first');return;}
+const amt=parseFloat(document.getElementById('mf-amount')?.value)||0;
+const bank=document.getElementById('mf-bank-sel')?.value||'';
+const sender=(document.getElementById('mf-sender')?.value||'').trim();
+const note=(document.getElementById('mf-note')?.value||'').trim();
+if(amt<100){toast('Enter the amount you transferred (min NGN 100)');return;}
+if(!bank){toast('Select the bank account you paid into');return;}
+if(!_mfReceiptFile){toast('Please upload your payment receipt or screenshot');return;}
+const btn=document.getElementById('mf-submit-btn');
+if(btn){btn.disabled=true;btn.textContent='Uploading...';}
+try{
+// Convert file to base64
+const b64=await new Promise((res,rej)=>{
+const r=new FileReader();
+r.onload=()=>res(r.result);
+r.onerror=()=>rej(new Error('Read failed'));
+r.readAsDataURL(_mfReceiptFile);
+});
+// Save proof to Firestore — write to 'fundings' (collection admin panel reads from)
+const ref='MF_'+Date.now()+'_'+Math.random().toString(36).slice(2,7).toUpperCase();
+const fundDoc={
+userId:CU.uid,
+email:CU.email||'',
+userName:UD.name||CU.email||'',
+userPhone:UD.phone||'',
+amount:amt,
+bankAccount:bank,
+senderName:sender||UD.name||'',
+note:note,
+receiptBase64:b64,
+receiptFileName:_mfReceiptFile.name,
+receiptType:_mfReceiptFile.type,
+ref:ref,
+status:'pending',
+type:'manual_bank_transfer',
+createdAt:firebase.firestore.FieldValue.serverTimestamp()
+};
+await db.collection('fundings').add(fundDoc);
+await db.collection('fundingRequests').add(fundDoc);
+// Also notify via transaction record
+await db.collection('transactions').add({
+userId:CU.uid,
+type:'credit',
+amount:amt,
+description:'Manual Bank Transfer — Pending Admin Approval (Ref: '+ref+')',
+status:'pending',
+ref:ref,
+createdAt:firebase.firestore.FieldValue.serverTimestamp()
+});
+// Reset form
+_mfReceiptFile=null;
+['mf-amount','mf-sender','mf-note'].forEach(id=>{const el=document.getElementById(id);if(el)el.value='';});
+const sel=document.getElementById('mf-bank-sel');if(sel)sel.value='';
+const prev=document.getElementById('mf-receipt-preview');
+if(prev)prev.innerHTML='<div style="font-size:28px;margin-bottom:6px">&#128247;</div><div style="font-size:12px;color:var(--g500)">Tap to upload receipt / screenshot</div><div style="font-size:10px;color:var(--g400);margin-top:3px">JPG, PNG or PDF &middot; Max 5MB</div>';
+const drop=document.getElementById('mf-receipt-drop');
+if(drop){drop.style.borderColor='#86efac';drop.style.background='#fff';}
+closeM('m-fund');
+toast('&#9989; Payment proof submitted! Ref: '+ref+' — Admin will credit your wallet within 30 mins.');
+}catch(e){toast('Error: '+e.message);console.error('submitManualFundProof:',e);}
+finally{if(btn){btn.disabled=false;btn.textContent='&#128203; Submit Payment Proof';}}
+}
+
+// ================================================================
+// ELECTRICITY HELPERS
+// ================================================================
+var _elecVerified = false;
+var _elecCustomerName = '';
+
+function onElecDiscoChange(){
+  clearElecVerify();
+}
+
+function clearElecVerify(){
+  _elecVerified = false;
+  _elecCustomerName = '';
+  const res = document.getElementById('elec-verify-result');
+  if(res){ res.style.display='none'; res.textContent=''; }
+}
+
+async function verifyElecMeter(){
+  const meter = (document.getElementById('s-meter')?.value||'').trim();
+  const disco = document.getElementById('s-phone')?.value||'01';
+  const meterType = document.getElementById('s-meter-type')?.value||'01';
+  const res = document.getElementById('elec-verify-result');
+  const btn = document.getElementById('elec-verify-btn');
+  if(!meter){ toast('Enter your meter number first'); return; }
+  if(meter.length < 6){ toast('Meter number seems too short. Please check.'); return; }
+  if(btn){ btn.disabled=true; btn.textContent='Verifying...'; }
+  if(res){ res.style.display='block'; res.style.background='#fef3c7'; res.style.borderColor='#fcd34d'; res.style.color='#92400e'; res.textContent='⏳ Verifying meter number...'; }
+  try{
+    const data = await apiVerifyElecMeter(meter, disco, meterType);
+    const custName = data?.customer_name || data?.CustomerName || data?.customername || data?.name || '';
+    if(custName && custName.toUpperCase() !== 'INVALID_METERNO' && custName !== ''){
+      _elecVerified = true;
+      _elecCustomerName = custName;
+      if(res){ res.style.display='block'; res.style.background='#d1fae5'; res.style.borderColor='#86efac'; res.style.color='#065f46'; res.innerHTML='✅ Meter Verified &mdash; <strong>'+custName+'</strong>'; }
+    } else {
+      _elecVerified = false;
+      _elecCustomerName = '';
+      const errMsg = custName==='INVALID_METERNO' ? 'Invalid meter number. Please check and try again.' : (data?.message||data?.Message||'Could not verify meter. Check number and try again.');
+      if(res){ res.style.display='block'; res.style.background='#fef2f2'; res.style.borderColor='#fecaca'; res.style.color='#dc2626'; res.textContent='❌ '+errMsg; }
+    }
+  } catch(e){
+    if(res){ res.style.display='block'; res.style.background='#fef2f2'; res.style.borderColor='#fecaca'; res.style.color='#dc2626'; res.textContent='❌ Verification failed: '+e.message; }
+  } finally {
+    if(btn){ btn.disabled=false; btn.textContent='Verify'; }
+  }
+}
+
+// ================================================================
+// ELECTRICITY HELPERS
+// ================================================================
+var _elecVerified = false;
+var _elecCustomerName = '';
+
+function onElecDiscoChange(){
+  clearElecVerify();
+}
+
+function clearElecVerify(){
+  _elecVerified = false;
+  _elecCustomerName = '';
+  const res = document.getElementById('elec-verify-result');
+  if(res){ res.style.display='none'; res.textContent=''; }
+}
+
+async function verifyElecMeter(){
+  const meter = (document.getElementById('s-meter')?.value||'').trim();
+  const disco = document.getElementById('s-phone')?.value||'01';
+  const meterType = document.getElementById('s-meter-type')?.value||'01';
+  const res = document.getElementById('elec-verify-result');
+  const btn = document.getElementById('elec-verify-btn');
+  if(!meter){ toast('Enter your meter number first'); return; }
+  if(meter.length < 6){ toast('Meter number seems too short. Please check.'); return; }
+  if(btn){ btn.disabled=true; btn.textContent='Verifying...'; }
+  if(res){ res.style.display='block'; res.style.background='#fef3c7'; res.style.borderColor='#fcd34d'; res.style.color='#92400e'; res.textContent='⏳ Verifying meter number...'; }
+  try{
+    const data = await apiVerifyElecMeter(meter, disco, meterType);
+    const custName = data?.customer_name || data?.CustomerName || data?.customername || data?.name || '';
+    if(custName && custName.toUpperCase() !== 'INVALID_METERNO' && custName !== ''){
+      _elecVerified = true;
+      _elecCustomerName = custName;
+      if(res){ res.style.display='block'; res.style.background='#d1fae5'; res.style.borderColor='#86efac'; res.style.color='#065f46'; res.innerHTML='✅ Meter Verified &mdash; <strong>'+custName+'</strong>'; }
+    } else {
+      _elecVerified = false;
+      _elecCustomerName = '';
+      const errMsg = custName==='INVALID_METERNO' ? 'Invalid meter number. Please check and try again.' : (data?.message||data?.Message||'Could not verify meter. Check number and try again.');
+      if(res){ res.style.display='block'; res.style.background='#fef2f2'; res.style.borderColor='#fecaca'; res.style.color='#dc2626'; res.textContent='❌ '+errMsg; }
+    }
+  } catch(e){
+    if(res){ res.style.display='block'; res.style.background='#fef2f2'; res.style.borderColor='#fecaca'; res.style.color='#dc2626'; res.textContent='❌ Verification failed: '+e.message; }
+  } finally {
+    if(btn){ btn.disabled=false; btn.textContent='Verify'; }
+  }
+}
+
 const rwToggles={};
 function ebLocalDate(d){
 const dt=d||new Date();
@@ -8383,7 +9001,11 @@ Welcome! How can we help you today? You can describe your issue and we will get 
   Share Link
   </button></div><div style="margin-top:12px;display:flex;align-items:center;justify-content:space-between;padding:10px 14px;background:var(--g100);border-radius:10px"><div style="font-size:12px;color:var(--g600)">Total referrals made</div><div style="font-size:14px;font-weight:800;color:var(--green-d)" id="rw-ref-count">0 users</div></div></div></div><!-- Cashback Stats --><div style="margin:0 14px 14px"><div class="card" style="padding:16px"><div style="font-size:14px;font-weight:700;color:var(--black);margin-bottom:12px">&#127894; Cashback Stats</div><div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px"><div style="background:var(--green-xl);border-radius:11px;padding:12px"><div style="font-size:10px;color:var(--green-d);font-weight:600;margin-bottom:4px">Rate</div><div style="font-size:18px;font-weight:800;color:var(--green-d)" id="rw-cb-rate">1%</div><div style="font-size:10px;color:var(--g400)">per VTU transaction</div></div><div style="background:#f0f9ff;border-radius:11px;padding:12px"><div style="font-size:10px;color:#0369a1;font-weight:600;margin-bottom:4px">Total Transactions</div><div style="font-size:18px;font-weight:800;color:#0369a1" id="rw-tx-count">0</div><div style="font-size:10px;color:var(--g400)">VTU services used</div></div></div></div></div><!-- Rewards History --><div style="margin:0 14px 14px"><div style="font-size:14px;font-weight:700;color:var(--g700);margin-bottom:10px">Rewards History</div><div class="card" id="rw-history" style="overflow:hidden"><div style="padding:28px;text-align:center;color:var(--g400)"><div style="font-size:28px;margin-bottom:7px">&#127873;</div><p style="font-size:13px">Loading rewards...</p></div></div></div></div><div class="bnav"><div class="bni" onclick="goPg('pg-dash')"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg><span>Home</span></div><div class="bni" onclick="goPg('pg-hist')"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg><span>History</span></div><div class="bni on" style="flex:none;padding:0 16px"><div style="width:44px;height:44px;background:linear-gradient(135deg,#15803d,#16a34a);border-radius:50%;display:flex;align-items:center;justify-content:center;margin-top:-12px;box-shadow:0 4px 14px rgba(22,163,74,.35)"><span style="font-size:20px">&#127873;</span></div><span style="margin-top:2px;font-size:10px;font-weight:600;color:var(--green)">Rewards</span></div><div class="bni" onclick="goPg('pg-notif')"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 01-3.46 0"/></svg><span>Alerts</span></div><div class="bni" onclick="goPg('pg-profile')"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg><span>Profile</span></div></div></div><!-- ======================================
   SAVINGS: NEW PLAN MODAL
-====================================== --><div class="modal" id="m-sv-new"><div class="mbox" style="max-height:92vh;overflow-y:auto"><div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;position:sticky;top:0;background:#fff;padding-bottom:10px;border-bottom:1px solid #f1f5f9;z-index:1"><div><h3 style="font-size:17px;font-weight:700">&#128184; New Savings Plan</h3><p style="font-size:11px;color:var(--g400);margin-top:2px">Choose a savings type to get started</p></div><button onclick="closeM('m-sv-new')" style="background:var(--g100);border:none;width:30px;height:30px;border-radius:50%;cursor:pointer;color:var(--g600);flex-shrink:0">&#10005;</button></div><div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:18px"><button class="sv-type-btn" onclick="openSavingsType('fixed')"><div style="font-size:26px">&#128274;</div><div style="font-size:12px;font-weight:700;color:var(--g700)">Fixed Savings</div><div style="font-size:10px;color:var(--g400);line-height:1.4">Lock money &amp; earn interest</div></button><button class="sv-type-btn" onclick="openSavingsType('target')"><div style="font-size:26px">&#127919;</div><div style="font-size:12px;font-weight:700;color:var(--g700)">Target Savings</div><div style="font-size:10px;color:var(--g400);line-height:1.4">Save towards a goal</div></button><button class="sv-type-btn" onclick="openSavingsType('flexible')"><div style="font-size:26px">&#128260;</div><div style="font-size:12px;font-weight:700;color:var(--g700)">Flexible Savings</div><div style="font-size:10px;color:var(--g400);line-height:1.4">Deposit anytime, withdraw anytime</div></button><button class="sv-type-btn" onclick="openSavingsType('spend-save')"><div style="font-size:26px">&#128176;</div><div style="font-size:12px;font-weight:700;color:var(--g700)">Spend &amp; Save</div><div style="font-size:10px;color:var(--g400);line-height:1.4">Auto-save from transactions</div></button></div><div id="sv-type-form"></div></div></div><!-- SAVINGS WITHDRAW MODAL --><div class="modal" id="m-sv-withdraw"><div class="mbox" style="max-height:92vh;overflow-y:auto"><div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;position:sticky;top:0;background:#fff;padding-bottom:10px;border-bottom:1px solid #f1f5f9;z-index:1"><div><h3 style="font-size:17px;font-weight:700">&#8659; Savings Withdrawal</h3><p style="font-size:11px;color:var(--g400);margin-top:2px">Transfer from savings to wallet</p></div><button onclick="closeM('m-sv-withdraw')" style="background:var(--g100);border:none;width:30px;height:30px;border-radius:50%;cursor:pointer;color:var(--g600);flex-shrink:0">&#10005;</button></div><div style="background:linear-gradient(135deg,#064e3b,#065f46);border-radius:13px;padding:14px 16px;margin-bottom:16px"><div style="font-size:10px;color:rgba(167,243,208,.7);text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px">Savings Balance</div><div style="font-size:26px;font-weight:800;color:#fff" id="sv-wd-bal-display">NGN 0.00</div></div><div style="margin-bottom:12px"><label style="font-size:12px;font-weight:600;color:var(--g600);margin-bottom:5px;display:block">Select Plan to Withdraw From</label><select class="inp" id="sv-wd-plan-sel"><option value="">-- Select plan --</option></select></div><div style="margin-bottom:12px"><label style="font-size:12px;font-weight:600;color:var(--g600);margin-bottom:5px;display:block">Amount (NGN)</label><input class="inp" type="number" id="sv-wd-amount" placeholder="Enter amount"/></div><div style="margin-bottom:8px"><label style="font-size:12px;font-weight:600;color:var(--g600);margin-bottom:7px;display:block">Transaction PIN *</label><div style="display:flex;gap:10px;justify-content:center"><input class="pbox" type="password" maxlength="1" id="sv-wd-p1" oninput="pn('sv-wd-p1','sv-wd-p2')"/><input class="pbox" type="password" maxlength="1" id="sv-wd-p2" oninput="pn('sv-wd-p2','sv-wd-p3')"/><input class="pbox" type="password" maxlength="1" id="sv-wd-p3" oninput="pn('sv-wd-p3','sv-wd-p4')"/><input class="pbox" type="password" maxlength="1" id="sv-wd-p4"/></div></div><button onclick="submitSvWithdrawal()" class="btn-g" style="width:100%;padding:14px;border-radius:11px;font-size:15px;font-weight:700;margin-top:12px;background:linear-gradient(135deg,#059669,#047857)">Transfer to Wallet</button></div></div><!-- SAVINGS DEPOSIT MODAL --><div class="modal" id="m-sv-deposit"><div class="mbox" style="max-height:92vh;overflow-y:auto"><div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;position:sticky;top:0;background:#fff;padding-bottom:10px;border-bottom:1px solid #f1f5f9;z-index:1"><div><h3 style="font-size:17px;font-weight:700">&#128176; Top-Up Savings</h3><p style="font-size:11px;color:var(--g400);margin-top:2px">Add money from wallet to savings</p></div><button onclick="closeM('m-sv-deposit')" style="background:var(--g100);border:none;width:30px;height:30px;border-radius:50%;cursor:pointer;color:var(--g600);flex-shrink:0">&#10005;</button></div><div id="sv-dep-plan-info" style="background:#f0fdf4;border:1px solid #bbf7d0;border-radius:11px;padding:12px;margin-bottom:14px;font-size:13px;color:var(--green-d)">Loading plan...</div><div style="background:linear-gradient(135deg,#0f172a,#1e3a5f);border-radius:13px;padding:14px 16px;margin-bottom:14px"><div style="font-size:10px;color:rgba(255,255,255,.5);text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px">Wallet Balance</div><div style="font-size:22px;font-weight:800;color:#fff" id="sv-dep-wallet-bal">NGN 0.00</div></div><div style="margin-bottom:12px"><label style="font-size:12px;font-weight:600;color:var(--g600);margin-bottom:5px;display:block">Amount to Add (NGN)</label><input class="inp" type="number" id="sv-dep-amount" placeholder="Enter amount"/></div><div style="margin-bottom:8px"><label style="font-size:12px;font-weight:600;color:var(--g600);margin-bottom:7px;display:block">Transaction PIN *</label><div style="display:flex;gap:10px;justify-content:center"><input class="pbox" type="password" maxlength="1" id="sv-dep-p1" oninput="pn('sv-dep-p1','sv-dep-p2')"/><input class="pbox" type="password" maxlength="1" id="sv-dep-p2" oninput="pn('sv-dep-p2','sv-dep-p3')"/><input class="pbox" type="password" maxlength="1" id="sv-dep-p3" oninput="pn('sv-dep-p3','sv-dep-p4')"/><input class="pbox" type="password" maxlength="1" id="sv-dep-p4"/></div></div><input type="hidden" id="sv-dep-plan-id"/><button onclick="submitSvDeposit()" class="btn-g" style="width:100%;padding:14px;border-radius:11px;font-size:15px;font-weight:700;margin-top:12px;background:linear-gradient(135deg,#059669,#047857)">Add to Savings</button></div></div>
+<!-- ======================================
+  FUNDING REQUEST VERIFICATION MODAL
+====================================== --><div class="modal" id="m-fund-verify"><div class="mbox" style="max-height:92vh;overflow-y:auto"><div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;position:sticky;top:0;background:#fff;padding-bottom:10px;border-bottom:1px solid #f1f5f9;z-index:1"><div><h3 style="font-size:17px;font-weight:700">&#128269; Verify Payment</h3><p style="font-size:11px;color:var(--g400);margin-top:2px">Check the receipt carefully before approving</p></div><button onclick="closeM('m-fund-verify')" style="background:var(--g100);border:none;width:30px;height:30px;border-radius:50%;cursor:pointer;color:var(--g600);flex-shrink:0">&#10005;</button></div>
+<div id="fv-body"><div style="text-align:center;padding:30px;color:var(--g400)">Loading request...</div></div>
+</div></div>====================================== --><div class="modal" id="m-sv-new"><div class="mbox" style="max-height:92vh;overflow-y:auto"><div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;position:sticky;top:0;background:#fff;padding-bottom:10px;border-bottom:1px solid #f1f5f9;z-index:1"><div><h3 style="font-size:17px;font-weight:700">&#128184; New Savings Plan</h3><p style="font-size:11px;color:var(--g400);margin-top:2px">Choose a savings type to get started</p></div><button onclick="closeM('m-sv-new')" style="background:var(--g100);border:none;width:30px;height:30px;border-radius:50%;cursor:pointer;color:var(--g600);flex-shrink:0">&#10005;</button></div><div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:18px"><button class="sv-type-btn" onclick="openSavingsType('fixed')"><div style="font-size:26px">&#128274;</div><div style="font-size:12px;font-weight:700;color:var(--g700)">Fixed Savings</div><div style="font-size:10px;color:var(--g400);line-height:1.4">Lock money &amp; earn interest</div></button><button class="sv-type-btn" onclick="openSavingsType('target')"><div style="font-size:26px">&#127919;</div><div style="font-size:12px;font-weight:700;color:var(--g700)">Target Savings</div><div style="font-size:10px;color:var(--g400);line-height:1.4">Save towards a goal</div></button><button class="sv-type-btn" onclick="openSavingsType('flexible')"><div style="font-size:26px">&#128260;</div><div style="font-size:12px;font-weight:700;color:var(--g700)">Flexible Savings</div><div style="font-size:10px;color:var(--g400);line-height:1.4">Deposit anytime, withdraw anytime</div></button><button class="sv-type-btn" onclick="openSavingsType('spend-save')"><div style="font-size:26px">&#128176;</div><div style="font-size:12px;font-weight:700;color:var(--g700)">Spend &amp; Save</div><div style="font-size:10px;color:var(--g400);line-height:1.4">Auto-save from transactions</div></button></div><div id="sv-type-form"></div></div></div><!-- SAVINGS WITHDRAW MODAL --><div class="modal" id="m-sv-withdraw"><div class="mbox" style="max-height:92vh;overflow-y:auto"><div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;position:sticky;top:0;background:#fff;padding-bottom:10px;border-bottom:1px solid #f1f5f9;z-index:1"><div><h3 style="font-size:17px;font-weight:700">&#8659; Savings Withdrawal</h3><p style="font-size:11px;color:var(--g400);margin-top:2px">Transfer from savings to wallet</p></div><button onclick="closeM('m-sv-withdraw')" style="background:var(--g100);border:none;width:30px;height:30px;border-radius:50%;cursor:pointer;color:var(--g600);flex-shrink:0">&#10005;</button></div><div style="background:linear-gradient(135deg,#064e3b,#065f46);border-radius:13px;padding:14px 16px;margin-bottom:16px"><div style="font-size:10px;color:rgba(167,243,208,.7);text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px">Savings Balance</div><div style="font-size:26px;font-weight:800;color:#fff" id="sv-wd-bal-display">NGN 0.00</div></div><div style="margin-bottom:12px"><label style="font-size:12px;font-weight:600;color:var(--g600);margin-bottom:5px;display:block">Select Plan to Withdraw From</label><select class="inp" id="sv-wd-plan-sel"><option value="">-- Select plan --</option></select></div><div style="margin-bottom:12px"><label style="font-size:12px;font-weight:600;color:var(--g600);margin-bottom:5px;display:block">Amount (NGN)</label><input class="inp" type="number" id="sv-wd-amount" placeholder="Enter amount"/></div><div style="margin-bottom:8px"><label style="font-size:12px;font-weight:600;color:var(--g600);margin-bottom:7px;display:block">Transaction PIN *</label><div style="display:flex;gap:10px;justify-content:center"><input class="pbox" type="password" maxlength="1" id="sv-wd-p1" oninput="pn('sv-wd-p1','sv-wd-p2')"/><input class="pbox" type="password" maxlength="1" id="sv-wd-p2" oninput="pn('sv-wd-p2','sv-wd-p3')"/><input class="pbox" type="password" maxlength="1" id="sv-wd-p3" oninput="pn('sv-wd-p3','sv-wd-p4')"/><input class="pbox" type="password" maxlength="1" id="sv-wd-p4"/></div></div><button onclick="submitSvWithdrawal()" class="btn-g" style="width:100%;padding:14px;border-radius:11px;font-size:15px;font-weight:700;margin-top:12px;background:linear-gradient(135deg,#059669,#047857)">Transfer to Wallet</button></div></div><!-- SAVINGS DEPOSIT MODAL --><div class="modal" id="m-sv-deposit"><div class="mbox" style="max-height:92vh;overflow-y:auto"><div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;position:sticky;top:0;background:#fff;padding-bottom:10px;border-bottom:1px solid #f1f5f9;z-index:1"><div><h3 style="font-size:17px;font-weight:700">&#128176; Top-Up Savings</h3><p style="font-size:11px;color:var(--g400);margin-top:2px">Add money from wallet to savings</p></div><button onclick="closeM('m-sv-deposit')" style="background:var(--g100);border:none;width:30px;height:30px;border-radius:50%;cursor:pointer;color:var(--g600);flex-shrink:0">&#10005;</button></div><div id="sv-dep-plan-info" style="background:#f0fdf4;border:1px solid #bbf7d0;border-radius:11px;padding:12px;margin-bottom:14px;font-size:13px;color:var(--green-d)">Loading plan...</div><div style="background:linear-gradient(135deg,#0f172a,#1e3a5f);border-radius:13px;padding:14px 16px;margin-bottom:14px"><div style="font-size:10px;color:rgba(255,255,255,.5);text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px">Wallet Balance</div><div style="font-size:22px;font-weight:800;color:#fff" id="sv-dep-wallet-bal">NGN 0.00</div></div><div style="margin-bottom:12px"><label style="font-size:12px;font-weight:600;color:var(--g600);margin-bottom:5px;display:block">Amount to Add (NGN)</label><input class="inp" type="number" id="sv-dep-amount" placeholder="Enter amount"/></div><div style="margin-bottom:8px"><label style="font-size:12px;font-weight:600;color:var(--g600);margin-bottom:7px;display:block">Transaction PIN *</label><div style="display:flex;gap:10px;justify-content:center"><input class="pbox" type="password" maxlength="1" id="sv-dep-p1" oninput="pn('sv-dep-p1','sv-dep-p2')"/><input class="pbox" type="password" maxlength="1" id="sv-dep-p2" oninput="pn('sv-dep-p2','sv-dep-p3')"/><input class="pbox" type="password" maxlength="1" id="sv-dep-p3" oninput="pn('sv-dep-p3','sv-dep-p4')"/><input class="pbox" type="password" maxlength="1" id="sv-dep-p4"/></div></div><input type="hidden" id="sv-dep-plan-id"/><button onclick="submitSvDeposit()" class="btn-g" style="width:100%;padding:14px;border-radius:11px;font-size:15px;font-weight:700;margin-top:12px;background:linear-gradient(135deg,#059669,#047857)">Add to Savings</button></div></div>
 <!-- RECEIPT MODAL --><div class="modal" id="m-receipt"><div class="mbox" style="max-height:92vh;overflow-y:auto"><div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px"><div style="font-size:16px;font-weight:800">Transaction Receipt</div><button onclick="closeM('m-receipt')" style="background:var(--g100);border:none;width:30px;height:30px;border-radius:50%;cursor:pointer;color:var(--g600)">&#10005;</button></div><div id="receipt-content" style="background:#fff;border-radius:16px;overflow:hidden"><!-- Filled by JS --></div><div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:16px"><button onclick="shareReceipt('whatsapp')" style="display:flex;align-items:center;justify-content:center;gap:7px;padding:13px;background:#dcfce7;border:1px solid #86efac;border-radius:11px;color:#15803d;font-size:13px;font-weight:700;cursor:pointer;font-family:'Inter',sans-serif"><svg width="15" height="15" fill="currentColor" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51a5.051 5.051 0 00-.57-.01c-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
   WhatsApp
   </button><button onclick="shareReceipt('download')" style="display:flex;align-items:center;justify-content:center;gap:7px;padding:13px;background:#dbeafe;border:1px solid #93c5fd;border-radius:11px;color:#1d4ed8;font-size:13px;font-weight:700;cursor:pointer;font-family:'Inter',sans-serif"><svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
