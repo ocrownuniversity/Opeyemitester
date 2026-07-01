@@ -10146,30 +10146,17 @@ function disableBiometric(){
 document.addEventListener('DOMContentLoaded',()=>{ initBioLoginButton(); });
 setTimeout(initBioLoginButton,800);
 
-// SAFE bio lock: hook into loadDash completion, not goPg navigation
-// This avoids breaking any navigation. Bio lock shows as an overlay ON TOP of the loaded dashboard.
-const _origLoadDashForBio=window.loadDash;
-window.loadDash=async function(...args){
-  if(_origLoadDashForBio) await _origLoadDashForBio.apply(this,args);
-  // After dashboard loads, check if bio lock should be shown for returning sessions
-  try{
-    if(CU&&UD?.biometricEnabled){
-      const credId=getStoredBioCredId(CU.uid);
-      if(credId&&!window._bioJustLoggedIn){
-        showBioLockScreen(CU.uid,UD?.name||'');
-      }
-      window._bioJustLoggedIn=false;
-    }
-  }catch(e){}
-};
-
 // Fix avatar image: fall back to letter if photo fails to load
-document.querySelectorAll('#d-avatar-img,#pr-av-img').forEach(img=>{
-  img.onerror=function(){
-    this.style.display='none';
-    const letter=document.getElementById(this.id==='d-avatar-img'?'d-avatar-letter':'pr-av-letter');
-    if(letter)letter.style.display='flex';
-  };
+document.addEventListener('DOMContentLoaded',()=>{
+  ['d-avatar-img','pr-av-img'].forEach(id=>{
+    const img=document.getElementById(id);
+    if(!img)return;
+    img.onerror=function(){
+      this.style.display='none';
+      const ltr=document.getElementById(id==='d-avatar-img'?'d-avatar-letter':'pr-av-letter');
+      if(ltr)ltr.style.display='flex';
+    };
+  });
 });
 </script>
 <!-- ======== MODAL: SPENDING INSIGHTS ======== -->
@@ -10273,7 +10260,7 @@ document.querySelectorAll('#d-avatar-img,#pr-av-img').forEach(img=>{
 <div style="background:#f0fdf4;border-radius:10px;padding:10px;margin-bottom:16px;font-size:12px;color:#15803d">Let others scan this to send you money instantly</div>
 <div style="display:flex;gap:8px">
 <button onclick="downloadQR()" class="btn-g" style="flex:1;padding:11px;border-radius:10px;font-size:13px">📥 Download</button>
-<button onclick="openReferralShareCard()" style="flex:1;padding:11px;border-radius:10px;background:#eff6ff;border:1px solid #bfdbfe;color:#1d4ed8;font-size:13px;font-weight:700;cursor:pointer;font-family:Inter,sans-serif">🎨 Share Card</button>
+<button onclick="shareQRCode()" style="flex:1;padding:11px;border-radius:10px;background:#eff6ff;border:1px solid #bfdbfe;color:#1d4ed8;font-size:13px;font-weight:700;cursor:pointer;font-family:Inter,sans-serif">📤 Share QR</button>
 </div></div></div></div>
 
 <!-- ======== MODAL: ONBOARDING ======== -->
@@ -10461,8 +10448,15 @@ catch(e){document.getElementById('at-body').innerHTML='<div style="padding:12px;
 function openSplitPay(){if(!CU){goPg('pg-login');return;}openM('m-split-pay');loadSplitRequests();}
 async function loadSplitRequests(){
 const el=document.getElementById('sp-list');if(!el)return;el.innerHTML='<div style="text-align:center;padding:14px;color:var(--g400)">Loading...</div>';
-try{const [snap1,snap2]=await Promise.all([db.collection('splitRequests').where('creatorId','==',CU.uid).orderBy('createdAt','desc').limit(8).get(),db.collection('splitRequests').where('participants','array-contains',UD?.phone||'').orderBy('createdAt','desc').limit(8).get()]);
+try{
+// Use simple queries without orderBy to avoid composite index requirement
+const [snap1,snap2]=await Promise.all([
+db.collection('splitRequests').where('creatorId','==',CU.uid).limit(10).get(),
+db.collection('splitRequests').where('participants','array-contains',UD?.phone||'').limit(10).get()
+]);
 const seen=new Set();const docs=[...snap1.docs,...snap2.docs].filter(d=>{if(seen.has(d.id))return false;seen.add(d.id);return true;});
+// Sort client-side by createdAt descending
+docs.sort((a,b)=>{const ta=a.data().createdAt?.toMillis?.()||0;const tb=b.data().createdAt?.toMillis?.()||0;return tb-ta;});
 if(!docs.length){el.innerHTML='<div style="text-align:center;padding:14px;color:var(--g400)"><div style="font-size:28px">🤝</div><p style="font-size:12px;margin-top:8px">No split requests yet</p></div>';return;}
 el.innerHTML=docs.map(d=>{const r=d.data();const isOwner=r.creatorId===CU.uid;const paid=r.payments?Object.values(r.payments).filter(Boolean).length:0;
 return`<div style="border:1px solid #f1f5f9;border-radius:12px;padding:12px;margin-bottom:8px"><div style="display:flex;justify-content:space-between;margin-bottom:5px"><div style="font-size:13px;font-weight:700">${r.title||'Split Request'}</div><div style="font-size:11px;color:${isOwner?'#2563eb':'#16a34a'};font-weight:600">${isOwner?'Creator':'Invited'}</div></div><div style="font-size:12px;color:var(--g500)">NGN ${fmt(r.totalAmount)} ÷ ${r.participants?.length||1} = <strong>NGN ${fmt(r.amountEach)}</strong> each</div><div style="font-size:11px;color:var(--g400);margin-top:3px">${paid}/${r.participants?.length||0} paid</div>${!isOwner&&!r.payments?.[UD?.phone||'']?`<button onclick="paySplitRequest('${d.id}',${r.amountEach})" style="margin-top:8px;width:100%;padding:8px;border-radius:8px;background:var(--green);color:#fff;border:none;font-size:12px;font-weight:700;cursor:pointer;font-family:Inter,sans-serif">Pay NGN ${fmt(r.amountEach)}</button>`:''}${isOwner?`<button onclick="shareSplitLink('${d.id}')" style="margin-top:8px;width:100%;padding:7px;border-radius:8px;background:#eff6ff;color:#1d4ed8;border:1px solid #bfdbfe;font-size:12px;font-weight:600;cursor:pointer;font-family:Inter,sans-serif">📤 Share Link</button>`:''}</div>`;}).join('');}
@@ -10493,7 +10487,48 @@ const data=`zmonie://pay?account=${acc}&name=${encodeURIComponent(name)}`;
 el.innerHTML=`<img src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodeURIComponent(data)}&bgcolor=ffffff&color=15803d&qzone=2" style="width:200px;height:200px;border-radius:12px" alt="QR"/>`;
 const nd=document.getElementById('qr-name-display');const ad=document.getElementById('qr-acc-display');
 if(nd)nd.textContent=name;if(ad)ad.textContent=acc;}
-function downloadQR(){const img=document.querySelector('#qr-canvas-wrap img');if(!img){toast('QR not loaded');return;}const a=document.createElement('a');a.href=img.src;a.download='zmonie-qr.png';a.click();}
+function downloadQR(){
+const img=document.querySelector('#qr-canvas-wrap img');if(!img){toast('QR not loaded');return;}
+const a=document.createElement('a');a.href=img.src;a.download='zmonie-qr-'+(UD?.phone||'')+'.png';a.click();
+toast('📥 QR Code downloaded!');
+}
+async function shareQRCode(){
+const img=document.querySelector('#qr-canvas-wrap img');
+if(!img){toast('QR not loaded yet');return;}
+try{
+// Draw QR onto canvas to get a shareable blob
+const canvas=document.createElement('canvas');canvas.width=300;canvas.height=360;
+const ctx=canvas.getContext('2d');
+// White background
+ctx.fillStyle='#fff';ctx.fillRect(0,0,300,360);
+// Draw QR image
+const qrImg=new Image();qrImg.crossOrigin='anonymous';
+qrImg.onload=async function(){
+ctx.drawImage(qrImg,30,20,240,240);
+// Name and phone text
+ctx.fillStyle='#111';ctx.font='bold 16px Arial';ctx.textAlign='center';ctx.fillText(UD?.name||'',150,285);
+ctx.fillStyle='#666';ctx.font='13px Arial';ctx.fillText(UD?.phone||'',150,305);
+ctx.fillStyle='#16a34a';ctx.font='bold 11px Arial';ctx.fillText('Scan to send money via ZMONIE',150,330);
+canvas.toBlob(async blob=>{
+if(!blob)return;
+const file=new File([blob],'zmonie-qr.png',{type:'image/png'});
+if(navigator.share&&navigator.canShare&&navigator.canShare({files:[file]})){
+try{await navigator.share({files:[file],title:'My ZMONIE QR Code',text:'Scan to send me money on ZMONIE'});return;}
+catch(e){if(e.name==='AbortError')return;}
+}
+// Fallback: download
+const a=document.createElement('a');a.href=canvas.toDataURL('image/png');a.download='zmonie-qr.png';a.click();
+toast('📥 QR saved (sharing not supported on this browser)');
+});
+};
+qrImg.onerror=function(){
+// Fallback: just share the img src URL
+if(navigator.share){navigator.share({title:'My ZMONIE QR Code',text:'Scan to send money to '+(UD?.name||'')+' on ZMONIE',url:img.src});}
+else{const a=document.createElement('a');a.href=img.src;a.download='zmonie-qr.png';a.click();}
+};
+qrImg.src=img.src;
+}catch(e){toast('Share failed: '+e.message);}
+}
 
 // FEATURE 11: REVENUE DASHBOARD (called from admin panel)
 async function loadRevenueTab(el){
@@ -10558,7 +10593,30 @@ canvas.style.display='block';}
 function downloadReferralCard(){const c=document.getElementById('referral-canvas');if(!c)return;const a=document.createElement('a');a.href=c.toDataURL('image/png');a.download='zmonie-referral.png';a.click();toast('📥 Downloaded!');}
 function shareReferralCard(){const c=document.getElementById('referral-canvas');if(!c)return;if(!navigator.share){downloadReferralCard();return;}c.toBlob(async b=>{try{await navigator.share({files:[new File([b],'zmonie-referral.png',{type:'image/png'})],title:'Join ZMONIE!',text:'Use my referral code: '+(UD?.phone||'')});}catch(e){downloadReferralCard();}});}
 
-// Hook: call bill reminders and onboarding after loadDash populates UD
+// Single clean hook — runs after the original loadDash completes
 const _existingLoadDash=window.loadDash;
-window.loadDash=async function(...a){if(_existingLoadDash)await _existingLoadDash.apply(this,a);try{await checkBillReminders();}catch(e){}try{await logLoginActivity();}catch(e){}if(!localStorage.getItem('zmonie_onboarded')&&UD&&!UD.onboardedAt)setTimeout(showOnboarding,900);};</script>
+window.loadDash=async function(...a){
+  if(_existingLoadDash)await _existingLoadDash.apply(this,a);
+  // Bill reminders check
+  try{await checkBillReminders();}catch(e){}
+  // Log login
+  try{await logLoginActivity();}catch(e){}
+  // Biometric lock overlay (only for returning sessions, not fresh login)
+  try{if(CU&&UD?.biometricEnabled&&!window._bioJustLoggedIn){const credId=getStoredBioCredId(CU.uid);if(credId)showBioLockScreen(CU.uid,UD?.name||'');}window._bioJustLoggedIn=false;}catch(e){}
+  // Onboarding for new users
+  if(!localStorage.getItem('zmonie_onboarded')&&UD&&!UD.onboardedAt)setTimeout(showOnboarding,900);
+  // Retry profile photo if avatar still shows initial U
+  try{
+    const photo=UD?.photoURL||'';
+    if(photo){
+      const img=document.getElementById('d-avatar-img');
+      const ltr=document.getElementById('d-avatar-letter');
+      if(img&&img.style.display==='none'&&ltr&&ltr.textContent!=='?'){
+        img.onerror=function(){this.style.display='none';const l=document.getElementById('d-avatar-letter');if(l)l.style.display='flex';};
+        img.onload=function(){this.style.display='block';const l=document.getElementById('d-avatar-letter');if(l)l.style.display='none';};
+        img.src=photo;
+      }
+    }
+  }catch(e){}
+};</script>
 </body></html>
