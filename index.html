@@ -286,10 +286,14 @@ localStorage.removeItem('zmonie_banner_dismissed');
 <div class="svc-item" onclick="openSvc('data');closeAllServices()"><div class="svc-ico" style="background:#dbeafe">&#127760;</div><div class="svc-lbl">Data</div></div>
 <div class="svc-item" onclick="openSvc('cable');closeAllServices()"><div class="svc-ico" style="background:#fef3c7">&#128250;</div><div class="svc-lbl">Cable TV</div></div>
 <div class="svc-item" onclick="openSvc('electricity');closeAllServices()" style="border-right:none;border-radius:0 14px 0 0"><div class="svc-ico" style="background:#fce7f3">&#128161;</div><div class="svc-lbl">Electricity</div></div>
-<div class="svc-item" onclick="openAirtimeCash();closeAllServices()" style="border-bottom:none;border-radius:0 0 0 14px"><div class="svc-ico" style="background:#fef3c7">&#128176;</div><div class="svc-lbl">Airtime Cash</div></div>
-<div class="svc-item" onclick="openSvc('result');closeAllServices()" style="border-bottom:none"><div class="svc-ico" style="background:#dcfce7">&#128203;</div><div class="svc-lbl">Result Checker</div></div>
-<div class="svc-item" onclick="openScheduled();closeAllServices()" style="border-bottom:none"><div class="svc-ico" style="background:#fff7ed">&#128197;</div><div class="svc-lbl">Scheduled</div></div>
-<div class="svc-item" onclick="openBillReminders();closeAllServices()" style="border-right:none;border-bottom:none;border-radius:0 0 14px 0"><div class="svc-ico" style="background:#fef3c7">&#128276;</div><div class="svc-lbl">Reminders</div></div>
+<div class="svc-item" onclick="openAirtimeCash();closeAllServices()"><div class="svc-ico" style="background:#fef3c7">&#128176;</div><div class="svc-lbl">Airtime Cash</div></div>
+<div class="svc-item" onclick="openSvc('result');closeAllServices()"><div class="svc-ico" style="background:#dcfce7">&#128203;</div><div class="svc-lbl">Result Checker</div></div>
+<div class="svc-item" onclick="openRechargeCard();closeAllServices()"><div class="svc-ico" style="background:#fdf4ff">&#128190;</div><div class="svc-lbl">Recharge Card</div></div>
+<div class="svc-item" onclick="openBetting();closeAllServices()" style="border-right:none"><div class="svc-ico" style="background:#fff7ed">&#127921;</div><div class="svc-lbl">Betting</div></div>
+<div class="svc-item" onclick="openScheduled();closeAllServices()" style="border-bottom:none;border-radius:0 0 0 14px"><div class="svc-ico" style="background:#fff7ed">&#128197;</div><div class="svc-lbl">Scheduled</div></div>
+<div class="svc-item" onclick="openBillReminders();closeAllServices()" style="border-bottom:none"><div class="svc-ico" style="background:#fef3c7">&#128276;</div><div class="svc-lbl">Reminders</div></div>
+<div class="svc-item" style="border-bottom:none;border-right:none;border-radius:0 0 14px 0" onclick="closeAllServices()"><div class="svc-ico" style="background:#f8fafc"></div><div class="svc-lbl"></div></div>
+<div class="svc-item" style="display:none"></div>
 </div>
 <!-- Category: Money -->
 <div style="font-size:11px;font-weight:700;color:var(--g400);text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px">Money</div>
@@ -715,7 +719,7 @@ function fmt(n){return parseFloat(n||0).toLocaleString('en-NG',{minimumFractionD
 // All Firebase balances are stored and transacted in NGN.
 // FMT() converts to the user's chosen display currency for visual display ONLY.
 // The original NGN value is never modified anywhere.
-const CURRENCY_SYMBOLS={NGN:'&#8358;',USD:'$',GBP:'&pound;',EUR:'&euro;',CAD:'CA$',AED:'AED ',GHS:'GH&#8373;',KES:'KSh ',ZAR:'R ',CNY:'&yen;',SAR:'SAR '};
+const CURRENCY_SYMBOLS={NGN:'₦',USD:'$',GBP:'£',EUR:'€',CAD:'CA$',AED:'AED ',GHS:'GH₵',KES:'KSh ',ZAR:'R ',CNY:'¥',SAR:'SAR '};
 const CURRENCY_RATES_TO_NGN={NGN:1,USD:1590,GBP:2012,EUR:1729,CAD:1165,AED:433,GHS:102,KES:12.3,ZAR:85.5,CNY:219,SAR:424};
 let _dispCurrency='NGN';
 function fmtC(ngnAmount){
@@ -9887,6 +9891,9 @@ async function adminSvMarkMatured(planId,userId){
       read:false,createdAt:firebase.firestore.FieldValue.serverTimestamp()
     });
   }
+  toast('Plan marked as matured.');
+  aTab('savings');
+}
 // ============================================================
 // BIOMETRIC AUTHENTICATION SYSTEM
 // Works on any domain — rpId is always set to window.location.hostname
@@ -10398,14 +10405,15 @@ async function checkBillReminders(){if(!CU)return;try{const today=new Date().get
 
 // FEATURE 6: LOGIN ACTIVITY LOG
 function openLoginActivity(){if(!CU){goPg('pg-login');return;}openM('m-login-activity');loadLoginActivity();refreshBioProfileUI();}
-async function logLoginActivity(){if(!CU)return;try{await db.collection('loginActivity').add({userId:CU.uid,timestamp:firebase.firestore.FieldValue.serverTimestamp(),device:getDeviceInfo(),userAgent:navigator.userAgent.substring(0,100)});const old=await db.collection('loginActivity').where('userId','==',CU.uid).orderBy('timestamp','desc').offset(10).get();const batch=db.batch();old.docs.forEach(d=>batch.delete(d.ref));if(old.size>0)await batch.commit();}catch(e){}}
+async function logLoginActivity(){if(!CU)return;try{await db.collection('loginActivity').add({userId:CU.uid,timestamp:firebase.firestore.FieldValue.serverTimestamp(),device:getDeviceInfo(),userAgent:navigator.userAgent.substring(0,100)});const old=await db.collection('loginActivity').where('userId','==',CU.uid).get();if(old.size>10){const sorted=old.docs.sort((a,b)=>(b.data().timestamp?.toMillis?.()??0)-(a.data().timestamp?.toMillis?.()??0));const batch=db.batch();sorted.slice(10).forEach(d=>batch.delete(d.ref));await batch.commit();}}catch(e){}}
 function getDeviceInfo(){const ua=navigator.userAgent;if(/iPhone|iPad/.test(ua))return'📱 iPhone/iPad';if(/Android/.test(ua))return'📱 Android';if(/Windows/.test(ua))return'💻 Windows PC';if(/Mac/.test(ua))return'💻 Mac';return'🖥️ Device';}
 async function loadLoginActivity(){
 const el=document.getElementById('la-list');if(!el)return;
 el.innerHTML='<div style="text-align:center;padding:16px;color:var(--g400)">Loading...</div>';
-try{const snap=await db.collection('loginActivity').where('userId','==',CU.uid).orderBy('timestamp','desc').limit(8).get();
+try{const snap=await db.collection('loginActivity').where('userId','==',CU.uid).limit(20).get();
 if(snap.empty){el.innerHTML='<div style="text-align:center;padding:16px;color:var(--g400)"><div style="font-size:28px">🔐</div><p style="font-size:12px;margin-top:8px">No login history yet</p></div>';return;}
-el.innerHTML=snap.docs.map((d,i)=>{const r=d.data();const date=r.timestamp?.toDate?r.timestamp.toDate():new Date();
+const docs=snap.docs.sort((a,b)=>(b.data().timestamp?.toMillis?.()??0)-(a.data().timestamp?.toMillis?.()??0)).slice(0,8);
+el.innerHTML=docs.map((d,i)=>{const r=d.data();const date=r.timestamp?.toDate?r.timestamp.toDate():new Date();
 return`<div style="display:flex;align-items:flex-start;gap:12px;padding:11px;border-bottom:1px solid #f1f5f9;${i===0?'background:#f0fdf4;border-radius:10px;margin-bottom:4px':''}"><div style="font-size:22px">${r.device?.startsWith('📱')?'📱':'💻'}</div><div><div style="font-size:13px;font-weight:700">${r.device||'Unknown'}${i===0?' <span style="font-size:10px;background:#16a34a;color:#fff;padding:2px 7px;border-radius:10px">Now</span>':''}</div><div style="font-size:11px;color:var(--g400);margin-top:2px">${date.toLocaleDateString('en-NG',{day:'numeric',month:'short',year:'numeric'})} at ${date.toLocaleTimeString('en-NG',{hour:'2-digit',minute:'2-digit'})}</div></div></div>`;}).join('');}
 catch(e){el.innerHTML='<div style="padding:12px;color:#dc2626">'+e.message+'</div>';}}
 
@@ -10596,27 +10604,365 @@ function shareReferralCard(){const c=document.getElementById('referral-canvas');
 // Single clean hook — runs after the original loadDash completes
 const _existingLoadDash=window.loadDash;
 window.loadDash=async function(...a){
-  if(_existingLoadDash)await _existingLoadDash.apply(this,a);
-  // Bill reminders check
-  try{await checkBillReminders();}catch(e){}
-  // Log login
-  try{await logLoginActivity();}catch(e){}
-  // Biometric lock overlay (only for returning sessions, not fresh login)
-  try{if(CU&&UD?.biometricEnabled&&!window._bioJustLoggedIn){const credId=getStoredBioCredId(CU.uid);if(credId)showBioLockScreen(CU.uid,UD?.name||'');}window._bioJustLoggedIn=false;}catch(e){}
-  // Onboarding for new users
-  if(!localStorage.getItem('zmonie_onboarded')&&UD&&!UD.onboardedAt)setTimeout(showOnboarding,900);
-  // Retry profile photo if avatar still shows initial U
+  // PRE-POPULATE name & avatar immediately using data already in UD from onAuthStateChanged
+  // This ensures name never stays "Loading..." even if the Firestore fetch inside loadDash is slow
   try{
-    const photo=UD?.photoURL||'';
-    if(photo){
-      const img=document.getElementById('d-avatar-img');
-      const ltr=document.getElementById('d-avatar-letter');
-      if(img&&img.style.display==='none'&&ltr&&ltr.textContent!=='?'){
-        img.onerror=function(){this.style.display='none';const l=document.getElementById('d-avatar-letter');if(l)l.style.display='flex';};
-        img.onload=function(){this.style.display='block';const l=document.getElementById('d-avatar-letter');if(l)l.style.display='none';};
-        img.src=photo;
+    if(CU){
+      const nameEl=document.getElementById('d-name');
+      const ltrEl=document.getElementById('d-avatar-letter');
+      const imgEl=document.getElementById('d-avatar-img');
+      const n=UD?.name||CU.displayName||CU.email?.split('@')[0]||'User';
+      if(nameEl&&(nameEl.textContent==='Loading...'||!nameEl.textContent))nameEl.textContent=n;
+      if(ltrEl&&ltrEl.textContent==='U')ltrEl.textContent=n.charAt(0).toUpperCase();
+      const photo=UD?.photoURL||CU.photoURL||'';
+      if(photo&&imgEl){
+        imgEl.onerror=function(){this.style.display='none';const l=document.getElementById('d-avatar-letter');if(l)l.style.display='flex';};
+        imgEl.onload=function(){this.style.display='block';const l=document.getElementById('d-avatar-letter');if(l)l.style.display='none';};
+        imgEl.src=photo;
       }
     }
   }catch(e){}
+  if(_existingLoadDash)await _existingLoadDash.apply(this,a);
+  // Bill reminders
+  try{await checkBillReminders();}catch(e){}
+  // Login activity log
+  try{await logLoginActivity();}catch(e){}
+  // Biometric lock (returning sessions only)
+  try{if(CU&&UD?.biometricEnabled&&!window._bioJustLoggedIn){const credId=getStoredBioCredId(CU.uid);if(credId)showBioLockScreen(CU.uid,UD?.name||'');}window._bioJustLoggedIn=false;}catch(e){}
+  // Onboarding for new users
+  if(!localStorage.getItem('zmonie_onboarded')&&UD&&!UD.onboardedAt)setTimeout(showOnboarding,900);
+  // Final photo retry after Firestore fetch completes
+  try{
+    const photo=UD?.photoURL||'';
+    const img=document.getElementById('d-avatar-img');
+    if(photo&&img&&img.style.display==='none'){
+      img.onerror=function(){this.style.display='none';const l=document.getElementById('d-avatar-letter');if(l)l.style.display='flex';};
+      img.onload=function(){this.style.display='block';const l=document.getElementById('d-avatar-letter');if(l)l.style.display='none';};
+      img.src=photo;
+    }
+  }catch(e){}
 };</script>
+
+<!-- ======== MODAL: RECHARGE CARD PRINTING ======== -->
+<div class="modal" id="m-recharge-card"><div class="mbox" style="max-height:92vh;overflow-y:auto">
+<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px">
+<div><div style="font-size:17px;font-weight:700">💿 Recharge Card Printing</div><div style="font-size:11px;color:var(--g400);margin-top:2px">Generate &amp; print airtime PINs instantly</div></div>
+<button onclick="closeM('m-recharge-card')" style="background:var(--g100);border:none;width:30px;height:30px;border-radius:50%;cursor:pointer;color:var(--g600)">✕</button>
+</div>
+<div id="rc-step-1">
+<div style="margin-bottom:13px"><label style="font-size:12px;font-weight:600;color:var(--g600);margin-bottom:6px;display:block">Network</label>
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
+<button onclick="selectRCNet('01','MTN','#d97706')" id="rcn-01" style="padding:10px;border-radius:10px;border:2px solid #e2e8f0;background:#fff;font-size:13px;font-weight:700;cursor:pointer;font-family:Inter,sans-serif">📱 MTN</button>
+<button onclick="selectRCNet('02','Glo','#16a34a')" id="rcn-02" style="padding:10px;border-radius:10px;border:2px solid #e2e8f0;background:#fff;font-size:13px;font-weight:700;cursor:pointer;font-family:Inter,sans-serif">📱 Glo</button>
+<button onclick="selectRCNet('03','9Mobile','#059669')" id="rcn-03" style="padding:10px;border-radius:10px;border:2px solid #e2e8f0;background:#fff;font-size:13px;font-weight:700;cursor:pointer;font-family:Inter,sans-serif">📱 9Mobile</button>
+<button onclick="selectRCNet('04','Airtel','#dc2626')" id="rcn-04" style="padding:10px;border-radius:10px;border:2px solid #e2e8f0;background:#fff;font-size:13px;font-weight:700;cursor:pointer;font-family:Inter,sans-serif">📱 Airtel</button>
+</div></div>
+<div style="margin-bottom:13px"><label style="font-size:12px;font-weight:600;color:var(--g600);margin-bottom:6px;display:block">Card Value</label>
+<div style="display:flex;gap:8px">
+<button onclick="selectRCVal(100)" id="rcv-100" style="flex:1;padding:11px;border-radius:10px;border:2px solid #e2e8f0;background:#fff;font-size:13px;font-weight:700;cursor:pointer;font-family:Inter,sans-serif">₦100</button>
+<button onclick="selectRCVal(200)" id="rcv-200" style="flex:1;padding:11px;border-radius:10px;border:2px solid #e2e8f0;background:#fff;font-size:13px;font-weight:700;cursor:pointer;font-family:Inter,sans-serif">₦200</button>
+<button onclick="selectRCVal(500)" id="rcv-500" style="flex:1;padding:11px;border-radius:10px;border:2px solid #e2e8f0;background:#fff;font-size:13px;font-weight:700;cursor:pointer;font-family:Inter,sans-serif">₦500</button>
+</div></div>
+<div style="margin-bottom:13px"><label style="font-size:12px;font-weight:600;color:var(--g600);margin-bottom:6px;display:block">Quantity <span style="font-weight:400;color:var(--g400)">(1–100)</span></label>
+<input class="inp" type="number" id="rc-qty" min="1" max="100" value="1" oninput="updateRCSummary()" style="font-size:18px;font-weight:700"/></div>
+<div id="rc-summary" style="display:none;background:linear-gradient(135deg,#0f172a,#15803d);border-radius:12px;padding:14px;color:#fff;margin-bottom:14px">
+<div style="font-size:10px;color:rgba(255,255,255,.5);text-transform:uppercase;font-weight:600;margin-bottom:8px">Order Summary</div>
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+<div><div style="font-size:10px;color:rgba(255,255,255,.45)">Network</div><div style="font-size:15px;font-weight:800" id="rc-sum-net">-</div></div>
+<div><div style="font-size:10px;color:rgba(255,255,255,.45)">Card Value</div><div style="font-size:15px;font-weight:800" id="rc-sum-val">-</div></div>
+<div><div style="font-size:10px;color:rgba(255,255,255,.45)">Quantity</div><div style="font-size:15px;font-weight:800" id="rc-sum-qty">-</div></div>
+<div><div style="font-size:10px;color:rgba(255,255,255,.45)">Total</div><div style="font-size:15px;font-weight:800;color:#4ade80" id="rc-sum-total">-</div></div>
+</div></div>
+<div style="background:#fef3c7;border-radius:10px;padding:10px 13px;font-size:12px;color:#92400e;margin-bottom:14px">💡 PINs are delivered instantly. Cost deducted from your wallet.</div>
+<button onclick="proceedRCPin()" class="btn-g" id="rc-proceed-btn" disabled style="width:100%;padding:13px;border-radius:11px;font-size:15px;opacity:.5">Select Network &amp; Value</button>
+</div>
+<div id="rc-step-2" style="display:none">
+<div style="background:#f8fafc;border-radius:12px;padding:14px;margin-bottom:16px">
+<div style="font-size:12px;font-weight:600;color:var(--g500);margin-bottom:10px">CONFIRM ORDER</div>
+<div style="display:flex;justify-content:space-between;padding:7px 0;border-bottom:1px solid #f1f5f9"><span style="font-size:12px;color:var(--g500)">Network</span><span style="font-size:13px;font-weight:700" id="rc-cf-net">-</span></div>
+<div style="display:flex;justify-content:space-between;padding:7px 0;border-bottom:1px solid #f1f5f9"><span style="font-size:12px;color:var(--g500)">Value × Qty</span><span style="font-size:13px;font-weight:700" id="rc-cf-detail">-</span></div>
+<div style="display:flex;justify-content:space-between;padding:8px 0"><span style="font-size:13px;font-weight:700">Total</span><span style="font-size:15px;font-weight:900;color:#dc2626" id="rc-cf-total">-</span></div>
+</div>
+<div style="margin-bottom:16px"><label style="font-size:12px;font-weight:600;color:var(--g600);margin-bottom:7px;display:block">Enter PIN to confirm</label>
+<div style="display:flex;gap:12px;justify-content:center">
+<input class="pbox" type="password" maxlength="1" id="rcp1" oninput="pn('rcp1','rcp2')"/>
+<input class="pbox" type="password" maxlength="1" id="rcp2" oninput="pn('rcp2','rcp3')"/>
+<input class="pbox" type="password" maxlength="1" id="rcp3" oninput="pn('rcp3','rcp4')"/>
+<input class="pbox" type="password" maxlength="1" id="rcp4" oninput="if(this.value.length===1)confirmRechargeCard()"/>
+</div></div>
+<button onclick="confirmRechargeCard()" class="btn-g" id="rc-confirm-btn" style="width:100%;padding:13px;border-radius:11px;font-size:15px;margin-bottom:9px">🖨️ Get PINs</button>
+<button onclick="document.getElementById('rc-step-1').style.display='block';document.getElementById('rc-step-2').style.display='none'" style="width:100%;padding:11px;border-radius:10px;background:var(--g100);border:none;font-size:13px;font-weight:600;cursor:pointer;font-family:Inter,sans-serif;color:var(--g600)">Back</button>
+</div>
+<div id="rc-step-3" style="display:none">
+<div style="background:#f0fdf4;border:2px solid #86efac;border-radius:14px;padding:14px;margin-bottom:14px">
+<div style="display:flex;align-items:center;gap:10px;margin-bottom:12px">
+<div style="font-size:22px">✅</div>
+<div><div style="font-size:14px;font-weight:800;color:#15803d">PINs Generated!</div><div style="font-size:11px;color:var(--g500);margin-top:2px" id="rc-result-label">-</div></div>
+</div>
+<div id="rc-pins-list" style="display:flex;flex-direction:column;gap:8px"></div>
+</div>
+<div style="display:flex;gap:8px;margin-bottom:8px">
+<button onclick="copyAllPins()" style="flex:1;padding:11px;border-radius:10px;background:#eff6ff;border:1.5px solid #bfdbfe;color:#1d4ed8;font-size:12px;font-weight:700;cursor:pointer;font-family:Inter,sans-serif">📋 Copy All</button>
+<button onclick="printRCPins()" style="flex:1;padding:11px;border-radius:10px;background:#f0fdf4;border:1.5px solid #86efac;color:#15803d;font-size:12px;font-weight:700;cursor:pointer;font-family:Inter,sans-serif">🖨️ Print</button>
+</div>
+<button onclick="resetRechargeCard()" style="width:100%;padding:11px;border-radius:10px;background:var(--g100);border:none;font-size:13px;font-weight:600;cursor:pointer;font-family:Inter,sans-serif;color:var(--g600)">Buy More</button>
+</div>
+</div></div>
+
+<!-- ======== MODAL: BETTING WALLET FUNDING ======== -->
+<div class="modal" id="m-betting"><div class="mbox" style="max-height:92vh;overflow-y:auto">
+<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px">
+<div><div style="font-size:17px;font-weight:700">🎰 Betting Wallet Funding</div><div style="font-size:11px;color:var(--g400);margin-top:2px">Fund your betting account instantly</div></div>
+<button onclick="closeM('m-betting')" style="background:var(--g100);border:none;width:30px;height:30px;border-radius:50%;cursor:pointer;color:var(--g600)">✕</button>
+</div>
+<div id="bet-step-1">
+<div style="margin-bottom:13px"><label style="font-size:12px;font-weight:600;color:var(--g600);margin-bottom:6px;display:block">Betting Company</label>
+<select class="inp" id="bet-company" onchange="onBetCompanyChange()" style="font-size:14px">
+<option value="">-- Select Company --</option>
+<option value="product-nairabet">Nairabet</option>
+<option value="product-bang-bet">BangBet</option>
+<option value="product-bet-way">BetWay</option>
+<option value="product-bet-land">BetLand</option>
+<option value="product-bet-king">BetKing</option>
+<option value="product-1x-bet">1xBet</option>
+<option value="product-naija-bet">NaijaBet</option>
+<option value="prd-sporty-bet">Sporty Bet</option>
+<option value="product-merry-bet">MerryBet</option>
+</select></div>
+<div style="margin-bottom:13px"><label style="font-size:12px;font-weight:600;color:var(--g600);margin-bottom:6px;display:block">Betting Account ID</label>
+<div style="display:flex;gap:8px">
+<input class="inp" id="bet-customer-id" placeholder="Your betting user ID" type="tel" style="flex:1;font-size:16px;font-weight:700" oninput="clearBetVerify()"/>
+<button onclick="verifyBettingCustomer()" id="bet-verify-btn" style="padding:0 14px;border-radius:10px;background:#1d4ed8;color:#fff;border:none;font-size:12px;font-weight:700;cursor:pointer;font-family:Inter,sans-serif;white-space:nowrap;flex-shrink:0">Verify</button>
+</div></div>
+<div id="bet-name-found" style="display:none;background:#f0fdf4;border:1px solid #86efac;border-radius:11px;padding:12px;margin-bottom:13px">
+<div style="font-size:11px;color:var(--g500)">Account Name:</div>
+<div style="font-size:16px;font-weight:800;color:#15803d;margin-top:3px" id="bet-customer-name">-</div>
+<div style="font-size:10px;color:var(--g400);margin-top:2px">✅ Verified</div>
+</div>
+<div id="bet-name-error" style="display:none;background:#fef2f2;border:1px solid #fecaca;border-radius:11px;padding:10px;margin-bottom:13px;font-size:12px;color:#dc2626">Invalid Account ID. Check and try again.</div>
+<div style="margin-bottom:13px"><label style="font-size:12px;font-weight:600;color:var(--g600);margin-bottom:6px;display:block">Amount (NGN)</label>
+<input class="inp" id="bet-amount" type="number" min="100" placeholder="Min ₦100" style="font-size:18px;font-weight:700"/></div>
+<div id="bet-min-notice" style="display:none;background:#fef3c7;border-radius:10px;padding:10px 13px;font-size:12px;color:#92400e;margin-bottom:13px">⚠️ This provider may require a minimum of ₦50,000. Confirm before proceeding.</div>
+<button onclick="proceedBetPin()" class="btn-g" style="width:100%;padding:13px;border-radius:11px;font-size:15px">Continue</button>
+</div>
+<div id="bet-step-2" style="display:none">
+<div style="background:#f8fafc;border-radius:12px;padding:14px;margin-bottom:16px">
+<div style="font-size:12px;font-weight:600;color:var(--g500);margin-bottom:10px">FUNDING SUMMARY</div>
+<div style="display:flex;justify-content:space-between;padding:7px 0;border-bottom:1px solid #f1f5f9"><span style="font-size:12px;color:var(--g500)">Company</span><span style="font-size:13px;font-weight:700" id="bet-cf-company">-</span></div>
+<div style="display:flex;justify-content:space-between;padding:7px 0;border-bottom:1px solid #f1f5f9"><span style="font-size:12px;color:var(--g500)">Account ID</span><span style="font-size:13px;font-weight:700" id="bet-cf-customer">-</span></div>
+<div style="display:flex;justify-content:space-between;padding:7px 0;border-bottom:1px solid #f1f5f9"><span style="font-size:12px;color:var(--g500)">Name</span><span style="font-size:13px;font-weight:700" id="bet-cf-name">-</span></div>
+<div style="display:flex;justify-content:space-between;padding:8px 0"><span style="font-size:13px;font-weight:700">Amount</span><span style="font-size:15px;font-weight:900;color:#dc2626" id="bet-cf-amount">-</span></div>
+</div>
+<div style="background:#fef3c7;border-radius:10px;padding:10px 13px;font-size:12px;color:#92400e;margin-bottom:14px">⚠️ Betting wallet funding is instant and non-reversible once confirmed.</div>
+<div style="margin-bottom:16px"><label style="font-size:12px;font-weight:600;color:var(--g600);margin-bottom:7px;display:block">Enter PIN to confirm</label>
+<div style="display:flex;gap:12px;justify-content:center">
+<input class="pbox" type="password" maxlength="1" id="betp1" oninput="pn('betp1','betp2')"/>
+<input class="pbox" type="password" maxlength="1" id="betp2" oninput="pn('betp2','betp3')"/>
+<input class="pbox" type="password" maxlength="1" id="betp3" oninput="pn('betp3','betp4')"/>
+<input class="pbox" type="password" maxlength="1" id="betp4" oninput="if(this.value.length===1)confirmBetting()"/>
+</div></div>
+<button onclick="confirmBetting()" class="btn-g" id="bet-confirm-btn" style="width:100%;padding:13px;border-radius:11px;font-size:15px;margin-bottom:9px">✅ Fund Wallet</button>
+<button onclick="document.getElementById('bet-step-1').style.display='block';document.getElementById('bet-step-2').style.display='none'" style="width:100%;padding:11px;border-radius:10px;background:var(--g100);border:none;font-size:13px;font-weight:600;cursor:pointer;font-family:Inter,sans-serif;color:var(--g600)">Back</button>
+</div>
+</div></div>
+
+<script>
+// ============================================================
+// CLUBKONNECT — Recharge Card + Betting
+// ============================================================
+var _ckConfig=null;
+async function loadCKConfig(){
+  if(_ckConfig)return _ckConfig;
+  try{const s=await db.collection('settings').doc('clubkonnect').get();_ckConfig=s.exists?s.data():{};}catch(e){_ckConfig={};}
+  return _ckConfig;
+}
+async function getCKCreds(){
+  const c=await loadCKConfig();
+  if(!c.userId||!c.apiKey)throw new Error('Service not configured. Contact admin.');
+  return{userId:c.userId,apiKey:c.apiKey};
+}
+const CK_BASE='https://www.nellobytesystems.com';
+
+// ── RECHARGE CARD ──
+var _rcNet='',_rcNetName='',_rcVal=0,_rcPins=[];
+function openRechargeCard(){if(!CU){goPg('pg-login');return;}openM('m-recharge-card');resetRechargeCard();}
+function resetRechargeCard(){
+  _rcNet='';_rcNetName='';_rcVal=0;_rcPins=[];
+  ['rc-step-1','rc-step-2','rc-step-3'].forEach((id,i)=>{const e=document.getElementById(id);if(e)e.style.display=i===0?'block':'none';});
+  const qEl=document.getElementById('rc-qty');if(qEl)qEl.value='1';
+  const sEl=document.getElementById('rc-summary');if(sEl)sEl.style.display='none';
+  const bEl=document.getElementById('rc-proceed-btn');if(bEl){bEl.disabled=true;bEl.style.opacity='.5';bEl.textContent='Select Network & Value';}
+  ['rcn-01','rcn-02','rcn-03','rcn-04','rcv-100','rcv-200','rcv-500'].forEach(id=>{const b=document.getElementById(id);if(b){b.style.borderColor='#e2e8f0';b.style.background='#fff';b.style.color='var(--g700)';}});
+}
+function selectRCNet(code,name,color){
+  _rcNet=code;_rcNetName=name;
+  ['rcn-01','rcn-02','rcn-03','rcn-04'].forEach(id=>{const b=document.getElementById(id);if(b){b.style.borderColor='#e2e8f0';b.style.background='#fff';b.style.color='var(--g700)';}});
+  const btn=document.getElementById('rcn-'+code);if(btn){btn.style.borderColor=color;btn.style.background=color+'20';btn.style.color=color;}
+  updateRCSummary();
+}
+function selectRCVal(val){
+  _rcVal=val;
+  ['rcv-100','rcv-200','rcv-500'].forEach(id=>{const b=document.getElementById(id);if(b){b.style.borderColor='#e2e8f0';b.style.background='#fff';b.style.color='var(--g700)';}});
+  const btn=document.getElementById('rcv-'+val);if(btn){btn.style.borderColor='#16a34a';btn.style.background='#f0fdf4';btn.style.color='#15803d';}
+  updateRCSummary();
+}
+function updateRCSummary(){
+  const qty=Math.max(1,parseInt(document.getElementById('rc-qty')?.value||1));
+  const total=_rcVal*qty;const ready=!!(_rcNet&&_rcVal&&qty>=1&&qty<=100);
+  const sEl=document.getElementById('rc-summary');const bEl=document.getElementById('rc-proceed-btn');
+  if(ready&&sEl){
+    sEl.style.display='block';
+    document.getElementById('rc-sum-net').textContent=_rcNetName;
+    document.getElementById('rc-sum-val').textContent='NGN '+_rcVal;
+    document.getElementById('rc-sum-qty').textContent=qty;
+    document.getElementById('rc-sum-total').textContent='NGN '+fmt(total);
+  }else if(sEl)sEl.style.display='none';
+  if(bEl){bEl.disabled=!ready;bEl.style.opacity=ready?'1':'.5';bEl.textContent=ready?'Continue →':'Select Network & Value';}
+}
+function proceedRCPin(){
+  const qty=parseInt(document.getElementById('rc-qty')?.value||1);
+  if(!_rcNet||!_rcVal||qty<1){toast('Please select network and value');return;}
+  const total=_rcVal*qty;
+  if((UD?.balance||0)<total){toast('Insufficient balance. Need NGN '+fmt(total));return;}
+  document.getElementById('rc-cf-net').textContent=_rcNetName;
+  document.getElementById('rc-cf-detail').textContent='NGN '+_rcVal+' × '+qty;
+  document.getElementById('rc-cf-total').textContent='NGN '+fmt(total);
+  ['rcp1','rcp2','rcp3','rcp4'].forEach(id=>{const e=document.getElementById(id);if(e)e.value='';});
+  document.getElementById('rc-step-1').style.display='none';
+  document.getElementById('rc-step-2').style.display='block';
+  document.getElementById('rcp1')?.focus();
+}
+async function confirmRechargeCard(){
+  const pin=['rcp1','rcp2','rcp3','rcp4'].map(id=>document.getElementById(id)?.value||'').join('');
+  if(pin.length<4)return;
+  if(hp(pin)!==UD?.pin){toast('Incorrect PIN');['rcp1','rcp2','rcp3','rcp4'].forEach(id=>{const e=document.getElementById(id);if(e)e.value='';});document.getElementById('rcp1')?.focus();return;}
+  const qty=parseInt(document.getElementById('rc-qty')?.value||1);
+  const total=_rcVal*qty;
+  if((UD?.balance||0)<total){toast('Insufficient balance');return;}
+  const btn=document.getElementById('rc-confirm-btn');
+  if(btn){btn.disabled=true;btn.textContent='⏳ Processing...';}
+  try{
+    const{userId,apiKey}=await getCKCreds();
+    const reqId='RC'+CU.uid.substring(0,6)+Date.now();
+    const url=`${CK_BASE}/APIEPINV1.asp?UserID=${userId}&APIKey=${apiKey}&MobileNetwork=${_rcNet}&Value=${_rcVal}&Quantity=${qty}&RequestID=${reqId}`;
+    await db.collection('users').doc(CU.uid).update({balance:firebase.firestore.FieldValue.increment(-total)});
+    const res=await fetch(url);const data=await res.json();
+    if(!data.TXN_EPIN?.length){
+      await db.collection('users').doc(CU.uid).update({balance:firebase.firestore.FieldValue.increment(total)});
+      toast('PIN generation failed. Refunded.');if(btn){btn.disabled=false;btn.textContent='🖨️ Get PINs';}return;
+    }
+    _rcPins=data.TXN_EPIN;
+    await db.collection('transactions').doc().set({userId:CU.uid,type:'recharge_card',amount:total,description:`${qty}× ₦${_rcVal} ${_rcNetName} Recharge Card`,network:_rcNetName,value:_rcVal,quantity:qty,pins:_rcPins.map(p=>p.pin),status:'success',createdAt:firebase.firestore.FieldValue.serverTimestamp()});
+    await loadUser();
+    document.getElementById('rc-step-2').style.display='none';
+    document.getElementById('rc-step-3').style.display='block';
+    document.getElementById('rc-result-label').textContent=qty+'× ₦'+_rcVal+' '+_rcNetName+' PINs';
+    document.getElementById('rc-pins-list').innerHTML=_rcPins.map((p,i)=>`<div style="background:#fff;border:1px solid #dcfce7;border-radius:10px;padding:12px 14px;display:flex;align-items:center;justify-content:space-between"><div><div style="font-size:10px;color:var(--g400);font-weight:600">PIN ${i+1}${p.sno?' · S/N: '+p.sno:''}</div><div style="font-size:18px;font-weight:800;font-family:monospace;letter-spacing:.1em;margin-top:3px;color:#111">${p.pin}</div></div><button onclick="navigator.clipboard&&navigator.clipboard.writeText('${p.pin}').then(()=>toast('Copied!'))" style="padding:6px 12px;border-radius:8px;background:#f0fdf4;border:1px solid #86efac;color:#15803d;font-size:11px;font-weight:700;cursor:pointer;font-family:Inter,sans-serif">Copy</button></div>`).join('');
+  }catch(e){if(btn){btn.disabled=false;btn.textContent='🖨️ Get PINs';}toast('Error: '+e.message);}
+}
+function copyAllPins(){
+  const text=_rcPins.map((p,i)=>`PIN ${i+1}: ${p.pin}`).join('\n');
+  if(navigator.clipboard)navigator.clipboard.writeText(text).then(()=>toast('✅ All PINs copied!'));
+}
+function printRCPins(){
+  const w=window.open('','_blank');if(!w)return;
+  w.document.write(`<html><body style="font-family:Arial;padding:20px"><h2 style="color:#16a34a">ZMONIE — ${_rcNetName} ₦${_rcVal} Recharge PINs</h2><p style="color:#666">Generated: ${new Date().toLocaleString()}</p><hr/>${_rcPins.map((p,i)=>`<div style="border:1px solid #ccc;border-radius:8px;padding:12px;margin:8px 0"><b>PIN ${i+1}:</b> <span style="font-size:18px;font-family:monospace;letter-spacing:2px">${p.pin}</span><br/><small>S/N: ${p.sno||'-'}</small></div>`).join('')}<p style="color:#999;font-size:12px;margin-top:16px">Keep these PINs safe — ZMONIE is not responsible for misuse.</p></body></html>`);
+  w.document.close();w.print();
+}
+
+// ── BETTING ──
+var _betVerifiedName='';
+function openBetting(){if(!CU){goPg('pg-login');return;}openM('m-betting');resetBetting();}
+function resetBetting(){
+  _betVerifiedName='';
+  ['bet-step-1','bet-step-2'].forEach((id,i)=>{const e=document.getElementById(id);if(e)e.style.display=i===0?'block':'none';});
+  ['bet-company','bet-customer-id','bet-amount'].forEach(id=>{const e=document.getElementById(id);if(e)e.value='';});
+  ['bet-name-found','bet-name-error','bet-min-notice'].forEach(id=>{const e=document.getElementById(id);if(e)e.style.display='none';});
+}
+function onBetCompanyChange(){
+  _betVerifiedName='';
+  ['bet-name-found','bet-name-error'].forEach(id=>{const e=document.getElementById(id);if(e)e.style.display='none';});
+  const co=document.getElementById('bet-company')?.value||'';
+  const highMin=['product-bet-way','product-1x-bet'].includes(co);
+  const mn=document.getElementById('bet-min-notice');if(mn)mn.style.display=highMin?'block':'none';
+}
+function clearBetVerify(){
+  _betVerifiedName='';
+  ['bet-name-found','bet-name-error'].forEach(id=>{const e=document.getElementById(id);if(e)e.style.display='none';});
+}
+async function verifyBettingCustomer(){
+  const co=document.getElementById('bet-company')?.value||'';
+  const cid=(document.getElementById('bet-customer-id')?.value||'').trim();
+  if(!co){toast('Select a betting company first');return;}
+  if(!cid){toast('Enter your Account ID');return;}
+  const btn=document.getElementById('bet-verify-btn');
+  if(btn){btn.textContent='⏳';btn.disabled=true;}
+  try{
+    const{userId,apiKey}=await getCKCreds();
+    const url=`${CK_BASE}/APIVerifyBettingV1.asp?UserID=${userId}&APIKey=${apiKey}&BettingCompany=${co}&CustomerID=${cid}`;
+    const res=await fetch(url);const data=await res.json();
+    const name=data.customer_name||'';
+    const isErr=!name||name.toLowerCase().includes('error')||name.toLowerCase().includes('invalid')||name.toLowerCase().includes('not found');
+    if(!isErr){
+      _betVerifiedName=name;
+      document.getElementById('bet-customer-name').textContent=name;
+      document.getElementById('bet-name-found').style.display='block';
+      document.getElementById('bet-name-error').style.display='none';
+    }else{
+      _betVerifiedName='';
+      document.getElementById('bet-name-found').style.display='none';
+      const eEl=document.getElementById('bet-name-error');
+      if(eEl){eEl.style.display='block';eEl.textContent=name||'Invalid Account ID. Check and try again.';}
+    }
+  }catch(e){toast('Verification failed: '+e.message);}
+  finally{if(btn){btn.textContent='Verify';btn.disabled=false;}}
+}
+function proceedBetPin(){
+  const co=document.getElementById('bet-company')?.value||'';
+  const cid=(document.getElementById('bet-customer-id')?.value||'').trim();
+  const amt=parseFloat(document.getElementById('bet-amount')?.value||0);
+  const sel=document.getElementById('bet-company');
+  const coName=sel?.options[sel.selectedIndex]?.text||co;
+  if(!co){toast('Select a betting company');return;}
+  if(!cid){toast('Enter Account ID');return;}
+  if(!_betVerifiedName){toast('Verify your Account ID first');return;}
+  if(!amt||amt<100){toast('Minimum is NGN 100');return;}
+  if((UD?.balance||0)<amt){toast('Insufficient balance');return;}
+  document.getElementById('bet-cf-company').textContent=coName;
+  document.getElementById('bet-cf-customer').textContent=cid;
+  document.getElementById('bet-cf-name').textContent=_betVerifiedName;
+  document.getElementById('bet-cf-amount').textContent='NGN '+fmt(amt);
+  ['betp1','betp2','betp3','betp4'].forEach(id=>{const e=document.getElementById(id);if(e)e.value='';});
+  document.getElementById('bet-step-1').style.display='none';
+  document.getElementById('bet-step-2').style.display='block';
+  document.getElementById('betp1')?.focus();
+}
+async function confirmBetting(){
+  const pin=['betp1','betp2','betp3','betp4'].map(id=>document.getElementById(id)?.value||'').join('');
+  if(pin.length<4)return;
+  if(hp(pin)!==UD?.pin){toast('Incorrect PIN');['betp1','betp2','betp3','betp4'].forEach(id=>{const e=document.getElementById(id);if(e)e.value='';});document.getElementById('betp1')?.focus();return;}
+  const co=document.getElementById('bet-company')?.value||'';
+  const cid=(document.getElementById('bet-customer-id')?.value||'').trim();
+  const amt=parseFloat(document.getElementById('bet-amount')?.value||0);
+  const coName=document.getElementById('bet-cf-company')?.textContent||co;
+  const btn=document.getElementById('bet-confirm-btn');
+  if(btn){btn.disabled=true;btn.textContent='⏳ Processing...';}
+  try{
+    const{userId,apiKey}=await getCKCreds();
+    const reqId='BET'+CU.uid.substring(0,6)+Date.now();
+    const url=`${CK_BASE}/APIBettingV1.asp?UserID=${userId}&APIKey=${apiKey}&BettingCompany=${co}&CustomerID=${cid}&Amount=${amt}&RequestID=${reqId}`;
+    await db.collection('users').doc(CU.uid).update({balance:firebase.firestore.FieldValue.increment(-amt)});
+    const res=await fetch(url);const data=await res.json();
+    const ok=data.statuscode==='100'||data.status==='ORDER_COMPLETED'||data.status==='ORDER_RECEIVED'||data.statuscode==='200';
+    if(ok){
+      await db.collection('transactions').doc().set({userId:CU.uid,type:'betting',amount:amt,description:`${coName} — ${_betVerifiedName} (${cid})`,bettingCompany:coName,customerId:cid,customerName:_betVerifiedName,orderId:data.orderid||reqId,status:'success',createdAt:firebase.firestore.FieldValue.serverTimestamp()});
+      await loadUser();closeM('m-betting');toast('✅ NGN '+fmt(amt)+' sent to '+coName+' wallet!');
+    }else{
+      await db.collection('users').doc(CU.uid).update({balance:firebase.firestore.FieldValue.increment(amt)});
+      toast('Funding failed: '+(data.status||data.message||'Unknown error')+'. Refunded.');
+      if(btn){btn.disabled=false;btn.textContent='✅ Fund Wallet';}
+    }
+  }catch(e){if(btn){btn.disabled=false;btn.textContent='✅ Fund Wallet';}toast('Error: '+e.message);}
+}
+</script>
 </body></html>
