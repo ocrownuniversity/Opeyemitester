@@ -167,7 +167,7 @@ W.lo=()=>fb.au.signOut(fb.auth);W.sy=async()=>{await sync();toast('Synced')};
 async function admin(){view='adm';nav();const a=$('#app');if(role!='admin')return a.innerHTML='<div class=card>Admins only.</div>';
   const{f,db}=fb;a.innerHTML='<p>Loading…</p>';
   const[qd,ud]=await Promise.all([f.getDocs(f.collection(db,'questions')),f.getDocs(f.collection(db,'users'))]);
-  const Q=qd.docs.map(d=>({...d.data(),id:d.id})),sr=(S.aq||'').toLowerCase(),sh=Q.filter(q=>!sr||(q.text+q.subject+q.topic+q.exam+q.year).toLowerCase().includes(sr)).slice(0,40);
+  const Q=qd.docs.map(d=>({...d.data(),id:d.id})),sr=(S.aq||'').toLowerCase(),fl=Q.filter(q=>!sr||(q.text+q.subject+q.topic+q.exam+q.year).toLowerCase().includes(sr)),sh=fl.slice(0,40);S.fl=fl;
   S.exq=Q;a.innerHTML=`<h2>Admin</h2><div class=card><div class=row><span>Students: <b>${ud.size}</b></span><span>Published: <b>${Q.filter(q=>q.status=='published').length}</b></span><span>Drafts: <b>${Q.filter(q=>q.status!='published').length}</b></span><span>Verified: <b>${Q.filter(q=>q.verified).length}</b></span></div></div>
   ${upCard()}
   <div class=card><h3>Add question</h3><select id=ex><option value=WAEC>WAEC</option><option value=NECO>NECO</option><option value=JAMB>JAMB/UTME</option></select><input id=yr type=number placeholder="Year (blank if not past question)"><input id=sj placeholder=Subject><input id=tp placeholder=Topic>
@@ -175,9 +175,11 @@ async function admin(){view='adm';nav();const a=$('#app');if(role!='admin')retur
   <select id=an><option value=0>Answer A</option><option value=1>Answer B</option><option value=2>Answer C</option><option value=3>Answer D</option></select><textarea id=xp placeholder=Explanation></textarea><input id=mk type=number value=1 placeholder=Marks><input id=so placeholder="Source (e.g. WAEC 2019 official)">
   <label><input id=vf type=checkbox style="width:auto"> Verified</label><select id=st><option value=draft>Draft</option><option value=published>Published</option></select><button class=pr data-a=asv>Save</button></div>
   <details class=card><summary><b>Advanced JSON Import</b></summary><textarea id=bj rows=4 placeholder='[{"exam":"WAEC","year":2019,"subject":"Biology","topic":"Cell","text":"...","options":["a","b","c","d"],"answer":0,"explanation":"","status":"published","verified":true}]'></textarea><button data-a=bi>Preview import</button></details>
-  <div class=card><h3>Questions</h3><input id=sq placeholder=Search value="${E(S.aq||'')}"><button data-a=asr>Search</button>
+  <div class=card><h3>Questions</h3><input id=sq placeholder=Search value="${E(S.aq||'')}"><button data-a=asr>Search</button><div class=row><button class=pr data-a=pa data-v=published>Publish all (${fl.filter(q=>q.status!='published').length})</button><button data-a=pa data-v=draft>Unpublish all (${fl.filter(q=>q.status=='published').length})</button></div><p class=m>Applies to all ${fl.length} questions matching the search box (leave it empty for everything).</p>
   ${sh.map(q=>`<div class=card><span class=m>${N[q.exam]||q.exam} ${q.year||''} · ${E(q.subject)} · ${E(q.topic)} · ${q.status}${q.verified?' ✔':''}</span><br>${E(q.text).slice(0,120)}<br><button data-a=tg data-v=${q.id} data-s=${q.status}>${q.status=='published'?'Unpublish':'Publish'}</button><button data-a=ad data-v=${q.id}>Delete</button></div>`).join('')}</div>
   <div class=card><h3>Students</h3>${ud.docs.slice(0,30).map(d=>`<div class=m>${E(d.data().email)} · ${d.data().role}</div>`).join('')}</div>`}
+W.pa=d=>ae(async()=>{const t=(S.fl||[]).filter(q=>(q.status=='published')!=(d.v=='published'));if(!t.length)return toast('Nothing to change');if(!confirm((d.v=='published'?'Publish ':'Unpublish ')+t.length+' questions?'))return;const{f,db}=fb;
+  for(let i=0;i<t.length;i+=400){const b=f.writeBatch(db);t.slice(i,i+400).forEach(q=>b.update(f.doc(db,'questions',q.id),{status:d.v,updated:Date.now()}));await b.commit()}toast('Done: '+t.length+' questions');admin()});
 W.asr=()=>{S.aq=$('#sq').value;admin()};
 W.asv=()=>ae(async()=>{const g=i=>$('#'+i).value.trim(),o=[0,1,2,3].map(i=>g('o'+i)).filter(Boolean),an=+g('an');
   if(!g('qt')||!g('sj')||o.length<2||an>=o.length)return toast('Check question, subject, options and answer');
@@ -200,7 +202,7 @@ const upCard=()=>`<div class=card style="border:2px solid #0f4c81"><h3>📤 Uplo
 <input id=uf type=file accept=".json,.csv,.xlsx,.zip,application/json,text/csv,application/zip,application/x-zip-compressed,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" style="padding:14px;border:2px dashed #0f4c81">
 <div class=ps><b>Whole subject & year in one upload</b><br><span class=m>Fill these once and they apply to every question in the file that has no exam/year/subject of its own. Then your file only needs the questions.</span>
 <select id=dex><option value=''>Exam: take from file</option><option value=WAEC>WAEC</option><option value=NECO>NECO</option><option value=JAMB>JAMB/UTME</option></select><input id=dsj placeholder="Subject e.g. Chemistry"><input id=dyr type=number placeholder="Year e.g. 2023"><input id=dtp placeholder="Topic (optional)"></div>
-<label>Save imported questions as</label><select id=ist><option value=draft>Draft (recommended)</option><option value=published>Published (visible to students)</option></select>
+<label>Save imported questions as</label><select id=ist><option value=published>Published (students see it now)</option><option value=draft>Draft (hidden until you publish)</option></select>
 <label><input id=ivf type=checkbox style="width:auto"> Mark all imported questions as verified</label>
 <div><button data-a=tpl data-v=xlsx>⬇ Excel template</button><button data-a=tpl data-v=csv>⬇ CSV template</button><button class=pr data-a=tpl data-v=quick>⬇ Quick template (questions only)</button></div>
 <details><summary class=m>Template instructions</summary>${INS.map(x=>`<div class=m>• ${E(x)}</div>`).join('')}</details><div id=up></div></div>`;
