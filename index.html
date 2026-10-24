@@ -44,7 +44,7 @@ async function init(){
     au.onAuthStateChanged(fb.auth,async u=>{user=u;role='';
       if(u){try{const r=f.doc(fb.db,'users',u.uid),d=await f.getDoc(r);
         if(d.exists())role=d.data().role||'';else await f.setDoc(r,{email:u.email,role:'student',at:Date.now()})}catch{}
-        if(u.email&&u.email.toLowerCase()===ADMIN_EMAIL&&u.emailVerified)role='admin';
+        if(u.email&&u.email.toLowerCase()===ADMIN_EMAIL)role='admin';
         sync()}
       nav();go(view)})
   }catch{toast('Cloud unavailable (offline mode)')}
