@@ -124,7 +124,7 @@ function begin(L,x,min){min=min??(x.timed?x.min:0);
 W.res=async()=>{sess=await get('s','cur');if(sess)quiz()};
 function quiz(){clearInterval(tick);view='quiz';nav();const s=sess,q=s.Q[s.i],a=s.ans[q.id],lock=s.fb&&a!=null,mock=s.mode=='mock';
   $('#app').innerHTML=`<div class=card><div class=row><b>${s.i+1}/${s.Q.length} · ${E(q.subject)}</b>${s.timed?'<b id=tm></b>':'<span class=m>Untimed</span>'}</div><div class=bar><i style="width:${(s.i+1)/s.Q.length*100}%"></i></div>
-  ${q.passage?`<p class=ps>${E(q.passage)}</p>`:''}${q.img?`<img src="${E(q.img)}" alt="" style="max-width:100%">`:''}<h3>${E(q.text)}</h3>
+  ${q.passage?`<p class=ps>${E(q.passage)}</p>`:''}${q.img?`<img src="${E(q.img)}" alt="" style="max-width:100%">`:''}<h3>${E(q.text)}</h3>${q.formula?`<code>${E(q.formula)}</code>`:''}
   ${q.options.map((o,j)=>{let c=a===j?' sel':'';if(lock){if(j===q.answer)c+=' ok';else if(a===j)c+=' bad'}return`<button class="opt${c}" data-a=pk data-v=${j}>${L8[j]}. ${E(o)}</button>`}).join('')}
   ${lock?`<p class=ex><b>${a===q.answer?'Correct ✔':'Correct answer: '+L8[q.answer]}</b><br>${E(q.explanation||'')}</p>`:''}
   <div class=row><button data-a=mv data-v=-1 ${s.i?'':'disabled'}>◀ Prev</button>${mock?`<button data-a=fl>${s.fl[q.id]?'★ Marked':'☆ Mark'}</button>`:''}
@@ -168,12 +168,13 @@ async function admin(){view='adm';nav();const a=$('#app');if(role!='admin')retur
   const{f,db}=fb;a.innerHTML='<p>Loading…</p>';
   const[qd,ud]=await Promise.all([f.getDocs(f.collection(db,'questions')),f.getDocs(f.collection(db,'users'))]);
   const Q=qd.docs.map(d=>({...d.data(),id:d.id})),sr=(S.aq||'').toLowerCase(),sh=Q.filter(q=>!sr||(q.text+q.subject+q.topic+q.exam+q.year).toLowerCase().includes(sr)).slice(0,40);
-  a.innerHTML=`<h2>Admin</h2><div class=card><div class=row><span>Students: <b>${ud.size}</b></span><span>Published: <b>${Q.filter(q=>q.status=='published').length}</b></span><span>Drafts: <b>${Q.filter(q=>q.status!='published').length}</b></span><span>Verified: <b>${Q.filter(q=>q.verified).length}</b></span></div></div>
+  S.exq=Q;a.innerHTML=`<h2>Admin</h2><div class=card><div class=row><span>Students: <b>${ud.size}</b></span><span>Published: <b>${Q.filter(q=>q.status=='published').length}</b></span><span>Drafts: <b>${Q.filter(q=>q.status!='published').length}</b></span><span>Verified: <b>${Q.filter(q=>q.verified).length}</b></span></div></div>
+  ${upCard()}
   <div class=card><h3>Add question</h3><select id=ex><option value=WAEC>WAEC</option><option value=NECO>NECO</option><option value=JAMB>JAMB/UTME</option></select><input id=yr type=number placeholder="Year (blank if not past question)"><input id=sj placeholder=Subject><input id=tp placeholder=Topic>
   <input id=pa placeholder="Passage (optional)"><textarea id=qt placeholder="Question"></textarea><input id=im placeholder="Image URL (optional)">${[0,1,2,3].map(i=>`<input id=o${i} placeholder="Option ${L8[i]}">`).join('')}
   <select id=an><option value=0>Answer A</option><option value=1>Answer B</option><option value=2>Answer C</option><option value=3>Answer D</option></select><textarea id=xp placeholder=Explanation></textarea><input id=mk type=number value=1 placeholder=Marks><input id=so placeholder="Source (e.g. WAEC 2019 official)">
   <label><input id=vf type=checkbox style="width:auto"> Verified</label><select id=st><option value=draft>Draft</option><option value=published>Published</option></select><button class=pr data-a=asv>Save</button></div>
-  <div class=card><h3>Bulk import (JSON array)</h3><textarea id=bj rows=4 placeholder='[{"exam":"WAEC","year":2019,"subject":"Biology","topic":"Cell","text":"...","options":["a","b","c","d"],"answer":0,"explanation":"","status":"published","verified":true}]'></textarea><button data-a=bi>Import</button></div>
+  <details class=card><summary><b>Advanced JSON Import</b></summary><textarea id=bj rows=4 placeholder='[{"exam":"WAEC","year":2019,"subject":"Biology","topic":"Cell","text":"...","options":["a","b","c","d"],"answer":0,"explanation":"","status":"published","verified":true}]'></textarea><button data-a=bi>Preview import</button></details>
   <div class=card><h3>Questions</h3><input id=sq placeholder=Search value="${E(S.aq||'')}"><button data-a=asr>Search</button>
   ${sh.map(q=>`<div class=card><span class=m>${N[q.exam]||q.exam} ${q.year||''} · ${E(q.subject)} · ${E(q.topic)} · ${q.status}${q.verified?' ✔':''}</span><br>${E(q.text).slice(0,120)}<br><button data-a=tg data-v=${q.id} data-s=${q.status}>${q.status=='published'?'Unpublish':'Publish'}</button><button data-a=ad data-v=${q.id}>Delete</button></div>`).join('')}</div>
   <div class=card><h3>Students</h3>${ud.docs.slice(0,30).map(d=>`<div class=m>${E(d.data().email)} · ${d.data().role}</div>`).join('')}</div>`}
@@ -182,9 +183,81 @@ W.asv=()=>ae(async()=>{const g=i=>$('#'+i).value.trim(),o=[0,1,2,3].map(i=>g('o'
   if(!g('qt')||!g('sj')||o.length<2||an>=o.length)return toast('Check question, subject, options and answer');
   const d={exam:g('ex'),year:+g('yr')||null,subject:g('sj'),topic:g('tp'),text:g('qt'),options:o,answer:an,explanation:g('xp'),marks:+g('mk')||1,img:g('im'),passage:g('pa'),source:g('so'),verified:$('#vf').checked,status:g('st'),qtype:'objective',created:Date.now(),updated:Date.now(),by:user.uid};
   await fb.f.addDoc(fb.f.collection(fb.db,'questions'),d);toast('Saved');admin()});
-W.bi=()=>ae(async()=>{const a=JSON.parse($('#bj').value),{f,db}=fb;for(let i=0;i<a.length;i+=400){const b=f.writeBatch(db);a.slice(i,i+400).forEach(q=>{if(!q.text||!q.options||q.answer==null)throw Error('Bad item');b.set(f.doc(f.collection(db,'questions')),{qtype:'objective',marks:1,...q,created:Date.now(),updated:Date.now(),by:user.uid})});await b.commit()}toast(a.length+' imported');admin()});
+W.bi=()=>ae(async()=>{const j=JSON.parse($('#bj').value),rows=Array.isArray(j)?j:j.questions;if(!rows||!rows.length)throw Error('No questions found');prev(await prepare(rows,1),'Pasted JSON')});
 W.tg=d=>ae(async()=>{await fb.f.updateDoc(fb.f.doc(fb.db,'questions',d.v),{status:d.s=='published'?'draft':'published',updated:Date.now()});admin()});
 W.ad=d=>confirm('Delete this question?')&&ae(async()=>{await fb.f.deleteDoc(fb.f.doc(fb.db,'questions',d.v));admin()});
+/* ---------- Upload & import ---------- */
+const lib=(u,t)=>window[t]?0:new Promise((r,j)=>{const s=document.createElement('script');s.src=u;s.onload=r;s.onerror=()=>j(Error('Could not load '+t+' (internet needed)'));document.head.appendChild(s)});
+const needX=()=>lib('https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js','XLSX'),needZ=()=>lib('https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js','JSZip');
+const COLS=['exam','year','subject','topic','passage','question','optionA','optionB','optionC','optionD','answer','explanation','marks','image','formula','source'];
+const INS=['exam: WAEC, NECO or JAMB (required)','year: e.g. 2019 — leave blank if it is not a past question','subject and question are required','topic: used for topic practice','answer: the letter of the correct option (A, B, C…) (required)','Fill optionA and optionB at least (up to optionH)','image: a full https:// link, or a file name from your ZIP (jpg/png/webp/gif, max 3 MB)','formula: formula written as text, shown under the question','passage: shared reading text for the question','ZIP: put the .xlsx/.csv/.json file and the images together, then zip','DELETE the example row before importing','Imports are saved as Draft unless you choose Published'];
+const nk=k=>String(k).toLowerCase().replace(/[^a-z0-9]/g,''),nt=s=>String(s).toLowerCase().replace(/[^a-z0-9]/g,'').slice(0,300);
+const hash=s=>{let a=0xdeadbeef,b=0x41c6ce57;for(let i=0;i<s.length;i++){const c=s.charCodeAt(i);a=Math.imul(a^c,2654435761);b=Math.imul(b^c,1597334677)}a=Math.imul(a^a>>>16,2246822507)^Math.imul(b^b>>>13,3266489909);b=Math.imul(b^b>>>16,2246822507)^Math.imul(a^a>>>13,3266489909);return(4294967296*(2097151&b)+(a>>>0)).toString(36)+s.length};
+const dk=q=>[q.exam,q.year||'',String(q.subject||'').toLowerCase(),nt(q.text)].join('|');
+const sv=(b,n)=>{const a=document.createElement('a');a.href=URL.createObjectURL(b);a.download=n;a.click()};
+const upCard=()=>`<div class=card style="border:2px solid #0f4c81"><h3>📤 Upload Question File</h3><p class=m>Choose a .json, .csv, .xlsx or .zip (data file + images) from your phone or computer. Nothing is saved until you confirm the preview.</p>
+<input id=uf type=file accept=".json,.csv,.xlsx,.zip,application/json,text/csv,application/zip,application/x-zip-compressed,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" style="padding:14px;border:2px dashed #0f4c81">
+<label>Save imported questions as</label><select id=ist><option value=draft>Draft (recommended)</option><option value=published>Published (visible to students)</option></select>
+<label><input id=ivf type=checkbox style="width:auto"> Mark all imported questions as verified</label>
+<div><button data-a=tpl data-v=xlsx>⬇ Excel template</button><button data-a=tpl data-v=csv>⬇ CSV template</button></div>
+<details><summary class=m>Template instructions</summary>${INS.map(x=>`<div class=m>• ${E(x)}</div>`).join('')}</details><div id=up></div></div>`;
+W.tpl=d=>ae(async()=>{await needX();const ex={exam:'WAEC',year:2019,subject:'Example Subject',topic:'Example Topic',passage:'',question:'EXAMPLE ROW - DELETE ME: What is 2 + 2?',optionA:'3',optionB:'4',optionC:'5',optionD:'6',answer:'B',explanation:'2 + 2 = 4',marks:1,image:'',formula:'',source:'Your source'},ws=XLSX.utils.json_to_sheet([ex],{header:COLS});
+  if(d.v=='csv')sv(new Blob([XLSX.utils.sheet_to_csv(ws)],{type:'text/csv'}),'exampilot-template.csv');
+  else{const wb=XLSX.utils.book_new();XLSX.utils.book_append_sheet(wb,ws,'Questions');XLSX.utils.book_append_sheet(wb,XLSX.utils.aoa_to_sheet(INS.map(x=>[x])),'Instructions');XLSX.writeFile(wb,'exampilot-template.xlsx')}});
+async function readFile(file){const n=file.name.toLowerCase();if(file.size>25*1048576)throw Error('File too large (max 25 MB)');
+  if(n.endsWith('.json')){const j=JSON.parse(await file.text());return{rows:Array.isArray(j)?j:j.questions,j:1}}
+  await needX();const wb=n.endsWith('.csv')?XLSX.read(await file.text(),{type:'string'}):XLSX.read(await file.arrayBuffer(),{type:'array'});
+  return{rows:XLSX.utils.sheet_to_json(wb.Sheets[wb.SheetNames[0]],{defval:''}),j:0}}
+async function readZip(file){if(file.size>60*1048576)throw Error('ZIP too large (max 60 MB)');await needZ();const z=await JSZip.loadAsync(file),ents=Object.values(z.files).filter(e=>!e.dir);
+  if(ents.length>3000)throw Error('Too many files in ZIP');
+  const ok=e=>!/(^|\/)\.\.(\/|$)|^\/|\\|:|^__MACOSX\/|(^|\/)\./.test(e.name),imgs={};let data=null;
+  for(const e of ents){if(!ok(e))continue;const b=e.name.split('/').pop().toLowerCase();if(/\.(png|jpe?g|gif|webp)$/.test(b))imgs[b]=e;else if(!data&&/\.(json|csv|xlsx)$/.test(b))data=e}
+  if(!data)throw Error('No .json, .csv or .xlsx data file found in the ZIP');
+  if(data._data&&data._data.uncompressedSize>25*1048576)throw Error('Data file too large');
+  const d=await readFile(new File([await data.async('blob')],data.name.split('/').pop()));d.imgs=imgs;return d}
+async function pic(e){if(e._data&&e._data.uncompressedSize>3*1048576)throw Error('Image over 3 MB: '+e.name);const bm=await createImageBitmap(await e.async('blob')),s=Math.min(1,800/Math.max(bm.width,bm.height)),c=document.createElement('canvas');
+  c.width=Math.round(bm.width*s);c.height=Math.round(bm.height*s);const x=c.getContext('2d');x.fillStyle='#fff';x.fillRect(0,0,c.width,c.height);x.drawImage(bm,0,0,c.width,c.height);
+  const u=c.toDataURL('image/jpeg',.75);if(u.length>700000)throw Error('Image too detailed: '+e.name);return u}
+function norm(r,j){const o={};for(const k in r)o[nk(k)]=r[k];const g=(...n)=>{for(const x of n){const v=o[x];if(v!=null&&String(v).trim()!=='')return String(v).trim()}return''},e=[];
+  const u=g('exam','examination','examtype').toUpperCase(),exam=/JAMB|UTME/.test(u)?'JAMB':/WAEC/.test(u)?'WAEC':/NECO/.test(u)?'NECO':'';if(!exam)e.push('exam must be WAEC, NECO or JAMB');
+  const text=g('question','text','questiontext'),subject=g('subject');if(!text)e.push('question missing');if(!subject)e.push('subject missing');
+  const ys=g('year');let year=null;if(ys){year=+ys;if(!Number.isInteger(year)||year<1980||year>2100){e.push('invalid year');year=null}}
+  let options=Array.isArray(r.options)?r.options.map(x=>String(x??'').trim()):[...'ABCDEFGH'].map(l=>g('option'+l.toLowerCase(),l.toLowerCase()));
+  let n=0;options.forEach((x,i)=>{if(x)n=i+1});options=options.slice(0,n);if(n<2)e.push('need at least 2 options');else if(options.includes(''))e.push('gap in options');
+  const a=g('answer','correct','correctanswer','correctoption');let answer=-1;if(/^[A-Ha-h]$/.test(a))answer=a.toUpperCase().charCodeAt(0)-65;else if(j&&/^\d+$/.test(a))answer=+a;
+  if(answer<0||answer>=options.length)e.push('answer must be a letter matching an option (A, B, C…)');
+  const mk=g('marks','mark'),marks=mk?+mk:1;if(!(marks>0))e.push('invalid marks');
+  return{e,rec:{exam,year,subject,topic:g('topic'),passage:g('passage'),text,options,answer,explanation:g('explanation','explain'),marks:marks>0?marks:1,img:'',_img:g('image','img','diagram'),formula:g('formula','math'),source:g('source'),no:+g('no','number','questionnumber')||null}}}
+async function prepare(rows,j,imgs){const ex=new Set((S.exq||[]).map(dk)),seen=new Set(),P={ok:[],err:[],dup:[]},cache={};
+  for(let i=0;i<rows.length;i++){const n=i+1;if(!rows[i]||typeof rows[i]!='object'){P.err.push({n,e:['not a valid record']});continue}
+    const{e,rec}=norm(rows[i],j),u=rec._img;delete rec._img;
+    if(u){if(/^https?:\/\//i.test(u))rec.img=u;else if(!imgs)e.push('image file name needs a ZIP upload (or use an https link)');
+      else{const k=u.split(/[\\/]/).pop().toLowerCase(),en=imgs[k];if(!en)e.push('image not found in ZIP: '+k);else try{rec.img=cache[k]??=await pic(en)}catch(x){e.push(x.message)}}}
+    if(e.length){P.err.push({n,e});continue}
+    const key=dk(rec);if(ex.has(key)||seen.has(key)){P.dup.push({n});continue}seen.add(key);rec.id='q'+hash(key);rec.n=n;P.ok.push(rec)}
+  return P}
+function prev(P,name){S.P=P;const g={};P.ok.forEach(r=>{const k=`${N[r.exam]} · ${r.subject} · ${r.year||'no year'}`;g[k]=(g[k]||0)+1});
+  $('#up').innerHTML=`<h3>Preview: ${E(name)}</h3><p><b>${P.ok.length}</b> ready · <b>${P.dup.length}</b> duplicates (skipped) · <b>${P.err.length}</b> with errors (skipped)</p>`+
+  Object.entries(g).map(([k,v])=>`<div class=row><span>${E(k)}</span><b>${v}</b></div>`).join('')+
+  (P.err.length?`<div class=card style="background:#fee2e2"><b>Errors</b>${P.err.slice(0,30).map(x=>`<div class=m>Row ${x.n}: ${E(x.e.join('; '))}</div>`).join('')}${P.err.length>30?'<div class=m>…and more</div>':''}</div>`:'')+
+  (P.dup.length?`<p class=m>Duplicate rows: ${P.dup.slice(0,10).map(x=>x.n).join(', ')}${P.dup.length>10?'…':''}</p>`:'')+
+  P.ok.slice(0,10).map(r=>`<div class=card><span class=m>${E(r.subject)} ${r.year||''} · ${E(r.topic)}</span>${r.passage?`<p class=ps>${E(r.passage)}</p>`:''}<p>${E(r.text)}</p>${r.formula?`<code>${E(r.formula)}</code>`:''}${r.img?'<p class=m>🖼 image attached</p>':''}${r.options.map((o,i)=>`<div class="${i==r.answer?'ok':''}">${L8[i]}. ${E(o)}</div>`).join('')}<p class=m>${E(r.explanation)}</p></div>`).join('')+
+  (P.ok.length>10?`<p class=m>Showing first 10 of ${P.ok.length}</p>`:'')+(P.ok.length?`<button class=pr data-a=ci>Confirm import of ${P.ok.length}</button>`:'')+`<button data-a=cx>Cancel</button><div id=pg></div>`;
+  $('#up').scrollIntoView()}
+W.cx=()=>{S.P=null;$('#up').innerHTML=''};W.adm2=()=>admin();
+async function up(file){if(role!='admin')return;const p=$('#up');p.innerHTML='<p>Reading and validating…</p>';
+  try{const n=file.name.toLowerCase();let d;if(n.endsWith('.zip'))d=await readZip(file);else if(/\.(json|csv|xlsx)$/.test(n))d=await readFile(file);else throw Error('Use a .json, .csv, .xlsx or .zip file');
+    if(!Array.isArray(d.rows)||!d.rows.length)throw Error('No questions found in the file');if(d.rows.length>5000)throw Error('Maximum 5000 questions per file');
+    prev(await prepare(d.rows,d.j,d.imgs),file.name)}catch(e){p.innerHTML=`<p style="color:#b91c1c">✘ ${E(e.message)}</p>`}
+  const i=$('#uf');if(i)i.value=''}
+document.addEventListener('change',e=>{if(e.target.id=='uf'&&e.target.files[0])ae(()=>up(e.target.files[0]))});
+W.ci=()=>ae(async()=>{const P=S.P;if(!P||S.busy||role!='admin')return;S.busy=1;const{f,db}=fb,st=$('#ist').value,vf=$('#ivf').checked,tot=P.ok.length,rep={ok:0,fail:[]};
+  const mk=q=>{const{id,n,...d}=q;return{...d,qtype:'objective',status:st,verified:vf,created:Date.now(),updated:Date.now(),by:user.uid}};
+  let i=0;while(i<tot){const b=f.writeBatch(db),ch=[];let sz=0;
+    while(i<tot&&ch.length<200&&sz<5e6){const q=P.ok[i++];ch.push(q);sz+=JSON.stringify(q).length;b.set(f.doc(db,'questions',q.id),mk(q))}
+    try{await b.commit();rep.ok+=ch.length}catch{for(const q of ch){try{await f.setDoc(f.doc(db,'questions',q.id),mk(q));rep.ok++}catch(e){rep.fail.push({n:q.n,e:e.code||e.message})}}}
+    $('#pg').innerHTML=`<div class=bar><i style="width:${i/tot*100}%"></i></div><p class=m>Saving ${i}/${tot}…</p>`}
+  S.busy=0;$('#up').innerHTML=`<h3>Import report</h3><p>✔ Imported: <b>${rep.ok}</b> (${st})<br>⏭ Duplicates skipped: <b>${P.dup.length}</b><br>⚠ Invalid rows skipped: <b>${P.err.length}</b><br>✘ Failed to save: <b>${rep.fail.length}</b></p>${rep.fail.slice(0,20).map(x=>`<div class=m>Row ${x.n}: ${E(x.e)}</div>`).join('')}${rep.fail.length?'<p class=m>Upload the same file again to retry only the failed rows — saved rows are detected as duplicates.</p>':''}<p class=m>${st=='published'?'Students get these after tapping Update in Downloads.':'Saved as drafts. Publish them from the Questions list so students can see them.'}</p><button class=pr data-a=adm2>Done</button>`});
 /* ---------- Nav / routing / PWA ---------- */
 function nav(){const t=[['home','🏠','Home'],['prac','📝','Practice'],['dl','⬇️','Downloads'],['acc','👤','Account']];if(role=='admin')t.push(['adm','⚙️','Admin']);
   $('#nav').style.display=view=='quiz'?'none':'flex';$('#nav').innerHTML=t.map(([v,i,l])=>`<button class="${view==v?'on':''}" data-a=nv data-v=${v}>${i}<br><small>${l}</small></button>`).join('')}
