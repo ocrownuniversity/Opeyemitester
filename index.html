@@ -99,10 +99,10 @@ async function setup(){view='prac';nav();const x=S.sel??={exam:'JAMB',mode:'topi
   if(fb&&navigator.onLine&&!(S.chk??={})[x.exam]){S.chk[x.exam]=1;await dl(x.exam);return}
   const subs=[...new Set(Q.map(q=>q.subject))].sort(),sQ=Q.filter(q=>q.subject==x.subs[0]);
   const chips=(k,arr,sel)=>arr.map(([v,l])=>`<button class="${sel(v)?'on':''}" data-a=P data-k=${k} data-v="${E(v)}">${E(l)}</button>`).join('');
-  let h=`<h2>Practice</h2><div class=card><b>1. Examination</b><br>${chips('exam',Object.entries(N),v=>x.exam==v)}</div>`;
+  let h=`<h2>Practice</h2><div class=card><b>1. Examination</b><br>${chips('exam',Object.entries(N),v=>x.exam==v)}<p class=m>${Q.length} question(s) available for ${N[x.exam]} <button data-a=dl data-v=${x.exam}>⟳ Refresh</button></p></div>`;
   if(!Q.length)h+=`<div class=card>No questions downloaded for ${N[x.exam]}. <button class=pr data-a=dl data-v=${x.exam}>Download now</button></div>`;
   else{h+=`<div class=card><b>2. Activity</b><br>${chips('mode',[['past','Past Questions'],['topic','Topic Practice'],['mock','Mock Exam']],v=>x.mode==v)}</div>
-  <div class=card><b>3. Subject${x.mode=='mock'&&x.exam=='JAMB'?'s (pick 4)':''}</b><br>${chips('subs',subs.map(s=>[s,s]),v=>x.subs.includes(v))}</div>`;
+  <div class=card><b>3. Subject${x.mode=='mock'&&x.exam=='JAMB'?'s (pick 4)':''}</b><br>${chips('subs',subs.map(s=>[s,s+' ('+Q.filter(q=>q.subject==s).length+')']),v=>x.subs.includes(v))}</div>`;
   if(x.mode=='past'&&x.subs[0])h+=`<div class=card><b>Year</b><br>${chips('year',[...new Set(sQ.map(q=>q.year).filter(Boolean))].sort().reverse().map(y=>[String(y),String(y)]),v=>x.year==v)}</div>`;
   if(x.mode=='topic'&&x.subs[0])h+=`<div class=card><b>Topic</b><br>${chips('topic',[...new Set(sQ.map(q=>q.topic).filter(Boolean))].sort().map(t=>[t,t]),v=>x.topic==v)}<br><b>Questions</b><br>${chips('n',[10,20,30].map(n=>[n,n]),v=>x.n==v)}</div>`;
   if(x.mode=='mock')h+=`<div class=card><b>Questions per subject</b><input id=pc type=number value=20 min=1><p class=m>ExamPilot practice mock — not an official exam structure. Set counts/duration as you wish.</p></div>`;
