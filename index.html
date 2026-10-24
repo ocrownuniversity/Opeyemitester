@@ -28,7 +28,7 @@ let fb=null,user=null,role='',view='home',S={},sess=null,tick,ip;
 const W={};
 const shuf=a=>a.map(x=>[Math.random(),x]).sort((a,b)=>a[0]-b[0]).map(x=>x[1]);
 const fmt=ms=>{ms=Math.max(0,ms)/1000|0;const h=ms/3600|0,m=ms%3600/60|0,s=ms%60;return(h?h+':':'')+String(m).padStart(2,'0')+':'+String(s).padStart(2,'0')};
-const toast=m=>{const t=$('#ts');t.textContent=m;t.style.display='block';setTimeout(()=>t.style.display='none',2600)};
+const toast=m=>{const t=$('#ts');t.textContent=m;t.style.display='block';setTimeout(()=>t.style.display='none',5000)};
 /* ---------- IndexedDB ---------- */
 const dbp=new Promise((r,j)=>{const q=indexedDB.open('exampilot',1);q.onupgradeneeded=()=>['q','m','a','s'].forEach(n=>q.result.createObjectStore(n,{keyPath:'id'}));q.onsuccess=()=>r(q.result);q.onerror=()=>j(q.error)});
 const tx=async(s,m,f)=>{const d=await dbp;return new Promise((res,rej)=>{const t=d.transaction(s,m);const r=f(t.objectStore(s));t.oncomplete=()=>res(r&&r.result);t.onerror=()=>rej(t.error);t.onabort=()=>rej(t.error)})};
@@ -96,6 +96,7 @@ W.rec=async d=>{const x=S.sel={exam:'',mode:'topic',subs:[d.s],topic:d.t,n:10,fb
   if(!Q.length)return toast('Download questions first');x.exam=Q[0].exam;begin(shuf(Q).slice(0,10),x)};
 /* ---------- Practice setup ---------- */
 async function setup(){view='prac';nav();const x=S.sel??={exam:'JAMB',mode:'topic',subs:[],n:10,timed:false,min:60,fb:true},Q=await qs(x.exam);
+  if(fb&&navigator.onLine&&!(S.chk??={})[x.exam]){S.chk[x.exam]=1;await dl(x.exam);return}
   const subs=[...new Set(Q.map(q=>q.subject))].sort(),sQ=Q.filter(q=>q.subject==x.subs[0]);
   const chips=(k,arr,sel)=>arr.map(([v,l])=>`<button class="${sel(v)?'on':''}" data-a=P data-k=${k} data-v="${E(v)}">${E(l)}</button>`).join('');
   let h=`<h2>Practice</h2><div class=card><b>1. Examination</b><br>${chips('exam',Object.entries(N),v=>x.exam==v)}</div>`;
@@ -158,7 +159,8 @@ function account(){view='acc';nav();const a=$('#app');
   a.innerHTML=user?`<div class=card><h2>Account</h2><p>${E(user.email)}<br><span class=m>${role=='admin'?'Administrator':'Student'}</span></p><button class=pr data-a=sy>Sync now</button><button data-a=lo>Sign out</button></div>`:
   `<div class=card><h2>Sign in (optional)</h2><p class=m>Guest progress is saved only on this device and can be lost if browser data is cleared. Sign in to back it up — existing local progress is kept and uploaded without duplicates.</p><input id=em type=email placeholder=Email><input id=pw type=password placeholder=Password>
   <button class=pr data-a=li>Sign in</button><button data-a=su>Create account</button><button data-a=gg>Continue with Google</button></div>`}
-const ae=async f=>{try{await f()}catch(e){toast(e.code||e.message)}};
+const FM={'auth/operation-not-allowed':'Email/Password sign-in is not enabled in Firebase (Authentication > Sign-in method)','auth/email-already-in-use':'This email already has an account — tap Sign in instead','auth/weak-password':'Password must be at least 6 characters','auth/invalid-email':'Enter a valid email address','auth/invalid-credential':'Wrong email or password','auth/missing-password':'Enter a password','auth/unauthorized-domain':'Add this website in Firebase > Authentication > Settings > Authorized domains','permission-denied':'Permission denied — check your Firestore rules','auth/network-request-failed':'No internet connection'};
+const ae=async f=>{try{await f()}catch(e){toast(FM[e.code]||e.code||e.message)}};
 W.li=()=>ae(()=>fb.au.signInWithEmailAndPassword(fb.auth,$('#em').value,$('#pw').value));
 W.su=()=>ae(()=>fb.au.createUserWithEmailAndPassword(fb.auth,$('#em').value,$('#pw').value));
 W.gg=()=>ae(()=>fb.au.signInWithPopup(fb.auth,new fb.au.GoogleAuthProvider()));
