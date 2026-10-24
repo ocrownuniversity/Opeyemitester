@@ -224,8 +224,8 @@ async function pic(e){if(e._data&&e._data.uncompressedSize>3*1048576)throw Error
   c.width=Math.round(bm.width*s);c.height=Math.round(bm.height*s);const x=c.getContext('2d');x.fillStyle='#fff';x.fillRect(0,0,c.width,c.height);x.drawImage(bm,0,0,c.width,c.height);
   const u=c.toDataURL('image/jpeg',.75);if(u.length>700000)throw Error('Image too detailed: '+e.name);return u}
 function norm(r,j){const o={};for(const k in r)o[nk(k)]=r[k];const g=(...n)=>{for(const x of n){const v=o[x];if(v!=null&&String(v).trim()!=='')return String(v).trim()}return''},e=[];
-  const u=(g('exam','examination','examtype')||DEF.exam).toUpperCase(),exam=/JAMB|UTME/.test(u)?'JAMB':/WAEC/.test(u)?'WAEC':/NECO/.test(u)?'NECO':'';if(!exam)e.push('exam must be WAEC, NECO or JAMB');
-  const text=g('question','text','questiontext'),subject=g('subject')||DEF.subject;if(!text)e.push('question missing');if(!subject)e.push('subject missing');
+  const u=(g('exam','examination','examtype')||DEF.exam).toUpperCase(),exam=/JAMB|UTME/.test(u)?'JAMB':/WAEC/.test(u)?'WAEC':/NECO/.test(u)?'NECO':'';if(!exam)e.push('exam missing — choose Exam in the box above the upload button (or add an exam column)');
+  const text=g('question','text','questiontext'),subject=g('subject')||DEF.subject;if(!text)e.push('question missing');if(!subject)e.push('subject missing — type it in the Subject box above (or add a subject column)');if(/EXAMPLE ROW - DELETE ME/i.test(text))e.push('this is the template example row — delete it');
   const ys=g('year')||DEF.year;let year=null;if(ys){year=+ys;if(!Number.isInteger(year)||year<1980||year>2100){e.push('invalid year');year=null}}
   let options=Array.isArray(r.options)?r.options.map(x=>String(x??'').trim()):[...'ABCDEFGH'].map(l=>g('option'+l.toLowerCase(),l.toLowerCase()));
   let n=0;options.forEach((x,i)=>{if(x)n=i+1});options=options.slice(0,n);if(n<2)e.push('need at least 2 options');else if(options.includes(''))e.push('gap in options');
