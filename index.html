@@ -92,7 +92,7 @@ async function home(){view='home';nav();const A=(await all('a')).sort((a,b)=>b.a
   <div class=card><b>Subject performance</b>${Object.entries(s.sub).map(([k,v])=>`<div>${E(k)} ${Math.round(v.c/v.t*100)}%<div class=bar><i style="width:${v.c/v.t*100}%"></i></div></div>`).join('')||'<p class=m>No attempts yet.</p>'}</div>
   <div class=card><b>Recent results</b>${A.slice(0,6).map(a=>`<div class=row><span>${N[a.exam]} ${a.mode} · ${new Date(a.at).toLocaleDateString()}</span><button data-a=hi data-v=${a.id}>${a.pct}% ›</button></div>`).join('')||'<p class=m>Nothing yet.</p>'}</div>`}
 W.nv=d=>go(d.v);W.ex=d=>{S.sel={exam:d.v,mode:'topic',subs:[],n:10,timed:false,min:60,fb:true};go('prac')};
-W.rec=async d=>{const x=S.sel={exam:'',mode:'topic',subs:[d.s],topic:d.t,n:10,fb:true},Q=(await all('q')).filter(q=>q.subject==d.s&&(q.topic||'')==d.t);
+W.rec=async d=>{const x=S.sel={exam:'',mode:'topic',subs:[d.s],topics:[d.t],n:10,fb:true},Q=(await all('q')).filter(q=>q.subject==d.s&&(q.topic||'')==d.t);
   if(!Q.length)return toast('Download questions first');x.exam=Q[0].exam;begin(shuf(Q).slice(0,10),x)};
 /* ---------- Practice setup ---------- */
 async function setup(){view='prac';nav();const x=S.sel??={exam:'JAMB',mode:'topic',subs:[],n:10,timed:false,min:60,fb:true},Q=await qs(x.exam);
@@ -104,18 +104,20 @@ async function setup(){view='prac';nav();const x=S.sel??={exam:'JAMB',mode:'topi
   else{h+=`<div class=card><b>2. Activity</b><br>${chips('mode',[['past','Past Questions'],['topic','Topic Practice'],['mock','Mock Exam']],v=>x.mode==v)}</div>
   <div class=card><b>3. Subject${x.mode=='mock'&&x.exam=='JAMB'?'s (pick 4)':''}</b><br>${chips('subs',subs.map(s=>[s,s+' ('+Q.filter(q=>q.subject==s).length+')']),v=>x.subs.includes(v))}</div>`;
   if(x.mode=='past'&&x.subs[0])h+=`<div class=card><b>Year</b><br>${chips('year',[...new Set(sQ.map(q=>q.year).filter(Boolean))].sort().reverse().map(y=>[String(y),String(y)]),v=>x.year==v)}</div>`;
-  if(x.mode=='topic'&&x.subs[0])h+=`<div class=card><b>Topic</b><br>${chips('topic',[...new Set(sQ.map(q=>q.topic).filter(Boolean))].sort().map(t=>[t,t]),v=>x.topic==v)}<br><b>Questions</b><br>${chips('n',[10,20,30].map(n=>[n,n]),v=>x.n==v)}</div>`;
+  if(x.mode=='topic'&&x.subs[0])h+=`<div class=card><b>Topics</b> <span class=m>(tap one or more)</span><br><button data-a=ta>Select all / none</button><br>${[...new Set(sQ.map(q=>q.topic).filter(Boolean))].sort().map(t=>`<button class="${(x.topics||[]).includes(t)?'on':''}" data-a=tp data-v="${E(t)}">${E(t)} (${sQ.filter(q=>q.topic==t).length})</button>`).join('')}<br><b>Number of questions</b><br>${chips('n',[10,20,30,50].map(n=>[n,n]),v=>x.n==v)}</div>`;
   if(x.mode=='mock')h+=`<div class=card><b>Questions per subject</b><input id=pc type=number value=20 min=1><p class=m>ExamPilot practice mock — not an official exam structure. Set counts/duration as you wish.</p></div>`;
   h+=`<div class=card><button class="${x.timed?'on':''}" data-a=T data-k=timed>⏱ Timed</button>${x.mode!='mock'?`<button class="${x.fb?'on':''}" data-a=T data-k=fb>Show answers as I go</button>`:''}
   ${x.timed?`<br>Minutes <input id=mn type=number value=${x.min} min=1>`:''}</div><button class=pr data-a=go>Begin</button>`}
   $('#app').innerHTML=h}
 W.P=d=>{const x=S.sel;let v=d.v;
-  if(d.k=='subs'){x.subs=x.mode=='mock'&&x.exam=='JAMB'?(x.subs.includes(v)?x.subs.filter(y=>y!=v):x.subs.length<4?[...x.subs,v]:x.subs):[v];x.year=x.topic=null}
-  else{x[d.k]=d.k=='n'?+v:v;if(d.k=='exam'||d.k=='mode'){x.subs=[];x.year=x.topic=null}}setup()};
+  if(d.k=='subs'){x.subs=x.mode=='mock'&&x.exam=='JAMB'?(x.subs.includes(v)?x.subs.filter(y=>y!=v):x.subs.length<4?[...x.subs,v]:x.subs):[v];x.year=null;x.topics=[]}
+  else{x[d.k]=d.k=='n'?+v:v;if(d.k=='exam'||d.k=='mode'){x.subs=[];x.year=null;x.topics=[]}}setup()};
+W.tp=d=>{const x=S.sel,t=x.topics||[];x.topics=t.includes(d.v)?t.filter(y=>y!=d.v):[...t,d.v];setup()};
+W.ta=async()=>{const x=S.sel,Q=await qs(x.exam),t=[...new Set(Q.filter(q=>q.subject==x.subs[0]).map(q=>q.topic).filter(Boolean))];x.topics=(x.topics||[]).length==t.length?[]:t;setup()};
 W.T=d=>{S.sel[d.k]=!S.sel[d.k];setup()};
 W.go=async()=>{const x=S.sel,Q=await qs(x.exam);let L=[];if(!x.subs.length)return toast('Pick a subject');x.min=+($('#mn')?.value)||60;
   if(x.mode=='past'){if(!x.year)return toast('Pick a year');L=Q.filter(q=>q.subject==x.subs[0]&&q.year==x.year).sort((a,b)=>(a.no||0)-(b.no||0))}
-  else if(x.mode=='topic'){if(!x.topic)return toast('Pick a topic');L=shuf(Q.filter(q=>q.subject==x.subs[0]&&q.topic==x.topic)).slice(0,x.n)}
+  else if(x.mode=='topic'){if(!(x.topics||[]).length)return toast('Pick at least one topic');L=shuf(Q.filter(q=>q.subject==x.subs[0]&&x.topics.includes(q.topic))).slice(0,x.n)}
   else{const n=+$('#pc').value||20;x.subs.forEach(s=>L.push(...shuf(Q.filter(q=>q.subject==s)).slice(0,n)))}
   if(!L.length)return toast('No questions available');begin(L,x)};
 /* ---------- Session / Quiz ---------- */
@@ -170,7 +172,7 @@ async function admin(){view='adm';nav();const a=$('#app');if(role!='admin')retur
   const{f,db}=fb;a.innerHTML='<p>Loading…</p>';
   const[qd,ud]=await Promise.all([f.getDocs(f.collection(db,'questions')),f.getDocs(f.collection(db,'users'))]);
   const Q=qd.docs.map(d=>({...d.data(),id:d.id})),sr=(S.aq||'').toLowerCase(),fl=Q.filter(q=>!sr||(q.text+q.subject+q.topic+q.exam+q.year).toLowerCase().includes(sr)),sh=fl.slice(0,40);S.fl=fl;
-  S.exq=Q;a.innerHTML=`<h2>Admin</h2><div class=card><div class=row><span>Students: <b>${ud.size}</b></span><span>Published: <b>${Q.filter(q=>q.status=='published').length}</b></span><span>Drafts: <b>${Q.filter(q=>q.status!='published').length}</b></span><span>Verified: <b>${Q.filter(q=>q.verified).length}</b></span></div></div>
+  S.exq=Q;a.innerHTML=`<h2>Admin <small class=m>v7</small></h2><div class=card><div class=row><span>Students: <b>${ud.size}</b></span><span>Published: <b>${Q.filter(q=>q.status=='published').length}</b></span><span>Drafts: <b>${Q.filter(q=>q.status!='published').length}</b></span><span>Verified: <b>${Q.filter(q=>q.verified).length}</b></span></div></div>
   ${upCard()}
   <div class=card><h3>Add question</h3><select id=ex><option value=WAEC>WAEC</option><option value=NECO>NECO</option><option value=JAMB>JAMB/UTME</option></select><input id=yr type=number placeholder="Year (blank if not past question)"><input id=sj placeholder=Subject><input id=tp placeholder=Topic>
   <input id=pa placeholder="Passage (optional)"><textarea id=qt placeholder="Question"></textarea><input id=im placeholder="Image URL (optional)">${[0,1,2,3].map(i=>`<input id=o${i} placeholder="Option ${L8[i]}">`).join('')}
@@ -237,21 +239,21 @@ function norm(r,j){const o={};for(const k in r)o[nk(k)]=r[k];const g=(...n)=>{fo
   if(answer<0||answer>=options.length)e.push('answer must be a letter matching an option (A, B, C…)');
   const mk=g('marks','mark'),marks=mk?+mk:1;if(!(marks>0))e.push('invalid marks');
   return{e,rec:{exam,year,subject,topic:g('topic')||DEF.topic,passage:g('passage'),text,options,answer,explanation:g('explanation','explain'),marks:marks>0?marks:1,img:'',_img:g('image','img','diagram'),formula:g('formula','math'),source:g('source'),no:+g('no','number','questionnumber')||null}}}
-async function prepare(rows,j,imgs){const ex=new Set((S.exq||[]).map(dk)),seen=new Set(),P={ok:[],err:[],dup:[]},cache={};
+async function prepare(rows,j,imgs){const ex=new Map((S.exq||[]).map(q=>[dk(q),q])),seen=new Set(),P={ok:[],err:[],dup:[]},cache={};
   for(let i=0;i<rows.length;i++){const n=i+1;if(!rows[i]||typeof rows[i]!='object'){P.err.push({n,e:['not a valid record']});continue}
     const{e,rec}=norm(rows[i],j),u=rec._img;delete rec._img;
     if(u){if(/^https?:\/\//i.test(u))rec.img=u;else if(!imgs)e.push('image file name needs a ZIP upload (or use an https link)');
       else{const k=u.split(/[\\/]/).pop().toLowerCase(),en=imgs[k];if(!en)e.push('image not found in ZIP: '+k);else try{rec.img=cache[k]??=await pic(en)}catch(x){e.push(x.message)}}}
     if(e.length){P.err.push({n,e});continue}
-    const key=dk(rec);if(ex.has(key)||seen.has(key)){P.dup.push({n});continue}seen.add(key);rec.id='q'+hash(key);rec.n=n;rec.no=rec.no||n;P.ok.push(rec)}
+    const key=dk(rec);if(ex.has(key)||seen.has(key)){const o=ex.get(key);P.dup.push({n,id:o&&o.id,st:o&&o.status});continue}seen.add(key);rec.id='q'+hash(key);rec.n=n;rec.no=rec.no||n;P.ok.push(rec)}
   return P}
-function prev(P,name){S.P=P;const g={};P.ok.forEach(r=>{const k=`${N[r.exam]} · ${r.subject} · ${r.year||'no year'}`;g[k]=(g[k]||0)+1});
+function prev(P,name){S.P=P;P.dr=P.dup.filter(x=>x.id&&x.st!='published');const g={};P.ok.forEach(r=>{const k=`${N[r.exam]} · ${r.subject} · ${r.year||'no year'}`;g[k]=(g[k]||0)+1});
   $('#up').innerHTML=`<h3>Preview: ${E(name)}</h3><p><b>${P.ok.length}</b> ready · <b>${P.dup.length}</b> duplicates (skipped) · <b>${P.err.length}</b> with errors (skipped)</p>`+
   Object.entries(g).map(([k,v])=>`<div class=row><span>${E(k)}</span><b>${v}</b></div>`).join('')+
   (P.err.length?`<div class=card style="background:#fee2e2"><b>Errors</b>${P.err.slice(0,30).map(x=>`<div class=m>Row ${x.n}: ${E(x.e.join('; '))}</div>`).join('')}${P.err.length>30?'<div class=m>…and more</div>':''}</div>`:'')+
-  (P.dup.length?`<p class=m>Duplicate rows: ${P.dup.slice(0,10).map(x=>x.n).join(', ')}${P.dup.length>10?'…':''}</p>`:'')+
+  (P.dr.length?`<p class=ps>${P.dr.length} of the duplicates already exist as <b>drafts</b>. They will be published automatically if you import as Published.</p>`:'')+(P.dup.length?`<p class=m>Duplicate rows: ${P.dup.slice(0,10).map(x=>x.n).join(', ')}${P.dup.length>10?'…':''}</p>`:'')+
   P.ok.slice(0,10).map(r=>`<div class=card><span class=m>${E(r.subject)} ${r.year||''} · ${E(r.topic)}</span>${r.passage?`<p class=ps>${E(r.passage)}</p>`:''}<p>${E(r.text)}</p>${r.formula?`<code>${E(r.formula)}</code>`:''}${r.img?'<p class=m>🖼 image attached</p>':''}${r.options.map((o,i)=>`<div class="${i==r.answer?'ok':''}">${L8[i]}. ${E(o)}</div>`).join('')}<p class=m>${E(r.explanation)}</p></div>`).join('')+
-  (P.ok.length>10?`<p class=m>Showing first 10 of ${P.ok.length}</p>`:'')+(P.ok.length?`<button class=pr data-a=ci>Confirm import of ${P.ok.length}</button>`:'')+`<button data-a=cx>Cancel</button><div id=pg></div>`;
+  (P.ok.length>10?`<p class=m>Showing first 10 of ${P.ok.length}</p>`:'')+(P.ok.length||P.dr.length?`<button class=pr data-a=ci>Confirm import of ${P.ok.length}${P.dr.length?` + publish ${P.dr.length} drafts`:''}</button>`:'')+`<button data-a=cx>Cancel</button><div id=pg></div>`;
   $('#up').scrollIntoView()}
 W.cx=()=>{S.P=null;$('#up').innerHTML=''};W.adm2=()=>admin();
 async function up(file){if(role!='admin')return;defs();const p=$('#up');p.innerHTML='<p>Reading and validating…</p>';
@@ -266,7 +268,8 @@ W.ci=()=>ae(async()=>{const P=S.P;if(!P||S.busy||role!='admin')return;S.busy=1;c
     while(i<tot&&ch.length<200&&sz<5e6){const q=P.ok[i++];ch.push(q);sz+=JSON.stringify(q).length;b.set(f.doc(db,'questions',q.id),mk(q))}
     try{await b.commit();rep.ok+=ch.length}catch{for(const q of ch){try{await f.setDoc(f.doc(db,'questions',q.id),mk(q));rep.ok++}catch(e){rep.fail.push({n:q.n,e:e.code||e.message})}}}
     $('#pg').innerHTML=`<div class=bar><i style="width:${i/tot*100}%"></i></div><p class=m>Saving ${i}/${tot}…</p>`}
-  S.busy=0;$('#up').innerHTML=`<h3>Import report</h3><p>✔ Imported: <b>${rep.ok}</b> (${st})<br>⏭ Duplicates skipped: <b>${P.dup.length}</b><br>⚠ Invalid rows skipped: <b>${P.err.length}</b><br>✘ Failed to save: <b>${rep.fail.length}</b></p>${rep.fail.slice(0,20).map(x=>`<div class=m>Row ${x.n}: ${E(x.e)}</div>`).join('')}${rep.fail.length?'<p class=m>Upload the same file again to retry only the failed rows — saved rows are detected as duplicates.</p>':''}<p class=m>${st=='published'?'Students get these after tapping Update in Downloads.':'Saved as drafts. Publish them from the Questions list so students can see them.'}</p><button class=pr data-a=adm2>Done</button>`});
+  let pub=0;if(st=='published')for(let k=0;k<P.dr.length;k+=400){const b=f.writeBatch(db),ch=P.dr.slice(k,k+400);ch.forEach(x=>b.update(f.doc(db,'questions',x.id),{status:'published',updated:Date.now()}));try{await b.commit();pub+=ch.length}catch(e){rep.fail.push({n:'existing',e:e.code||e.message})}}
+  S.busy=0;$('#up').innerHTML=`<h3>Import report</h3><p>✔ Imported: <b>${rep.ok}</b> (${st})${pub?`<br>✔ Existing drafts now published: <b>${pub}</b>`:''}<br>⏭ Duplicates skipped: <b>${P.dup.length}</b><br>⚠ Invalid rows skipped: <b>${P.err.length}</b><br>✘ Failed to save: <b>${rep.fail.length}</b></p>${rep.fail.slice(0,20).map(x=>`<div class=m>Row ${x.n}: ${E(x.e)}</div>`).join('')}${rep.fail.length?'<p class=m>Upload the same file again to retry only the failed rows — saved rows are detected as duplicates.</p>':''}<p class=m>${st=='published'?'Students get these after tapping Update in Downloads.':'Saved as drafts. Publish them from the Questions list so students can see them.'}</p><button class=pr data-a=adm2>Done</button>`});
 /* ---------- Nav / routing / PWA ---------- */
 function nav(){const t=[['home','🏠','Home'],['prac','📝','Practice'],['dl','⬇️','Downloads'],['acc','👤','Account']];if(role=='admin')t.push(['adm','⚙️','Admin']);
   $('#nav').style.display=view=='quiz'?'none':'flex';$('#nav').innerHTML=t.map(([v,i,l])=>`<button class="${view==v?'on':''}" data-a=nv data-v=${v}>${i}<br><small>${l}</small></button>`).join('')}
