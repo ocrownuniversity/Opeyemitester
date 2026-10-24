@@ -16,8 +16,15 @@ nav{position:fixed;bottom:0;left:0;right:0;display:flex;background:#fff;border-t
 #ban{background:#0f4c81;color:#fff;padding:10px 14px}.m{color:#64748b;font-size:14px}
 #ts{display:none;position:fixed;top:10px;left:50%;transform:translateX(-50%);background:#16202c;color:#fff;padding:10px 16px;border-radius:10px;z-index:9}
 .ex{background:#fffbeb;padding:8px;border-radius:8px}.ps{background:#f1f5f9;padding:8px;border-radius:8px}h1,h2,h3{margin:.3em 0}.big{font-size:28px;font-weight:700;color:#0f4c81}
+#hd{background:#0f4c81;color:#fff;padding:10px 16px;font-weight:700;display:flex;align-items:center;gap:8px}#hd i{background:#f5a524;color:#0f4c81;border-radius:8px;padding:2px 8px;font-style:normal}#hd span{margin-left:auto;font-weight:400;font-size:12px;opacity:.85}
+.hero{background:linear-gradient(135deg,#0f4c81,#1e7bc4);color:#fff;border-radius:18px;padding:18px;margin:10px 0}.hero h1{font-size:24px;margin:.1em 0}.hero p{opacity:.9;margin:.2em 0 10px}
+.cta{background:#f5a524;color:#10263f;border:0;font-weight:700}.pill{background:#ffffff2e;padding:4px 10px;border-radius:99px;font-size:13px}
+.ex3{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}.exc{background:#fff;border-radius:14px;padding:12px 6px;text-align:center;box-shadow:0 1px 4px #0002;border-top:4px solid var(--c)}.exc b{display:block}.ic{font-size:26px}
+.qa{background:#fff;border:0;border-radius:14px;box-shadow:0 1px 4px #0002;margin:0;min-height:84px}
+.tiles{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:10px 0}.tile{background:#fff;border-radius:12px;padding:10px 4px;text-align:center;box-shadow:0 1px 4px #0001}.tile b{display:block;font-size:21px;color:#0f4c81}
+.tabs{display:flex;overflow-x:auto;gap:2px}.tabs button{white-space:nowrap}.dg{background:#fee2e2;border-color:#ef4444;color:#991b1b}h3{margin:.8em 0 .3em}
 </style></head><body>
-<div id="ban"></div><main id="app"></main><nav id="nav"></nav><div id="ts"></div>
+<header id="hd"><i>EP</i> ExamPilot <span>Prepare Smart. Pass with Confidence.</span></header><div id="ban"></div><main id="app"></main><nav id="nav"></nav><div id="ts"></div>
 <script type="module">
 /* ====== FIREBASE CONFIG: paste yours (Project settings > Web app) ====== */
 const FB={apiKey:"AIzaSyDM7EE5Ca3jc8qmPkFlS7MkkrTW8qnlDQk",authDomain:"exampilot-1c536.firebaseapp.com",projectId:"exampilot-1c536",storageBucket:"exampilot-1c536.firebasestorage.app",messagingSenderId:"361085178691",appId:"1:361085178691:web:20ef874a601c9eb35595f6"};
@@ -65,6 +72,7 @@ async function dl(exam){
   try{const{f,db}=fb,s=await f.getDocs(f.query(f.collection(db,'questions'),f.where('exam','==',exam),f.where('status','==','published')));
     const a=s.docs.map(d=>({...d.data(),id:d.id})),old=await qs(exam);
     await tx('q','readwrite',o=>{old.forEach(q=>o.delete(q.id));a.forEach(q=>o.put(q))});
+    try{const tr=await f.getDocs(f.query(f.collection(db,'templates'),f.where('exam','==',exam)));await put('m',{id:'T'+exam,list:tr.docs.map(d=>({...d.data(),id:d.id}))})}catch{}
     await put('m',{id:exam,n:a.length,at:Date.now(),ok:1});toast(a.length+' questions saved offline')
   }catch(e){toast('Download failed/incomplete: '+(e.name=='QuotaExceededError'?'storage full':e.code||e.message))}
   if(view=='dl')downloads();if(view=='prac')setup()
@@ -81,22 +89,26 @@ function stats(A){const sub={},top={},days=new Set(),td=new Date().toDateString(
     const x=sub[d.s]??={c:0,t:0};x.t++;x.c+=d.c;const k=d.s+' · '+(d.tp||'General'),y=top[k]??={c:0,t:0,s:d.s,tp:d.tp};y.t++;y.c+=d.c})});
   let st=0,dt=new Date();while(days.has(dt.toDateString())){st++;dt.setDate(dt.getDate()-1)}
   const p=A.map(a=>a.pct);return{tq,today,sub,top,st,n:A.length,avg:p.length?Math.round(p.reduce((a,b)=>a+b)/p.length):0,best:p.length?Math.max(...p):0}}
-async function home(){view='home';nav();const A=(await all('a')).sort((a,b)=>b.at-a.at),s=stats(A),cur=await get('s','cur');
-  const weak=Object.values(s.top).filter(t=>t.t>=3).map(t=>({...t,p:Math.round(t.c/t.t*100)})).sort((a,b)=>a.p-b.p).slice(0,3);
-  $('#app').innerHTML=`<div class=card><h1>Welcome${user?', '+E(user.displayName||user.email.split('@')[0]):''} 👋</h1><span class=m>${navigator.onLine?'🟢 Online':'🔴 Offline — downloaded questions still work'}</span><br>
-  ${cur?`<button class=pr data-a=res>▶ Continue studying</button>`:`<button class=pr data-a=nv data-v=prac>Start practising</button>`}</div>
-  <div class=g3>${Object.keys(N).map(e=>`<div class=card><b>${N[e]}</b><br><button data-a=ex data-v=${e}>Open</button></div>`).join('')}</div>
-  <div class=card><div class=row><div><div class=big>${s.tq}</div><span class=m>Questions</span></div><div><div class=big>${s.n}</div><span class=m>Sessions</span></div><div><div class=big>${s.avg}%</div><span class=m>Average</span></div><div><div class=big>${s.best}%</div><span class=m>Best</span></div><div><div class=big>🔥${s.st}</div><span class=m>Day streak</span></div></div>
-  <p>Daily goal: ${Math.min(s.today,20)}/20 questions</p><div class=bar><i style="width:${Math.min(100,s.today*5)}%"></i></div></div>
+async function home(){view='home';nav();const A=(await all('a')).sort((a,b)=>b.at-a.at),s=stats(A),cur=await get('s','cur'),M=Object.fromEntries((await all('m')).filter(m=>N[m.id]).map(m=>[m.id,m])),h=new Date().getHours(),nm=user?E(user.displayName||user.email.split('@')[0]):'';
+  const weak=Object.values(s.top).filter(t=>t.t>=3).map(t=>({...t,p:Math.round(t.c/t.t*100)})).sort((a,b)=>a.p-b.p).slice(0,3),CL={WAEC:'#0f4c81',NECO:'#16a34a',JAMB:'#f5a524'},IC={WAEC:'📘',NECO:'📗',JAMB:'📙'};
+  $('#app').innerHTML=`<section class=hero><small>${h<12?'Good morning':h<17?'Good afternoon':'Good evening'}</small><h1>${nm||'Welcome to ExamPilot'} 👋</h1><p>Prepare Smart. Practise Anywhere. Pass with Confidence.</p><span class=pill>${navigator.onLine?'🟢 Online':'🔴 Offline — downloaded questions still work'}</span>
+  <div style="margin-top:12px">${cur?'<button class=cta data-a=res>▶ Resume your session</button>':'<button class=cta data-a=nv data-v=prac>Start practising</button>'}</div></section>
+  <h3>Choose your exam</h3><div class=ex3>${Object.keys(N).map(e=>`<div class=exc style="--c:${CL[e]}"><span class=ic>${IC[e]}</span><b>${N[e]}</b><span class=m>${M[e]&&M[e].ok?M[e].n+' questions':'Tap Open to load'}</span><br><button class=pr data-a=ex data-v=${e}>Open</button></div>`).join('')}</div>
+  <h3>Quick start</h3><div class=ex3>${[['topic','🎯','Topic practice'],['mock','⏱','Mock exam'],['past','📄','Past questions']].map(([m,i,l])=>`<button class=qa data-a=qa data-v=${m}><span class=ic>${i}</span><br>${l}</button>`).join('')}</div>
+  <h3>Your progress</h3><div class=tiles>${[[s.tq,'Questions'],[s.n,'Sessions'],[s.avg+'%','Average'],[s.best+'%','Best score'],['🔥'+s.st,'Day streak'],[Math.min(s.today,20)+'/20','Today']].map(([v,l])=>`<div class=tile><b>${v}</b><span class=m>${l}</span></div>`).join('')}</div>
+  <div class=card><div class=row><b>Daily goal</b><span class=m>${Math.min(s.today,20)}/20 questions</span></div><div class=bar><i style="width:${Math.min(100,s.today*5)}%"></i></div></div>
   ${weak.length?`<div class=card><b>Recommended revision</b>${weak.map(t=>`<div class=row><span>${E(t.s)} · ${E(t.tp||'General')} (${t.p}%)</span><button data-a=rec data-s="${E(t.s)}" data-t="${E(t.tp||'')}">Practise</button></div>`).join('')}</div>`:''}
-  <div class=card><b>Subject performance</b>${Object.entries(s.sub).map(([k,v])=>`<div>${E(k)} ${Math.round(v.c/v.t*100)}%<div class=bar><i style="width:${v.c/v.t*100}%"></i></div></div>`).join('')||'<p class=m>No attempts yet.</p>'}</div>
-  <div class=card><b>Recent results</b>${A.slice(0,6).map(a=>`<div class=row><span>${N[a.exam]} ${a.mode} · ${new Date(a.at).toLocaleDateString()}</span><button data-a=hi data-v=${a.id}>${a.pct}% ›</button></div>`).join('')||'<p class=m>Nothing yet.</p>'}</div>`}
+  <div class=card><b>Subject performance</b>${Object.entries(s.sub).map(([k,v])=>`<div>${E(k)} ${Math.round(v.c/v.t*100)}%<div class=bar><i style="width:${v.c/v.t*100}%"></i></div></div>`).join('')||'<p class=m>Complete a practice session to see your performance.</p>'}</div>
+  <div class=card><b>Recent results</b>${A.slice(0,6).map(a=>`<div class=row><span>${N[a.exam]} ${a.mode} · ${new Date(a.at).toLocaleDateString()}</span><button data-a=hi data-v=${a.id}>${a.pct}% ›</button></div>`).join('')||'<p class=m>No results yet.</p>'}</div>
+  <p class=m style="text-align:center">ExamPilot practice platform · Not affiliated with WAEC, NECO or JAMB</p>`}
+W.qa=d=>{const e=(S.sel&&S.sel.exam)||'JAMB';S.sel={exam:e,mode:d.v,subs:[],n:10,timed:false,min:60,fb:true,topics:[]};go('prac')};
 W.nv=d=>go(d.v);W.ex=d=>{S.sel={exam:d.v,mode:'topic',subs:[],n:10,timed:false,min:60,fb:true};go('prac')};
 W.rec=async d=>{const x=S.sel={exam:'',mode:'topic',subs:[d.s],topics:[d.t],n:10,fb:true},Q=(await all('q')).filter(q=>q.subject==d.s&&(q.topic||'')==d.t);
   if(!Q.length)return toast('Download questions first');x.exam=Q[0].exam;begin(shuf(Q).slice(0,10),x)};
 /* ---------- Practice setup ---------- */
 async function setup(){view='prac';nav();const x=S.sel??={exam:'JAMB',mode:'topic',subs:[],n:10,timed:false,min:60,fb:true},Q=await qs(x.exam);
   if(fb&&navigator.onLine&&!(S.chk??={})[x.exam]){S.chk[x.exam]=1;await dl(x.exam);return}
+  const T=((await get('m','T'+x.exam))||{}).list||[];
   const subs=[...new Set(Q.map(q=>q.subject))].sort(),sQ=Q.filter(q=>q.subject==x.subs[0]);
   const chips=(k,arr,sel)=>arr.map(([v,l])=>`<button class="${sel(v)?'on':''}" data-a=P data-k=${k} data-v="${E(v)}">${E(l)}</button>`).join('');
   let h=`<h2>Practice</h2><div class=card><b>1. Examination</b><br>${chips('exam',Object.entries(N),v=>x.exam==v)}<p class=m>${Q.length} question(s) available for ${N[x.exam]} <button data-a=dl data-v=${x.exam}>⟳ Refresh</button></p></div>`;
@@ -105,7 +117,7 @@ async function setup(){view='prac';nav();const x=S.sel??={exam:'JAMB',mode:'topi
   <div class=card><b>3. Subject${x.mode=='mock'&&x.exam=='JAMB'?'s (pick 4)':''}</b><br>${chips('subs',subs.map(s=>[s,s+' ('+Q.filter(q=>q.subject==s).length+')']),v=>x.subs.includes(v))}</div>`;
   if(x.mode=='past'&&x.subs[0])h+=`<div class=card><b>Year</b><br>${chips('year',[...new Set(sQ.map(q=>q.year).filter(Boolean))].sort().reverse().map(y=>[String(y),String(y)]),v=>x.year==v)}</div>`;
   if(x.mode=='topic'&&x.subs[0])h+=`<div class=card><b>Topics</b> <span class=m>(tap one or more)</span><br><button data-a=ta>Select all / none</button><br>${[...new Set(sQ.map(q=>q.topic).filter(Boolean))].sort().map(t=>`<button class="${(x.topics||[]).includes(t)?'on':''}" data-a=tp data-v="${E(t)}">${E(t)} (${sQ.filter(q=>q.topic==t).length})</button>`).join('')}<br><b>Number of questions</b><br>${chips('n',[10,20,30,50].map(n=>[n,n]),v=>x.n==v)}</div>`;
-  if(x.mode=='mock')h+=`<div class=card><b>Questions per subject</b><input id=pc type=number value=20 min=1><p class=m>ExamPilot practice mock — not an official exam structure. Set counts/duration as you wish.</p></div>`;
+  if(x.mode=='mock')h+=`${T.length?`<div class=card><b>Ready-made mock exams</b><br>${T.map((t,i)=>`<button data-a=mt data-v=${i}>${E(t.name)}</button>`).join('')}</div>`:''}<div class=card><b>Questions per subject</b><input id=pc type=number value=${x.pc||20} min=1><p class=m>ExamPilot practice mock — not an official exam structure. Set counts/duration as you wish.</p></div>`;
   h+=`<div class=card><button class="${x.timed?'on':''}" data-a=T data-k=timed>⏱ Timed</button>${x.mode!='mock'?`<button class="${x.fb?'on':''}" data-a=T data-k=fb>Show answers as I go</button>`:''}
   ${x.timed?`<br>Minutes <input id=mn type=number value=${x.min} min=1>`:''}</div><button class=pr data-a=go>Begin</button>`}
   $('#app').innerHTML=h}
@@ -114,6 +126,7 @@ W.P=d=>{const x=S.sel;let v=d.v;
   else{x[d.k]=d.k=='n'?+v:v;if(d.k=='exam'||d.k=='mode'){x.subs=[];x.year=null;x.topics=[]}}setup()};
 W.tp=d=>{const x=S.sel,t=x.topics||[];x.topics=t.includes(d.v)?t.filter(y=>y!=d.v):[...t,d.v];setup()};
 W.ta=async()=>{const x=S.sel,Q=await qs(x.exam),t=[...new Set(Q.filter(q=>q.subject==x.subs[0]).map(q=>q.topic).filter(Boolean))];x.topics=(x.topics||[]).length==t.length?[]:t;setup()};
+W.mt=async d=>{const x=S.sel,t=(((await get('m','T'+x.exam))||{}).list||[])[+d.v],Q=await qs(x.exam),av=new Set(Q.map(q=>q.subject));if(!t)return;x.subs=t.subjects.filter(s=>av.has(s));x.pc=t.count;x.min=t.min;x.timed=true;if(x.subs.length<t.subjects.length)toast('Some subjects are not downloaded yet');setup()};
 W.T=d=>{S.sel[d.k]=!S.sel[d.k];setup()};
 W.go=async()=>{const x=S.sel,Q=await qs(x.exam);let L=[];if(!x.subs.length)return toast('Pick a subject');x.min=+($('#mn')?.value)||60;
   if(x.mode=='past'){if(!x.year)return toast('Pick a year');L=Q.filter(q=>q.subject==x.subs[0]&&q.year==x.year).sort((a,b)=>(a.no||0)-(b.no||0))}
@@ -168,30 +181,65 @@ W.su=()=>ae(()=>fb.au.createUserWithEmailAndPassword(fb.auth,$('#em').value,$('#
 W.gg=()=>ae(()=>fb.au.signInWithPopup(fb.auth,new fb.au.GoogleAuthProvider()));
 W.lo=()=>fb.au.signOut(fb.auth);W.sy=async()=>{await sync();toast('Synced')};
 /* ---------- Admin ---------- */
-async function admin(){view='adm';nav();const a=$('#app');if(role!='admin')return a.innerHTML='<div class=card>Admins only.</div>';
-  const{f,db}=fb;a.innerHTML='<p>Loading…</p>';
-  const[qd,ud]=await Promise.all([f.getDocs(f.collection(db,'questions')),f.getDocs(f.collection(db,'users'))]);
-  const Q=qd.docs.map(d=>({...d.data(),id:d.id})),sr=(S.aq||'').toLowerCase(),fl=Q.filter(q=>!sr||(q.text+q.subject+q.topic+q.exam+q.year).toLowerCase().includes(sr)),sh=fl.slice(0,40);S.fl=fl;
-  S.exq=Q;a.innerHTML=`<h2>Admin <small class=m>v7</small></h2><div class=card><div class=row><span>Students: <b>${ud.size}</b></span><span>Published: <b>${Q.filter(q=>q.status=='published').length}</b></span><span>Drafts: <b>${Q.filter(q=>q.status!='published').length}</b></span><span>Verified: <b>${Q.filter(q=>q.verified).length}</b></span></div></div>
-  ${upCard()}
-  <div class=card><h3>Add question</h3><select id=ex><option value=WAEC>WAEC</option><option value=NECO>NECO</option><option value=JAMB>JAMB/UTME</option></select><input id=yr type=number placeholder="Year (blank if not past question)"><input id=sj placeholder=Subject><input id=tp placeholder=Topic>
-  <input id=pa placeholder="Passage (optional)"><textarea id=qt placeholder="Question"></textarea><input id=im placeholder="Image URL (optional)">${[0,1,2,3].map(i=>`<input id=o${i} placeholder="Option ${L8[i]}">`).join('')}
-  <select id=an><option value=0>Answer A</option><option value=1>Answer B</option><option value=2>Answer C</option><option value=3>Answer D</option></select><textarea id=xp placeholder=Explanation></textarea><input id=mk type=number value=1 placeholder=Marks><input id=so placeholder="Source (e.g. WAEC 2019 official)">
-  <label><input id=vf type=checkbox style="width:auto"> Verified</label><select id=st><option value=draft>Draft</option><option value=published>Published</option></select><button class=pr data-a=asv>Save</button></div>
-  <details class=card><summary><b>Advanced JSON Import</b></summary><textarea id=bj rows=4 placeholder='[{"exam":"WAEC","year":2019,"subject":"Biology","topic":"Cell","text":"...","options":["a","b","c","d"],"answer":0,"explanation":"","status":"published","verified":true}]'></textarea><button data-a=bi>Preview import</button></details>
-  <div class=card><h3>Questions</h3><input id=sq placeholder=Search value="${E(S.aq||'')}"><button data-a=asr>Search</button><div class=row><button class=pr data-a=pa data-v=published>Publish all (${fl.filter(q=>q.status!='published').length})</button><button data-a=pa data-v=draft>Unpublish all (${fl.filter(q=>q.status=='published').length})</button></div><p class=m>Applies to all ${fl.length} questions matching the search box (leave it empty for everything).</p>
-  ${sh.map(q=>`<div class=card><span class=m>${N[q.exam]||q.exam} ${q.year||''} · ${E(q.subject)} · ${E(q.topic)} · ${q.status}${q.verified?' ✔':''}</span><br>${E(q.text).slice(0,120)}<br><button data-a=tg data-v=${q.id} data-s=${q.status}>${q.status=='published'?'Unpublish':'Publish'}</button><button data-a=ad data-v=${q.id}>Delete</button></div>`).join('')}</div>
-  <div class=card><h3>Students</h3>${ud.docs.slice(0,30).map(d=>`<div class=m>${E(d.data().email)} · ${d.data().role}</div>`).join('')}</div>`}
-W.pa=d=>ae(async()=>{const t=(S.fl||[]).filter(q=>(q.status=='published')!=(d.v=='published'));if(!t.length)return toast('Nothing to change');if(!confirm((d.v=='published'?'Publish ':'Unpublish ')+t.length+' questions?'))return;const{f,db}=fb;
-  for(let i=0;i<t.length;i+=400){const b=f.writeBatch(db);t.slice(i,i+400).forEach(q=>b.update(f.doc(db,'questions',q.id),{status:d.v,updated:Date.now()}));await b.commit()}toast('Done: '+t.length+' questions');admin()});
-W.asr=()=>{S.aq=$('#sq').value;admin()};
-W.asv=()=>ae(async()=>{const g=i=>$('#'+i).value.trim(),o=[0,1,2,3].map(i=>g('o'+i)).filter(Boolean),an=+g('an');
+const ATABS=[['ov','Overview'],['qs','Questions'],['up','Upload'],['ex','Exams'],['st','Students']];
+async function admin(){view='adm';nav();const a=$('#app');if(role!='admin')return a.innerHTML='<div class=card>Admins only.</div>';a.innerHTML='<p>Loading…</p>';
+  const{f,db}=fb,rd=n=>f.getDocs(f.collection(db,n)).then(r=>r.docs.map(d=>({...d.data(),id:d.id}))).catch(()=>null);
+  const[Q,U,T]=await Promise.all([rd('questions'),rd('users'),rd('templates')]);
+  S.Q=Q||[];S.exq=S.Q;S.U=U||[];S.T=T||[];S.noT=T===null;S.at=S.at||'ov';S.F=S.F||{q:'',exam:'',sub:'',st:'',pg:0};adm()}
+function adm(){$('#app').innerHTML=`<h2>Admin <small class=m>v8</small></h2><div class=tabs>${ATABS.map(([k,l])=>`<button class="${S.at==k?'on':''}" data-a=at data-v=${k}>${l}</button>`).join('')}</div><div id=ab></div>`;$('#ab').innerHTML=({ov:aOv,qs:aQs,up:aUp,ex:aEx,st:aSt}[S.at])()}
+W.at=d=>{S.at=d.v;adm()};
+function aOv(){const Q=S.Q,pub=Q.filter(q=>q.status=='published').length,by={};
+  Q.forEach(q=>{const x=by[(N[q.exam]||q.exam)+' · '+q.subject]??={t:0,p:0,y:new Set()};x.t++;if(q.status=='published')x.p++;if(q.year)x.y.add(q.year)});
+  const uv=Q.filter(q=>!q.verified).length;
+  return`<div class=tiles>${[['Students',S.U.length],['Questions',Q.length],['Published',pub],['Drafts',Q.length-pub],['Verified',Q.length-uv],['Mock setups',S.T.length]].map(([l,v])=>`<div class=tile><b>${v}</b><span class=m>${l}</span></div>`).join('')}</div>
+  ${uv?`<p class=ps>${uv} question(s) are not marked verified. Check answers, then verify them in the Questions tab.</p>`:''}
+  <div class=card><b>Content by exam and subject</b>${Object.entries(by).sort().map(([k,x])=>`<div class=row><span>${E(k)}<br><span class=m>${[...x.y].sort().join(', ')||'no year'}</span></span><span>${x.p}/${x.t} published</span></div>`).join('')||'<p class=m>No questions yet. Use the Upload tab.</p>'}</div>`}
+function qForm(){const q=S.form,v=k=>E(q[k]??''),op=i=>E((q.options||[])[i]??'');
+  const sel=(k,a)=>a.map(([x,l])=>`<option value="${x}" ${q[k]==x?'selected':''}>${l}</option>`).join('');
+  return`<div class=card><h3>${q.id?'Edit question':'Add question'}</h3><select id=ex>${sel('exam',[['WAEC','WAEC'],['NECO','NECO'],['JAMB','JAMB/UTME']])}</select><input id=yr type=number placeholder="Year (blank if not a past question)" value="${v('year')}"><input id=sj placeholder=Subject value="${v('subject')}"><input id=tp placeholder=Topic value="${v('topic')}">
+  <input id=pa placeholder="Passage (optional)" value="${v('passage')}"><textarea id=qt placeholder=Question>${v('text')}</textarea><input id=fm placeholder="Formula (optional)" value="${v('formula')}"><input id=im placeholder="Image URL (optional)" value="${q.img&&/^http/.test(q.img)?E(q.img):''}">
+  ${[0,1,2,3,4].map(i=>`<input id=o${i} placeholder="Option ${L8[i]}${i>3?' (optional)':''}" value="${op(i)}">`).join('')}
+  <select id=an>${sel('answer',[[0,'Answer A'],[1,'Answer B'],[2,'Answer C'],[3,'Answer D'],[4,'Answer E']])}</select><textarea id=xp placeholder=Explanation>${v('explanation')}</textarea><input id=mk type=number placeholder=Marks value="${q.marks||1}"><input id=so placeholder="Source" value="${v('source')}">
+  <label><input id=vf type=checkbox style="width:auto" ${q.verified?'checked':''}> Verified</label><select id=st>${sel('status',[['published','Published'],['draft','Draft']])}</select><button class=pr data-a=asv>Save</button><button data-a=cq>Cancel</button></div>`}
+function aQs(){const F=S.F,sr=F.q.toLowerCase(),subs=[...new Set(S.Q.map(q=>q.subject))].sort();
+  const fl=S.Q.filter(q=>(!F.exam||q.exam==F.exam)&&(!F.sub||q.subject==F.sub)&&(!F.st||(F.st=='published'?q.status=='published':F.st=='draft'?q.status!='published':!q.verified))&&(!sr||(q.text+q.topic+q.year).toLowerCase().includes(sr)))
+    .sort((a,b)=>(a.exam+a.subject+(a.year||'')).localeCompare(b.exam+b.subject+(b.year||''))||(a.no||0)-(b.no||0));
+  S.fl=fl;const PG=20,pages=Math.max(1,Math.ceil(fl.length/PG));F.pg=Math.min(F.pg,pages-1);const sh=fl.slice(F.pg*PG,F.pg*PG+PG),o=(v,l,c)=>`<option value="${E(v)}" ${c==v?'selected':''}>${E(l)}</option>`;
+  return`${S.form?qForm():'<button class=pr data-a=nq>＋ Add question</button>'}
+  <div class=card><input id=fq placeholder="Search question, topic or year" value="${E(F.q)}"><select id=fe>${o('','All exams',F.exam)}${Object.entries(N).map(([k,l])=>o(k,l,F.exam)).join('')}</select><select id=fs>${o('','All subjects',F.sub)}${subs.map(x=>o(x,x,F.sub)).join('')}</select>
+  <select id=ft>${o('','Any status',F.st)}${o('published','Published',F.st)}${o('draft','Drafts',F.st)}${o('unv','Not verified',F.st)}</select><button class=pr data-a=fa>Apply filters</button>
+  <p class=m>${fl.length} question(s) match. Actions below apply to all of them.</p><button data-a=pa data-v=published>Publish (${fl.filter(q=>q.status!='published').length})</button><button data-a=pa data-v=draft>Unpublish (${fl.filter(q=>q.status=='published').length})</button><button data-a=vA>✔ Verify (${fl.filter(q=>!q.verified).length})</button><button class=dg data-a=dA>🗑 Delete all ${fl.length}</button></div>
+  ${sh.map(q=>`<div class=card><span class=m>${N[q.exam]||E(q.exam)} ${q.year||''} · ${E(q.subject)} · ${E(q.topic)}<br>${q.status=='published'?'🟢 Published':'⚪ Draft'}${q.verified?' · ✔ Verified':''}</span><p>${E(q.text).slice(0,160)}</p>
+  ${S.pv==q.id?`<div class=ex>${(q.options||[]).map((x,i)=>`<div>${i==q.answer?'✅':'▫️'} ${L8[i]}. ${E(x)}</div>`).join('')}<p class=m>${E(q.explanation||'')}</p></div>`:''}
+  <button data-a=pv data-v=${q.id}>👁 Preview</button><button data-a=eq data-v=${q.id}>✏️ Edit</button><button data-a=tg data-v=${q.id} data-s=${q.status}>${q.status=='published'?'Unpublish':'Publish'}</button><button data-a=vf data-v=${q.id} data-s=${q.verified?1:0}>${q.verified?'Unverify':'✔ Verify'}</button><button class=dg data-a=ad data-v=${q.id}>🗑</button></div>`).join('')}
+  <div class=row><button data-a=pgn data-v=-1 ${F.pg?'':'disabled'}>◀ Prev</button><span class=m>Page ${F.pg+1}/${pages}</span><button data-a=pgn data-v=1 ${F.pg<pages-1?'':'disabled'}>Next ▶</button></div>`}
+const aUp=()=>upCard()+`<details class=card><summary><b>Advanced JSON Import</b></summary><textarea id=bj rows=4 placeholder="Paste a JSON array of questions"></textarea><button data-a=bi>Preview import</button></details>`;
+function aEx(){return`${S.noT?'<div class=card style="background:#fee2e2">Mock setups need the <b>templates</b> rule in Firestore. Add it, then reopen Admin.</div>':''}<div class=card><h3>New mock exam setup</h3><input id=tn placeholder="Name e.g. JAMB UTME Mock"><select id=te><option value=WAEC>WAEC</option><option value=NECO>NECO</option><option value=JAMB>JAMB/UTME</option></select>
+  <input id=ts placeholder="Subjects, comma separated (exact names)"><p class=m>Your subjects: ${E([...new Set(S.Q.map(q=>q.subject))].sort().join(', ')||'none yet')}</p><input id=tc type=number placeholder="Questions per subject"><input id=tm type=number placeholder="Duration in minutes"><button class=pr data-a=ta2>Save setup</button><p class=m>Students see it under Mock Exam after tapping Refresh.</p></div>
+  ${S.T.map(t=>`<div class=card><b>${E(t.name)}</b><br><span class=m>${N[t.exam]} · ${E((t.subjects||[]).join(', '))} · ${t.count} per subject · ${t.min} min</span><br><button class=dg data-a=td data-v=${t.id}>Delete</button></div>`).join('')}`}
+function aSt(){const sr=(S.sq||'').toLowerCase(),L=S.U.filter(u=>!sr||(u.email||'').toLowerCase().includes(sr)).sort((a,b)=>(b.at||0)-(a.at||0));
+  return`<div class=card><b>${S.U.length} registered students</b><input id=sq2 placeholder="Search email" value="${E(S.sq||'')}"><button data-a=sq>Search</button></div>${L.slice(0,50).map(u=>`<div class=card><b>${E(u.email)}</b><br><span class=m>${u.at?new Date(u.at).toLocaleDateString():''} · ${(u.email||'').toLowerCase()==ADMIN_EMAIL?'Administrator':'Student'}</span></div>`).join('')}`}
+W.sq=()=>{S.sq=$('#sq2').value;adm()};
+W.nq=()=>{S.form={exam:'WAEC',status:'published',options:[]};adm()};W.cq=()=>{S.form=null;adm()};
+W.eq=d=>{S.form={...S.Q.find(q=>q.id==d.v)};adm();scrollTo(0,0)};
+W.pv=d=>{S.pv=S.pv==d.v?null:d.v;adm()};
+W.fa=()=>{S.F={q:$('#fq').value,exam:$('#fe').value,sub:$('#fs').value,st:$('#ft').value,pg:0};adm()};
+W.pgn=d=>{S.F.pg+=+d.v;adm();scrollTo(0,0)};
+W.asv=()=>ae(async()=>{const g=i=>$('#'+i).value.trim(),o=[0,1,2,3,4].map(i=>g('o'+i)).filter(Boolean),an=+g('an'),q=S.form,{f,db}=fb;
   if(!g('qt')||!g('sj')||o.length<2||an>=o.length)return toast('Check question, subject, options and answer');
-  const d={exam:g('ex'),year:+g('yr')||null,subject:g('sj'),topic:g('tp'),text:g('qt'),options:o,answer:an,explanation:g('xp'),marks:+g('mk')||1,img:g('im'),passage:g('pa'),source:g('so'),verified:$('#vf').checked,status:g('st'),qtype:'objective',created:Date.now(),updated:Date.now(),by:user.uid};
-  await fb.f.addDoc(fb.f.collection(fb.db,'questions'),d);toast('Saved');admin()});
-W.bi=()=>ae(async()=>{defs();const j=JSON.parse($('#bj').value),rows=Array.isArray(j)?j:j.questions;if(!rows||!rows.length)throw Error('No questions found');prev(await prepare(rows,1),'Pasted JSON')});
+  const d={exam:g('ex'),year:+g('yr')||null,subject:g('sj'),topic:g('tp'),text:g('qt'),options:o,answer:an,explanation:g('xp'),marks:+g('mk')||1,img:g('im')||q.img||'',passage:g('pa'),formula:g('fm'),source:g('so'),verified:$('#vf').checked,status:g('st'),qtype:'objective',updated:Date.now(),by:user.uid};
+  if(q.id)await f.updateDoc(f.doc(db,'questions',q.id),d);else await f.addDoc(f.collection(db,'questions'),{...d,created:Date.now()});S.form=null;toast('Saved');admin()});
+const bulk=async(arr,fn)=>{const{f,db}=fb;for(let i=0;i<arr.length;i+=400){const b=f.writeBatch(db);arr.slice(i,i+400).forEach(q=>fn(b,f.doc(db,'questions',q.id)));await b.commit()}};
 W.tg=d=>ae(async()=>{await fb.f.updateDoc(fb.f.doc(fb.db,'questions',d.v),{status:d.s=='published'?'draft':'published',updated:Date.now()});admin()});
+W.vf=d=>ae(async()=>{await fb.f.updateDoc(fb.f.doc(fb.db,'questions',d.v),{verified:d.s!='1',updated:Date.now()});admin()});
 W.ad=d=>confirm('Delete this question?')&&ae(async()=>{await fb.f.deleteDoc(fb.f.doc(fb.db,'questions',d.v));admin()});
+W.pa=d=>ae(async()=>{const t=S.fl.filter(q=>(q.status=='published')!=(d.v=='published'));if(!t.length)return toast('Nothing to change');if(!confirm((d.v=='published'?'Publish ':'Unpublish ')+t.length+' questions?'))return;await bulk(t,(b,r)=>b.update(r,{status:d.v,updated:Date.now()}));toast('Done: '+t.length);admin()});
+W.vA=()=>ae(async()=>{const t=S.fl.filter(q=>!q.verified);if(!t.length)return toast('Nothing to change');if(!confirm('Mark '+t.length+' questions as verified?'))return;await bulk(t,(b,r)=>b.update(r,{verified:true,updated:Date.now()}));toast('Verified '+t.length);admin()});
+W.dA=()=>ae(async()=>{const t=S.fl;if(!t.length)return toast('Nothing to delete');if(prompt(`This permanently deletes ${t.length} questions. Type DELETE to confirm.`)!=='DELETE')return;await bulk(t,(b,r)=>b.delete(r));toast('Deleted '+t.length);admin()});
+W.ta2=()=>ae(async()=>{const g=i=>$('#'+i).value.trim(),sb=g('ts').split(',').map(x=>x.trim()).filter(Boolean);if(!g('tn')||!sb.length||!(+g('tc')>0)||!(+g('tm')>0))return toast('Fill in every field');
+  await fb.f.addDoc(fb.f.collection(fb.db,'templates'),{name:g('tn'),exam:g('te'),subjects:sb,count:+g('tc'),min:+g('tm'),by:user.uid,created:Date.now()});toast('Saved');admin()});
+W.td=d=>confirm('Delete this setup?')&&ae(async()=>{await fb.f.deleteDoc(fb.f.doc(fb.db,'templates',d.v));admin()});
+W.bi=()=>ae(async()=>{defs();const j=JSON.parse($('#bj').value),rows=Array.isArray(j)?j:j.questions;if(!rows||!rows.length)throw Error('No questions found');prev(await prepare(rows,1),'Pasted JSON')});
 /* ---------- Upload & import ---------- */
 const lib=(u,t)=>window[t]?0:new Promise((r,j)=>{const s=document.createElement('script');s.src=u;s.onload=r;s.onerror=()=>j(Error('Could not load '+t+' (internet needed)'));document.head.appendChild(s)});
 const needX=()=>lib('https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js','XLSX'),needZ=()=>lib('https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js','JSZip');
