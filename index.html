@@ -81,7 +81,7 @@ function trend(A){const P=[...A].sort((a,b)=>a.at-b.at).slice(-10);if(P.length<2
   const w=300,H=120,l=26,r=8,t=8,b=20,x=i=>l+i*(w-l-r)/(P.length-1),y=v=>t+(100-v)*(H-t-b)/100,pts=P.map((a,i)=>`${x(i).toFixed(1)},${y(a.pct).toFixed(1)}`).join(' ');
   return`<svg class=chart viewBox="0 0 300 120" role=img aria-label="Score trend over your last ${P.length} sessions">${[0,50,100].map(v=>`<line x1="${l}" x2="${w-r}" y1="${y(v)}" y2="${y(v)}" stroke="#e2e8f0"/><text x="${l-4}" y="${y(v)+3}" text-anchor="end" font-size="9" fill="#64748b">${v}</text>`).join('')}<polygon points="${l},${y(0)} ${pts} ${x(P.length-1).toFixed(1)},${y(0)}" fill="#0f4c8122"/><polyline points="${pts}" fill="none" stroke="#0f4c81" stroke-width="2.5" stroke-linejoin="round"/>${P.map((a,i)=>`<circle cx="${x(i).toFixed(1)}" cy="${y(a.pct).toFixed(1)}" r="3.5" fill="${col(a.pct)}" stroke="#fff" stroke-width="1.5"><title>${a.pct}% · ${new Date(a.at).toLocaleDateString()}</title></circle>`).join('')}</svg>`}
 /* ---------- Bookmarks ---------- */
-let BM={};
+let BM={},G=20;
 const findQ=id=>(sess&&sess.Q.find(q=>q.id==id))||(S.r&&S.r.Q.find(q=>q.id==id))||BM[id];
 const bmBtn=id=>findQ(id)?.qtype=='theory'?'':`<button class=bm data-a=bm data-v=${id}>${BM[id]?'🔖 Saved':'🔖 Save'}</button>`;
 W.bm=async d=>{const id=d.v,q=findQ(id);if(BM[id]){delete BM[id];toast('Removed from Saved')}else if(q){BM[id]=q;toast('Saved 🔖')}else return;
@@ -98,7 +98,7 @@ async function init(){
     const app=a.initializeApp(FB);fb={au,f,auth:au.getAuth(app),db:f.getFirestore(app)};
     au.onAuthStateChanged(fb.auth,async u=>{user=u;role='';prof={};
       if(u){try{const r=f.doc(fb.db,'users',u.uid),d=await f.getDoc(r);
-        if(d.exists()){prof=d.data();role=prof.role||''}
+        if(d.exists()){prof=d.data();role=prof.role||'';if(prof.goal>0)G=prof.goal}
         else{const p=pend&&(pend.email||'').toLowerCase()==(u.email||'').toLowerCase()?pend.p:{};prof={...p,email:u.email,role:'student',at:Date.now()};await f.setDoc(r,prof)}}catch{}
         pend=null;
         if(u.email&&u.email.toLowerCase()===ADMIN_EMAIL)role='admin';
@@ -138,7 +138,7 @@ async function downloads(){view='dl';nav();const M=Object.fromEntries((await all
 function stats(A){const sub={},top={},days=new Set(),td=new Date().toDateString();let tq=0,today=0;
   A.forEach(a=>{days.add(new Date(a.at).toDateString());(a.det||[]).forEach(d=>{tq++;if(new Date(a.at).toDateString()==td)today++;
     const x=sub[d.s]??={c:0,t:0};x.t++;x.c+=d.c;const k=d.s+' · '+(d.tp||'General'),y=top[k]??={c:0,t:0,s:d.s,tp:d.tp};y.t++;y.c+=d.c})});
-  let st=0,dt=new Date();while(days.has(dt.toDateString())){st++;dt.setDate(dt.getDate()-1)}
+  A.forEach(a=>{if(new Date(a.at).toDateString()==td)today+=(a.th||[]).filter(t=>t.txt).length});let st=0,dt=new Date();while(days.has(dt.toDateString())){st++;dt.setDate(dt.getDate()-1)}
   const p=A.map(a=>a.pct);return{tq,today,sub,top,st,n:A.length,avg:p.length?Math.round(p.reduce((a,b)=>a+b)/p.length):0,best:p.length?Math.max(...p):0}}
 async function home(){view='home';nav();const A=(await all('a')).sort((a,b)=>b.at-a.at),s=stats(A),cur=await get('s','cur'),M=Object.fromEntries((await all('m')).filter(m=>N[m.id]).map(m=>[m.id,m])),h=new Date().getHours(),nm=user?E(user.displayName||user.email.split('@')[0]):'';
   const weak=Object.values(s.top).filter(t=>t.t>=3).map(t=>({...t,p:Math.round(t.c/t.t*100)})).sort((a,b)=>a.p-b.p).slice(0,3),CL={WAEC:'#0f4c81',NECO:'#16a34a',JAMB:'#f5a524'},IC={WAEC:'📘',NECO:'📗',JAMB:'📙'};
@@ -146,14 +146,16 @@ async function home(){view='home';nav();const A=(await all('a')).sort((a,b)=>b.a
   <div style="margin-top:12px">${cur?'<button class=cta data-a=res>▶ Resume your session</button>':'<button class=cta data-a=nv data-v=prac>Start practising</button>'}</div></section>
   <h3>Choose your exam</h3><div class=ex3>${Object.keys(N).map(e=>`<div class=exc style="--c:${CL[e]}"><span class=ic>${IC[e]}</span><b>${N[e]}</b><span class=m>${M[e]&&M[e].ok?M[e].n+' questions':'Tap Open to load'}</span><br><button class=pr data-a=ex data-v=${e}>Open</button></div>`).join('')}</div>
   <h3>Quick start</h3><div class=ex3>${[['topic','🎯','Topic practice'],['mock','⏱','Mock exam'],['past','📄','Past questions']].map(([m,i,l])=>`<button class=qa data-a=qa data-v=${m}><span class=ic>${i}</span><br>${l}</button>`).join('')}</div>
-  <h3>Your progress</h3><div class=tiles>${[[s.tq,'Questions'],[s.n,'Sessions'],[s.avg+'%','Average'],[s.best+'%','Best score'],['🔥'+s.st,'Day streak'],[Math.min(s.today,20)+'/20','Today']].map(([v,l])=>`<div class=tile><b>${v}</b><span class=m>${l}</span></div>`).join('')}</div>
-  <div class=card><div class=row><b>Daily goal</b><span class=m>${Math.min(s.today,20)}/20 questions</span></div><div class=bar><i style="width:${Math.min(100,s.today*5)}%"></i></div></div>
+  <h3>Your progress</h3><div class=tiles>${[[s.tq,'Questions'],[s.n,'Sessions'],[s.avg+'%','Average'],[s.best+'%','Best score'],['🔥'+s.st,'Day streak'],[Math.min(s.today,G)+'/'+G,'Today']].map(([v,l])=>`<div class=tile><b>${v}</b><span class=m>${l}</span></div>`).join('')}</div>
+  <div class=card><div class=row><b>Daily goal</b><span class=m>${Math.min(s.today,G)}/${G} questions${s.today>=G?' · 🎉 Goal reached!':''}</span></div><div class=bar><i style="width:${Math.min(100,Math.round(s.today/G*100))}%"></i></div><p class=m style="margin:10px 0 4px">Set your goal (questions per day):</p>${[10,20,30,50,100].map(n=>`<button class="${G==n?'on':''}" data-a=goal data-v=${n}>${n}</button>`).join('')}<button data-a=goalc>Custom</button></div>
   <div class=card><b>Score trend</b> <span class=m>(last 10 sessions)</span>${trend(A)}</div>
   ${weak.length?`<div class=card><b>Recommended revision</b>${weak.map(t=>`<div class=row><span>${E(t.s)} · ${E(t.tp||'General')} (${t.p}%)</span><button data-a=rec data-s="${E(t.s)}" data-t="${E(t.tp||'')}">Practise</button></div>`).join('')}</div>`:''}
   <div class=card><b>Subject performance</b>${Object.entries(s.sub).map(([k,v])=>`<div>${E(k)} ${Math.round(v.c/v.t*100)}%<div class=bar><i style="width:${v.c/v.t*100}%"></i></div></div>`).join('')||'<p class=m>Complete a practice session to see your performance.</p>'}</div>
   <div class=card><b>Recent results</b>${A.slice(0,6).map(a=>`<div class=row><span>${N[a.exam]} ${a.mode} · ${new Date(a.at).toLocaleDateString()}</span><button data-a=hi data-v=${a.id}>${a.pct}% ›</button></div>`).join('')||'<p class=m>No results yet.</p>'}</div>
   <p class=m style="text-align:center">ExamPilot practice platform · Not affiliated with WAEC, NECO or JAMB</p>`}
 W.qa=d=>{const e=(S.sel&&S.sel.exam)||'JAMB';S.sel={exam:e,mode:d.v,subs:[],n:10,timed:d.v=='mock',min:d.v=='mock'?90:60,fb:true,topics:[]};go('prac')};
+const setGoal=async n=>{n=Math.round(+n);if(!(n>=1&&n<=500))return toast('Choose between 1 and 500 questions');G=n;try{await put('m',{id:'GOAL',n})}catch{}try{if(fb&&user&&navigator.onLine)await fb.f.setDoc(fb.f.doc(fb.db,'users',user.uid),{goal:n},{merge:true})}catch{}toast('Daily goal set to '+n);home()};
+W.goal=d=>setGoal(d.v);W.goalc=()=>{const v=prompt('How many questions per day? (1–500)',G);if(v!==null)setGoal(v)};
 W.nv=d=>go(d.v);W.ex=d=>{S.sel={exam:d.v,mode:'topic',subs:[],n:10,timed:false,min:60,fb:true};go('prac')};
 W.rec=async d=>{const x=S.sel={exam:'',mode:'topic',subs:[d.s],topics:[d.t],n:10,fb:true},Q=(await all('q')).filter(q=>q.subject==d.s&&(q.topic||'')==d.t&&q.qtype!='theory');
   if(!Q.length)return toast('Download questions first');x.exam=Q[0].exam;begin(shuf(Q).slice(0,10),x)};
@@ -452,5 +454,5 @@ addEventListener('online',()=>{sync();if(view=='home')home()});addEventListener(
   const i=document.createElement('link');i.rel='icon';i.href=ic(64);document.head.appendChild(i)})();
 if('serviceWorker'in navigator)navigator.serviceWorker.register('sw.js').catch(()=>{});
 banner();
-(async()=>{try{BM=((await get('m','BM'))||{}).items||{}}catch{}sess=await get('s','cur');if(sess&&sess.timed&&sess.deadline<Date.now()){await finish();}else go('home');init()})();
+(async()=>{try{BM=((await get('m','BM'))||{}).items||{}}catch{}try{G=((await get('m','GOAL'))||{}).n||G}catch{}sess=await get('s','cur');if(sess&&sess.timed&&sess.deadline<Date.now()){await finish();}else go('home');init()})();
 </script></body></html>
