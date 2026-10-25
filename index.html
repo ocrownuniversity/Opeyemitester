@@ -153,7 +153,7 @@ async function home(){view='home';nav();const A=(await all('a')).sort((a,b)=>b.a
   <div class=card><b>Subject performance</b>${Object.entries(s.sub).map(([k,v])=>`<div>${E(k)} ${Math.round(v.c/v.t*100)}%<div class=bar><i style="width:${v.c/v.t*100}%"></i></div></div>`).join('')||'<p class=m>Complete a practice session to see your performance.</p>'}</div>
   <div class=card><b>Recent results</b>${A.slice(0,6).map(a=>`<div class=row><span>${N[a.exam]} ${a.mode} · ${new Date(a.at).toLocaleDateString()}</span><button data-a=hi data-v=${a.id}>${a.pct}% ›</button></div>`).join('')||'<p class=m>No results yet.</p>'}</div>
   <p class=m style="text-align:center">ExamPilot practice platform · Not affiliated with WAEC, NECO or JAMB</p>`}
-W.qa=d=>{const e=(S.sel&&S.sel.exam)||'JAMB';S.sel={exam:e,mode:d.v,subs:[],n:10,timed:false,min:60,fb:true,topics:[]};go('prac')};
+W.qa=d=>{const e=(S.sel&&S.sel.exam)||'JAMB';S.sel={exam:e,mode:d.v,subs:[],n:10,timed:d.v=='mock',min:d.v=='mock'?90:60,fb:true,topics:[]};go('prac')};
 W.nv=d=>go(d.v);W.ex=d=>{S.sel={exam:d.v,mode:'topic',subs:[],n:10,timed:false,min:60,fb:true};go('prac')};
 W.rec=async d=>{const x=S.sel={exam:'',mode:'topic',subs:[d.s],topics:[d.t],n:10,fb:true},Q=(await all('q')).filter(q=>q.subject==d.s&&(q.topic||'')==d.t&&q.qtype!='theory');
   if(!Q.length)return toast('Download questions first');x.exam=Q[0].exam;begin(shuf(Q).slice(0,10),x)};
@@ -161,7 +161,7 @@ W.rec=async d=>{const x=S.sel={exam:'',mode:'topic',subs:[d.s],topics:[d.t],n:10
 async function setup(){view='prac';nav();const x=S.sel??={exam:'JAMB',mode:'topic',subs:[],n:10,timed:false,min:60,fb:true},Q=await qs(x.exam);
   if(fb&&navigator.onLine&&!(S.chk??={})[x.exam]){S.chk[x.exam]=1;await dl(x.exam);return}
   const T=((await get('m','T'+x.exam))||{}).list||[];const TQ=(await qa(x.exam)).filter(q=>q.qtype=='theory');
-  const PQ=x.mode=='past'?await qa(x.exam):Q,subs=[...new Set(PQ.map(q=>q.subject))].sort(),sQ=PQ.filter(q=>q.subject==x.subs[0]);
+  const PQ=x.mode=='past'||x.mode=='mock'?await qa(x.exam):Q,subs=[...new Set(PQ.map(q=>q.subject))].sort(),sQ=PQ.filter(q=>q.subject==x.subs[0]);
   const chips=(k,arr,sel)=>arr.map(([v,l])=>`<button class="${sel(v)?'on':''}" data-a=P data-k=${k} data-v="${E(v)}">${E(l)}</button>`).join('');
   let h=`<h2>Practice</h2><div class=card><b>1. Examination</b><br>${chips('exam',Object.entries(N),v=>x.exam==v)}<p class=m>${Q.length} question(s) available for ${N[x.exam]} <button data-a=dl data-v=${x.exam}>⟳ Refresh</button></p></div>`;
   if(!Q.length)h+=`<div class=card>No questions downloaded for ${N[x.exam]}. <button class=pr data-a=dl data-v=${x.exam}>Download now</button></div>`;
@@ -169,13 +169,13 @@ async function setup(){view='prac';nav();const x=S.sel??={exam:'JAMB',mode:'topi
   <div class=card><b>3. Subject${x.mode=='mock'&&x.exam=='JAMB'?'s (pick 4)':''}</b><br>${chips('subs',subs.map(s=>[s,s+' ('+PQ.filter(q=>q.subject==s).length+')']),v=>x.subs.includes(v))}</div>`;
   if(x.mode=='past'&&x.subs[0]){const ys=[...new Set(sQ.map(q=>q.year).filter(Boolean))].sort().reverse().map(y=>[String(y),y+' ('+sQ.filter(q=>q.year==y).length+')']);if(sQ.some(q=>!q.year))ys.push(['none','No year / likely questions ('+sQ.filter(q=>!q.year).length+')']);h+=`<div class=card><b>Year</b><br>${ys.length?chips('year',ys,v=>x.year==v):'<p class=m>No questions found for this subject. Tap Refresh above to update.</p>'}</div>`}
   if(x.mode=='topic'&&x.subs[0])h+=`<div class=card><b>Topics</b> <span class=m>(tap one or more)</span><br><button data-a=ta>Select all / none</button><br>${[...new Set(sQ.map(q=>q.topic).filter(Boolean))].sort().map(t=>`<button class="${(x.topics||[]).includes(t)?'on':''}" data-a=tp data-v="${E(t)}">${E(t)} (${sQ.filter(q=>q.topic==t).length})</button>`).join('')}<br><b>Number of questions</b><br>${chips('n',[10,20,30,50].map(n=>[n,n]),v=>x.n==v)}</div>`;
-  if(x.mode=='mock')h+=`${T.length?`<div class=card><b>Ready-made mock exams</b><br>${T.map((t,i)=>`<button data-a=mt data-v=${i}>${E(t.name)}</button>`).join('')}</div>`:''}<div class=card><b>Questions per subject</b><input id=pc type=number value=${x.pc||20} min=1>${TQ.length&&x.exam!='JAMB'?`<b>Theory questions per subject (Section B)</b><input id=tc2 type=number value=${x.tc||0} min=0><p class=m>${TQ.length} theory question(s) downloaded. You self-mark them after submitting.</p>`:''}<p class=m>ExamPilot practice mock — not an official exam structure. Set counts/duration as you wish.</p></div>`;
+  if(x.mode=='mock')h+=`${T.length?`<div class=card><b>Ready-made mock exams</b><br>${T.map((t,i)=>`<button data-a=mt data-v=${i}>${E(t.name)}</button>`).join('')}</div>`:''}<div class=card><b>Questions per subject</b><input id=pc type=number value=${x.pc||20} min=1>${x.exam!='JAMB'?(()=>{const tn=TQ.filter(q=>x.subs.includes(q.subject)).length,on=Q.filter(q=>x.subs.includes(q.subject)).length;return x.subs.length?`<div class=ex><b>Your mock</b><br>Section A · Objective (${on} available)<br>Section B · Theory (${tn} available) — you write your answers, then self-mark with the model answer.</div>${tn?`<b>Theory questions in Section B</b><input id=tc2 type=number value=${x.tc??Math.min(5,tn)} min=0 max=${tn}>`:'<p class=m>No theory questions for the selected subject yet.</p>'}`:'<p class=m>Pick a subject above to see Section A (objective) and Section B (theory).</p>'})():''}<p class=m>ExamPilot practice mock — not an official exam structure. Set counts/duration as you wish.</p></div>`;
   h+=`<div class=card><button class="${x.timed?'on':''}" data-a=T data-k=timed>⏱ Timed</button>${x.mode!='mock'?`<button class="${x.fb?'on':''}" data-a=T data-k=fb>Show answers as I go</button>`:''}
   ${x.timed?`<br>Minutes <input id=mn type=number value=${x.min} min=1>`:''}</div><button class=pr data-a=go>Begin</button>`}
   $('#app').innerHTML=h}
 W.P=d=>{const x=S.sel;let v=d.v;
-  if(d.k=='subs'){x.subs=x.mode=='mock'&&x.exam=='JAMB'?(x.subs.includes(v)?x.subs.filter(y=>y!=v):x.subs.length<4?[...x.subs,v]:x.subs):[v];x.year=null;x.topics=[]}
-  else{x[d.k]=d.k=='n'?+v:v;if(d.k=='exam'||d.k=='mode'){x.subs=[];x.year=null;x.topics=[]}}setup()};
+  if(d.k=='subs'){x.subs=x.mode=='mock'&&x.exam=='JAMB'?(x.subs.includes(v)?x.subs.filter(y=>y!=v):x.subs.length<4?[...x.subs,v]:x.subs):[v];x.year=null;x.topics=[];delete x.tc}
+  else{x[d.k]=d.k=='n'?+v:v;if(d.k=='exam'||d.k=='mode'){x.subs=[];x.year=null;x.topics=[];delete x.tc;if(d.k=='mode'&&v=='mock'){x.timed=true;x.min=90}}}setup()};
 W.tp=d=>{const x=S.sel,t=x.topics||[];x.topics=t.includes(d.v)?t.filter(y=>y!=d.v):[...t,d.v];setup()};
 W.ta=async()=>{const x=S.sel,Q=await qs(x.exam),t=[...new Set(Q.filter(q=>q.subject==x.subs[0]).map(q=>q.topic).filter(Boolean))];x.topics=(x.topics||[]).length==t.length?[]:t;setup()};
 W.mt=async d=>{const x=S.sel,t=(((await get('m','T'+x.exam))||{}).list||[])[+d.v],Q=await qs(x.exam),av=new Set(Q.map(q=>q.subject));if(!t)return;x.subs=t.subjects.filter(s=>av.has(s));x.pc=t.count;x.tc=t.theory||0;x.min=t.min;x.timed=true;if(x.subs.length<t.subjects.length)toast('Some subjects are not downloaded yet');setup()};
@@ -204,7 +204,7 @@ function quiz(){clearInterval(tick);view='quiz';nav();const s=sess,q=s.Q[s.i],a=
     if(r<=60000&&r>0&&s.min>1&&!s.w1){s.w1=1;toast('⚠️ Only 1 minute left!');navigator.vibrate&&navigator.vibrate([200,100,200])}
     if(r<=0){toast("⏱ Time's up! Submitting…");finish()}};t();tick=setInterval(t,500)}}
 W.pk=d=>{const q=sess.Q[sess.i];if(sess.fb&&sess.ans[q.id]!=null)return;sess.ans[q.id]=+d.v;persist();quiz()};
-document.addEventListener('input',e=>{if(e.target.id=='ta'&&sess){const q=sess.Q[sess.i],v=e.target.value;if(v.trim())sess.ans[q.id]=v;else delete sess.ans[q.id];persist()}});W.mv=d=>{sess.i+=+d.v;persist();quiz()};W.gt=d=>{sess.i=+d.v;persist();quiz()};
+document.addEventListener('input',e=>{if(e.target.id=='tc2'&&S.sel)S.sel.tc=+e.target.value||0;if(e.target.id=='ta'&&sess){const q=sess.Q[sess.i],v=e.target.value;if(v.trim())sess.ans[q.id]=v;else delete sess.ans[q.id];persist()}});W.mv=d=>{sess.i+=+d.v;persist();quiz()};W.gt=d=>{sess.i=+d.v;persist();quiz()};
 W.fl=()=>{const id=sess.Q[sess.i].id;sess.fl[id]=!sess.fl[id];persist();quiz()};
 W.sub=async()=>{const u=sess.Q.filter(q=>sess.ans[q.id]==null).length;if(await ask(u?`${u} question${u>1?'s are':' is'} unanswered. Submit now?`:'Submit your answers now?',{ok:'Submit'}))finish()};
 async function finish(){const s=sess;if(!s||s.done)return;s.done=1;clearInterval(tick);let sc=0,mx=0,c=0,w=0,u=0;const bs={},det=[],th=[];
