@@ -187,12 +187,13 @@ const STATES=['Abia','Adamawa','Akwa Ibom','Anambra','Bauchi','Bayelsa','Benue',
 const LV=['JSS 3','SS 1','SS 2','SS 3','Graduate / writing again','Other'];
 const needProf=()=>!!user&&role!='admin'&&!(prof.name&&prof.phone&&prof.state);
 const normPhone=v=>{let d=String(v||'').replace(/[\s\-()]/g,'');if(d.startsWith('+234'))d='0'+d.slice(4);else if(d.startsWith('234'))d='0'+d.slice(3);return/^0[789][01]\d{8}$/.test(d)?'+234'+d.slice(1):''};
-function regForm(p,full){const v=k=>E(p[k]??''),o=(arr,sel,ph)=>`<option value="">${ph}</option>`+arr.map(x=>`<option ${x==sel?'selected':''}>${E(x)}</option>`).join('');
+const MO=['January','February','March','April','May','June','July','August','September','October','November','December'];
+function regForm(p,full){const dob=String(p.dob||'').split('-'),v=k=>E(p[k]??''),o=(arr,sel,ph)=>`<option value="">${ph}</option>`+arr.map(x=>`<option ${x==sel?'selected':''}>${E(x)}</option>`).join('');
   return`<input id=rn placeholder="Full name *" autocomplete=name value="${v('name')}">
   ${full?'<input id=em type=email placeholder="Email address *" autocomplete=email>':''}
   <input id=rph type=tel placeholder="Phone number * e.g. 08012345678" autocomplete=tel value="${v('phone')}">
   <select id=rgn>${o(['Male','Female','Prefer not to say'],p.gender,'Gender *')}</select>
-  <label class=m>Date of birth *</label><input id=rdb type=date value="${v('dob')}">
+  <label class=m>Date of birth *</label><div style="display:flex;gap:6px"><select id=rdd>${o(Array.from({length:31},(_,i)=>String(i+1)),String(+dob[2]||''),'Day')}</select><select id=rdm>${MO.map((m,i)=>`<option value="${i+1}" ${+dob[1]==i+1?'selected':''}>${m}</option>`).join('').replace('<option','<option value="" hidden>Month</option><option')}</select><select id=rdy>${o(Array.from({length:73},(_,i)=>String(new Date().getFullYear()-8-i)),String(+dob[0]||''),'Year')}</select></div>
   <select id=rst>${o(STATES,p.state,'State of residence *')}</select>
   <input id=rlg placeholder="Town / LGA *" value="${v('lga')}">
   <input id=rsc placeholder="School (or last school attended) *" value="${v('school')}">
@@ -200,7 +201,7 @@ function regForm(p,full){const v=k=>E(p[k]??''),o=(arr,sel,ph)=>`<option value="
   <div class=m>Exam(s) you are preparing for *</div><div>${Object.entries(N).map(([k,l])=>`<label style="margin-right:12px"><input type=checkbox class=rx value=${k} style="width:auto" ${(p.exams||[]).includes(k)?'checked':''}> ${l}</label>`).join('')}</div>
   ${full?'<input id=pw type=password placeholder="Password * (min 6 characters)" autocomplete=new-password><input id=pw2 type=password placeholder="Confirm password *" autocomplete=new-password>':''}
   <label class=m style="display:block;margin:8px 0"><input id=rt type=checkbox style="width:auto"> I confirm my details are correct and agree that ExamPilot may store them to manage my account.</label>`}
-function readReg(){const g=i=>($('#'+i)?.value||'').trim(),p={name:g('rn').replace(/\s+/g,' '),phone:normPhone(g('rph')),gender:g('rgn'),dob:g('rdb'),state:g('rst'),lga:g('rlg'),school:g('rsc'),level:g('rlv'),exams:[...document.querySelectorAll('.rx:checked')].map(x=>x.value)};
+function readReg(){const g=i=>($('#'+i)?.value||'').trim(),p={name:g('rn').replace(/\s+/g,' '),phone:normPhone(g('rph')),gender:g('rgn'),dob:(()=>{const y=+g('rdy'),m=+g('rdm'),d=+g('rdd'),t=new Date(y,m-1,d);return y&&m&&d&&t.getFullYear()==y&&t.getMonth()==m-1&&t.getDate()==d?`${y}-${String(m).padStart(2,'0')}-${String(d).padStart(2,'0')}`:''})(),state:g('rst'),lga:g('rlg'),school:g('rsc'),level:g('rlv'),exams:[...document.querySelectorAll('.rx:checked')].map(x=>x.value)};
   const age=(Date.now()-new Date(p.dob))/31557600000;let err='';
   if(p.name.length<5||p.name.split(' ').length<2)err='Enter your full name (first and last name)';
   else if(!p.phone)err='Enter a valid Nigerian phone number, e.g. 08012345678';
