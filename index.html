@@ -23,8 +23,20 @@ nav{position:fixed;bottom:0;left:0;right:0;display:flex;background:#fff;border-t
 .qa{background:#fff;border:0;border-radius:14px;box-shadow:0 1px 4px #0002;margin:0;min-height:84px}
 .tiles{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:10px 0}.tile{background:#fff;border-radius:12px;padding:10px 4px;text-align:center;box-shadow:0 1px 4px #0001}.tile b{display:block;font-size:21px;color:#0f4c81}
 .tabs{display:flex;overflow-x:auto;gap:2px}.tabs button{white-space:nowrap}.dg{background:#fee2e2;border-color:#ef4444;color:#991b1b}h3{margin:.8em 0 .3em}
+
+nav button{padding:6px 2px}nav small{font-size:11px}
+.av{display:inline-flex;align-items:center;justify-content:center;border-radius:50%;object-fit:cover;background:#f5a524;color:#0f4c81;font-weight:700;flex:none;border:2px solid #fff;box-shadow:0 1px 4px #0003}
+.hero{position:relative}.hero .av{position:absolute;top:14px;right:14px;cursor:pointer}
+.mdl{position:fixed;inset:0;background:#0009;display:flex;align-items:center;justify-content:center;padding:16px;z-index:99}.mb{background:#fff;border-radius:16px;padding:18px;max-width:420px;width:100%;box-shadow:0 10px 30px #0006}.mb p{margin:0 0 8px}
+#tm{padding:3px 10px;border-radius:99px;background:#e6f0fa}#tm.warn{background:#fef3c7;color:#92400e}#tm.crit{background:#fee2e2;color:#b91c1c;animation:pl 1s infinite}@keyframes pl{50%{opacity:.45}}
+@keyframes rg{from{stroke-dashoffset:var(--c)}to{stroke-dashoffset:0}}
+.chart{width:100%;height:auto}.lg{display:flex;gap:12px;flex-wrap:wrap;font-size:13px;color:#64748b;margin-top:6px}.lg i{display:inline-block;width:10px;height:10px;border-radius:3px;margin-right:4px}
+.stk{display:flex;height:14px;border-radius:9px;overflow:hidden;background:#e2e8f0}.stk i{display:block;height:100%}
+.lnk{border:0;background:none;color:#0f4c81;text-decoration:underline}
+button:focus-visible,input:focus-visible,select:focus-visible{outline:3px solid #f5a524;outline-offset:1px}
+@media (prefers-reduced-motion:reduce){*{animation:none!important}}
 </style></head><body>
-<header id="hd"><i>EP</i> ExamPilot <span>Prepare Smart. Pass with Confidence.</span></header><div id="ban"></div><main id="app"></main><nav id="nav"></nav><div id="ts"></div>
+<header id="hd"><i>EP</i> ExamPilot <span>Prepare Smart. Pass with Confidence.</span></header><div id="ban"></div><main id="app"></main><nav id="nav"></nav><div id="ts" role="status" aria-live="polite"></div>
 <script type="module">
 /* ====== FIREBASE CONFIG: paste yours (Project settings > Web app) ====== */
 const FB={apiKey:"AIzaSyDM7EE5Ca3jc8qmPkFlS7MkkrTW8qnlDQk",authDomain:"exampilot-1c536.firebaseapp.com",projectId:"exampilot-1c536",storageBucket:"exampilot-1c536.firebasestorage.app",messagingSenderId:"361085178691",appId:"1:361085178691:web:20ef874a601c9eb35595f6"};
@@ -42,6 +54,42 @@ const tx=async(s,m,f)=>{const d=await dbp;return new Promise((res,rej)=>{const t
 const all=s=>tx(s,'readonly',o=>o.getAll()),get=(s,k)=>tx(s,'readonly',o=>o.get(k)),put=(s,v)=>tx(s,'readwrite',o=>o.put(v)),del=(s,k)=>tx(s,'readwrite',o=>o.delete(k)),putMany=(s,a)=>tx('readwrite'&&s,'readwrite',o=>{a.forEach(v=>o.put(v))});
 const qs=async e=>(await all('q')).filter(q=>q.exam===e);
 const persist=()=>put('s',sess);
+
+/* ---------- Modal dialogs (replace confirm/prompt) ---------- */
+const ask=(msg,o={})=>new Promise(res=>{const inp=o.input!=null,d=document.createElement('div');d.className='mdl';
+  d.innerHTML=`<div class=mb role=dialog aria-modal=true><p>${E(msg).replace(/\n/g,'<br>')}</p>${inp?`<input id=mi type="${o.type||'text'}" placeholder="${E(o.ph||'')}" value="${E(o.val||'')}" autocomplete=off>`:''}<div class=row style="justify-content:flex-end"><button data-x=0>${E(o.no||'Cancel')}</button><button class="${o.danger?'dg':'pr'}" data-x=1>${E(o.ok||'OK')}</button></div></div>`;
+  const done=v=>{d.remove();removeEventListener('keydown',kd);res(v)},no=inp?null:false;
+  const kd=e=>{if(e.key=='Escape')done(no);else if(e.key=='Enter'&&e.target.tagName!='BUTTON')d.querySelector('[data-x="1"]').click()};
+  d.onclick=e=>{if(e.target===d)return done(no);const x=e.target.dataset&&e.target.dataset.x;if(x==null)return;done(x=='1'?(inp?d.querySelector('#mi').value.trim():true):no)};
+  addEventListener('keydown',kd);document.body.appendChild(d);(d.querySelector('#mi')||d.querySelector('[data-x="1"]')).focus()});
+/* ---------- Avatar ---------- */
+const av=(sz=40,click)=>{if(!user)return'';const n=String(prof.name||user.displayName||user.email||'').trim(),ini=n.split(/\s+/).slice(0,2).map(x=>x[0]||'').join('').toUpperCase()||'?',ph=prof.photo||localStorage['ph_'+user.uid]||'',c=click?' data-a=nv data-v=acc':'';
+  return ph?`<img class=av src="${E(ph)}" style="width:${sz}px;height:${sz}px" alt="Profile photo"${c}>`:`<span class=av style="width:${sz}px;height:${sz}px;font-size:${Math.round(sz*.4)}px"${c}>${E(ini)}</span>`};
+async function setPhoto(file){if(!fb||!user)return;if(!/^image\//.test(file.type))throw Error('Please choose an image file');if(file.size>15*1048576)throw Error('Image too large (max 15 MB)');
+  let bm;try{bm=await createImageBitmap(file)}catch{throw Error('Could not read that image. Try a JPG or PNG.')}
+  const s=Math.min(bm.width,bm.height),c=document.createElement('canvas');c.width=c.height=256;const x=c.getContext('2d');x.fillStyle='#fff';x.fillRect(0,0,256,256);x.drawImage(bm,(bm.width-s)/2,(bm.height-s)/2,s,s,0,0,256,256);
+  const u=c.toDataURL('image/jpeg',.8);await fb.f.setDoc(fb.f.doc(fb.db,'users',user.uid),{photo:u},{merge:true});prof.photo=u;try{localStorage['ph_'+user.uid]=u}catch{}toast('Profile photo updated');account()}
+/* ---------- Charts ---------- */
+const col=p=>p>=70?'#10b981':p>=50?'#f5a524':'#ef4444';
+const ring=p=>{const c=+(2*Math.PI*52).toFixed(1);return`<svg viewBox="0 0 120 120" style="width:140px;display:block;margin:auto" role=img aria-label="Score ${p} percent"><circle cx="60" cy="60" r="52" fill="none" stroke="#e2e8f0" stroke-width="12"/><circle cx="60" cy="60" r="52" fill="none" stroke="${col(p)}" stroke-width="12" stroke-linecap="round" stroke-dasharray="${(c*p/100).toFixed(1)} ${c}" transform="rotate(-90 60 60)" style="--c:${c};animation:rg 1s ease-out"/><text x="60" y="60" text-anchor="middle" dominant-baseline="central" font-size="26" font-weight="700" fill="#0f4c81">${p}%</text></svg>`};
+function resCharts(at){const p=at.pct,n=at.n||1,msg=p>=70?'Excellent work! 🎉':p>=50?'Good effort — keep pushing 💪':'Keep practising — you will improve 📚',bs=Object.entries(at.bs||{});
+  return`<div style="text-align:center">${ring(p)}<div class=big style="font-size:22px">${at.sc}/${at.mx}</div><p class=m>${msg}</p></div>
+  <div class=stk><i style="width:${at.c/n*100}%;background:#10b981"></i><i style="width:${at.w/n*100}%;background:#ef4444"></i><i style="width:${at.u/n*100}%;background:#94a3b8"></i></div>
+  <div class=lg><span><i style="background:#10b981"></i>Correct ${at.c}</span><span><i style="background:#ef4444"></i>Wrong ${at.w}</span><span><i style="background:#94a3b8"></i>Unanswered ${at.u}</span></div>
+  ${bs.length>1?`<h3>By subject</h3>${bs.map(([k,b])=>{const q=b.mx?Math.round(b.sc/b.mx*100):0;return`<div style="margin:6px 0"><div class=row><span>${E(k)}</span><b>${b.sc}/${b.mx} · ${q}%</b></div><div class=bar><i style="width:${q}%;background:${col(q)}"></i></div></div>`}).join('')}`:''}`}
+function trend(A){const P=[...A].sort((a,b)=>a.at-b.at).slice(-10);if(P.length<2)return'<p class=m>Complete at least 2 sessions to see your score trend.</p>';
+  const w=300,H=120,l=26,r=8,t=8,b=20,x=i=>l+i*(w-l-r)/(P.length-1),y=v=>t+(100-v)*(H-t-b)/100,pts=P.map((a,i)=>`${x(i).toFixed(1)},${y(a.pct).toFixed(1)}`).join(' ');
+  return`<svg class=chart viewBox="0 0 300 120" role=img aria-label="Score trend over your last ${P.length} sessions">${[0,50,100].map(v=>`<line x1="${l}" x2="${w-r}" y1="${y(v)}" y2="${y(v)}" stroke="#e2e8f0"/><text x="${l-4}" y="${y(v)+3}" text-anchor="end" font-size="9" fill="#64748b">${v}</text>`).join('')}<polygon points="${l},${y(0)} ${pts} ${x(P.length-1).toFixed(1)},${y(0)}" fill="#0f4c8122"/><polyline points="${pts}" fill="none" stroke="#0f4c81" stroke-width="2.5" stroke-linejoin="round"/>${P.map((a,i)=>`<circle cx="${x(i).toFixed(1)}" cy="${y(a.pct).toFixed(1)}" r="3.5" fill="${col(a.pct)}" stroke="#fff" stroke-width="1.5"><title>${a.pct}% · ${new Date(a.at).toLocaleDateString()}</title></circle>`).join('')}</svg>`}
+/* ---------- Bookmarks ---------- */
+let BM={};
+const findQ=id=>(sess&&sess.Q.find(q=>q.id==id))||(S.r&&S.r.Q.find(q=>q.id==id))||BM[id];
+const bmBtn=id=>`<button class=bm data-a=bm data-v=${id}>${BM[id]?'🔖 Saved':'🔖 Save'}</button>`;
+W.bm=async d=>{const id=d.v,q=findQ(id);if(BM[id]){delete BM[id];toast('Removed from Saved')}else if(q){BM[id]=q;toast('Saved 🔖')}else return;
+  try{await put('m',{id:'BM',items:BM})}catch{toast('Could not save bookmark (storage full?)')}
+  if(view=='quiz')quiz();else if(view=='result')result(S.r.at,S.r.Q,S.rf||'all');else if(view=='sv')saved()};
+function saved(){view='sv';nav();const L=Object.values(BM).sort((a,b)=>String(a.subject||'').localeCompare(b.subject||''));
+  $('#app').innerHTML=`<h2>Saved questions</h2>`+(L.length?`<div class=card><p class=m>${L.length} saved question${L.length>1?'s':''} · stored on this device</p><button class=pr data-a=psv>▶ Practise saved questions</button></div>`+L.map(q=>`<div class=card><span class=m>${E(N[q.exam]||q.exam)} · ${E(q.subject)}${q.year?' '+q.year:''}${q.topic?' · '+E(q.topic):''}</span>${q.passage?`<p class=ps>${E(q.passage)}</p>`:''}${q.img?`<img src="${E(q.img)}" alt="" style="max-width:100%">`:''}<p><b>${E(q.text)}</b></p>${q.formula?`<code>${E(q.formula)}</code>`:''}${q.options.map((o,i)=>`<div class=m>${L8[i]}. ${E(o)}</div>`).join('')}<details><summary>Show answer</summary><p class=ok style="padding:6px;border-radius:8px">Correct: ${L8[q.answer]}. ${E(q.options[q.answer])}</p><p class=m>${E(q.explanation||'')}</p></details><button class=bm data-a=bm data-v=${q.id}>🗑 Remove</button></div>`).join(''):`<div class=card style="text-align:center"><div class=ic>🔖</div><p>No saved questions yet.</p><p class=m>Tap “🔖 Save” on any question during practice or in your results to keep it here.</p></div>`)}
+W.psv=()=>{const L=shuf(Object.values(BM));if(!L.length)return;begin(L,{exam:L[0].exam,mode:'saved',fb:true})};
 /* ---------- Firebase ---------- */
 async function init(){
   if(!FB.apiKey)return;
@@ -80,7 +128,7 @@ async function dl(exam){
   }catch(e){toast('Download failed/incomplete: '+(e.name=='QuotaExceededError'?'storage full':e.code||e.message))}
   if(view=='dl')downloads();if(view=='prac')setup()
 }
-W.dl=d=>dl(d.v);W.rm=async d=>{if(!confirm('Remove download?'))return;const o=await qs(d.v);await tx('q','readwrite',s=>{o.forEach(q=>s.delete(q.id))});await del('m',d.v);downloads()};
+W.dl=d=>dl(d.v);W.rm=async d=>{if(!await ask('Remove this download from your device?',{danger:1,ok:'Remove'}))return;const o=await qs(d.v);await tx('q','readwrite',s=>{o.forEach(q=>s.delete(q.id))});await del('m',d.v);downloads()};
 W.dall=async()=>{for(const e of Object.keys(N))await dl(e)};
 async function downloads(){view='dl';nav();const M=Object.fromEntries((await all('m')).map(m=>[m.id,m]));let st='';
   try{const e=await navigator.storage.estimate();st=`Storage used: ${(e.usage/1048576).toFixed(1)} MB of ${(e.quota/1048576|0)} MB`}catch{}
@@ -94,12 +142,13 @@ function stats(A){const sub={},top={},days=new Set(),td=new Date().toDateString(
   const p=A.map(a=>a.pct);return{tq,today,sub,top,st,n:A.length,avg:p.length?Math.round(p.reduce((a,b)=>a+b)/p.length):0,best:p.length?Math.max(...p):0}}
 async function home(){view='home';nav();const A=(await all('a')).sort((a,b)=>b.at-a.at),s=stats(A),cur=await get('s','cur'),M=Object.fromEntries((await all('m')).filter(m=>N[m.id]).map(m=>[m.id,m])),h=new Date().getHours(),nm=user?E(user.displayName||user.email.split('@')[0]):'';
   const weak=Object.values(s.top).filter(t=>t.t>=3).map(t=>({...t,p:Math.round(t.c/t.t*100)})).sort((a,b)=>a.p-b.p).slice(0,3),CL={WAEC:'#0f4c81',NECO:'#16a34a',JAMB:'#f5a524'},IC={WAEC:'📘',NECO:'📗',JAMB:'📙'};
-  $('#app').innerHTML=`<section class=hero><small>${h<12?'Good morning':h<17?'Good afternoon':'Good evening'}</small><h1>${nm||'Welcome to ExamPilot'} 👋</h1><p>Prepare Smart. Practise Anywhere. Pass with Confidence.</p><span class=pill>${navigator.onLine?'🟢 Online':'🔴 Offline — downloaded questions still work'}</span>
+  $('#app').innerHTML=`<section class=hero>${av(46,1)}<small>${h<12?'Good morning':h<17?'Good afternoon':'Good evening'}</small><h1>${nm||'Welcome to ExamPilot'} 👋</h1><p>Prepare Smart. Practise Anywhere. Pass with Confidence.</p><span class=pill>${navigator.onLine?'🟢 Online':'🔴 Offline — downloaded questions still work'}</span>
   <div style="margin-top:12px">${cur?'<button class=cta data-a=res>▶ Resume your session</button>':'<button class=cta data-a=nv data-v=prac>Start practising</button>'}</div></section>
   <h3>Choose your exam</h3><div class=ex3>${Object.keys(N).map(e=>`<div class=exc style="--c:${CL[e]}"><span class=ic>${IC[e]}</span><b>${N[e]}</b><span class=m>${M[e]&&M[e].ok?M[e].n+' questions':'Tap Open to load'}</span><br><button class=pr data-a=ex data-v=${e}>Open</button></div>`).join('')}</div>
   <h3>Quick start</h3><div class=ex3>${[['topic','🎯','Topic practice'],['mock','⏱','Mock exam'],['past','📄','Past questions']].map(([m,i,l])=>`<button class=qa data-a=qa data-v=${m}><span class=ic>${i}</span><br>${l}</button>`).join('')}</div>
   <h3>Your progress</h3><div class=tiles>${[[s.tq,'Questions'],[s.n,'Sessions'],[s.avg+'%','Average'],[s.best+'%','Best score'],['🔥'+s.st,'Day streak'],[Math.min(s.today,20)+'/20','Today']].map(([v,l])=>`<div class=tile><b>${v}</b><span class=m>${l}</span></div>`).join('')}</div>
   <div class=card><div class=row><b>Daily goal</b><span class=m>${Math.min(s.today,20)}/20 questions</span></div><div class=bar><i style="width:${Math.min(100,s.today*5)}%"></i></div></div>
+  <div class=card><b>Score trend</b> <span class=m>(last 10 sessions)</span>${trend(A)}</div>
   ${weak.length?`<div class=card><b>Recommended revision</b>${weak.map(t=>`<div class=row><span>${E(t.s)} · ${E(t.tp||'General')} (${t.p}%)</span><button data-a=rec data-s="${E(t.s)}" data-t="${E(t.tp||'')}">Practise</button></div>`).join('')}</div>`:''}
   <div class=card><b>Subject performance</b>${Object.entries(s.sub).map(([k,v])=>`<div>${E(k)} ${Math.round(v.c/v.t*100)}%<div class=bar><i style="width:${v.c/v.t*100}%"></i></div></div>`).join('')||'<p class=m>Complete a practice session to see your performance.</p>'}</div>
   <div class=card><b>Recent results</b>${A.slice(0,6).map(a=>`<div class=row><span>${N[a.exam]} ${a.mode} · ${new Date(a.at).toLocaleDateString()}</span><button data-a=hi data-v=${a.id}>${a.pct}% ›</button></div>`).join('')||'<p class=m>No results yet.</p>'}</div>
@@ -146,42 +195,44 @@ function quiz(){clearInterval(tick);view='quiz';nav();const s=sess,q=s.Q[s.i],a=
   ${q.passage?`<p class=ps>${E(q.passage)}</p>`:''}${q.img?`<img src="${E(q.img)}" alt="" style="max-width:100%">`:''}<h3>${E(q.text)}</h3>${q.formula?`<code>${E(q.formula)}</code>`:''}
   ${q.options.map((o,j)=>{let c=a===j?' sel':'';if(lock){if(j===q.answer)c+=' ok';else if(a===j)c+=' bad'}return`<button class="opt${c}" data-a=pk data-v=${j}>${L8[j]}. ${E(o)}</button>`}).join('')}
   ${lock?`<p class=ex><b>${a===q.answer?'Correct ✔':'Correct answer: '+L8[q.answer]}</b><br>${E(q.explanation||'')}</p>`:''}
-  <div class=row><button data-a=mv data-v=-1 ${s.i?'':'disabled'}>◀ Prev</button>${mock?`<button data-a=fl>${s.fl[q.id]?'★ Marked':'☆ Mark'}</button>`:''}
+  <div class=row><button data-a=mv data-v=-1 ${s.i?'':'disabled'}>◀ Prev</button>${bmBtn(q.id)}${mock?`<button data-a=fl>${s.fl[q.id]?'★ Marked':'☆ Mark'}</button>`:''}
   ${s.i<s.Q.length-1?'<button class=pr data-a=mv data-v=1>Next ▶</button>':'<button class=pr data-a=sub>Submit</button>'}</div></div>
   <div class=card><div class=grid>${s.Q.map((x,k)=>`<button data-a=gt data-v=${k} class="${s.ans[x.id]!=null?'an':''}${s.fl[x.id]?' fg':''}${k==s.i?' cu':''}">${k+1}</button>`).join('')}</div><button class=pr data-a=sub>Submit${mock?' exam':' / End'}</button></div>`;
-  if(s.timed){const t=()=>{const r=s.deadline-Date.now(),el=$('#tm');if(el)el.textContent='⏱ '+fmt(r);if(r<=0)finish()};t();tick=setInterval(t,500)}}
+  if(s.timed){const t=()=>{const r=s.deadline-Date.now(),el=$('#tm');if(el){el.textContent='⏱ '+fmt(r);el.className=r<=60000?'crit':r<=300000?'warn':''}
+    if(r<=300000&&r>60000&&s.min>5&&!s.w5){s.w5=1;toast('⏰ 5 minutes left');navigator.vibrate&&navigator.vibrate(200)}
+    if(r<=60000&&r>0&&s.min>1&&!s.w1){s.w1=1;toast('⚠️ Only 1 minute left!');navigator.vibrate&&navigator.vibrate([200,100,200])}
+    if(r<=0){toast("⏱ Time's up! Submitting…");finish()}};t();tick=setInterval(t,500)}}
 W.pk=d=>{const q=sess.Q[sess.i];if(sess.fb&&sess.ans[q.id]!=null)return;sess.ans[q.id]=+d.v;persist();quiz()};
 W.mv=d=>{sess.i+=+d.v;persist();quiz()};W.gt=d=>{sess.i=+d.v;persist();quiz()};
 W.fl=()=>{const id=sess.Q[sess.i].id;sess.fl[id]=!sess.fl[id];persist();quiz()};
-W.sub=()=>{const u=sess.Q.filter(q=>sess.ans[q.id]==null).length;if(confirm(`${u} unanswered. Submit now?`))finish()};
+W.sub=async()=>{const u=sess.Q.filter(q=>sess.ans[q.id]==null).length;if(await ask(u?`${u} question${u>1?'s are':' is'} unanswered. Submit now?`:'Submit your answers now?',{ok:'Submit'}))finish()};
 async function finish(){const s=sess;if(!s||s.done)return;s.done=1;clearInterval(tick);let sc=0,mx=0,c=0,w=0,u=0;const bs={},det=[];
   s.Q.forEach(q=>{const m=q.marks||1,a=s.ans[q.id],ok=a===q.answer,b=bs[q.subject]??={sc:0,mx:0,c:0,t:0};mx+=m;b.mx+=m;b.t++;
     if(a==null)u++;else if(ok){c++;sc+=m;b.sc+=m;b.c++}else w++;det.push({id:q.id,s:q.subject,tp:q.topic||'',c:ok?1:0,a:a??null})});
   const at={id:s.aid,exam:s.exam,mode:s.mode,at:Date.now(),sc,mx,c,w,u,n:s.Q.length,pct:mx?Math.round(sc/mx*100):0,used:Math.round((Date.now()-s.start)/1000),tm:s.min,bs,det,synced:0,uid:user?.uid||null};
   await put('a',at);await del('s','cur');sess=null;sync();result(at,s.Q)}
-function result(at,Q,f='all'){S.r={at,Q};view='result';nav();const dm=Object.fromEntries(at.det.map(d=>[d.id,d]));
+function result(at,Q,f='all'){S.r={at,Q};S.rf=f;view='result';nav();const dm=Object.fromEntries(at.det.map(d=>[d.id,d]));
   const R=Q.filter(q=>{const d=dm[q.id];return d&&(f=='all'||(f=='c'&&d.a!=null&&d.c)||(f=='w'&&d.a!=null&&!d.c)||(f=='u'&&d.a==null))});
-  $('#app').innerHTML=`<div class=card><h2>Result · ${N[at.exam]} ${at.mode}</h2><div class=big>${at.sc}/${at.mx} (${at.pct}%)</div>
+  $('#app').innerHTML=`<div class=card><h2>Result · ${N[at.exam]} ${at.mode}</h2>${resCharts(at)}
   <p>Total ${at.n} · Answered ${at.n-at.u} · ✔ ${at.c} · ✘ ${at.w} · Unanswered ${at.u} · Time ${fmt(at.used*1000)}</p>
   <p class=m>ExamPilot practice score (1 mark per question unless set) — not an official marking scheme.</p>
-  ${Object.entries(at.bs).map(([k,b])=>`<div class=row><span>${E(k)}</span><b>${b.sc}/${b.mx}</b></div>`).join('')}
   <button class=pr data-a=ag>Try again</button><button data-a=nv data-v=home>Home</button></div>
   <div>${[['all','All'],['c','Correct'],['w','Incorrect'],['u','Unanswered']].map(([k,l])=>`<button class="${f==k?'on':''}" data-a=rf data-v=${k}>${l}</button>`).join('')}</div>
   ${R.map(q=>{const d=dm[q.id];return`<div class=card><b>${E(q.subject)}</b> ${q.passage?`<p class=ps>${E(q.passage)}</p>`:''}<p>${E(q.text)}</p>
-  <p class=${d.a==null?'m':d.c?'ok':'bad'} style="padding:6px;border-radius:8px">Your answer: ${d.a==null?'—':L8[d.a]+'. '+E(q.options[d.a])}</p><p class=ok style="padding:6px;border-radius:8px">Correct: ${L8[q.answer]}. ${E(q.options[q.answer])}</p><p class=m>${E(q.explanation||'')}</p></div>`}).join('')||'<p class=m>Nothing to show (download the questions to review old attempts).</p>'}`}
+  <p class=${d.a==null?'m':d.c?'ok':'bad'} style="padding:6px;border-radius:8px">Your answer: ${d.a==null?'—':L8[d.a]+'. '+E(q.options[d.a])}</p><p class=ok style="padding:6px;border-radius:8px">Correct: ${L8[q.answer]}. ${E(q.options[q.answer])}</p><p class=m>${E(q.explanation||'')}</p>${bmBtn(q.id)}</div>`}).join('')||'<p class=m>Nothing to show (download the questions to review old attempts).</p>'}`}
 W.rf=d=>result(S.r.at,S.r.Q,d.v);W.ag=()=>{const{at,Q}=S.r;begin(Q,{exam:at.exam,mode:at.mode,fb:true},at.tm)};
 W.hi=async d=>{const a=(await all('a')).find(x=>x.id==d.v),ids=new Set(a.det.map(x=>x.id));result(a,(await all('q')).filter(q=>ids.has(q.id)))};
 /* ---------- Account ---------- */
 function account(){view='acc';nav();const a=$('#app');
   if(!fb)return a.innerHTML=`<div class=card><h2>Account</h2><p>Cloud sync is not configured. You are using a local guest profile.</p></div>`;
   if(user){const need=needProf(),ed=need||S.ep;
-    return a.innerHTML=`<div class=card><h2>Account</h2><p><b>${E(prof.name||user.displayName||user.email)}</b><br>${E(user.email)}<br><span class=m>${role=='admin'?'Administrator':'Student'}</span></p>
+    return a.innerHTML=`<div class=card><h2>Account</h2><div class=row style="justify-content:flex-start;gap:14px">${av(72)}<div><button data-a=cph>📷 ${prof.photo?'Change':'Add'} photo</button>${prof.photo?'<button data-a=rph>Remove</button>':''}</div></div><input id=pf type=file accept="image/*" hidden><p><b>${E(prof.name||user.displayName||user.email)}</b><br>${E(user.email)}<br><span class=m>${role=='admin'?'Administrator':'Student'}</span></p>
     ${prof.phone?`<p class=m>📞 ${E(prof.phone)}<br>📍 ${E([prof.lga,prof.state].filter(Boolean).join(', '))}${prof.school?`<br>🏫 ${E(prof.school)}`:''}${(prof.exams||[]).length?`<br>🎯 ${E(prof.exams.map(x=>N[x]||x).join(', '))}`:''}</p>`:''}
     <button class=pr data-a=sy>Sync now</button>${need?'':`<button data-a=ep>${S.ep?'Close':'Edit profile'}</button>`}<button data-a=lo>Sign out</button></div>
     ${ed?`<div class=card><h3>${need?'Complete your student profile':'Edit profile'}</h3>${need?'<p class=m>Please finish your registration so we can set up your student account.</p>':''}${regForm(prof,0)}<button class=pr data-a=cp>Save profile</button></div>`:''}`}
   if(S.am=='up')return a.innerHTML=`<div class=card><h2>Create student account</h2><p class=m>Fill in your details to register. Fields marked * are required.</p>${regForm({},1)}<button class=pr data-a=rg>Register</button><button data-a=bk>Back to sign in</button></div>`;
   a.innerHTML=`<div class=card><h2>Sign in (optional)</h2><p class=m>Guest progress is saved only on this device and can be lost if browser data is cleared. Sign in to back it up — existing local progress is kept and uploaded without duplicates.</p><input id=em type=email placeholder=Email><input id=pw type=password placeholder=Password>
-  <button class=pr data-a=li>Sign in</button><button data-a=su>Create account</button><button data-a=gg>Continue with Google</button></div>`}
+  <button class=pr data-a=li>Sign in</button><button data-a=su>Create account</button><button data-a=gg>Continue with Google</button><br><button class=lnk data-a=fp>Forgot password?</button></div>`}
 /* ---------- Student registration ---------- */
 const STATES=['Abia','Adamawa','Akwa Ibom','Anambra','Bauchi','Bayelsa','Benue','Borno','Cross River','Delta','Ebonyi','Edo','Ekiti','Enugu','FCT (Abuja)','Gombe','Imo','Jigawa','Kaduna','Kano','Katsina','Kebbi','Kogi','Kwara','Lagos','Nasarawa','Niger','Ogun','Ondo','Osun','Oyo','Plateau','Rivers','Sokoto','Taraba','Yobe','Zamfara'];
 const LV=['JSS 3','SS 1','SS 2','SS 3','Graduate / writing again','Other'];
@@ -214,7 +265,7 @@ function readReg(){const g=i=>($('#'+i)?.value||'').trim(),p={name:g('rn').repla
   else if(!p.exams.length)err='Select at least one exam you are preparing for';
   else if(!$('#rt').checked)err='Please tick the confirmation box to continue';
   return{p,err}}
-const FM={'auth/operation-not-allowed':'Email/Password sign-in is not enabled in Firebase (Authentication > Sign-in method)','auth/email-already-in-use':'This email already has an account — tap Sign in instead','auth/weak-password':'Password must be at least 6 characters','auth/invalid-email':'Enter a valid email address','auth/invalid-credential':'Wrong email or password','auth/missing-password':'Enter a password','auth/unauthorized-domain':'Add this website in Firebase > Authentication > Settings > Authorized domains','permission-denied':'Permission denied — check your Firestore rules','auth/network-request-failed':'No internet connection'};
+const FM={'auth/operation-not-allowed':'Email/Password sign-in is not enabled in Firebase (Authentication > Sign-in method)','auth/email-already-in-use':'This email already has an account — tap Sign in instead','auth/weak-password':'Password must be at least 6 characters','auth/invalid-email':'Enter a valid email address','auth/invalid-credential':'Wrong email or password','auth/missing-password':'Enter a password','auth/unauthorized-domain':'Add this website in Firebase > Authentication > Settings > Authorized domains','auth/too-many-requests':'Too many attempts — please wait a few minutes and try again','auth/user-disabled':'This account has been disabled','permission-denied':'Permission denied — check your Firestore rules','auth/network-request-failed':'No internet connection'};
 const ae=async f=>{try{await f()}catch(e){toast(FM[e.code]||e.code||e.message)}};
 W.li=()=>ae(()=>fb.au.signInWithEmailAndPassword(fb.auth,$('#em').value,$('#pw').value));
 W.su=()=>{S.am='up';account()};W.bk=()=>{S.am='in';account()};W.ep=()=>{S.ep=!S.ep;account()};
@@ -227,7 +278,14 @@ W.rg=()=>ae(async()=>{const{p,err}=readReg();if(err)return toast(err);const em=$
 W.cp=()=>ae(async()=>{const{p,err}=readReg();if(err)return toast(err);
   await fb.f.setDoc(fb.f.doc(fb.db,'users',user.uid),p,{merge:true});prof={...prof,...p};try{await fb.au.updateProfile(user,{displayName:p.name})}catch{}
   S.ep=0;toast('Profile saved');account()});
+W.fp=()=>ae(async()=>{const e0=($('#em')&&$('#em').value||'').trim(),em=await ask('Enter your account email and we will send you a password reset link.',{input:1,type:'email',ph:'Email address',val:e0,ok:'Send link'});if(em==null)return;
+  if(!/^\S+@\S+\.\S+$/.test(em))return toast(FM['auth/invalid-email']);
+  try{await fb.au.sendPasswordResetEmail(fb.auth,em)}catch(x){if(x.code!='auth/user-not-found')throw x}
+  toast('If an account exists for '+em+', a reset link is on its way. Check your inbox and spam folder.')});
 W.gg=()=>ae(()=>fb.au.signInWithPopup(fb.auth,new fb.au.GoogleAuthProvider()));
+W.cph=()=>$('#pf')&&$('#pf').click();
+W.rph=async()=>{if(!await ask('Remove your profile photo?',{danger:1,ok:'Remove'}))return;ae(async()=>{await fb.f.setDoc(fb.f.doc(fb.db,'users',user.uid),{photo:''},{merge:true});prof.photo='';try{localStorage.removeItem('ph_'+user.uid)}catch{}toast('Photo removed');account()})};
+document.addEventListener('change',e=>{if(e.target.id=='pf'&&e.target.files[0]){const f=e.target.files[0];e.target.value='';ae(()=>setPhoto(f))}});
 W.lo=()=>fb.au.signOut(fb.auth);W.sy=async()=>{await sync();toast('Synced')};
 /* ---------- Admin ---------- */
 const ATABS=[['ov','Overview'],['qs','Questions'],['up','Upload'],['ex','Exams'],['st','Students']];
@@ -281,13 +339,13 @@ W.asv=()=>ae(async()=>{const g=i=>$('#'+i).value.trim(),o=[0,1,2,3,4].map(i=>g('
 const bulk=async(arr,fn)=>{const{f,db}=fb;for(let i=0;i<arr.length;i+=400){const b=f.writeBatch(db);arr.slice(i,i+400).forEach(q=>fn(b,f.doc(db,'questions',q.id)));await b.commit()}};
 W.tg=d=>ae(async()=>{await fb.f.updateDoc(fb.f.doc(fb.db,'questions',d.v),{status:d.s=='published'?'draft':'published',updated:Date.now()});admin()});
 W.vf=d=>ae(async()=>{await fb.f.updateDoc(fb.f.doc(fb.db,'questions',d.v),{verified:d.s!='1',updated:Date.now()});admin()});
-W.ad=d=>confirm('Delete this question?')&&ae(async()=>{await fb.f.deleteDoc(fb.f.doc(fb.db,'questions',d.v));admin()});
-W.pa=d=>ae(async()=>{const t=S.fl.filter(q=>(q.status=='published')!=(d.v=='published'));if(!t.length)return toast('Nothing to change');if(!confirm((d.v=='published'?'Publish ':'Unpublish ')+t.length+' questions?'))return;await bulk(t,(b,r)=>b.update(r,{status:d.v,updated:Date.now()}));toast('Done: '+t.length);admin()});
-W.vA=()=>ae(async()=>{const t=S.fl.filter(q=>!q.verified);if(!t.length)return toast('Nothing to change');if(!confirm('Mark '+t.length+' questions as verified?'))return;await bulk(t,(b,r)=>b.update(r,{verified:true,updated:Date.now()}));toast('Verified '+t.length);admin()});
-W.dA=()=>ae(async()=>{const t=S.fl;if(!t.length)return toast('Nothing to delete');if(prompt(`This permanently deletes ${t.length} questions. Type DELETE to confirm.`)!=='DELETE')return;await bulk(t,(b,r)=>b.delete(r));toast('Deleted '+t.length);admin()});
+W.ad=async d=>{if(await ask('Delete this question?',{danger:1,ok:'Delete'}))ae(async()=>{await fb.f.deleteDoc(fb.f.doc(fb.db,'questions',d.v));admin()})};
+W.pa=d=>ae(async()=>{const t=S.fl.filter(q=>(q.status=='published')!=(d.v=='published'));if(!t.length)return toast('Nothing to change');if(!await ask((d.v=='published'?'Publish ':'Unpublish ')+t.length+' questions?'))return;await bulk(t,(b,r)=>b.update(r,{status:d.v,updated:Date.now()}));toast('Done: '+t.length);admin()});
+W.vA=()=>ae(async()=>{const t=S.fl.filter(q=>!q.verified);if(!t.length)return toast('Nothing to change');if(!await ask('Mark '+t.length+' questions as verified?'))return;await bulk(t,(b,r)=>b.update(r,{verified:true,updated:Date.now()}));toast('Verified '+t.length);admin()});
+W.dA=()=>ae(async()=>{const t=S.fl;if(!t.length)return toast('Nothing to delete');if(await ask(`This permanently deletes ${t.length} questions. Type DELETE to confirm.`,{input:1,ph:'Type DELETE',danger:1,ok:'Delete all'})!=='DELETE')return;await bulk(t,(b,r)=>b.delete(r));toast('Deleted '+t.length);admin()});
 W.ta2=()=>ae(async()=>{const g=i=>$('#'+i).value.trim(),sb=g('tsb').split(',').map(x=>x.trim()).filter(Boolean);if(!g('tn')||!sb.length||!(+g('tc')>0)||!(+g('tm')>0))return toast('Fill in every field');
   await fb.f.addDoc(fb.f.collection(fb.db,'templates'),{name:g('tn'),exam:g('te'),subjects:sb,count:+g('tc'),min:+g('tm'),by:user.uid,created:Date.now()});toast('Saved');admin()});
-W.td=d=>confirm('Delete this setup?')&&ae(async()=>{await fb.f.deleteDoc(fb.f.doc(fb.db,'templates',d.v));admin()});
+W.td=async d=>{if(await ask('Delete this setup?',{danger:1,ok:'Delete'}))ae(async()=>{await fb.f.deleteDoc(fb.f.doc(fb.db,'templates',d.v));admin()})};
 W.bi=()=>ae(async()=>{defs();const j=JSON.parse($('#bj').value),rows=Array.isArray(j)?j:j.questions;if(!rows||!rows.length)throw Error('No questions found');prev(await prepare(rows,1),'Pasted JSON')});
 /* ---------- Upload & import ---------- */
 const lib=(u,t)=>window[t]?0:new Promise((r,j)=>{const s=document.createElement('script');s.src=u;s.onload=r;s.onerror=()=>j(Error('Could not load '+t+' (internet needed)'));document.head.appendChild(s)});
@@ -368,9 +426,9 @@ W.ci=()=>ae(async()=>{const P=S.P;if(!P||S.busy||role!='admin')return;S.busy=1;c
   let pub=0;if(st=='published')for(let k=0;k<P.dr.length;k+=400){const b=f.writeBatch(db),ch=P.dr.slice(k,k+400);ch.forEach(x=>b.update(f.doc(db,'questions',x.id),{status:'published',updated:Date.now()}));try{await b.commit();pub+=ch.length}catch(e){rep.fail.push({n:'existing',e:e.code||e.message})}}
   S.busy=0;$('#up').innerHTML=`<h3>Import report</h3><p>✔ Imported: <b>${rep.ok}</b> (${st})${pub?`<br>✔ Existing drafts now published: <b>${pub}</b>`:''}<br>⏭ Duplicates skipped: <b>${P.dup.length}</b><br>⚠ Invalid rows skipped: <b>${P.err.length}</b><br>✘ Failed to save: <b>${rep.fail.length}</b></p>${rep.fail.slice(0,20).map(x=>`<div class=m>Row ${x.n}: ${E(x.e)}</div>`).join('')}${rep.fail.length?'<p class=m>Upload the same file again to retry only the failed rows — saved rows are detected as duplicates.</p>':''}<p class=m>${st=='published'?'Students get these after tapping Update in Downloads.':'Saved as drafts. Publish them from the Questions list so students can see them.'}</p><button class=pr data-a=adm2>Done</button>`});
 /* ---------- Nav / routing / PWA ---------- */
-function nav(){const t=[['home','🏠','Home'],['prac','📝','Practice'],['dl','⬇️','Downloads'],['acc','👤','Account']];if(role=='admin')t.push(['adm','⚙️','Admin']);
+function nav(){const t=[['home','🏠','Home'],['prac','📝','Practice'],['dl','⬇️','Downloads'],['sv','🔖','Saved'],['acc','👤','Account']];if(role=='admin')t.push(['adm','⚙️','Admin']);
   $('#nav').style.display=view=='quiz'?'none':'flex';$('#nav').innerHTML=t.map(([v,i,l])=>`<button class="${view==v?'on':''}" data-a=nv data-v=${v}>${i}<br><small>${l}</small></button>`).join('')}
-function go(v){clearInterval(tick);({home,prac:setup,dl:downloads,acc:account,adm:admin}[v]||home)()}
+function go(v){clearInterval(tick);({home,prac:setup,dl:downloads,sv:saved,acc:account,adm:admin}[v]||home)()}
 document.addEventListener('click',e=>{const t=e.target.closest('[data-a]');if(t&&W[t.dataset.a])W[t.dataset.a](t.dataset,t)});
 function banner(){if(localStorage.epd||matchMedia('(display-mode:standalone)').matches)return;const ios=/iphone|ipad/i.test(navigator.userAgent);
   $('#ban').innerHTML=`<b>Install ExamPilot</b> — Study anywhere, even without internet.<br><small>${ios?'Tap Share ▸ Add to Home Screen.':ip?'':'Use browser menu ▸ Install app / Add to Home screen.'} After installing, download your question collections in Downloads for offline practice.</small><br>${ip?'<button data-a=ins>Install App</button>':''}<button data-a=nt>Not Now</button>`}
@@ -383,5 +441,5 @@ addEventListener('online',()=>{sync();if(view=='home')home()});addEventListener(
   const i=document.createElement('link');i.rel='icon';i.href=ic(64);document.head.appendChild(i)})();
 if('serviceWorker'in navigator)navigator.serviceWorker.register('sw.js').catch(()=>{});
 banner();
-(async()=>{sess=await get('s','cur');if(sess&&sess.timed&&sess.deadline<Date.now()){await finish();}else go('home');init()})();
+(async()=>{try{BM=((await get('m','BM'))||{}).items||{}}catch{}sess=await get('s','cur');if(sess&&sess.timed&&sess.deadline<Date.now()){await finish();}else go('home');init()})();
 </script></body></html>
