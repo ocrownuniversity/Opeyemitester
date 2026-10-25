@@ -161,13 +161,13 @@ W.rec=async d=>{const x=S.sel={exam:'',mode:'topic',subs:[d.s],topics:[d.t],n:10
 async function setup(){view='prac';nav();const x=S.sel??={exam:'JAMB',mode:'topic',subs:[],n:10,timed:false,min:60,fb:true},Q=await qs(x.exam);
   if(fb&&navigator.onLine&&!(S.chk??={})[x.exam]){S.chk[x.exam]=1;await dl(x.exam);return}
   const T=((await get('m','T'+x.exam))||{}).list||[];const TQ=(await qa(x.exam)).filter(q=>q.qtype=='theory');
-  const subs=[...new Set(Q.map(q=>q.subject))].sort(),sQ=Q.filter(q=>q.subject==x.subs[0]);
+  const PQ=x.mode=='past'?await qa(x.exam):Q,subs=[...new Set(PQ.map(q=>q.subject))].sort(),sQ=PQ.filter(q=>q.subject==x.subs[0]);
   const chips=(k,arr,sel)=>arr.map(([v,l])=>`<button class="${sel(v)?'on':''}" data-a=P data-k=${k} data-v="${E(v)}">${E(l)}</button>`).join('');
   let h=`<h2>Practice</h2><div class=card><b>1. Examination</b><br>${chips('exam',Object.entries(N),v=>x.exam==v)}<p class=m>${Q.length} question(s) available for ${N[x.exam]} <button data-a=dl data-v=${x.exam}>⟳ Refresh</button></p></div>`;
   if(!Q.length)h+=`<div class=card>No questions downloaded for ${N[x.exam]}. <button class=pr data-a=dl data-v=${x.exam}>Download now</button></div>`;
   else{h+=`<div class=card><b>2. Activity</b><br>${chips('mode',[['past','Past Questions'],['topic','Topic Practice'],['mock','Mock Exam']],v=>x.mode==v)}</div>
-  <div class=card><b>3. Subject${x.mode=='mock'&&x.exam=='JAMB'?'s (pick 4)':''}</b><br>${chips('subs',subs.map(s=>[s,s+' ('+Q.filter(q=>q.subject==s).length+')']),v=>x.subs.includes(v))}</div>`;
-  if(x.mode=='past'&&x.subs[0])h+=`<div class=card><b>Year</b><br>${chips('year',[...new Set(sQ.map(q=>q.year).filter(Boolean))].sort().reverse().map(y=>[String(y),String(y)]),v=>x.year==v)}</div>`;
+  <div class=card><b>3. Subject${x.mode=='mock'&&x.exam=='JAMB'?'s (pick 4)':''}</b><br>${chips('subs',subs.map(s=>[s,s+' ('+PQ.filter(q=>q.subject==s).length+')']),v=>x.subs.includes(v))}</div>`;
+  if(x.mode=='past'&&x.subs[0]){const ys=[...new Set(sQ.map(q=>q.year).filter(Boolean))].sort().reverse().map(y=>[String(y),y+' ('+sQ.filter(q=>q.year==y).length+')']);if(sQ.some(q=>!q.year))ys.push(['none','No year / likely questions ('+sQ.filter(q=>!q.year).length+')']);h+=`<div class=card><b>Year</b><br>${ys.length?chips('year',ys,v=>x.year==v):'<p class=m>No questions found for this subject. Tap Refresh above to update.</p>'}</div>`}
   if(x.mode=='topic'&&x.subs[0])h+=`<div class=card><b>Topics</b> <span class=m>(tap one or more)</span><br><button data-a=ta>Select all / none</button><br>${[...new Set(sQ.map(q=>q.topic).filter(Boolean))].sort().map(t=>`<button class="${(x.topics||[]).includes(t)?'on':''}" data-a=tp data-v="${E(t)}">${E(t)} (${sQ.filter(q=>q.topic==t).length})</button>`).join('')}<br><b>Number of questions</b><br>${chips('n',[10,20,30,50].map(n=>[n,n]),v=>x.n==v)}</div>`;
   if(x.mode=='mock')h+=`${T.length?`<div class=card><b>Ready-made mock exams</b><br>${T.map((t,i)=>`<button data-a=mt data-v=${i}>${E(t.name)}</button>`).join('')}</div>`:''}<div class=card><b>Questions per subject</b><input id=pc type=number value=${x.pc||20} min=1>${TQ.length&&x.exam!='JAMB'?`<b>Theory questions per subject (Section B)</b><input id=tc2 type=number value=${x.tc||0} min=0><p class=m>${TQ.length} theory question(s) downloaded. You self-mark them after submitting.</p>`:''}<p class=m>ExamPilot practice mock — not an official exam structure. Set counts/duration as you wish.</p></div>`;
   h+=`<div class=card><button class="${x.timed?'on':''}" data-a=T data-k=timed>⏱ Timed</button>${x.mode!='mock'?`<button class="${x.fb?'on':''}" data-a=T data-k=fb>Show answers as I go</button>`:''}
@@ -181,7 +181,7 @@ W.ta=async()=>{const x=S.sel,Q=await qs(x.exam),t=[...new Set(Q.filter(q=>q.subj
 W.mt=async d=>{const x=S.sel,t=(((await get('m','T'+x.exam))||{}).list||[])[+d.v],Q=await qs(x.exam),av=new Set(Q.map(q=>q.subject));if(!t)return;x.subs=t.subjects.filter(s=>av.has(s));x.pc=t.count;x.tc=t.theory||0;x.min=t.min;x.timed=true;if(x.subs.length<t.subjects.length)toast('Some subjects are not downloaded yet');setup()};
 W.T=d=>{S.sel[d.k]=!S.sel[d.k];setup()};
 W.go=async()=>{const x=S.sel,Q=await qs(x.exam);let L=[];if(!x.subs.length)return toast('Pick a subject');x.min=+($('#mn')?.value)||60;
-  if(x.mode=='past'){if(!x.year)return toast('Pick a year');L=Q.filter(q=>q.subject==x.subs[0]&&q.year==x.year).sort((a,b)=>(a.no||0)-(b.no||0))}
+  if(x.mode=='past'){if(!x.year)return toast('Pick a year');L=(await qa(x.exam)).filter(q=>q.subject==x.subs[0]&&(x.year=='none'?!q.year:q.year==x.year)).sort((a,b)=>(a.qtype=='theory')-(b.qtype=='theory')||(a.no||0)-(b.no||0))}
   else if(x.mode=='topic'){if(!(x.topics||[]).length)return toast('Pick at least one topic');L=shuf(Q.filter(q=>q.subject==x.subs[0]&&x.topics.includes(q.topic))).slice(0,x.n)}
   else{const n=+$('#pc').value||20;x.subs.forEach(s=>L.push(...shuf(Q.filter(q=>q.subject==s)).slice(0,n)));
     const tn=+($('#tc2')?.value)||0;x.tc=tn;if(tn&&x.exam!='JAMB'){const TQ=(await qa(x.exam)).filter(q=>q.qtype=='theory');x.subs.forEach(s=>L.push(...shuf(TQ.filter(q=>q.subject==s)).slice(0,tn)))}}
@@ -191,10 +191,10 @@ function begin(L,x,min){min=min??(x.timed?x.min:0);
   sess={id:'cur',aid:(crypto.randomUUID?crypto.randomUUID():Date.now()+''+Math.random()),exam:x.exam,mode:x.mode,Q:L,ans:{},fl:{},i:0,fb:x.mode!='mock'&&x.fb,min,timed:!!min,deadline:min?Date.now()+min*60000:0,start:Date.now()};
   persist();quiz()}
 W.res=async()=>{sess=await get('s','cur');if(sess)quiz()};
-function quiz(){clearInterval(tick);view='quiz';nav();const s=sess,q=s.Q[s.i],a=s.ans[q.id],lock=s.fb&&a!=null,mock=s.mode=='mock';
+function quiz(){clearInterval(tick);view='quiz';nav();const s=sess,q=s.Q[s.i],a=s.ans[q.id],lock=s.fb&&a!=null&&q.qtype!='theory',mock=s.mode=='mock';
   $('#app').innerHTML=`<div class=card><div class=row><b>${s.i+1}/${s.Q.length} · ${E(q.subject)}${q.qtype=='theory'?' · Section B · '+(q.marks||1)+' marks':''}</b>${s.timed?'<b id=tm></b>':'<span class=m>Untimed</span>'}</div><div class=bar><i style="width:${(s.i+1)/s.Q.length*100}%"></i></div>
   ${q.passage?`<p class=ps>${E(q.passage)}</p>`:''}${q.img?`<img src="${E(q.img)}" alt="" style="max-width:100%">`:''}<h3>${E(q.text)}</h3>${q.formula?`<code>${E(q.formula)}</code>`:''}
-  ${q.qtype=='theory'?`<textarea id=ta rows=9 placeholder="Write your answer here…">${E(a||'')}</textarea><p class=m>${q.marks||1} mark(s) · you will mark yourself after submitting</p>`:q.options.map((o,j)=>{let c=a===j?' sel':'';if(lock){if(j===q.answer)c+=' ok';else if(a===j)c+=' bad'}return`<button class="opt${c}" data-a=pk data-v=${j}>${L8[j]}. ${E(o)}</button>`}).join('')}
+  ${q.qtype=='theory'?`<textarea id=ta rows=9 placeholder="Write your answer here…">${E(a||'')}</textarea><p class=m>${q.marks||1} mark(s) · you will mark yourself after submitting</p>${s.fb?`<details><summary>Show model answer</summary><p class=ok style="padding:6px;border-radius:8px">${E(q.model||'')}</p>${(q.points||[]).map(p=>`<div class=m>▫️ ${E(p.t)} (${p.m})</div>`).join('')}</details>`:''}`:q.options.map((o,j)=>{let c=a===j?' sel':'';if(lock){if(j===q.answer)c+=' ok';else if(a===j)c+=' bad'}return`<button class="opt${c}" data-a=pk data-v=${j}>${L8[j]}. ${E(o)}</button>`}).join('')}
   ${lock?`<p class=ex><b>${a===q.answer?'Correct ✔':'Correct answer: '+L8[q.answer]}</b><br>${E(q.explanation||'')}</p>`:''}
   <div class=row><button data-a=mv data-v=-1 ${s.i?'':'disabled'}>◀ Prev</button>${bmBtn(q.id)}${mock?`<button data-a=fl>${s.fl[q.id]?'★ Marked':'☆ Mark'}</button>`:''}
   ${s.i<s.Q.length-1?'<button class=pr data-a=mv data-v=1>Next ▶</button>':'<button class=pr data-a=sub>Submit</button>'}</div></div>
