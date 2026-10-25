@@ -52,7 +52,7 @@ const toast=m=>{const t=$('#ts');t.textContent=m;t.style.display='block';setTime
 const dbp=new Promise((r,j)=>{const q=indexedDB.open('exampilot',1);q.onupgradeneeded=()=>['q','m','a','s'].forEach(n=>q.result.createObjectStore(n,{keyPath:'id'}));q.onsuccess=()=>r(q.result);q.onerror=()=>j(q.error)});
 const tx=async(s,m,f)=>{const d=await dbp;return new Promise((res,rej)=>{const t=d.transaction(s,m);const r=f(t.objectStore(s));t.oncomplete=()=>res(r&&r.result);t.onerror=()=>rej(t.error);t.onabort=()=>rej(t.error)})};
 const all=s=>tx(s,'readonly',o=>o.getAll()),get=(s,k)=>tx(s,'readonly',o=>o.get(k)),put=(s,v)=>tx(s,'readwrite',o=>o.put(v)),del=(s,k)=>tx(s,'readwrite',o=>o.delete(k)),putMany=(s,a)=>tx('readwrite'&&s,'readwrite',o=>{a.forEach(v=>o.put(v))});
-const qs=async e=>(await all('q')).filter(q=>q.exam===e);
+const qa=async e=>(await all('q')).filter(q=>q.exam===e),qs=async e=>(await qa(e)).filter(q=>q.qtype!='theory');
 const persist=()=>put('s',sess);
 
 /* ---------- Modal dialogs (replace confirm/prompt) ---------- */
@@ -83,7 +83,7 @@ function trend(A){const P=[...A].sort((a,b)=>a.at-b.at).slice(-10);if(P.length<2
 /* ---------- Bookmarks ---------- */
 let BM={};
 const findQ=id=>(sess&&sess.Q.find(q=>q.id==id))||(S.r&&S.r.Q.find(q=>q.id==id))||BM[id];
-const bmBtn=id=>`<button class=bm data-a=bm data-v=${id}>${BM[id]?'🔖 Saved':'🔖 Save'}</button>`;
+const bmBtn=id=>findQ(id)?.qtype=='theory'?'':`<button class=bm data-a=bm data-v=${id}>${BM[id]?'🔖 Saved':'🔖 Save'}</button>`;
 W.bm=async d=>{const id=d.v,q=findQ(id);if(BM[id]){delete BM[id];toast('Removed from Saved')}else if(q){BM[id]=q;toast('Saved 🔖')}else return;
   try{await put('m',{id:'BM',items:BM})}catch{toast('Could not save bookmark (storage full?)')}
   if(view=='quiz')quiz();else if(view=='result')result(S.r.at,S.r.Q,S.rf||'all');else if(view=='sv')saved()};
@@ -121,14 +121,14 @@ async function dl(exam){
   if(!fb||!navigator.onLine)return toast('Need internet and Firebase config');
   toast('Downloading '+N[exam]+'…');
   try{const{f,db}=fb,s=await f.getDocs(f.query(f.collection(db,'questions'),f.where('exam','==',exam),f.where('status','==','published')));
-    const a=s.docs.map(d=>({...d.data(),id:d.id})),old=await qs(exam);
+    const a=s.docs.map(d=>({...d.data(),id:d.id})),old=await qa(exam);
     await tx('q','readwrite',o=>{old.forEach(q=>o.delete(q.id));a.forEach(q=>o.put(q))});
     try{const tr=await f.getDocs(f.query(f.collection(db,'templates'),f.where('exam','==',exam)));await put('m',{id:'T'+exam,list:tr.docs.map(d=>({...d.data(),id:d.id}))})}catch{}
     await put('m',{id:exam,n:a.length,at:Date.now(),ok:1});toast(a.length+' questions saved offline')
   }catch(e){toast('Download failed/incomplete: '+(e.name=='QuotaExceededError'?'storage full':e.code||e.message))}
   if(view=='dl')downloads();if(view=='prac')setup()
 }
-W.dl=d=>dl(d.v);W.rm=async d=>{if(!await ask('Remove this download from your device?',{danger:1,ok:'Remove'}))return;const o=await qs(d.v);await tx('q','readwrite',s=>{o.forEach(q=>s.delete(q.id))});await del('m',d.v);downloads()};
+W.dl=d=>dl(d.v);W.rm=async d=>{if(!await ask('Remove this download from your device?',{danger:1,ok:'Remove'}))return;const o=await qa(d.v);await tx('q','readwrite',s=>{o.forEach(q=>s.delete(q.id))});await del('m',d.v);downloads()};
 W.dall=async()=>{for(const e of Object.keys(N))await dl(e)};
 async function downloads(){view='dl';nav();const M=Object.fromEntries((await all('m')).map(m=>[m.id,m]));let st='';
   try{const e=await navigator.storage.estimate();st=`Storage used: ${(e.usage/1048576).toFixed(1)} MB of ${(e.quota/1048576|0)} MB`}catch{}
@@ -155,12 +155,12 @@ async function home(){view='home';nav();const A=(await all('a')).sort((a,b)=>b.a
   <p class=m style="text-align:center">ExamPilot practice platform · Not affiliated with WAEC, NECO or JAMB</p>`}
 W.qa=d=>{const e=(S.sel&&S.sel.exam)||'JAMB';S.sel={exam:e,mode:d.v,subs:[],n:10,timed:false,min:60,fb:true,topics:[]};go('prac')};
 W.nv=d=>go(d.v);W.ex=d=>{S.sel={exam:d.v,mode:'topic',subs:[],n:10,timed:false,min:60,fb:true};go('prac')};
-W.rec=async d=>{const x=S.sel={exam:'',mode:'topic',subs:[d.s],topics:[d.t],n:10,fb:true},Q=(await all('q')).filter(q=>q.subject==d.s&&(q.topic||'')==d.t);
+W.rec=async d=>{const x=S.sel={exam:'',mode:'topic',subs:[d.s],topics:[d.t],n:10,fb:true},Q=(await all('q')).filter(q=>q.subject==d.s&&(q.topic||'')==d.t&&q.qtype!='theory');
   if(!Q.length)return toast('Download questions first');x.exam=Q[0].exam;begin(shuf(Q).slice(0,10),x)};
 /* ---------- Practice setup ---------- */
 async function setup(){view='prac';nav();const x=S.sel??={exam:'JAMB',mode:'topic',subs:[],n:10,timed:false,min:60,fb:true},Q=await qs(x.exam);
   if(fb&&navigator.onLine&&!(S.chk??={})[x.exam]){S.chk[x.exam]=1;await dl(x.exam);return}
-  const T=((await get('m','T'+x.exam))||{}).list||[];
+  const T=((await get('m','T'+x.exam))||{}).list||[];const TQ=(await qa(x.exam)).filter(q=>q.qtype=='theory');
   const subs=[...new Set(Q.map(q=>q.subject))].sort(),sQ=Q.filter(q=>q.subject==x.subs[0]);
   const chips=(k,arr,sel)=>arr.map(([v,l])=>`<button class="${sel(v)?'on':''}" data-a=P data-k=${k} data-v="${E(v)}">${E(l)}</button>`).join('');
   let h=`<h2>Practice</h2><div class=card><b>1. Examination</b><br>${chips('exam',Object.entries(N),v=>x.exam==v)}<p class=m>${Q.length} question(s) available for ${N[x.exam]} <button data-a=dl data-v=${x.exam}>⟳ Refresh</button></p></div>`;
@@ -169,7 +169,7 @@ async function setup(){view='prac';nav();const x=S.sel??={exam:'JAMB',mode:'topi
   <div class=card><b>3. Subject${x.mode=='mock'&&x.exam=='JAMB'?'s (pick 4)':''}</b><br>${chips('subs',subs.map(s=>[s,s+' ('+Q.filter(q=>q.subject==s).length+')']),v=>x.subs.includes(v))}</div>`;
   if(x.mode=='past'&&x.subs[0])h+=`<div class=card><b>Year</b><br>${chips('year',[...new Set(sQ.map(q=>q.year).filter(Boolean))].sort().reverse().map(y=>[String(y),String(y)]),v=>x.year==v)}</div>`;
   if(x.mode=='topic'&&x.subs[0])h+=`<div class=card><b>Topics</b> <span class=m>(tap one or more)</span><br><button data-a=ta>Select all / none</button><br>${[...new Set(sQ.map(q=>q.topic).filter(Boolean))].sort().map(t=>`<button class="${(x.topics||[]).includes(t)?'on':''}" data-a=tp data-v="${E(t)}">${E(t)} (${sQ.filter(q=>q.topic==t).length})</button>`).join('')}<br><b>Number of questions</b><br>${chips('n',[10,20,30,50].map(n=>[n,n]),v=>x.n==v)}</div>`;
-  if(x.mode=='mock')h+=`${T.length?`<div class=card><b>Ready-made mock exams</b><br>${T.map((t,i)=>`<button data-a=mt data-v=${i}>${E(t.name)}</button>`).join('')}</div>`:''}<div class=card><b>Questions per subject</b><input id=pc type=number value=${x.pc||20} min=1><p class=m>ExamPilot practice mock — not an official exam structure. Set counts/duration as you wish.</p></div>`;
+  if(x.mode=='mock')h+=`${T.length?`<div class=card><b>Ready-made mock exams</b><br>${T.map((t,i)=>`<button data-a=mt data-v=${i}>${E(t.name)}</button>`).join('')}</div>`:''}<div class=card><b>Questions per subject</b><input id=pc type=number value=${x.pc||20} min=1>${TQ.length&&x.exam!='JAMB'?`<b>Theory questions per subject (Section B)</b><input id=tc2 type=number value=${x.tc||0} min=0><p class=m>${TQ.length} theory question(s) downloaded. You self-mark them after submitting.</p>`:''}<p class=m>ExamPilot practice mock — not an official exam structure. Set counts/duration as you wish.</p></div>`;
   h+=`<div class=card><button class="${x.timed?'on':''}" data-a=T data-k=timed>⏱ Timed</button>${x.mode!='mock'?`<button class="${x.fb?'on':''}" data-a=T data-k=fb>Show answers as I go</button>`:''}
   ${x.timed?`<br>Minutes <input id=mn type=number value=${x.min} min=1>`:''}</div><button class=pr data-a=go>Begin</button>`}
   $('#app').innerHTML=h}
@@ -178,12 +178,13 @@ W.P=d=>{const x=S.sel;let v=d.v;
   else{x[d.k]=d.k=='n'?+v:v;if(d.k=='exam'||d.k=='mode'){x.subs=[];x.year=null;x.topics=[]}}setup()};
 W.tp=d=>{const x=S.sel,t=x.topics||[];x.topics=t.includes(d.v)?t.filter(y=>y!=d.v):[...t,d.v];setup()};
 W.ta=async()=>{const x=S.sel,Q=await qs(x.exam),t=[...new Set(Q.filter(q=>q.subject==x.subs[0]).map(q=>q.topic).filter(Boolean))];x.topics=(x.topics||[]).length==t.length?[]:t;setup()};
-W.mt=async d=>{const x=S.sel,t=(((await get('m','T'+x.exam))||{}).list||[])[+d.v],Q=await qs(x.exam),av=new Set(Q.map(q=>q.subject));if(!t)return;x.subs=t.subjects.filter(s=>av.has(s));x.pc=t.count;x.min=t.min;x.timed=true;if(x.subs.length<t.subjects.length)toast('Some subjects are not downloaded yet');setup()};
+W.mt=async d=>{const x=S.sel,t=(((await get('m','T'+x.exam))||{}).list||[])[+d.v],Q=await qs(x.exam),av=new Set(Q.map(q=>q.subject));if(!t)return;x.subs=t.subjects.filter(s=>av.has(s));x.pc=t.count;x.tc=t.theory||0;x.min=t.min;x.timed=true;if(x.subs.length<t.subjects.length)toast('Some subjects are not downloaded yet');setup()};
 W.T=d=>{S.sel[d.k]=!S.sel[d.k];setup()};
 W.go=async()=>{const x=S.sel,Q=await qs(x.exam);let L=[];if(!x.subs.length)return toast('Pick a subject');x.min=+($('#mn')?.value)||60;
   if(x.mode=='past'){if(!x.year)return toast('Pick a year');L=Q.filter(q=>q.subject==x.subs[0]&&q.year==x.year).sort((a,b)=>(a.no||0)-(b.no||0))}
   else if(x.mode=='topic'){if(!(x.topics||[]).length)return toast('Pick at least one topic');L=shuf(Q.filter(q=>q.subject==x.subs[0]&&x.topics.includes(q.topic))).slice(0,x.n)}
-  else{const n=+$('#pc').value||20;x.subs.forEach(s=>L.push(...shuf(Q.filter(q=>q.subject==s)).slice(0,n)))}
+  else{const n=+$('#pc').value||20;x.subs.forEach(s=>L.push(...shuf(Q.filter(q=>q.subject==s)).slice(0,n)));
+    const tn=+($('#tc2')?.value)||0;x.tc=tn;if(tn&&x.exam!='JAMB'){const TQ=(await qa(x.exam)).filter(q=>q.qtype=='theory');x.subs.forEach(s=>L.push(...shuf(TQ.filter(q=>q.subject==s)).slice(0,tn)))}}
   if(!L.length)return toast('No questions available');begin(L,x)};
 /* ---------- Session / Quiz ---------- */
 function begin(L,x,min){min=min??(x.timed?x.min:0);
@@ -191,9 +192,9 @@ function begin(L,x,min){min=min??(x.timed?x.min:0);
   persist();quiz()}
 W.res=async()=>{sess=await get('s','cur');if(sess)quiz()};
 function quiz(){clearInterval(tick);view='quiz';nav();const s=sess,q=s.Q[s.i],a=s.ans[q.id],lock=s.fb&&a!=null,mock=s.mode=='mock';
-  $('#app').innerHTML=`<div class=card><div class=row><b>${s.i+1}/${s.Q.length} · ${E(q.subject)}</b>${s.timed?'<b id=tm></b>':'<span class=m>Untimed</span>'}</div><div class=bar><i style="width:${(s.i+1)/s.Q.length*100}%"></i></div>
+  $('#app').innerHTML=`<div class=card><div class=row><b>${s.i+1}/${s.Q.length} · ${E(q.subject)}${q.qtype=='theory'?' · Section B · '+(q.marks||1)+' marks':''}</b>${s.timed?'<b id=tm></b>':'<span class=m>Untimed</span>'}</div><div class=bar><i style="width:${(s.i+1)/s.Q.length*100}%"></i></div>
   ${q.passage?`<p class=ps>${E(q.passage)}</p>`:''}${q.img?`<img src="${E(q.img)}" alt="" style="max-width:100%">`:''}<h3>${E(q.text)}</h3>${q.formula?`<code>${E(q.formula)}</code>`:''}
-  ${q.options.map((o,j)=>{let c=a===j?' sel':'';if(lock){if(j===q.answer)c+=' ok';else if(a===j)c+=' bad'}return`<button class="opt${c}" data-a=pk data-v=${j}>${L8[j]}. ${E(o)}</button>`}).join('')}
+  ${q.qtype=='theory'?`<textarea id=ta rows=9 placeholder="Write your answer here…">${E(a||'')}</textarea><p class=m>${q.marks||1} mark(s) · you will mark yourself after submitting</p>`:q.options.map((o,j)=>{let c=a===j?' sel':'';if(lock){if(j===q.answer)c+=' ok';else if(a===j)c+=' bad'}return`<button class="opt${c}" data-a=pk data-v=${j}>${L8[j]}. ${E(o)}</button>`}).join('')}
   ${lock?`<p class=ex><b>${a===q.answer?'Correct ✔':'Correct answer: '+L8[q.answer]}</b><br>${E(q.explanation||'')}</p>`:''}
   <div class=row><button data-a=mv data-v=-1 ${s.i?'':'disabled'}>◀ Prev</button>${bmBtn(q.id)}${mock?`<button data-a=fl>${s.fl[q.id]?'★ Marked':'☆ Mark'}</button>`:''}
   ${s.i<s.Q.length-1?'<button class=pr data-a=mv data-v=1>Next ▶</button>':'<button class=pr data-a=sub>Submit</button>'}</div></div>
@@ -203,25 +204,32 @@ function quiz(){clearInterval(tick);view='quiz';nav();const s=sess,q=s.Q[s.i],a=
     if(r<=60000&&r>0&&s.min>1&&!s.w1){s.w1=1;toast('⚠️ Only 1 minute left!');navigator.vibrate&&navigator.vibrate([200,100,200])}
     if(r<=0){toast("⏱ Time's up! Submitting…");finish()}};t();tick=setInterval(t,500)}}
 W.pk=d=>{const q=sess.Q[sess.i];if(sess.fb&&sess.ans[q.id]!=null)return;sess.ans[q.id]=+d.v;persist();quiz()};
-W.mv=d=>{sess.i+=+d.v;persist();quiz()};W.gt=d=>{sess.i=+d.v;persist();quiz()};
+document.addEventListener('input',e=>{if(e.target.id=='ta'&&sess){const q=sess.Q[sess.i],v=e.target.value;if(v.trim())sess.ans[q.id]=v;else delete sess.ans[q.id];persist()}});W.mv=d=>{sess.i+=+d.v;persist();quiz()};W.gt=d=>{sess.i=+d.v;persist();quiz()};
 W.fl=()=>{const id=sess.Q[sess.i].id;sess.fl[id]=!sess.fl[id];persist();quiz()};
 W.sub=async()=>{const u=sess.Q.filter(q=>sess.ans[q.id]==null).length;if(await ask(u?`${u} question${u>1?'s are':' is'} unanswered. Submit now?`:'Submit your answers now?',{ok:'Submit'}))finish()};
-async function finish(){const s=sess;if(!s||s.done)return;s.done=1;clearInterval(tick);let sc=0,mx=0,c=0,w=0,u=0;const bs={},det=[];
-  s.Q.forEach(q=>{const m=q.marks||1,a=s.ans[q.id],ok=a===q.answer,b=bs[q.subject]??={sc:0,mx:0,c:0,t:0};mx+=m;b.mx+=m;b.t++;
+async function finish(){const s=sess;if(!s||s.done)return;s.done=1;clearInterval(tick);let sc=0,mx=0,c=0,w=0,u=0;const bs={},det=[],th=[];
+  s.Q.forEach(q=>{if(q.qtype=='theory'){th.push({id:q.id,s:q.subject,tp:q.topic||'',txt:s.ans[q.id]||'',pts:[]});return}const m=q.marks||1,a=s.ans[q.id],ok=a===q.answer,b=bs[q.subject]??={sc:0,mx:0,c:0,t:0};mx+=m;b.mx+=m;b.t++;
     if(a==null)u++;else if(ok){c++;sc+=m;b.sc+=m;b.c++}else w++;det.push({id:q.id,s:q.subject,tp:q.topic||'',c:ok?1:0,a:a??null})});
-  const at={id:s.aid,exam:s.exam,mode:s.mode,at:Date.now(),sc,mx,c,w,u,n:s.Q.length,pct:mx?Math.round(sc/mx*100):0,used:Math.round((Date.now()-s.start)/1000),tm:s.min,bs,det,synced:0,uid:user?.uid||null};
+  const at={id:s.aid,exam:s.exam,mode:s.mode,at:Date.now(),sc,mx,c,w,u,n:s.Q.length-th.length,pct:mx?Math.round(sc/mx*100):0,used:Math.round((Date.now()-s.start)/1000),tm:s.min,bs,det,th,synced:0,uid:user?.uid||null};
   await put('a',at);await del('s','cur');sess=null;sync();result(at,s.Q)}
 function result(at,Q,f='all'){S.r={at,Q};S.rf=f;view='result';nav();const dm=Object.fromEntries(at.det.map(d=>[d.id,d]));
   const R=Q.filter(q=>{const d=dm[q.id];return d&&(f=='all'||(f=='c'&&d.a!=null&&d.c)||(f=='w'&&d.a!=null&&!d.c)||(f=='u'&&d.a==null))});
   $('#app').innerHTML=`<div class=card><h2>Result · ${N[at.exam]} ${at.mode}</h2>${resCharts(at)}
   <p>Total ${at.n} · Answered ${at.n-at.u} · ✔ ${at.c} · ✘ ${at.w} · Unanswered ${at.u} · Time ${fmt(at.used*1000)}</p>
   <p class=m>ExamPilot practice score (1 mark per question unless set) — not an official marking scheme.</p>
-  <button class=pr data-a=ag>Try again</button><button data-a=nv data-v=home>Home</button></div>
+  <button class=pr data-a=ag>Try again</button><button data-a=nv data-v=home>Home</button></div>${thSec(at,Q)}
   <div>${[['all','All'],['c','Correct'],['w','Incorrect'],['u','Unanswered']].map(([k,l])=>`<button class="${f==k?'on':''}" data-a=rf data-v=${k}>${l}</button>`).join('')}</div>
   ${R.map(q=>{const d=dm[q.id];return`<div class=card><b>${E(q.subject)}</b> ${q.passage?`<p class=ps>${E(q.passage)}</p>`:''}<p>${E(q.text)}</p>
   <p class=${d.a==null?'m':d.c?'ok':'bad'} style="padding:6px;border-radius:8px">Your answer: ${d.a==null?'—':L8[d.a]+'. '+E(q.options[d.a])}</p><p class=ok style="padding:6px;border-radius:8px">Correct: ${L8[q.answer]}. ${E(q.options[q.answer])}</p><p class=m>${E(q.explanation||'')}</p>${bmBtn(q.id)}</div>`}).join('')||'<p class=m>Nothing to show (download the questions to review old attempts).</p>'}`}
+function thSec(at,Q){const T=at.th||[];if(!T.length)return'';let ts=0,tm=0;
+  const cards=T.map(t=>{const q=Q.find(x=>x.id==t.id);if(!q)return'';let g=0;const P=q.points||[];P.forEach((p,i)=>{if(t.pts.includes(i))g+=p.m});const mx=P.reduce((a,p)=>a+p.m,0);ts+=g;tm+=mx;
+    return`<div class=card><b>${E(q.subject)}</b> <span class=m>${g}/${mx}</span>${q.passage?`<p class=ps>${E(q.passage)}</p>`:''}<p>${E(q.text)}</p><p class=m>Your answer:</p><p class=ps>${E(t.txt)||'—'}</p><p class=m>Model answer:</p><p class=ok style="padding:6px;border-radius:8px">${E(q.model||'—')}</p><p class=m>Tick the marking points you covered:</p>${P.map((p,i)=>`<label style="display:block;margin:4px 0"><input type=checkbox style="width:auto" data-a=tk data-q="${E(t.id)}" data-i=${i} ${t.pts.includes(i)?'checked':''}> ${E(p.t)} <span class=m>(${p.m})</span></label>`).join('')}${q.explanation?`<p class=m>${E(q.explanation)}</p>`:''}</div>`}).join('');
+  const tot=at.mx+tm;return`<div class=card><h3>Section B · Theory (self-marked)</h3><p><b>Section A:</b> ${at.sc}/${at.mx} · <b>Section B:</b> ${ts}/${tm} · <b>Combined:</b> ${at.sc+ts}/${tot} (${tot?Math.round((at.sc+ts)/tot*100):0}%)</p><p class=m>Compare your answer with the model answer and tick each point you earned. Your ticks are saved; you can mark later from Recent results.</p></div>${cards}`}
+W.tk=async(d,el)=>{const{at,Q}=S.r,t=(at.th||[]).find(x=>x.id==d.q),i=+d.i;if(!t)return;t.pts=el.checked?[...new Set([...t.pts,i])]:t.pts.filter(x=>x!=i);
+  const y=scrollY;result(at,Q,S.rf||'all');scrollTo(0,y);
+  try{await put('a',at);if(fb&&user&&navigator.onLine)await fb.f.setDoc(fb.f.doc(fb.db,'users',user.uid,'attempts',at.id),{...at,uid:user.uid,synced:1})}catch{}};
 W.rf=d=>result(S.r.at,S.r.Q,d.v);W.ag=()=>{const{at,Q}=S.r;begin(Q,{exam:at.exam,mode:at.mode,fb:true},at.tm)};
-W.hi=async d=>{const a=(await all('a')).find(x=>x.id==d.v),ids=new Set(a.det.map(x=>x.id));result(a,(await all('q')).filter(q=>ids.has(q.id)))};
+W.hi=async d=>{const a=(await all('a')).find(x=>x.id==d.v),ids=new Set([...a.det,...(a.th||[])].map(x=>x.id));result(a,(await all('q')).filter(q=>ids.has(q.id)))};
 /* ---------- Account ---------- */
 function account(){view='acc';nav();const a=$('#app');
   if(!fb)return a.innerHTML=`<div class=card><h2>Account</h2><p>Cloud sync is not configured. You are using a local guest profile.</p></div>`;
@@ -303,10 +311,10 @@ function aOv(){const Q=S.Q,pub=Q.filter(q=>q.status=='published').length,by={};
   <div class=card><b>Content by exam and subject</b>${Object.entries(by).sort().map(([k,x])=>`<div class=row><span>${E(k)}<br><span class=m>${[...x.y].sort().join(', ')||'no year'}</span></span><span>${x.p}/${x.t} published</span></div>`).join('')||'<p class=m>No questions yet. Use the Upload tab.</p>'}</div>`}
 function qForm(){const q=S.form,v=k=>E(q[k]??''),op=i=>E((q.options||[])[i]??'');
   const sel=(k,a)=>a.map(([x,l])=>`<option value="${x}" ${q[k]==x?'selected':''}>${l}</option>`).join('');
-  return`<div class=card><h3>${q.id?'Edit question':'Add question'}</h3><select id=ex>${sel('exam',[['WAEC','WAEC'],['NECO','NECO'],['JAMB','JAMB/UTME']])}</select><input id=yr type=number placeholder="Year (blank if not a past question)" value="${v('year')}"><input id=sj placeholder=Subject value="${v('subject')}"><input id=tp placeholder=Topic value="${v('topic')}">
+  return`<div class=card><h3>${q.id?'Edit question':'Add question'}</h3><select id=qy>${sel('qtype',[['objective','Objective (options A–E)'],['theory','Theory (marking points, WAEC/NECO only)']])}</select><select id=ex>${sel('exam',[['WAEC','WAEC'],['NECO','NECO'],['JAMB','JAMB/UTME']])}</select><input id=yr type=number placeholder="Year (blank if not a past question)" value="${v('year')}"><input id=sj placeholder=Subject value="${v('subject')}"><input id=tp placeholder=Topic value="${v('topic')}">
   <input id=pa placeholder="Passage (optional)" value="${v('passage')}"><textarea id=qt placeholder=Question>${v('text')}</textarea><input id=fm placeholder="Formula (optional)" value="${v('formula')}"><input id=im placeholder="Image URL (optional)" value="${q.img&&/^http/.test(q.img)?E(q.img):''}">
   ${[0,1,2,3,4].map(i=>`<input id=o${i} placeholder="Option ${L8[i]}${i>3?' (optional)':''}" value="${op(i)}">`).join('')}
-  <select id=an>${sel('answer',[[0,'Answer A'],[1,'Answer B'],[2,'Answer C'],[3,'Answer D'],[4,'Answer E']])}</select><textarea id=xp placeholder=Explanation>${v('explanation')}</textarea><input id=mk type=number placeholder=Marks value="${q.marks||1}"><input id=so placeholder="Source" value="${v('source')}">
+  <select id=an>${sel('answer',[[0,'Answer A'],[1,'Answer B'],[2,'Answer C'],[3,'Answer D'],[4,'Answer E']])}</select><textarea id=md placeholder="Theory only: model answer">${v('model')}</textarea><textarea id=pt placeholder="Theory only: marking points, one per line, e.g. Defines osmosis (1)">${E((q.points||[]).map(p=>p.t+' ('+p.m+')').join('\n'))}</textarea><textarea id=xp placeholder=Explanation>${v('explanation')}</textarea><input id=mk type=number placeholder=Marks value="${q.marks||1}"><input id=so placeholder="Source" value="${v('source')}">
   <label><input id=vf type=checkbox style="width:auto" ${q.verified?'checked':''}> Verified</label><select id=st>${sel('status',[['published','Published'],['draft','Draft']])}</select><button class=pr data-a=asv>Save</button><button data-a=cq>Cancel</button></div>`}
 function aQs(){const F=S.F,sr=F.q.toLowerCase(),subs=[...new Set(S.Q.map(q=>q.subject))].sort();
   const fl=S.Q.filter(q=>(!F.exam||q.exam==F.exam)&&(!F.sub||q.subject==F.sub)&&(!F.st||(F.st=='published'?q.status=='published':F.st=='draft'?q.status!='published':!q.verified))&&(!sr||(q.text+q.topic+q.year).toLowerCase().includes(sr)))
@@ -317,13 +325,13 @@ function aQs(){const F=S.F,sr=F.q.toLowerCase(),subs=[...new Set(S.Q.map(q=>q.su
   <select id=ft>${o('','Any status',F.st)}${o('published','Published',F.st)}${o('draft','Drafts',F.st)}${o('unv','Not verified',F.st)}</select><button class=pr data-a=fa>Apply filters</button>
   <p class=m>${fl.length} question(s) match. Actions below apply to all of them.</p><button data-a=pa data-v=published>Publish (${fl.filter(q=>q.status!='published').length})</button><button data-a=pa data-v=draft>Unpublish (${fl.filter(q=>q.status=='published').length})</button><button data-a=vA>✔ Verify (${fl.filter(q=>!q.verified).length})</button><button class=dg data-a=dA>🗑 Delete all ${fl.length}</button></div>
   ${sh.map(q=>`<div class=card><span class=m>${N[q.exam]||E(q.exam)} ${q.year||''} · ${E(q.subject)} · ${E(q.topic)}<br>${q.status=='published'?'🟢 Published':'⚪ Draft'}${q.verified?' · ✔ Verified':''}</span><p>${E(q.text).slice(0,160)}</p>
-  ${S.pv==q.id?`<div class=ex>${(q.options||[]).map((x,i)=>`<div>${i==q.answer?'✅':'▫️'} ${L8[i]}. ${E(x)}</div>`).join('')}<p class=m>${E(q.explanation||'')}</p></div>`:''}
+  ${S.pv==q.id?`<div class=ex>${(q.options||[]).map((x,i)=>`<div>${i==q.answer?'✅':'▫️'} ${L8[i]}. ${E(x)}</div>`).join('')}${q.qtype=='theory'?`<p><b>Theory · Model:</b> ${E(q.model||'')}</p>${(q.points||[]).map(p=>`<div>▫️ ${E(p.t)} (${p.m})</div>`).join('')}`:''}<p class=m>${E(q.explanation||'')}</p></div>`:''}
   <button data-a=pv data-v=${q.id}>👁 Preview</button><button data-a=eq data-v=${q.id}>✏️ Edit</button><button data-a=tg data-v=${q.id} data-s=${q.status}>${q.status=='published'?'Unpublish':'Publish'}</button><button data-a=vf data-v=${q.id} data-s=${q.verified?1:0}>${q.verified?'Unverify':'✔ Verify'}</button><button class=dg data-a=ad data-v=${q.id}>🗑</button></div>`).join('')}
   <div class=row><button data-a=pgn data-v=-1 ${F.pg?'':'disabled'}>◀ Prev</button><span class=m>Page ${F.pg+1}/${pages}</span><button data-a=pgn data-v=1 ${F.pg<pages-1?'':'disabled'}>Next ▶</button></div>`}
 const aUp=()=>upCard()+`<details class=card><summary><b>Advanced JSON Import</b></summary><textarea id=bj rows=4 placeholder="Paste a JSON array of questions"></textarea><button data-a=bi>Preview import</button></details>`;
 function aEx(){return`${S.noT?'<div class=card style="background:#fee2e2">Mock setups need the <b>templates</b> rule in Firestore. Add it, then reopen Admin.</div>':''}<div class=card><h3>New mock exam setup</h3><input id=tn placeholder="Name e.g. JAMB UTME Mock"><select id=te><option value=WAEC>WAEC</option><option value=NECO>NECO</option><option value=JAMB>JAMB/UTME</option></select>
-  <input id=tsb placeholder="Subjects, comma separated (exact names)"><p class=m>Your subjects: ${E([...new Set(S.Q.map(q=>q.subject))].sort().join(', ')||'none yet')}</p><input id=tc type=number placeholder="Questions per subject"><input id=tm type=number placeholder="Duration in minutes"><button class=pr data-a=ta2>Save setup</button><p class=m>Students see it under Mock Exam after tapping Refresh.</p></div>
-  ${S.T.map(t=>`<div class=card><b>${E(t.name)}</b><br><span class=m>${N[t.exam]} · ${E((t.subjects||[]).join(', '))} · ${t.count} per subject · ${t.min} min</span><br><button class=dg data-a=td data-v=${t.id}>Delete</button></div>`).join('')}`}
+  <input id=tsb placeholder="Subjects, comma separated (exact names)"><p class=m>Your subjects: ${E([...new Set(S.Q.map(q=>q.subject))].sort().join(', ')||'none yet')}</p><input id=tc type=number placeholder="Questions per subject"><input id=tth type=number placeholder="Theory questions per subject (optional)"><input id=tm type=number placeholder="Duration in minutes"><button class=pr data-a=ta2>Save setup</button><p class=m>Students see it under Mock Exam after tapping Refresh.</p></div>
+  ${S.T.map(t=>`<div class=card><b>${E(t.name)}</b><br><span class=m>${N[t.exam]} · ${E((t.subjects||[]).join(', '))} · ${t.count} per subject${t.theory?' + '+t.theory+' theory':''} · ${t.min} min</span><br><button class=dg data-a=td data-v=${t.id}>Delete</button></div>`).join('')}`}
 function aSt(){const sr=(S.sq||'').toLowerCase(),L=S.U.filter(u=>!sr||[u.email,u.name,u.phone,u.state,u.lga,u.school].join(' ').toLowerCase().includes(sr)).sort((a,b)=>(b.at||0)-(a.at||0));
   return`<div class=card><b>${S.U.length} registered students</b><input id=sq2 placeholder="Search name, email, phone or state" value="${E(S.sq||'')}"><button data-a=sq>Search</button></div>${L.slice(0,50).map(u=>`<div class=card><b>${E(u.name||u.email)}</b><br><span class=m>${E(u.email)}${u.phone?`<br>📞 ${E(u.phone)}`:''}${u.state?`<br>📍 ${E([u.lga,u.state].filter(Boolean).join(', '))}`:''}${u.school?`<br>🏫 ${E(u.school)}${u.level?' · '+E(u.level):''}`:''}${(u.exams||[]).length?`<br>🎯 ${E(u.exams.map(x=>N[x]||x).join(', '))}`:''}<br>${u.at?new Date(u.at).toLocaleDateString():''} · ${(u.email||'').toLowerCase()==ADMIN_EMAIL?'Administrator':'Student'}</span></div>`).join('')}`}
 W.sq=()=>{S.sq=$('#sq2').value;adm()};
@@ -332,9 +340,9 @@ W.eq=d=>{S.form={...S.Q.find(q=>q.id==d.v)};adm();scrollTo(0,0)};
 W.pv=d=>{S.pv=S.pv==d.v?null:d.v;adm()};
 W.fa=()=>{S.F={q:$('#fq').value,exam:$('#fe').value,sub:$('#fs').value,st:$('#ft').value,pg:0};adm()};
 W.pgn=d=>{S.F.pg+=+d.v;adm();scrollTo(0,0)};
-W.asv=()=>ae(async()=>{const g=i=>$('#'+i).value.trim(),o=[0,1,2,3,4].map(i=>g('o'+i)).filter(Boolean),an=+g('an'),q=S.form,{f,db}=fb;
-  if(!g('qt')||!g('sj')||o.length<2||an>=o.length)return toast('Check question, subject, options and answer');
-  const d={exam:g('ex'),year:+g('yr')||null,subject:g('sj'),topic:g('tp'),text:g('qt'),options:o,answer:an,explanation:g('xp'),marks:+g('mk')||1,img:g('im')||q.img||'',passage:g('pa'),formula:g('fm'),source:g('so'),verified:$('#vf').checked,status:g('st'),qtype:'objective',updated:Date.now(),by:user.uid};
+W.asv=()=>ae(async()=>{const g=i=>$('#'+i).value.trim(),o=[0,1,2,3,4].map(i=>g('o'+i)).filter(Boolean),an=+g('an'),q=S.form,{f,db}=fb,th=g('qy')=='theory',P=pp(g('pt'));
+  if(th?(!g('qt')||!g('sj')||!P.length):(!g('qt')||!g('sj')||o.length<2||an>=o.length))return toast(th?'Check question, subject and marking points':'Check question, subject, options and answer');
+  const d={exam:g('ex'),year:+g('yr')||null,subject:g('sj'),topic:g('tp'),text:g('qt'),options:th?[]:o,answer:th?-1:an,explanation:g('xp'),model:g('md'),points:th?P:[],marks:th?P.reduce((a,p)=>a+p.m,0):(+g('mk')||1),img:g('im')||q.img||'',passage:g('pa'),formula:g('fm'),source:g('so'),verified:$('#vf').checked,status:g('st'),qtype:th?'theory':'objective',updated:Date.now(),by:user.uid};
   if(q.id)await f.updateDoc(f.doc(db,'questions',q.id),d);else await f.addDoc(f.collection(db,'questions'),{...d,created:Date.now()});S.form=null;toast('Saved');admin()});
 const bulk=async(arr,fn)=>{const{f,db}=fb;for(let i=0;i<arr.length;i+=400){const b=f.writeBatch(db);arr.slice(i,i+400).forEach(q=>fn(b,f.doc(db,'questions',q.id)));await b.commit()}};
 W.tg=d=>ae(async()=>{await fb.f.updateDoc(fb.f.doc(fb.db,'questions',d.v),{status:d.s=='published'?'draft':'published',updated:Date.now()});admin()});
@@ -344,28 +352,30 @@ W.pa=d=>ae(async()=>{const t=S.fl.filter(q=>(q.status=='published')!=(d.v=='publ
 W.vA=()=>ae(async()=>{const t=S.fl.filter(q=>!q.verified);if(!t.length)return toast('Nothing to change');if(!await ask('Mark '+t.length+' questions as verified?'))return;await bulk(t,(b,r)=>b.update(r,{verified:true,updated:Date.now()}));toast('Verified '+t.length);admin()});
 W.dA=()=>ae(async()=>{const t=S.fl;if(!t.length)return toast('Nothing to delete');if(await ask(`This permanently deletes ${t.length} questions. Type DELETE to confirm.`,{input:1,ph:'Type DELETE',danger:1,ok:'Delete all'})!=='DELETE')return;await bulk(t,(b,r)=>b.delete(r));toast('Deleted '+t.length);admin()});
 W.ta2=()=>ae(async()=>{const g=i=>$('#'+i).value.trim(),sb=g('tsb').split(',').map(x=>x.trim()).filter(Boolean);if(!g('tn')||!sb.length||!(+g('tc')>0)||!(+g('tm')>0))return toast('Fill in every field');
-  await fb.f.addDoc(fb.f.collection(fb.db,'templates'),{name:g('tn'),exam:g('te'),subjects:sb,count:+g('tc'),min:+g('tm'),by:user.uid,created:Date.now()});toast('Saved');admin()});
+  await fb.f.addDoc(fb.f.collection(fb.db,'templates'),{name:g('tn'),exam:g('te'),subjects:sb,count:+g('tc'),theory:+g('tth')||0,min:+g('tm'),by:user.uid,created:Date.now()});toast('Saved');admin()});
 W.td=async d=>{if(await ask('Delete this setup?',{danger:1,ok:'Delete'}))ae(async()=>{await fb.f.deleteDoc(fb.f.doc(fb.db,'templates',d.v));admin()})};
 W.bi=()=>ae(async()=>{defs();const j=JSON.parse($('#bj').value),rows=Array.isArray(j)?j:j.questions;if(!rows||!rows.length)throw Error('No questions found');prev(await prepare(rows,1),'Pasted JSON')});
 /* ---------- Upload & import ---------- */
 const lib=(u,t)=>window[t]?0:new Promise((r,j)=>{const s=document.createElement('script');s.src=u;s.onload=r;s.onerror=()=>j(Error('Could not load '+t+' (internet needed)'));document.head.appendChild(s)});
 const needX=()=>lib('https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js','XLSX'),needZ=()=>lib('https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js','JSZip');
-const COLS=['exam','year','subject','topic','passage','question','optionA','optionB','optionC','optionD','answer','explanation','marks','image','formula','source'];
-const INS=['exam: WAEC, NECO or JAMB (required)','year: e.g. 2019 — leave blank if it is not a past question','subject and question are required','topic: used for topic practice','answer: the letter of the correct option (A, B, C…) (required)','Fill optionA and optionB at least (up to optionH)','image: a full https:// link, or a file name from your ZIP (jpg/png/webp/gif, max 3 MB)','formula: formula written as text, shown under the question','passage: shared reading text for the question','ZIP: put the .xlsx/.csv/.json file and the images together, then zip','DELETE the example row before importing','Imports are saved as Draft unless you choose Published'];
-let DEF={exam:'',year:'',subject:'',topic:''};const defs=()=>{DEF={exam:$('#dex')?.value||'',year:($('#dyr')?.value||'').trim(),subject:($('#dsj')?.value||'').trim(),topic:($('#dtp')?.value||'').trim()}};
+const COLS=['exam','year','subject','topic','passage','question','optionA','optionB','optionC','optionD','answer','explanation','marks','image','formula','source','qtype','modelAnswer','points'];
+const INS=['exam: WAEC, NECO or JAMB (required)','year: e.g. 2019 — leave blank if it is not a past question','subject and question are required','topic: used for topic practice','answer: the letter of the correct option (A, B, C…) (required)','Fill optionA and optionB at least (up to optionH)','image: a full https:// link, or a file name from your ZIP (jpg/png/webp/gif, max 3 MB)','formula: formula written as text, shown under the question','passage: shared reading text for the question','ZIP: put the .xlsx/.csv/.json file and the images together, then zip','DELETE the example row before importing','theory (WAEC/NECO): set qtype to theory, put the model answer in modelAnswer and marking points in points, separated by | with marks in brackets e.g. Defines osmosis (1) | Gives an example (2). No options or answer letter needed','Imports are saved as Draft unless you choose Published'];
+let DEF={exam:'',year:'',subject:'',topic:'',qt:''};const defs=()=>{DEF={exam:$('#dex')?.value||'',year:($('#dyr')?.value||'').trim(),subject:($('#dsj')?.value||'').trim(),topic:($('#dtp')?.value||'').trim(),qt:$('#dqt')?.value||''}};
 const nk=k=>String(k).toLowerCase().replace(/[^a-z0-9]/g,''),nt=s=>String(s).toLowerCase().replace(/[^a-z0-9]/g,'').slice(0,300);
+const pp=s=>String(s||'').split(/\||\n/).map(x=>x.trim()).filter(Boolean).map(x=>{const m=x.match(/^(.*?)\s*\((\d+(?:\.\d+)?)\)$/);return m?{t:m[1].trim(),m:+m[2]}:{t:x,m:1}}).filter(p=>p.t&&p.m>0);
 const hash=s=>{let a=0xdeadbeef,b=0x41c6ce57;for(let i=0;i<s.length;i++){const c=s.charCodeAt(i);a=Math.imul(a^c,2654435761);b=Math.imul(b^c,1597334677)}a=Math.imul(a^a>>>16,2246822507)^Math.imul(b^b>>>13,3266489909);b=Math.imul(b^b>>>16,2246822507)^Math.imul(a^a>>>13,3266489909);return(4294967296*(2097151&b)+(a>>>0)).toString(36)+s.length};
 const dk=q=>[q.exam,q.year||'',String(q.subject||'').toLowerCase(),nt(q.text)].join('|');
 const sv=(b,n)=>{const a=document.createElement('a');a.href=URL.createObjectURL(b);a.download=n;a.click()};
 const upCard=()=>`<div class=card style="border:2px solid #0f4c81"><h3>📤 Upload Question File</h3><p class=m>Choose a .json, .csv, .xlsx or .zip (data file + images) from your phone or computer. Nothing is saved until you confirm the preview.</p>
 <input id=uf type=file accept=".json,.csv,.xlsx,.zip,application/json,text/csv,application/zip,application/x-zip-compressed,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" style="padding:14px;border:2px dashed #0f4c81">
 <div class=ps><b>Whole subject & year in one upload</b><br><span class=m>Fill these once and they apply to every question in the file that has no exam/year/subject of its own. Then your file only needs the questions.</span>
-<select id=dex><option value=''>Exam: take from file</option><option value=WAEC>WAEC</option><option value=NECO>NECO</option><option value=JAMB>JAMB/UTME</option></select><input id=dsj placeholder="Subject e.g. Chemistry"><input id=dyr type=number placeholder="Year e.g. 2023"><input id=dtp placeholder="Topic (optional)"></div>
+<select id=dex><option value=''>Exam: take from file</option><option value=WAEC>WAEC</option><option value=NECO>NECO</option><option value=JAMB>JAMB/UTME</option></select><input id=dsj placeholder="Subject e.g. Chemistry"><input id=dyr type=number placeholder="Year e.g. 2023"><input id=dtp placeholder="Topic (optional)"><select id=dqt><option value=''>Type: objective (default)</option><option value=theory>Type: THEORY — every question in this file is theory</option></select></div>
 <label>Save imported questions as</label><select id=ist><option value=published>Published (students see it now)</option><option value=draft>Draft (hidden until you publish)</option></select>
 <label><input id=ivf type=checkbox style="width:auto"> Mark all imported questions as verified</label>
-<div><button data-a=tpl data-v=xlsx>⬇ Excel template</button><button data-a=tpl data-v=csv>⬇ CSV template</button><button class=pr data-a=tpl data-v=quick>⬇ Quick template (questions only)</button></div>
+<div><button data-a=tpl data-v=xlsx>⬇ Excel template</button><button data-a=tpl data-v=csv>⬇ CSV template</button><button class=pr data-a=tpl data-v=quick>⬇ Quick template (questions only)</button><button data-a=tpl data-v=theory>⬇ Theory template</button></div>
 <details><summary class=m>Template instructions</summary>${INS.map(x=>`<div class=m>• ${E(x)}</div>`).join('')}</details><div id=up></div></div>`;
 W.tpl=d=>ae(async()=>{await needX();
+  if(d.v=='theory'){const q=XLSX.utils.json_to_sheet([{qtype:'theory',question:'EXAMPLE ROW - DELETE ME: Define osmosis.',modelAnswer:'Osmosis is the movement of water from a dilute solution to a concentrated one through a semi-permeable membrane.',points:'Defines osmosis (1) | Mentions semi-permeable membrane (1) | Gives an example (1)',topic:'',explanation:'',image:'',formula:''}]),wb=XLSX.utils.book_new();XLSX.utils.book_append_sheet(wb,q,'Questions');XLSX.writeFile(wb,'exampilot-theory-template.xlsx');return}
   if(d.v=='quick'){const q=XLSX.utils.json_to_sheet([{question:'EXAMPLE ROW - DELETE ME: What is 2 + 2?',optionA:'3',optionB:'4',optionC:'5',optionD:'6',answer:'B',explanation:'2 + 2 = 4',topic:'',image:'',formula:''}]),wb=XLSX.utils.book_new();XLSX.utils.book_append_sheet(wb,q,'Questions');XLSX.writeFile(wb,'exampilot-quick-template.xlsx');return}
   const ex={exam:'WAEC',year:2019,subject:'Example Subject',topic:'Example Topic',passage:'',question:'EXAMPLE ROW - DELETE ME: What is 2 + 2?',optionA:'3',optionB:'4',optionC:'5',optionD:'6',answer:'B',explanation:'2 + 2 = 4',marks:1,image:'',formula:'',source:'Your source'},ws=XLSX.utils.json_to_sheet([ex],{header:COLS});
   if(d.v=='csv')sv(new Blob([XLSX.utils.sheet_to_csv(ws)],{type:'text/csv'}),'exampilot-template.csv');
@@ -388,12 +398,12 @@ function norm(r,j){const o={};for(const k in r)o[nk(k)]=r[k];const g=(...n)=>{fo
   const u=(g('exam','examination','examtype')||DEF.exam).toUpperCase(),exam=/JAMB|UTME/.test(u)?'JAMB':/WAEC/.test(u)?'WAEC':/NECO/.test(u)?'NECO':'';if(!exam)e.push('exam missing — choose Exam in the box above the upload button (or add an exam column)');
   const text=g('question','text','questiontext'),subject=g('subject')||DEF.subject;if(!text)e.push('question missing');if(!subject)e.push('subject missing — type it in the Subject box above (or add a subject column)');if(/EXAMPLE ROW - DELETE ME/i.test(text))e.push('this is the template example row — delete it');
   const ys=g('year')||DEF.year;let year=null;if(ys){year=+ys;if(!Number.isInteger(year)||year<1980||year>2100){e.push('invalid year');year=null}}
-  let options=Array.isArray(r.options)?r.options.map(x=>String(x??'').trim()):[...'ABCDEFGH'].map(l=>g('option'+l.toLowerCase(),l.toLowerCase()));
+  const th=/theory|essay/i.test(g('qtype','type','questiontype')||DEF.qt),pts=!th?[]:Array.isArray(r.points)?r.points.flatMap(p=>typeof p=='string'?pp(p):[{t:String(p.t??p.text??'').trim(),m:+(p.m??p.marks??1)}]).filter(p=>p.t&&p.m>0):pp(g('points','markingpoints'));let options=[],answer=-1;if(th){if(!pts.length)e.push('theory question needs marking points (points column)')}else{options=Array.isArray(r.options)?r.options.map(x=>String(x??'').trim()):[...'ABCDEFGH'].map(l=>g('option'+l.toLowerCase(),l.toLowerCase()));
   let n=0;options.forEach((x,i)=>{if(x)n=i+1});options=options.slice(0,n);if(n<2)e.push('need at least 2 options');else if(options.includes(''))e.push('gap in options');
-  const a=g('answer','correct','correctanswer','correctoption');let answer=-1;if(/^[A-Ha-h]$/.test(a))answer=a.toUpperCase().charCodeAt(0)-65;else if(j&&/^\d+$/.test(a))answer=+a;
-  if(answer<0||answer>=options.length)e.push('answer must be a letter matching an option (A, B, C…)');
-  const mk=g('marks','mark'),marks=mk?+mk:1;if(!(marks>0))e.push('invalid marks');
-  return{e,rec:{exam,year,subject,topic:g('topic')||DEF.topic,passage:g('passage'),text,options,answer,explanation:g('explanation','explain'),marks:marks>0?marks:1,img:'',_img:g('image','img','diagram'),formula:g('formula','math'),source:g('source'),no:+g('no','number','questionnumber')||null}}}
+  const a=g('answer','correct','correctanswer','correctoption');if(/^[A-Ha-h]$/.test(a))answer=a.toUpperCase().charCodeAt(0)-65;else if(j&&/^\d+$/.test(a))answer=+a;
+  if(answer<0||answer>=options.length)e.push('answer must be a letter matching an option (A, B, C…)')}
+  const mk=g('marks','mark'),marks=th?pts.reduce((a,p)=>a+p.m,0):mk?+mk:1;if(!(marks>0))e.push('invalid marks');
+  return{e,rec:{qtype:th?'theory':'objective',model:th?g('modelanswer','model','answer'):'',points:pts,exam,year,subject,topic:g('topic')||DEF.topic,passage:g('passage'),text,options,answer,explanation:g('explanation','explain'),marks:marks>0?marks:1,img:'',_img:g('image','img','diagram'),formula:g('formula','math'),source:g('source'),no:+g('no','number','questionnumber')||null}}}
 async function prepare(rows,j,imgs){const ex=new Map((S.exq||[]).map(q=>[dk(q),q])),seen=new Set(),P={ok:[],err:[],dup:[]},cache={};
   for(let i=0;i<rows.length;i++){const n=i+1;if(!rows[i]||typeof rows[i]!='object'){P.err.push({n,e:['not a valid record']});continue}
     const{e,rec}=norm(rows[i],j),u=rec._img;delete rec._img;
@@ -407,7 +417,7 @@ function prev(P,name){S.P=P;P.dr=P.dup.filter(x=>x.id&&x.st!='published');const 
   Object.entries(g).map(([k,v])=>`<div class=row><span>${E(k)}</span><b>${v}</b></div>`).join('')+
   (P.err.length?`<div class=card style="background:#fee2e2"><b>Errors</b>${P.err.slice(0,30).map(x=>`<div class=m>Row ${x.n}: ${E(x.e.join('; '))}</div>`).join('')}${P.err.length>30?'<div class=m>…and more</div>':''}</div>`:'')+
   (P.dr.length?`<p class=ps>${P.dr.length} of the duplicates already exist as <b>drafts</b>. They will be published automatically if you import as Published.</p>`:'')+(P.dup.length?`<p class=m>Duplicate rows: ${P.dup.slice(0,10).map(x=>x.n).join(', ')}${P.dup.length>10?'…':''}</p>`:'')+
-  P.ok.slice(0,10).map(r=>`<div class=card><span class=m>${E(r.subject)} ${r.year||''} · ${E(r.topic)}</span>${r.passage?`<p class=ps>${E(r.passage)}</p>`:''}<p>${E(r.text)}</p>${r.formula?`<code>${E(r.formula)}</code>`:''}${r.img?'<p class=m>🖼 image attached</p>':''}${r.options.map((o,i)=>`<div class="${i==r.answer?'ok':''}">${L8[i]}. ${E(o)}</div>`).join('')}<p class=m>${E(r.explanation)}</p></div>`).join('')+
+  P.ok.slice(0,10).map(r=>`<div class=card><span class=m>${E(r.subject)} ${r.year||''} · ${E(r.topic)}</span>${r.passage?`<p class=ps>${E(r.passage)}</p>`:''}<p>${E(r.text)}</p>${r.formula?`<code>${E(r.formula)}</code>`:''}${r.img?'<p class=m>🖼 image attached</p>':''}${r.options.map((o,i)=>`<div class="${i==r.answer?'ok':''}">${L8[i]}. ${E(o)}</div>`).join('')}${r.qtype=='theory'?`<p class=m>Theory · ${r.points.length} points · ${r.marks} marks</p><p>${E(r.model)}</p>`:''}<p class=m>${E(r.explanation)}</p></div>`).join('')+
   (P.ok.length>10?`<p class=m>Showing first 10 of ${P.ok.length}</p>`:'')+(P.ok.length||P.dr.length?`<button class=pr data-a=ci>Confirm import of ${P.ok.length}${P.dr.length?` + publish ${P.dr.length} drafts`:''}</button>`:'')+`<button data-a=cx>Cancel</button><div id=pg></div>`;
   $('#up').scrollIntoView()}
 W.cx=()=>{S.P=null;$('#up').innerHTML=''};W.adm2=()=>admin();
@@ -418,7 +428,7 @@ async function up(file){if(role!='admin')return;defs();const p=$('#up');p.innerH
   const i=$('#uf');if(i)i.value=''}
 document.addEventListener('change',e=>{if(e.target.id=='uf'&&e.target.files[0])ae(()=>up(e.target.files[0]))});
 W.ci=()=>ae(async()=>{const P=S.P;if(!P||S.busy||role!='admin')return;S.busy=1;const{f,db}=fb,st=$('#ist').value,vf=$('#ivf').checked,tot=P.ok.length,rep={ok:0,fail:[]};
-  const mk=q=>{const{id,n,...d}=q;return{...d,qtype:'objective',status:st,verified:vf,created:Date.now(),updated:Date.now(),by:user.uid}};
+  const mk=q=>{const{id,n,...d}=q;return{...d,qtype:d.qtype||'objective',status:st,verified:vf,created:Date.now(),updated:Date.now(),by:user.uid}};
   let i=0;while(i<tot){const b=f.writeBatch(db),ch=[];let sz=0;
     while(i<tot&&ch.length<200&&sz<5e6){const q=P.ok[i++];ch.push(q);sz+=JSON.stringify(q).length;b.set(f.doc(db,'questions',q.id),mk(q))}
     try{await b.commit();rep.ok+=ch.length}catch{for(const q of ch){try{await f.setDoc(f.doc(db,'questions',q.id),mk(q));rep.ok++}catch(e){rep.fail.push({n:q.n,e:e.code||e.message})}}}
