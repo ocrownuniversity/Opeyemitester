@@ -31,7 +31,7 @@ const FB={apiKey:"AIzaSyDM7EE5Ca3jc8qmPkFlS7MkkrTW8qnlDQk",authDomain:"exampilot
 const ADMIN_EMAIL="oladejiridwanopeyemi@gmail.com";
 const $=s=>document.querySelector(s),E=s=>String(s??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 const N={WAEC:'WAEC',NECO:'NECO',JAMB:'JAMB/UTME'},L8='ABCDEFGH';
-let fb=null,user=null,role='',view='home',S={},sess=null,tick,ip;
+let fb=null,user=null,role='',view='home',S={},sess=null,tick,ip,prof={},pend=null;
 const W={};
 const shuf=a=>a.map(x=>[Math.random(),x]).sort((a,b)=>a[0]-b[0]).map(x=>x[1]);
 const fmt=ms=>{ms=Math.max(0,ms)/1000|0;const h=ms/3600|0,m=ms%3600/60|0,s=ms%60;return(h?h+':':'')+String(m).padStart(2,'0')+':'+String(s).padStart(2,'0')};
@@ -48,10 +48,13 @@ async function init(){
   try{const B='https://www.gstatic.com/firebasejs/10.12.2/';
     const[a,au,f]=await Promise.all([import(B+'firebase-app.js'),import(B+'firebase-auth.js'),import(B+'firebase-firestore.js')]);
     const app=a.initializeApp(FB);fb={au,f,auth:au.getAuth(app),db:f.getFirestore(app)};
-    au.onAuthStateChanged(fb.auth,async u=>{user=u;role='';
+    au.onAuthStateChanged(fb.auth,async u=>{user=u;role='';prof={};
       if(u){try{const r=f.doc(fb.db,'users',u.uid),d=await f.getDoc(r);
-        if(d.exists())role=d.data().role||'';else await f.setDoc(r,{email:u.email,role:'student',at:Date.now()})}catch{}
+        if(d.exists()){prof=d.data();role=prof.role||''}
+        else{const p=pend&&(pend.email||'').toLowerCase()==(u.email||'').toLowerCase()?pend.p:{};prof={...p,email:u.email,role:'student',at:Date.now()};await f.setDoc(r,prof)}}catch{}
+        pend=null;
         if(u.email&&u.email.toLowerCase()===ADMIN_EMAIL)role='admin';
+        if(needProf())view='acc';
         sync()}
       nav();go(view)})
   }catch{toast('Cloud unavailable (offline mode)')}
@@ -171,13 +174,58 @@ W.hi=async d=>{const a=(await all('a')).find(x=>x.id==d.v),ids=new Set(a.det.map
 /* ---------- Account ---------- */
 function account(){view='acc';nav();const a=$('#app');
   if(!fb)return a.innerHTML=`<div class=card><h2>Account</h2><p>Cloud sync is not configured. You are using a local guest profile.</p></div>`;
-  a.innerHTML=user?`<div class=card><h2>Account</h2><p>${E(user.email)}<br><span class=m>${role=='admin'?'Administrator':'Student'}</span></p><button class=pr data-a=sy>Sync now</button><button data-a=lo>Sign out</button></div>`:
-  `<div class=card><h2>Sign in (optional)</h2><p class=m>Guest progress is saved only on this device and can be lost if browser data is cleared. Sign in to back it up — existing local progress is kept and uploaded without duplicates.</p><input id=em type=email placeholder=Email><input id=pw type=password placeholder=Password>
+  if(user){const need=needProf(),ed=need||S.ep;
+    return a.innerHTML=`<div class=card><h2>Account</h2><p><b>${E(prof.name||user.displayName||user.email)}</b><br>${E(user.email)}<br><span class=m>${role=='admin'?'Administrator':'Student'}</span></p>
+    ${prof.phone?`<p class=m>📞 ${E(prof.phone)}<br>📍 ${E([prof.lga,prof.state].filter(Boolean).join(', '))}${prof.school?`<br>🏫 ${E(prof.school)}`:''}${(prof.exams||[]).length?`<br>🎯 ${E(prof.exams.map(x=>N[x]||x).join(', '))}`:''}</p>`:''}
+    <button class=pr data-a=sy>Sync now</button>${need?'':`<button data-a=ep>${S.ep?'Close':'Edit profile'}</button>`}<button data-a=lo>Sign out</button></div>
+    ${ed?`<div class=card><h3>${need?'Complete your student profile':'Edit profile'}</h3>${need?'<p class=m>Please finish your registration so we can set up your student account.</p>':''}${regForm(prof,0)}<button class=pr data-a=cp>Save profile</button></div>`:''}`}
+  if(S.am=='up')return a.innerHTML=`<div class=card><h2>Create student account</h2><p class=m>Fill in your details to register. Fields marked * are required.</p>${regForm({},1)}<button class=pr data-a=rg>Register</button><button data-a=bk>Back to sign in</button></div>`;
+  a.innerHTML=`<div class=card><h2>Sign in (optional)</h2><p class=m>Guest progress is saved only on this device and can be lost if browser data is cleared. Sign in to back it up — existing local progress is kept and uploaded without duplicates.</p><input id=em type=email placeholder=Email><input id=pw type=password placeholder=Password>
   <button class=pr data-a=li>Sign in</button><button data-a=su>Create account</button><button data-a=gg>Continue with Google</button></div>`}
+/* ---------- Student registration ---------- */
+const STATES=['Abia','Adamawa','Akwa Ibom','Anambra','Bauchi','Bayelsa','Benue','Borno','Cross River','Delta','Ebonyi','Edo','Ekiti','Enugu','FCT (Abuja)','Gombe','Imo','Jigawa','Kaduna','Kano','Katsina','Kebbi','Kogi','Kwara','Lagos','Nasarawa','Niger','Ogun','Ondo','Osun','Oyo','Plateau','Rivers','Sokoto','Taraba','Yobe','Zamfara'];
+const LV=['JSS 3','SS 1','SS 2','SS 3','Graduate / writing again','Other'];
+const needProf=()=>!!user&&role!='admin'&&!(prof.name&&prof.phone&&prof.state);
+const normPhone=v=>{let d=String(v||'').replace(/[\s\-()]/g,'');if(d.startsWith('+234'))d='0'+d.slice(4);else if(d.startsWith('234'))d='0'+d.slice(3);return/^0[789][01]\d{8}$/.test(d)?'+234'+d.slice(1):''};
+function regForm(p,full){const v=k=>E(p[k]??''),o=(arr,sel,ph)=>`<option value="">${ph}</option>`+arr.map(x=>`<option ${x==sel?'selected':''}>${E(x)}</option>`).join('');
+  return`<input id=rn placeholder="Full name *" autocomplete=name value="${v('name')}">
+  ${full?'<input id=em type=email placeholder="Email address *" autocomplete=email>':''}
+  <input id=rph type=tel placeholder="Phone number * e.g. 08012345678" autocomplete=tel value="${v('phone')}">
+  <select id=rgn>${o(['Male','Female','Prefer not to say'],p.gender,'Gender *')}</select>
+  <label class=m>Date of birth *</label><input id=rdb type=date value="${v('dob')}">
+  <select id=rst>${o(STATES,p.state,'State of residence *')}</select>
+  <input id=rlg placeholder="Town / LGA *" value="${v('lga')}">
+  <input id=rsc placeholder="School (or last school attended) *" value="${v('school')}">
+  <select id=rlv>${o(LV,p.level,'Class / level *')}</select>
+  <div class=m>Exam(s) you are preparing for *</div><div>${Object.entries(N).map(([k,l])=>`<label style="margin-right:12px"><input type=checkbox class=rx value=${k} style="width:auto" ${(p.exams||[]).includes(k)?'checked':''}> ${l}</label>`).join('')}</div>
+  ${full?'<input id=pw type=password placeholder="Password * (min 6 characters)" autocomplete=new-password><input id=pw2 type=password placeholder="Confirm password *" autocomplete=new-password>':''}
+  <label class=m style="display:block;margin:8px 0"><input id=rt type=checkbox style="width:auto"> I confirm my details are correct and agree that ExamPilot may store them to manage my account.</label>`}
+function readReg(){const g=i=>($('#'+i)?.value||'').trim(),p={name:g('rn').replace(/\s+/g,' '),phone:normPhone(g('rph')),gender:g('rgn'),dob:g('rdb'),state:g('rst'),lga:g('rlg'),school:g('rsc'),level:g('rlv'),exams:[...document.querySelectorAll('.rx:checked')].map(x=>x.value)};
+  const age=(Date.now()-new Date(p.dob))/31557600000;let err='';
+  if(p.name.length<5||p.name.split(' ').length<2)err='Enter your full name (first and last name)';
+  else if(!p.phone)err='Enter a valid Nigerian phone number, e.g. 08012345678';
+  else if(!p.gender)err='Select your gender';
+  else if(!p.dob||isNaN(age)||age<8||age>80)err='Enter a valid date of birth';
+  else if(!p.state)err='Select your state of residence';
+  else if(p.lga.length<2)err='Enter your town or LGA';
+  else if(p.school.length<2)err='Enter your school';
+  else if(!p.level)err='Select your class or level';
+  else if(!p.exams.length)err='Select at least one exam you are preparing for';
+  else if(!$('#rt').checked)err='Please tick the confirmation box to continue';
+  return{p,err}}
 const FM={'auth/operation-not-allowed':'Email/Password sign-in is not enabled in Firebase (Authentication > Sign-in method)','auth/email-already-in-use':'This email already has an account — tap Sign in instead','auth/weak-password':'Password must be at least 6 characters','auth/invalid-email':'Enter a valid email address','auth/invalid-credential':'Wrong email or password','auth/missing-password':'Enter a password','auth/unauthorized-domain':'Add this website in Firebase > Authentication > Settings > Authorized domains','permission-denied':'Permission denied — check your Firestore rules','auth/network-request-failed':'No internet connection'};
 const ae=async f=>{try{await f()}catch(e){toast(FM[e.code]||e.code||e.message)}};
 W.li=()=>ae(()=>fb.au.signInWithEmailAndPassword(fb.auth,$('#em').value,$('#pw').value));
-W.su=()=>ae(()=>fb.au.createUserWithEmailAndPassword(fb.auth,$('#em').value,$('#pw').value));
+W.su=()=>{S.am='up';account()};W.bk=()=>{S.am='in';account()};W.ep=()=>{S.ep=!S.ep;account()};
+W.rg=()=>ae(async()=>{const{p,err}=readReg();if(err)return toast(err);const em=$('#em').value.trim(),pw=$('#pw').value;
+  if(!em)return toast('Enter your email address');if(pw.length<6)return toast(FM['auth/weak-password']);if(pw!=$('#pw2').value)return toast('Passwords do not match');
+  const pr={...p,email:em,role:'student',at:Date.now()};pend={email:em,p:pr};let c;
+  try{c=await fb.au.createUserWithEmailAndPassword(fb.auth,em,pw)}catch(x){pend=null;throw x}
+  try{await fb.au.updateProfile(c.user,{displayName:p.name});await fb.f.setDoc(fb.f.doc(fb.db,'users',c.user.uid),pr,{merge:true});prof=pr}catch{}
+  S.am='in';toast('Welcome to ExamPilot, '+p.name.split(' ')[0]+'!');account()});
+W.cp=()=>ae(async()=>{const{p,err}=readReg();if(err)return toast(err);
+  await fb.f.setDoc(fb.f.doc(fb.db,'users',user.uid),p,{merge:true});prof={...prof,...p};try{await fb.au.updateProfile(user,{displayName:p.name})}catch{}
+  S.ep=0;toast('Profile saved');account()});
 W.gg=()=>ae(()=>fb.au.signInWithPopup(fb.auth,new fb.au.GoogleAuthProvider()));
 W.lo=()=>fb.au.signOut(fb.auth);W.sy=async()=>{await sync();toast('Synced')};
 /* ---------- Admin ---------- */
@@ -215,10 +263,10 @@ function aQs(){const F=S.F,sr=F.q.toLowerCase(),subs=[...new Set(S.Q.map(q=>q.su
   <div class=row><button data-a=pgn data-v=-1 ${F.pg?'':'disabled'}>◀ Prev</button><span class=m>Page ${F.pg+1}/${pages}</span><button data-a=pgn data-v=1 ${F.pg<pages-1?'':'disabled'}>Next ▶</button></div>`}
 const aUp=()=>upCard()+`<details class=card><summary><b>Advanced JSON Import</b></summary><textarea id=bj rows=4 placeholder="Paste a JSON array of questions"></textarea><button data-a=bi>Preview import</button></details>`;
 function aEx(){return`${S.noT?'<div class=card style="background:#fee2e2">Mock setups need the <b>templates</b> rule in Firestore. Add it, then reopen Admin.</div>':''}<div class=card><h3>New mock exam setup</h3><input id=tn placeholder="Name e.g. JAMB UTME Mock"><select id=te><option value=WAEC>WAEC</option><option value=NECO>NECO</option><option value=JAMB>JAMB/UTME</option></select>
-  <input id=ts placeholder="Subjects, comma separated (exact names)"><p class=m>Your subjects: ${E([...new Set(S.Q.map(q=>q.subject))].sort().join(', ')||'none yet')}</p><input id=tc type=number placeholder="Questions per subject"><input id=tm type=number placeholder="Duration in minutes"><button class=pr data-a=ta2>Save setup</button><p class=m>Students see it under Mock Exam after tapping Refresh.</p></div>
+  <input id=tsb placeholder="Subjects, comma separated (exact names)"><p class=m>Your subjects: ${E([...new Set(S.Q.map(q=>q.subject))].sort().join(', ')||'none yet')}</p><input id=tc type=number placeholder="Questions per subject"><input id=tm type=number placeholder="Duration in minutes"><button class=pr data-a=ta2>Save setup</button><p class=m>Students see it under Mock Exam after tapping Refresh.</p></div>
   ${S.T.map(t=>`<div class=card><b>${E(t.name)}</b><br><span class=m>${N[t.exam]} · ${E((t.subjects||[]).join(', '))} · ${t.count} per subject · ${t.min} min</span><br><button class=dg data-a=td data-v=${t.id}>Delete</button></div>`).join('')}`}
-function aSt(){const sr=(S.sq||'').toLowerCase(),L=S.U.filter(u=>!sr||(u.email||'').toLowerCase().includes(sr)).sort((a,b)=>(b.at||0)-(a.at||0));
-  return`<div class=card><b>${S.U.length} registered students</b><input id=sq2 placeholder="Search email" value="${E(S.sq||'')}"><button data-a=sq>Search</button></div>${L.slice(0,50).map(u=>`<div class=card><b>${E(u.email)}</b><br><span class=m>${u.at?new Date(u.at).toLocaleDateString():''} · ${(u.email||'').toLowerCase()==ADMIN_EMAIL?'Administrator':'Student'}</span></div>`).join('')}`}
+function aSt(){const sr=(S.sq||'').toLowerCase(),L=S.U.filter(u=>!sr||[u.email,u.name,u.phone,u.state,u.lga,u.school].join(' ').toLowerCase().includes(sr)).sort((a,b)=>(b.at||0)-(a.at||0));
+  return`<div class=card><b>${S.U.length} registered students</b><input id=sq2 placeholder="Search name, email, phone or state" value="${E(S.sq||'')}"><button data-a=sq>Search</button></div>${L.slice(0,50).map(u=>`<div class=card><b>${E(u.name||u.email)}</b><br><span class=m>${E(u.email)}${u.phone?`<br>📞 ${E(u.phone)}`:''}${u.state?`<br>📍 ${E([u.lga,u.state].filter(Boolean).join(', '))}`:''}${u.school?`<br>🏫 ${E(u.school)}${u.level?' · '+E(u.level):''}`:''}${(u.exams||[]).length?`<br>🎯 ${E(u.exams.map(x=>N[x]||x).join(', '))}`:''}<br>${u.at?new Date(u.at).toLocaleDateString():''} · ${(u.email||'').toLowerCase()==ADMIN_EMAIL?'Administrator':'Student'}</span></div>`).join('')}`}
 W.sq=()=>{S.sq=$('#sq2').value;adm()};
 W.nq=()=>{S.form={exam:'WAEC',status:'published',options:[]};adm()};W.cq=()=>{S.form=null;adm()};
 W.eq=d=>{S.form={...S.Q.find(q=>q.id==d.v)};adm();scrollTo(0,0)};
@@ -236,7 +284,7 @@ W.ad=d=>confirm('Delete this question?')&&ae(async()=>{await fb.f.deleteDoc(fb.f
 W.pa=d=>ae(async()=>{const t=S.fl.filter(q=>(q.status=='published')!=(d.v=='published'));if(!t.length)return toast('Nothing to change');if(!confirm((d.v=='published'?'Publish ':'Unpublish ')+t.length+' questions?'))return;await bulk(t,(b,r)=>b.update(r,{status:d.v,updated:Date.now()}));toast('Done: '+t.length);admin()});
 W.vA=()=>ae(async()=>{const t=S.fl.filter(q=>!q.verified);if(!t.length)return toast('Nothing to change');if(!confirm('Mark '+t.length+' questions as verified?'))return;await bulk(t,(b,r)=>b.update(r,{verified:true,updated:Date.now()}));toast('Verified '+t.length);admin()});
 W.dA=()=>ae(async()=>{const t=S.fl;if(!t.length)return toast('Nothing to delete');if(prompt(`This permanently deletes ${t.length} questions. Type DELETE to confirm.`)!=='DELETE')return;await bulk(t,(b,r)=>b.delete(r));toast('Deleted '+t.length);admin()});
-W.ta2=()=>ae(async()=>{const g=i=>$('#'+i).value.trim(),sb=g('ts').split(',').map(x=>x.trim()).filter(Boolean);if(!g('tn')||!sb.length||!(+g('tc')>0)||!(+g('tm')>0))return toast('Fill in every field');
+W.ta2=()=>ae(async()=>{const g=i=>$('#'+i).value.trim(),sb=g('tsb').split(',').map(x=>x.trim()).filter(Boolean);if(!g('tn')||!sb.length||!(+g('tc')>0)||!(+g('tm')>0))return toast('Fill in every field');
   await fb.f.addDoc(fb.f.collection(fb.db,'templates'),{name:g('tn'),exam:g('te'),subjects:sb,count:+g('tc'),min:+g('tm'),by:user.uid,created:Date.now()});toast('Saved');admin()});
 W.td=d=>confirm('Delete this setup?')&&ae(async()=>{await fb.f.deleteDoc(fb.f.doc(fb.db,'templates',d.v));admin()});
 W.bi=()=>ae(async()=>{defs();const j=JSON.parse($('#bj').value),rows=Array.isArray(j)?j:j.questions;if(!rows||!rows.length)throw Error('No questions found');prev(await prepare(rows,1),'Pasted JSON')});
