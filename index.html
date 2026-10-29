@@ -135,7 +135,7 @@ async function init(){
         if(u.email&&u.email.toLowerCase()===ADMIN_EMAIL)role='admin';
         if(needProf())view='acc';
         sync()}
-      nav();go(view)})
+      nav();go(view);jflush()})
   }catch{toast('Cloud unavailable (offline mode)')}
 }
 async function sync(){
@@ -225,24 +225,41 @@ W.go=async()=>{const x=S.sel,Q=await qs(x.exam);let L=[];if(!x.subs.length)retur
 /* ---------- JAMB CBT simulation ---------- */
 const JB_EN=s=>/english/i.test(s),JB_N=s=>JB_EN(s)?60:40,JB_MIN=120;
 const modeLabel=m=>({jamb:'CBT simulation',mock:'mock exam',past:'past questions',topic:'topic practice',saved:'saved questions'}[m]||m);
-async function jcbt(){view='jcbt';nav();const Q=await qs('JAMB'),by={};Q.forEach(q=>by[q.subject]=(by[q.subject]||0)+1);
-  const names=Object.keys(by).sort(),en=names.filter(JB_EN).sort((a,b)=>by[b]-by[a])[0],others=names.filter(x=>!JB_EN(x)),J=S.jb??={subs:[]};J.subs=J.subs.filter(x=>others.includes(x));
+async function jcbt(){view='jcbt';nav();let Q=await qs('JAMB');
+  if(!Q.length&&fb&&navigator.onLine&&!(S.jchk??={}).JAMB){S.jchk.JAMB=1;$('#app').innerHTML='<div class=card>Loading JAMB questions…</div>';await dl('JAMB');if(view!='jcbt')return;Q=await qs('JAMB')}
+  const by={};Q.forEach(q=>by[q.subject]=(by[q.subject]||0)+1);
+  const names=Object.keys(by).sort(),en=names.filter(JB_EN).sort((a,b)=>by[b]-by[a])[0],others=names.filter(x=>!JB_EN(x)),need=Math.min(3,others.length),J=S.jb??={subs:[]};J.subs=J.subs.filter(x=>others.includes(x));
   let h=`<h2>🎓 JAMB CBT Simulation</h2><div class=card><p>Sit the exam the way you will at the JAMB centre.</p>
   <div class=m>• <b>Use of English</b> is compulsory — pick <b>3 more subjects</b><br>• English has <b>60</b> questions, every other subject <b>40</b> (180 in all)<br>• <b>2 hours</b> for everything; the exam submits itself when time ends<br>• No answers shown until you submit · you can flag questions and use the calculator<br>• Each subject is scored out of <b>100</b>, giving a total out of <b>400</b></div></div>`;
-  if(!Q.length)return $('#app').innerHTML=h+`<div class=card>No JAMB questions are downloaded on this device yet. <button class=pr data-a=dl data-v=JAMB>Download JAMB questions</button></div>`;
-  if(!en)return $('#app').innerHTML=h+`<div class=card>Use of English questions are not available for JAMB yet, so the full simulation cannot start. <button data-a=dl data-v=JAMB>⟳ Refresh</button></div>`;
-  const pick=[en,...J.subs],cnt=s=>Math.min(JB_N(s),by[s]),tot=pick.reduce((a,s)=>a+cnt(s),0),ok=J.subs.length==3;
-  h+=`<div class=card><b>1. Your subjects</b><p class=m>Use of English is compulsory. Pick 3 more (${J.subs.length}/3).</p><button class=on disabled>${E(en)} (${by[en]}) · compulsory</button>${others.map(x=>`<button class="${J.subs.includes(x)?'on':''}" data-a=jp data-v="${E(x)}">${E(x)} (${by[x]})</button>`).join('')}</div>
+  if(!Q.length)return $('#app').innerHTML=h+`<div class=card>No JAMB questions are downloaded on this device yet. <button class=pr data-a=jdl>Download JAMB questions</button></div>`;
+  if(!en)return $('#app').innerHTML=h+`<div class=card>Use of English questions are not available for JAMB yet, so the full simulation cannot start. <button data-a=jdl>⟳ Refresh</button></div>`;
+  if(!need)return $('#app').innerHTML=h+`<div class=card>Only Use of English is available for JAMB so far. Other subjects are needed for the simulation. <button data-a=jdl>⟳ Refresh</button></div>`;
+  const pick=[en,...J.subs],cnt=s=>Math.min(JB_N(s),by[s]),tot=pick.reduce((a,s)=>a+cnt(s),0),ok=J.subs.length==need;
+  h+=`<div class=card><b>1. Your subjects</b><p class=m>Use of English is compulsory. Pick ${need} more (${J.subs.length}/${need}).</p><button class=on disabled>${E(en)} (${by[en]}) · compulsory</button>${others.map(x=>`<button class="${J.subs.includes(x)?'on':''}" data-a=jp data-v="${E(x)}">${E(x)} (${by[x]})</button>`).join('')}</div>
   <div class=card><b>2. Your exam</b>${pick.map(x=>`<div class=row><span>${E(x)}</span><b>${cnt(x)} questions</b></div>${by[x]<JB_N(x)?`<p class=m style="margin:0 0 6px">Only ${by[x]} downloaded (a full paper has ${JB_N(x)}).</p>`:''}`).join('')}
-  ${ok?`<div class=ex><b>${tot} questions · ${JB_MIN} minutes · score out of 400</b></div>`:`<p class=m>Pick ${3-J.subs.length} more subject${3-J.subs.length==1?'':'s'} to see your exam.</p>`}</div>
+  ${ok?`<div class=ex><b>${tot} questions · ${JB_MIN} minutes · score out of 400</b></div>`:`<p class=m>Pick ${need-J.subs.length} more subject${need-J.subs.length==1?'':'s'} to see your exam.</p>`}</div>
   <button class=pr data-a=jgo ${ok?'':'disabled'}>Continue to exam instructions</button><p class=m>ExamPilot practice simulation — official JAMB scores are standardised, so your result here is an estimate.</p>`;
   $('#app').innerHTML=h}
+W.jdl=async()=>{await dl('JAMB');if(view=='jcbt')jcbt()};
 W.jp=d=>{const J=S.jb??={subs:[]};J.subs=J.subs.includes(d.v)?J.subs.filter(x=>x!=d.v):J.subs.length<3?[...J.subs,d.v]:J.subs;jcbt()};
-W.jgo=async()=>{const Q=await qs('JAMB'),J=S.jb||{subs:[]},by=x=>Q.filter(q=>q.subject==x),en=[...new Set(Q.map(q=>q.subject))].filter(JB_EN).sort((a,b)=>by(b).length-by(a).length)[0];
-  if(!en||J.subs.length!=3)return toast('Pick 3 subjects besides English');
-  const nm=user?(prof.name||user.displayName||user.email):'Guest candidate',subs=[en,...J.subs],tot=subs.reduce((a,x)=>a+Math.min(JB_N(x),by(x).length),0);
+W.jgo=async()=>{const Q=await qs('JAMB'),J=S.jb||{subs:[]},by=x=>Q.filter(q=>q.subject==x),names=[...new Set(Q.map(q=>q.subject))],en=names.filter(JB_EN).sort((a,b)=>by(b).length-by(a).length)[0],need=Math.min(3,names.filter(x=>!JB_EN(x)).length);
+  if(!en||!need||J.subs.length!=need)return toast('Pick '+need+' subject'+(need==1?'':'s')+' besides English');
+  let nm=user?(prof.name||user.displayName||user.email):(J.name||'');
+  if(!nm){nm=await ask('Enter your full name for the exam and result slip',{input:'',ph:'Full name',ok:'Continue'});if(!nm)return toast('Your name is needed to start the exam');J.name=nm}
+  const subs=[en,...J.subs],tot=subs.reduce((a,x)=>a+Math.min(JB_N(x),by(x).length),0);
   if(!await ask(`Candidate: ${nm}\nSubjects: ${subs.join(', ')}\n${tot} questions · ${JB_MIN} minutes\n\nInstructions:\n• Answer every question. Each subject is scored out of 100 and the total is out of 400.\n• Use the subject tabs to move between subjects. Flag questions to come back to them.\n• Answers are not shown until you submit.\n• The exam submits automatically when the time ends.\n\nStart the exam now?`,{ok:'Start exam'}))return;
-  const L=[];subs.forEach(x=>L.push(...shuf(by(x)).slice(0,JB_N(x))));begin(L,{exam:'JAMB',mode:'jamb',fb:false,timed:true,min:JB_MIN},JB_MIN)};
+  const L=[];subs.forEach(x=>L.push(...shuf(by(x)).slice(0,JB_N(x))));begin(L,{exam:'JAMB',mode:'jamb',fb:false,timed:true,min:JB_MIN},JB_MIN);
+  sess.cand={name:nm,email:user?user.email||'':'',phone:prof.phone||'',uid:user?user.uid:''};persist()};
+/* Send finished JAMB simulations to Firestore (collection jambResults) so the admin can see them. Retries when offline. */
+let JF=0;
+async function jflush(){if(JF||!fb||!navigator.onLine)return;JF=1;
+  try{const{f,db}=fb,A=(await all('a')).filter(a=>a.mode=='jamb'&&a.jsent===0);
+    for(const a of A){const c=a.cand||{},bs=a.bs||{},sc={};Object.entries(bs).forEach(([k,b])=>{sc[k]={sc:b.sc,mx:b.mx,c:b.c,t:b.t,p100:b.mx?Math.round(b.sc/b.mx*100):0}});
+      await f.setDoc(f.doc(db,'jambResults',a.id),{id:a.id,exam:'JAMB',name:c.name||'Guest candidate',email:c.email||'',phone:c.phone||'',uid:c.uid||a.uid||'',total:jamb400(a)||0,pct:a.pct||0,c:a.c||0,w:a.w||0,u:a.u||0,n:a.n||0,used:a.used||0,mins:a.tm||0,subjects:Object.keys(bs),scores:sc,at:a.at,sent:Date.now()});
+      a.jsent=1;await put('a',a)}
+  }catch{}
+  JF=0}
+addEventListener('online',()=>{jflush()});
 W.jt=d=>{const cur=sess.Q[sess.i].subject;(sess.pos??={})[cur]=sess.i;const i=sess.pos[d.v]??sess.Q.findIndex(x=>x.subject==d.v);if(i<0)return;sess.i=i;persist();quiz()};
 /* ---------- Session / Quiz ---------- */
 function begin(L,x,min){min=min??(x.timed?x.min:0);
@@ -299,7 +316,7 @@ async function finish(){const s=sess;if(!s||s.done)return;s.done=1;clearInterval
   s.Q.forEach(q=>{if(q.qtype=='theory'){th.push({id:q.id,s:q.subject,tp:q.topic||'',txt:s.ans[q.id]||'',pts:[]});return}const m=q.marks||1,a=s.ans[q.id],ok=a===q.answer,b=bs[q.subject]??={sc:0,mx:0,c:0,t:0};mx+=m;b.mx+=m;b.t++;
     if(a==null)u++;else if(ok){c++;sc+=m;b.sc+=m;b.c++}else w++;det.push({id:q.id,s:q.subject,tp:q.topic||'',c:ok?1:0,a:a??null})});
   const at={id:s.aid,exam:s.exam,mode:s.mode,at:Date.now(),sc,mx,c,w,u,n:s.Q.length-th.length,pct:mx?Math.round(sc/mx*100):0,used:Math.round((Date.now()-s.start)/1000),tm:s.min,bs,det,th,synced:0,uid:user?.uid||null};
-  await put('a',at);await del('s','cur');sess=null;sync();result(at,s.Q)}
+  await put('a',at);await del('s','cur');sess=null;if(s.mode=='jamb'){at.cand=s.cand||null;at.jsent=0;try{await put('a',at)}catch{}jflush()}sync();result(at,s.Q)}
 const grade=p=>p>=70?'Excellent':p>=50?'Good':p>=40?'Fair':'Needs improvement';
 function topicStats(at){const g={};at.det.forEach(d=>{const k=(d.s||'')+'|'+(d.tp||''),x=g[k]??={s:d.s,tp:d.tp||'',c:0,t:0};x.t++;x.c+=d.c?1:0});return Object.values(g).map(x=>({...x,p:Math.round(x.c/x.t*100)})).sort((a,b)=>a.p-b.p||b.t-a.t)}
 function jamb400(at){const L=Object.values(at.bs||{});if(at.exam!='JAMB'||!L.length)return null;return Math.round(L.reduce((a,b)=>a+(b.mx?b.sc/b.mx:0),0)/L.length*400)}
@@ -402,12 +419,12 @@ W.rph=async()=>{if(!await ask('Remove your profile photo?',{danger:1,ok:'Remove'
 document.addEventListener('change',e=>{if(e.target.id=='pf'&&e.target.files[0]){const f=e.target.files[0];e.target.value='';ae(()=>setPhoto(f))}});
 W.lo=()=>fb.au.signOut(fb.auth);W.sy=async()=>{await sync();toast('Synced')};
 /* ---------- Admin ---------- */
-const ATABS=[['ov','Overview'],['an','Analytics'],['qs','Questions'],['up','Upload'],['ex','Exams'],['st','Students']];
+const ATABS=[['ov','Overview'],['an','Analytics'],['qs','Questions'],['up','Upload'],['ex','Exams'],['st','Students'],['jb','JAMB Results']];
 async function admin(){view='adm';nav();const a=$('#app');if(role!='admin')return a.innerHTML='<div class=card>Admins only.</div>';a.innerHTML='<p>Loading…</p>';
   const{f,db}=fb,rd=n=>f.getDocs(f.collection(db,n)).then(r=>r.docs.map(d=>({...d.data(),id:d.id}))).catch(()=>null);
   const[Q,U,T]=await Promise.all([rd('questions'),rd('users'),rd('templates')]);
   S.Q=Q||[];S.exq=S.Q;S.U=U||[];S.T=T||[];S.noT=T===null;S.at=S.at||'ov';S.F=S.F||{q:'',exam:'',sub:'',st:'',pg:0};adm()}
-function adm(){$('#app').innerHTML=`<h2>Admin <small class=m>v8</small></h2><div class=tabs>${ATABS.map(([k,l])=>`<button class="${S.at==k?'on':''}" data-a=at data-v=${k}>${l}</button>`).join('')}</div><div id=ab></div>`;$('#ab').innerHTML=({ov:aOv,an:aAn,qs:aQs,up:aUp,ex:aEx,st:aSt}[S.at])()}
+function adm(){$('#app').innerHTML=`<h2>Admin <small class=m>v8</small></h2><div class=tabs>${ATABS.map(([k,l])=>`<button class="${S.at==k?'on':''}" data-a=at data-v=${k}>${l}</button>`).join('')}</div><div id=ab></div>`;$('#ab').innerHTML=({ov:aOv,an:aAn,qs:aQs,up:aUp,ex:aEx,st:aSt,jb:aJb}[S.at])()}
 W.at=d=>{S.at=d.v;adm()};
 function aOv(){const Q=S.Q,pub=Q.filter(q=>q.status=='published').length,by={};
   Q.forEach(q=>{const x=by[(N[q.exam]||q.exam)+' · '+q.subject]??={t:0,p:0,y:new Set()};x.t++;if(q.status=='published')x.p++;if(q.year)x.y.add(q.year)});
@@ -575,6 +592,23 @@ W.ci=()=>ae(async()=>{const P=S.P;if(!P||S.busy||role!='admin')return;S.busy=1;c
     $('#pg').innerHTML=`<div class=bar><i style="width:${i/tot*100}%"></i></div><p class=m>Saving ${i}/${tot}…</p>`}
   let pub=0;if(st=='published')for(let k=0;k<P.dr.length;k+=400){const b=f.writeBatch(db),ch=P.dr.slice(k,k+400);ch.forEach(x=>b.update(f.doc(db,'questions',x.id),{status:'published',updated:Date.now()}));try{await b.commit();pub+=ch.length}catch(e){rep.fail.push({n:'existing',e:e.code||e.message})}}
   S.busy=0;$('#up').innerHTML=`<h3>Import report</h3><p>✔ Imported: <b>${rep.ok}</b> (${st})${pub?`<br>✔ Existing drafts now published: <b>${pub}</b>`:''}<br>⏭ Duplicates skipped: <b>${P.dup.length}</b><br>⚠ Invalid rows skipped: <b>${P.err.length}</b><br>✘ Failed to save: <b>${rep.fail.length}</b></p>${rep.fail.slice(0,20).map(x=>`<div class=m>Row ${x.n}: ${E(x.e)}</div>`).join('')}${rep.fail.length?'<p class=m>Upload the same file again to retry only the failed rows — saved rows are detected as duplicates.</p>':''}<p class=m>${st=='published'?'Students get these after tapping Update in Downloads.':'Saved as drafts. Publish them from the Questions list so students can see them.'}</p><button class=pr data-a=adm2>Done</button>`});
+/* ---------- Admin: JAMB simulation results ---------- */
+async function jLoad(){try{const{f,db}=fb,r=await f.getDocs(f.collection(db,'jambResults'));S.J=r.docs.map(d=>({...d.data(),id:d.id}));S.noJ=''}catch(e){S.J=[];S.noJ=e.code||e.message||'error'}
+  if(view=='adm'&&S.at=='jb'&&$('#ab'))$('#ab').innerHTML=aJb()}
+function jList(){const q=(S.jq||'').toLowerCase();return(S.J||[]).filter(r=>!q||[r.name,r.email,r.phone,(r.subjects||[]).join(' ')].join(' ').toLowerCase().includes(q)).sort((a,b)=>(b.at||0)-(a.at||0))}
+function aJb(){if(!S.J){jLoad();return'<p>Loading JAMB results…</p>'}
+  const A=S.J,L=jList(),n=A.length,T=A.map(r=>r.total||0),avg=n?Math.round(T.reduce((a,b)=>a+b,0)/n):0,hi=n?Math.max(...T):0,lo=n?Math.min(...T):0,w7=A.filter(r=>r.at>Date.now()-6048e5).length,gu=A.filter(r=>!r.uid).length;
+  return`${S.noJ?`<div class=card style="background:#fee2e2"><b>Could not read JAMB results (${E(S.noJ)}).</b><p class=m>In Firebase Console > Firestore > Rules add the block below, publish, then tap Refresh.</p><pre style="white-space:pre-wrap;font-size:12px;margin:0">match /jambResults/{id} {\n  allow create: if request.resource.data.exam == 'JAMB' &amp;&amp; request.resource.data.total &lt;= 400;\n  allow read, update, delete: if request.auth != null &amp;&amp; request.auth.token.email == '${E(ADMIN_EMAIL)}';\n}</pre></div>`:''}
+  <div class=tiles>${[['Attempts',n],['Average /400',avg],['Highest',hi],['Lowest',lo],['Last 7 days',w7],['Guests',gu]].map(([l,v])=>`<div class=tile><b>${v}</b><span class=m>${l}</span></div>`).join('')}</div>
+  <div class=card><b>JAMB CBT simulation results</b><input id=jq2 placeholder="Search name, email, phone or subject" value="${E(S.jq||'')}"><button data-a=jq>Search</button><button data-a=jr>⟳ Refresh</button><button data-a=jx>⬇️ CSV</button><p class=m>${L.length} result${L.length==1?'':'s'} · showing the first 50 · newest first</p></div>
+  ${L.slice(0,50).map(r=>{const sc=Object.entries(r.scores||{}),t=r.total||0;return`<div class=card><div class=row><b>${E(r.name||'Guest candidate')}</b><span class=big style="font-size:24px">${t}/400</span></div><span class=m>${r.email?E(r.email):'Guest (no account)'}${r.phone?' · 📞 '+E(r.phone):''}<br>${r.at?new Date(r.at).toLocaleString():''} · ${Math.round((r.used||0)/60)} of ${r.mins||120} min used</span>
+  ${sc.map(([k,b])=>`<div class=row style="margin-top:4px"><span>${E(k)}</span><b>${b.p100!=null?b.p100:0}/100</b></div><div class=tb><i style="width:${b.p100||0}%;background:${col(b.p100||0)}"></i></div>`).join('')}
+  <span class=m>✔ ${r.c||0} correct · ✘ ${r.w||0} wrong · ◻ ${r.u||0} unanswered</span><div><button data-a=jdel data-v="${E(r.id)}">🗑 Delete</button></div></div>`}).join('')||(S.noJ?'':'<div class=card><p class=m>No JAMB simulation results yet. They appear here after a student submits the simulation.</p></div>')}`}
+W.jq=()=>{S.jq=($('#jq2')||{}).value||'';$('#ab').innerHTML=aJb()};
+W.jr=()=>{S.J=null;$('#ab').innerHTML=aJb()};
+W.jdel=d=>ae(async()=>{if(!await ask('Delete this JAMB result permanently?',{danger:1,ok:'Delete'}))return;await fb.f.deleteDoc(fb.f.doc(fb.db,'jambResults',d.v));S.J=(S.J||[]).filter(r=>r.id!=d.v);if($('#ab'))$('#ab').innerHTML=aJb();toast('Result deleted')});
+W.jx=()=>{const L=jList();if(!L.length)return toast('No JAMB results to export');
+  sv(new Blob([toCsv(L.map(r=>({Name:r.name||'',Email:r.email||'',Phone:r.phone||'',Date:r.at?dstr(r.at):'','Total (400)':r.total||0,Subjects:(r.subjects||[]).join(', '),'Scores (each 100)':Object.entries(r.scores||{}).map(([k,b])=>k+': '+(b.p100||0)).join(' | '),Correct:r.c||0,Wrong:r.w||0,Unanswered:r.u||0,'Minutes used':Math.round((r.used||0)/60)})))],{type:'text/csv;charset=utf-8'}),`exampilot-jamb-results-${dstr(Date.now())}.csv`);toast('CSV downloaded ('+L.length+' results)')};
 /* ---------- Nav / routing / PWA ---------- */
 function nav(){const t=[['home','🏠','Home'],['prac','📝','Practice'],['dl','⬇️','Downloads'],['sv','🔖','Saved'],['acc','👤','Account']];if(role=='admin')t.push(['adm','⚙️','Admin']);
   $('#nav').style.display=view=='quiz'?'none':'flex';$('#nav').innerHTML=t.map(([v,i,l])=>`<button class="${view==v?'on':''}" data-a=nv data-v=${v}>${i}<br><small>${l}</small></button>`).join('')}
